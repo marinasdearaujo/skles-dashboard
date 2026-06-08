@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SKLES — Marketing Performance Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0F1F3A; --navy-deep:#081428; --navy-mid:#1B2D52; --navy-line:#2A3D63;
+  --gold:#D4A95B; --gold-soft:#E8C988; --gold-dim:#8B6E3A;
+  --cream:#F5EDD8; --text:#F0F4FA; --dim:#9CABC4; --very-dim:#6B7A93;
+  --up:#22C55E; --down:#EF4444; --warn:#F59E0B; --flat:#94A3B8;
+  --fb:#1877F2; --ig:#E1306C; --tt:#000000; --li:#0E76A8; --yt:#FF0000;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Roboto',sans-serif;background:var(--navy-deep);color:var(--text);line-height:1.5;min-height:100vh}
+h1,h2,h3,.st,.kpi-label,.tab{font-family:'Montserrat',sans-serif}
+
+.container{max-width:1400px;margin:0 auto;padding:20px}
+
+/* Header */
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--gold)}
+.brand{display:flex;align-items:center;gap:14px}
+.brand-mark{width:42px;height:42px;border:2px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Montserrat';font-weight:800;font-size:11px;letter-spacing:1px;color:var(--gold)}
+.brand-text h1{font-size:18px;font-weight:700;color:var(--text);letter-spacing:.3px}
+.brand-text .sub{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:2px;margin-top:2px}
+.meta{text-align:right}
+.meta .period{font-size:11px;color:var(--gold);font-weight:600;letter-spacing:.5px}
+.meta .updated{font-size:9px;color:var(--very-dim);margin-top:3px;text-transform:uppercase;letter-spacing:1px}
+
+/* Period selector */
+.period-bar{display:flex;gap:6px;margin-bottom:18px;padding:10px;background:var(--navy);border:1px solid var(--navy-line);border-radius:10px}
+.period-btn{padding:7px 16px;font-size:11px;font-weight:600;cursor:pointer;color:var(--dim);background:transparent;border:1px solid var(--navy-line);border-radius:6px;font-family:'Montserrat';letter-spacing:.5px;transition:.2s}
+.period-btn:hover{color:var(--text);border-color:var(--gold-dim)}
+.period-btn.active{background:var(--gold);border-color:var(--gold);color:var(--navy-deep)}
+.period-spacer{flex:1}
+.period-note{font-size:10px;color:var(--very-dim);font-style:italic;align-self:center;padding-right:10px}
+
+/* Tabs */
+.tabs{display:flex;gap:0;margin-bottom:20px;border-bottom:2px solid var(--navy-line);overflow-x:auto}
+.tab{padding:10px 18px;font-size:11px;font-weight:600;cursor:pointer;color:var(--dim);border-bottom:3px solid transparent;margin-bottom:-2px;transition:.2s;white-space:nowrap;letter-spacing:.5px;text-transform:uppercase}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.tc{display:none}
+.tc.active{display:block;animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+/* Section labels */
+.section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--gold);margin:24px 0 12px;display:flex;align-items:center;gap:10px}
+.section-title:first-child{margin-top:0}
+.section-title::before{content:'';width:4px;height:14px;background:var(--gold);border-radius:2px}
+.section-sub{font-size:11px;color:var(--dim);margin-top:-6px;margin-bottom:12px;padding-left:14px;font-style:italic}
+
+/* KPI Cards Grid */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:16px}
+.kpi-card{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);border:1px solid var(--navy-line);border-radius:10px;padding:16px;position:relative;overflow:hidden}
+.kpi-card.hit{border-left:4px solid var(--up)}
+.kpi-card.ontrack{border-left:4px solid var(--gold)}
+.kpi-card.behind{border-left:4px solid var(--warn)}
+.kpi-card.miss{border-left:4px solid var(--down)}
+.kpi-card.pending{border-left:4px solid var(--very-dim);opacity:.7}
+.kpi-label{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--dim);font-weight:600;margin-bottom:8px}
+.kpi-result{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.kpi-value{font-size:26px;font-weight:800;color:var(--text);font-family:'Montserrat';line-height:1}
+.kpi-status{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:3px 8px;border-radius:4px;white-space:nowrap}
+.kpi-status.hit{background:rgba(34,197,94,.15);color:var(--up)}
+.kpi-status.ontrack{background:rgba(212,169,91,.18);color:var(--gold)}
+.kpi-status.behind{background:rgba(245,158,11,.18);color:var(--warn)}
+.kpi-status.miss{background:rgba(239,68,68,.18);color:var(--down)}
+.kpi-status.pending{background:rgba(148,163,184,.15);color:var(--flat)}
+.kpi-meta{margin-top:10px;display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:10px}
+.kpi-goal{color:var(--very-dim)}
+.kpi-goal span{color:var(--gold);font-weight:600}
+.kpi-delta{font-weight:600}
+.kpi-delta.up{color:var(--up)}
+.kpi-delta.down{color:var(--down)}
+.kpi-delta.flat{color:var(--flat)}
+.progress{margin-top:12px;height:6px;background:var(--navy-deep);border-radius:3px;overflow:hidden;position:relative}
+.progress-fill{height:100%;border-radius:3px;transition:width .8s;background:linear-gradient(90deg,var(--gold-dim),var(--gold))}
+.progress-fill.hit{background:linear-gradient(90deg,#16a34a,var(--up))}
+.progress-fill.behind{background:linear-gradient(90deg,#b45309,var(--warn))}
+.progress-fill.miss{background:linear-gradient(90deg,#b91c1c,var(--down))}
+
+/* Channel header */
+.channel-header{background:linear-gradient(135deg,var(--navy),var(--navy-mid));border:1px solid var(--navy-line);border-left:5px solid var(--gold);border-radius:10px;padding:18px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.channel-header h2{font-size:20px;font-weight:700;color:var(--text);letter-spacing:.5px}
+.channel-header .job{font-size:11px;color:var(--dim);margin-top:4px;text-transform:uppercase;letter-spacing:1.5px}
+.channel-header .nstar{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--gold);font-weight:600;text-transform:uppercase;letter-spacing:.5px;background:rgba(212,169,91,.1);border:1px solid var(--gold-dim);border-radius:6px;padding:6px 12px}
+.channel-header .source{font-size:10px;color:var(--very-dim);margin-top:4px;display:flex;align-items:center;gap:6px}
+.channel-header .source .dot{width:6px;height:6px;border-radius:50%;background:var(--up)}
+.channel-header .source.export .dot{background:var(--warn)}
+.channel-header .source.blocked .dot{background:var(--down)}
+
+/* Data table */
+.data-card{background:var(--navy);border:1px solid var(--navy-line);border-radius:10px;padding:18px;margin-bottom:16px}
+.data-card h3{font-size:12px;font-weight:700;color:var(--text);margin-bottom:14px;text-transform:uppercase;letter-spacing:1.5px}
+.data-card h3 .badge{font-size:9px;color:var(--gold);background:rgba(212,169,91,.15);border:1px solid var(--gold-dim);padding:2px 8px;border-radius:4px;margin-left:8px;letter-spacing:1px}
+.data-table{width:100%;border-collapse:collapse}
+.data-table th{text-align:left;padding:10px 12px;font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--navy-line);font-weight:600}
+.data-table th.right{text-align:right}
+.data-table td{padding:10px 12px;font-size:12px;border-bottom:1px solid var(--navy-line)}
+.data-table td.right{text-align:right;font-variant-numeric:tabular-nums}
+.data-table td.metric{color:var(--dim);font-weight:500}
+.data-table td.goal{color:var(--gold);font-weight:600}
+.data-table td.result{color:var(--text);font-weight:700}
+.data-table td.delta{font-weight:600}
+.data-table td.delta.up{color:var(--up)}
+.data-table td.delta.down{color:var(--down)}
+.data-table td.delta.flat{color:var(--flat)}
+.data-table tr:last-child td{border-bottom:0}
+.data-table tr:hover td{background:rgba(255,255,255,.02)}
+.status-pill{display:inline-block;font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:1px}
+.status-pill.hit{background:rgba(34,197,94,.15);color:var(--up)}
+.status-pill.ontrack{background:rgba(212,169,91,.18);color:var(--gold)}
+.status-pill.behind{background:rgba(245,158,11,.18);color:var(--warn)}
+.status-pill.miss{background:rgba(239,68,68,.18);color:var(--down)}
+.status-pill.pending{background:rgba(148,163,184,.15);color:var(--flat)}
+
+/* Two column layout */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.split-21{display:grid;grid-template-columns:2fr 1fr;gap:14px}
+
+/* Insight cards */
+.insight{margin-top:14px;padding:12px 16px;background:rgba(212,169,91,.08);border:1px solid var(--gold-dim);border-radius:8px;font-size:12px;color:var(--cream);line-height:1.6}
+.insight.warn{background:rgba(245,158,11,.08);border-color:var(--warn);color:#FCD9A8}
+.insight.danger{background:rgba(239,68,68,.08);border-color:var(--down);color:#FCA5A5}
+.insight strong{color:var(--gold);font-weight:700}
+.insight.warn strong{color:var(--warn)}
+.insight.danger strong{color:var(--down)}
+
+/* Data source indicator */
+.source-bar{background:var(--navy);border:1px solid var(--navy-line);border-radius:8px;padding:10px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px;font-size:11px;color:var(--dim)}
+.source-bar .live{display:flex;align-items:center;gap:6px;color:var(--up);font-weight:600}
+.source-bar .export{display:flex;align-items:center;gap:6px;color:var(--warn);font-weight:600}
+.source-bar .blocked{display:flex;align-items:center;gap:6px;color:var(--down);font-weight:600}
+.source-bar .dot{width:6px;height:6px;border-radius:50%}
+.source-bar .dot.live{background:var(--up)}
+.source-bar .dot.export{background:var(--warn)}
+.source-bar .dot.blocked{background:var(--down)}
+
+/* Top performer cards */
+.top-list{display:flex;flex-direction:column;gap:8px}
+.top-item{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--navy-deep);border:1px solid var(--navy-line);border-radius:8px;font-size:12px}
+.top-item .rank{display:inline-flex;width:22px;height:22px;background:var(--gold);color:var(--navy-deep);border-radius:50%;align-items:center;justify-content:center;font-weight:800;font-size:10px;margin-right:10px;font-family:'Montserrat'}
+.top-item .title{flex:1;color:var(--text)}
+.top-item .value{color:var(--gold);font-weight:700;font-family:'Montserrat'}
+
+/* Funnel */
+.funnel{display:flex;align-items:center;gap:8px;overflow-x:auto;padding:8px 0}
+.funnel-step{flex:1;min-width:140px;padding:16px;background:linear-gradient(135deg,var(--navy),var(--navy-mid));border:1px solid var(--navy-line);border-radius:10px;text-align:center}
+.funnel-step .v{font-size:28px;font-weight:800;color:var(--gold);font-family:'Montserrat'}
+.funnel-step .l{font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:1.5px;margin:6px 0 4px;font-weight:600}
+.funnel-step .pct{font-size:10px;color:var(--cream);margin-top:6px}
+.funnel-arrow{color:var(--gold-dim);font-size:20px}
+.funnel-step.problem{border-color:var(--down);background:linear-gradient(135deg,var(--navy),rgba(239,68,68,.15))}
+.funnel-step.problem .v{color:var(--down)}
+
+/* Footer */
+.footer{margin-top:32px;padding-top:18px;border-top:1px solid var(--navy-line);font-size:10px;color:var(--very-dim);text-align:center;line-height:1.6}
+.footer strong{color:var(--gold)}
+
+@media(max-width:980px){.split,.split-21{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.kpi-grid{grid-template-columns:1fr}.funnel{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="brand">
+      <div class="brand-mark">SK</div>
+      <div class="brand-text">
+        <h1>SKLES Marketing Performance</h1>
+        <div class="sub">Sean K. Langston Enterprise System · Monthly Dashboard</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="period">MAY 2026 (MONTH 0 BASELINE) → JUN 2026 (MONTH 1 TARGETS)</div>
+      <div class="updated">Last updated: Jun 5, 2026</div>
+    </div>
+  </div>
+
+  <!-- PERIOD SELECTOR -->
+  <div class="period-bar">
+    <button class="period-btn active">May 2026 (Baseline)</button>
+    <button class="period-btn">Jun 2026 (Live)</button>
+    <button class="period-btn">Q3 2026 (Quarter)</button>
+    <button class="period-btn">All Time</button>
+    <div class="period-spacer"></div>
+    <div class="period-note">Backend wiring next · frontend preview</div>
+  </div>
+
+  <!-- DATA SOURCE STATUS -->
+  <div class="source-bar">
+    <span style="text-transform:uppercase;letter-spacing:1.5px;font-weight:600">Data sources:</span>
+    <span class="live"><span class="dot live"></span> Live API (planned: Meta)</span>
+    <span class="export"><span class="dot export"></span> Manual export (YouTube, FB until API)</span>
+    <span class="blocked"><span class="dot blocked"></span> Blocked on access (LinkedIn, YouTube admin)</span>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('overview',this)">Overview</div>
+    <div class="tab" onclick="switchTab('instagram',this)">Instagram</div>
+    <div class="tab" onclick="switchTab('fb-main',this)">FB Main</div>
+    <div class="tab" onclick="switchTab('fb-skles',this)">FB Skills Up</div>
+    <div class="tab" onclick="switchTab('tiktok',this)">TikTok</div>
+    <div class="tab" onclick="switchTab('linkedin',this)">LinkedIn</div>
+    <div class="tab" onclick="switchTab('youtube',this)">YouTube</div>
+    <div class="tab" onclick="switchTab('paid',this)">Paid + Webinar</div>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- OVERVIEW TAB -->
+  <!-- ==================================================================== -->
+  <div class="tc active" id="tab-overview">
+
+    <div class="section-title">Health snapshot — all channels</div>
+    <div class="section-sub">Quick read on whether each channel hit its May target. Status colors: green = hit, gold = on track, amber = behind, red = miss.</div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card hit">
+        <div class="kpi-label">Instagram · Followers</div>
+        <div class="kpi-result">
+          <div class="kpi-value">11,043</div>
+          <div class="kpi-status hit">Hit</div>
+        </div>
+        <div class="kpi-meta">
+          <span class="kpi-goal">Goal: <span>+200/mo</span></span>
+          <span class="kpi-delta up">+144 May</span>
+        </div>
+        <div class="progress"><div class="progress-fill hit" style="width:72%"></div></div>
+      </div>
+
+      <div class="kpi-card ontrack">
+        <div class="kpi-label">Instagram · Reach</div>
+        <div class="kpi-result">
+          <div class="kpi-value">1,292</div>
+          <div class="kpi-status hit">+59%</div>
+        </div>
+        <div class="kpi-meta">
+          <span class="kpi-goal">Jun goal: <span>1,650</span></span>
+          <span class="kpi-delta up">+58.7%</span>
+        </div>
+        <div class="progress"><div class="progress-fill" style="width:78%"></div></div>
+      </div>
+
+      <div class="kpi-card hit">
+        <div class="kpi-label">FB Main · Total Views</div>
+        <div class="kpi-result">
+          <div class="kpi-value">27,428</div>
+          <div class="kpi-status hit">+171%</div>
+        </div>
+        <div class="kpi-meta">
+          <span class="kpi-goal">Goal: <span>25,000+</span></span>
+          <span class="kpi-delta up">Ad-boosted</span>
+        </div>
+        <div class="progress"><div class="progress-fill hit" style="width:100%"></div></div>
+      </div>
+
+      <div class="kpi-card hit">
+        <div class="kpi-label">FB Skills Up · Total Views</div>
+        <div class="kpi-result">
+          <div class="kpi-value">6,600</div>
+          <div class="kpi-status hit">+1,225%</div>
+        </div>
+        <div class="kpi-meta">
+          <span class="kpi-goal">Goal: <span>5,000+</span></span>
+          <span class="kpi-delta up">Webinar push</span>
+        </div>
+        <div class="progress"><div class="progress-fill hit" style="width:100%"></div></div>
+      </div>
+
+      <div class="kpi-card hit">
+        <div class="kpi-label">TikTok · New Followers</div>
+        <div class="kpi-result">
+          <div class="kpi-value">+52</div>
+          <div class="kpi-status hit">Hit</div>
+        </div>
+        <div class="kpi-meta">
+          <span class="kpi-goal">Jun goal: <span>+75</span></span>
+          <span class="kpi-delta up">87.8% FYP</span>
+        </div>
+        <div class="progress"><div class="progress-fill" style="width:69%"></div></div>
+      </div>
+
+      <div class="kpi-card behind">
+        <div class="kpi-label">LinkedIn · Reach</div>
+        <div class="kpi-result">
+          <div class="kpi-value">499</div>
+          <div class="kpi-status behind">Behind</div>
+        </div>
+        <div class="kpi-meta">
+          <span class="kpi-goal">Jun goal: <span>749</span></span>
+          <span class="kpi-delta up">+33%</span>
+        </div>
+        <div class="progress"><div class="progress-fill behind" style="width:67%"></div></div>
+      </div>
+
+      <div class="kpi-card behind">
+        <div class="kpi-label">YouTube · Views</div>
+        <div class="kpi-result">
+          <div class="kpi-value">1,223</div>
+          <div class="kpi-status behind">61% of goal</div>
+        </div>
+        <div class="kpi-meta">
+          <span class="kpi-goal">Jun goal: <span>2,000+</span></span>
+          <span class="kpi-delta up">+5 subs</span>
+        </div>
+        <div class="progress"><div class="progress-fill behind" style="width:61%"></div></div>
+      </div>
+
+      <div class="kpi-card miss">
+        <div class="kpi-label">Webinar · Attendance</div>
+        <div class="kpi-result">
+          <div class="kpi-value">5%</div>
+          <div class="kpi-status miss">Miss</div>
+        </div>
+        <div class="kpi-meta">
+          <span class="kpi-goal">Jun goal: <span>25%+</span></span>
+          <span class="kpi-delta down">9 of 171</span>
+        </div>
+        <div class="progress"><div class="progress-fill miss" style="width:20%"></div></div>
+      </div>
+    </div>
+
+    <div class="insight">
+      <strong>This month's signal:</strong> Real Estate Transactions posts were the top performer on 3 of 5 channels (IG, FB Main, FB Skills Up). Member-recognition and deal-recognition content is the content lane to amplify in June. The webinar campaign's 5% attendance rate is the biggest leverage point — the ad campaign hit its CPA target ($7.66 vs $6 goal), but registrants aren't showing up.
+    </div>
+
+    <div class="section-title">May 21 webinar funnel</div>
+    <div class="section-sub">The cost-per-registration target was nearly met. The leak is between registration and attendance.</div>
+
+    <div class="funnel">
+      <div class="funnel-step">
+        <div class="l">Ad Impressions</div>
+        <div class="v">6,163</div>
+        <div class="pct">Webinar conv campaign</div>
+      </div>
+      <div class="funnel-arrow">▶</div>
+      <div class="funnel-step">
+        <div class="l">Paid Registrations</div>
+        <div class="v">28</div>
+        <div class="pct">$7.66 CPA · target $6</div>
+      </div>
+      <div class="funnel-arrow">▶</div>
+      <div class="funnel-step">
+        <div class="l">Total Registrations</div>
+        <div class="v">171</div>
+        <div class="pct">28 paid + 143 organic</div>
+      </div>
+      <div class="funnel-arrow">▶</div>
+      <div class="funnel-step problem">
+        <div class="l">Attended</div>
+        <div class="v">9</div>
+        <div class="pct">5% show rate</div>
+      </div>
+    </div>
+
+    <div class="insight danger">
+      <strong>Funnel diagnosis:</strong> ad campaign worked, webinar event mechanics failed. Industry baseline show rate is 30-40%; strong is 50%+. 162 registrants didn't show. June fix priorities: 7pm EST time slot (already locked), 6-touchpoint reminder sequence including SMS, ad-copy-to-webinar-opening match check, re-engagement of May 21 no-shows.
+    </div>
+
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- INSTAGRAM TAB -->
+  <!-- ==================================================================== -->
+  <div class="tc" id="tab-instagram">
+    <div class="channel-header" style="border-left-color:var(--ig)">
+      <div>
+        <h2>Instagram</h2>
+        <div class="job">Job: Awareness · 11,043 followers · Reels-led</div>
+        <div class="source"><span class="dot"></span>Source: Manual export from Meta Business Suite · API integration planned</div>
+      </div>
+      <div class="nstar">★ North-Star: Reel reach + non-follower reach</div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card hit">
+        <div class="kpi-label">Followers (Total)</div>
+        <div class="kpi-result">
+          <div class="kpi-value">11,043</div>
+          <div class="kpi-status hit">+144</div>
+        </div>
+        <div class="kpi-meta"><span class="kpi-goal">Jun goal: <span>+200</span></span><span class="kpi-delta up">+1.3%</span></div>
+      </div>
+      <div class="kpi-card hit">
+        <div class="kpi-label">Reach</div>
+        <div class="kpi-result">
+          <div class="kpi-value">1,292</div>
+          <div class="kpi-status hit">+58.7%</div>
+        </div>
+        <div class="kpi-meta"><span class="kpi-goal">Jun goal: <span>1,650</span></span><span class="kpi-delta up">+58.7%</span></div>
+      </div>
+      <div class="kpi-card ontrack">
+        <div class="kpi-label">Profile Visits</div>
+        <div class="kpi-result">
+          <div class="kpi-value">613</div>
+          <div class="kpi-status ontrack">+7.4%</div>
+        </div>
+        <div class="kpi-meta"><span class="kpi-goal">Jun goal: <span>750</span></span><span class="kpi-delta up">+7.4%</span></div>
+      </div>
+      <div class="kpi-card hit">
+        <div class="kpi-label">Reels + Post Views</div>
+        <div class="kpi-result">
+          <div class="kpi-value">5,255</div>
+          <div class="kpi-status hit">80% organic</div>
+        </div>
+        <div class="kpi-meta"><span class="kpi-goal">Organic share: <span>≥80%</span></span><span class="kpi-delta up">80.4%</span></div>
+      </div>
+    </div>
+
+    <div class="data-card">
+      <h3>Full Metrics — May vs June Target <span class="badge">Source: SMM Report</span></h3>
+      <table class="data-table">
+        <thead><tr><th>Metric</th><th class="right">May Actual</th><th class="right">Jun Goal</th><th class="right">% to Goal</th><th class="right">Status</th></tr></thead>
+        <tbody>
+          <tr><td class="metric">Followers (total)</td><td class="right result">11,043</td><td class="right goal">11,243 (+200)</td><td class="right delta up">72%</td><td class="right"><span class="status-pill hit">On track</span></td></tr>
+          <tr><td class="metric">Accounts reached</td><td class="right result">1,292</td><td class="right goal">1,650 (+28%)</td><td class="right delta up">78%</td><td class="right"><span class="status-pill ontrack">On track</span></td></tr>
+          <tr><td class="metric">Profile visits</td><td class="right result">613</td><td class="right goal">750 (+22%)</td><td class="right delta up">82%</td><td class="right"><span class="status-pill ontrack">On track</span></td></tr>
+          <tr><td class="metric">Posts published</td><td class="right result">18</td><td class="right goal">20-24</td><td class="right delta flat">75-90%</td><td class="right"><span class="status-pill ontrack">On track</span></td></tr>
+          <tr><td class="metric">Reels + post views</td><td class="right result">5,255</td><td class="right goal">7,000+</td><td class="right delta up">75%</td><td class="right"><span class="status-pill ontrack">On track</span></td></tr>
+          <tr><td class="metric">Organic share</td><td class="right result">80.4%</td><td class="right goal">≥80%</td><td class="right delta up">Hit</td><td class="right"><span class="status-pill hit">Hit</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="data-card">
+      <h3>Top performing content</h3>
+      <div class="top-list">
+        <div class="top-item"><span class="rank">1</span><span class="title">Real Estate Transactions (member recognition)</span><span class="value">Top performer</span></div>
+      </div>
+    </div>
+
+    <div class="insight"><strong>June priority:</strong> double down on Real Estate Transactions content. Across May this format outperformed motivational content on both reach and engagement. Pair with the SKLES Skills Up FB cross-post strategy for the page migration.</div>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- FB MAIN TAB -->
+  <!-- ==================================================================== -->
+  <div class="tc" id="tab-fb-main">
+    <div class="channel-header" style="border-left-color:var(--fb)">
+      <div>
+        <h2>Facebook — Main Profile (Motivates)</h2>
+        <div class="job">Job: Trust + follower base anchor · seanklangston.motivates</div>
+        <div class="source"><span class="dot"></span>Source: Manual export from Meta Business Suite · API access requested</div>
+      </div>
+      <div class="nstar">★ North-Star: Engagement Rate (eng ÷ reach)</div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card hit">
+        <div class="kpi-label">Total Views</div>
+        <div class="kpi-result">
+          <div class="kpi-value">27,428</div>
+          <div class="kpi-status hit">+171%</div>
+        </div>
+        <div class="kpi-meta"><span class="kpi-goal">Jun goal: <span>25,000+</span></span><span class="kpi-delta up">Ad-boosted</span></div>
+      </div>
+      <div class="kpi-card hit">
+        <div class="kpi-label">Engagement</div>
+        <div class="kpi-result">
+          <div class="kpi-value">1,493</div>
+          <div class="kpi-status hit">+55%</div>
+        </div>
+        <div class="kpi-meta"><span class="kpi-goal">Jun goal: <span>1,800</span></span><span class="kpi-delta up">+55%</span></div>
+      </div>
+      <div class="kpi-card ontrack">
+        <div class="kpi-label">Watch Time</div>
+        <div class="kpi-result">
+          <div class="kpi-value">6h 18m</div>
+          <div class="kpi-status hit">+44%</div>
+        </div>
+        <div class="kpi-meta"><span class="kpi-goal">Jun goal: <span>8h+</span></span><span class="kpi-delta up">+44%</span></div>
+      </div>
+      <div class="kpi-card pending">
+        <div class="kpi-label">Followers (Total)</div>
+        <div class="kpi-result">
+          <div class="kpi-value">—</div>
+          <div class="kpi-status pending">Pending</div>
+        </div>
+        <div class="kpi-meta"><span class="kpi-goal">Need from: <span>Page Insights</span></span></div>
+      </div>
+    </div>
+
+    <div class="data-card">
+      <h3>Full Metrics — May vs June Target <span class="badge">Source: SMM Report</span></h3>
+      <table class="data-table">
+        <thead><tr><th>Metric</th><th class="right">May Actual</th><th class="right">Jun Goal</th><th class="right">Read</th><th class="right">Status</th></tr></thead>
+        <tbody>
+          <tr><td class="metric">Total Views</td><td class="right result">27,428</td><td class="right goal">25,000+</td><td class="right delta flat">Ad-inflated</td><td class="right"><span class="status-pill hit">Hit</span></td></tr>
+          <tr><td class="metric">Engagement</td><td class="right result">1,493</td><td class="right goal">1,800 (+20%)</td><td class="right delta up">+55% MoM</td><td class="right"><span class="status-pill ontrack">On track</span></td></tr>
+          <tr><td class="metric">Watch Time</td><td class="right result">6h 18m</td><td class="right goal">8h+</td><td class="right delta up">+44%</td><td class="right"><span class="status-pill hit">Hit pace</span></td></tr>
+          <tr><td class="metric">Views from External Link</td><td class="right result">59.3%</td><td class="right goal">Track</td><td class="right delta flat">Webinar ads</td><td class="right"><span class="status-pill ontrack">Noted</span></td></tr>
+          <tr><td class="metric">Photos share</td><td class="right result">26.4%</td><td class="right goal">Increase video share</td><td class="right delta flat">Heavy on photos</td><td class="right"><span class="status-pill behind">Shift mix</span></td></tr>
+          <tr><td class="metric">Followers (total)</td><td class="right result">— pending</td><td class="right goal">+5-8%</td><td class="right delta flat">Need export</td><td class="right"><span class="status-pill pending">Pending</span></td></tr>
+          <tr><td class="metric">Organic ER (post-ad isolation)</td><td class="right result">— pending</td><td class="right goal">≥4%</td><td class="right delta flat">Need calc</td><td class="right"><span class="status-pill pending">Pending</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="insight warn"><strong>Caveat:</strong> May view explosion (+171%) is driven by webinar ad spend, not organic momentum. Once Jun 30 webinar wraps, isolate organic baseline — that's the honest trust-anchor metric going forward.</div>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- FB SKLES TAB -->
+  <!-- ==================================================================== -->
+  <div class="tc" id="tab-fb-skles">
+    <div class="channel-header" style="border-left-color:var(--fb)">
+      <div>
+        <h2>Facebook — SKLES Business Page (Skills Up)</h2>
+        <div class="job">Job: Brand-aligned conversion · seanlangston.skillsup</div>
+        <div class="source"><span class="dot"></span>Source: Manual export · API access requested</div>
+      </div>
+      <div class="nstar">★ North-Star: External-link CTR + saves/shares</div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card hit">
+        <div class="kpi-label">Total Views</div>
+        <div class="kpi-result">
+          <div class="kpi-value">6,600</div>
+          <div class="kpi-status hit">+1,225%</div>
+        </div>
+        <div class="kpi-meta"><span class="kpi-goal">Jun goal: <span>5,000+</span></span><span class="kpi-delta up">Webinar ads</span></div>
+      </div>
+      <div class="kpi-card hit">
+        <div class="kpi-label">Post-Level ER</div>
+        <div class="kpi-result">
+          <div class="kpi-value">6.25%</div>
+          <div class="kpi-status hit">Strong</div>
+        </div>
+        <div class="kpi-meta"><span class="kpi-goal">Jun goal: <span>8%</span></span><span class="kpi-delta up">From CSV export</span></div>
+      </div>
+      <div class="kpi-card ontrack">
+        <div class="kpi-label">Watch Time</div>
+        <div class="kpi-result">
+          <div class="kpi-value">11m 33s</div>
+          <div class="kpi-status ontrack">Building</div>
+        </div>
+        <div class="kpi-meta"><span class="kpi-goal">Jun goal: <span>30m+</span></span></div>
+      </div>
+      <div class="kpi-card pending">
+        <div class="kpi-label">New Followers</div>
+        <div class="kpi-result">
+          <div class="kpi-value">—</div>
+          <div class="kpi-status pending">Pending</div>
+        </div>
+        <div class="kpi-meta"><span class="kpi-goal">Jun goal: <span>+50</span></span></div>
+      </div>
+    </div>
+
+    <div class="data-card">
+      <h3>Full Metrics — May vs June Target <span class="badge">Source: SMM Report + FB Export Apr24-May21</span></h3>
+      <table class="data-table">
+        <thead><tr><th>Metric</th><th class="right">May Actual</th><th class="right">Jun Goal</th><th class="right">Read</th><th class="right">Status</th></tr></thead>
+        <tbody>
+          <tr><td class="metric">Total Views</td><td class="right result">6,600</td><td class="right goal">5,000+</td><td class="right delta flat">Ad-inflated</td><td class="right"><span class="status-pill hit">Hit</span></td></tr>
+          <tr><td class="metric">Post-level Engagement Rate</td><td class="right result">6.25%</td><td class="right goal">8%</td><td class="right delta up">Healthy by ER÷reach</td><td class="right"><span class="status-pill ontrack">On track</span></td></tr>
+          <tr><td class="metric">Posts (Apr 24-May 21)</td><td class="right result">9</td><td class="right goal">12-15</td><td class="right delta flat">Increase cadence</td><td class="right"><span class="status-pill behind">Below pace</span></td></tr>
+          <tr><td class="metric">Watch Time</td><td class="right result">11m 33s</td><td class="right goal">30m+</td><td class="right delta flat">Low</td><td class="right"><span class="status-pill behind">Behind</span></td></tr>
+          <tr><td class="metric">External Link views</td><td class="right result">80.3%</td><td class="right goal">Track</td><td class="right delta flat">Webinar ads</td><td class="right"><span class="status-pill ontrack">Noted</span></td></tr>
+          <tr><td class="metric">Photos / Video share</td><td class="right result">89% / 11%</td><td class="right goal">60% / 40%</td><td class="right delta down">Heavy photo</td><td class="right"><span class="status-pill behind">Shift mix</span></td></tr>
+          <tr><td class="metric">New followers</td><td class="right result">— pending</td><td class="right goal">+50</td><td class="right delta flat">Need export</td><td class="right"><span class="status-pill pending">Pending</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="insight"><strong>Signal:</strong> the one video published in May reached 148 — 5× the average photo reach (avg 28). The format lever is clear: shift content mix to 60% video / 40% static in June.</div>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- TIKTOK TAB -->
+  <!-- ==================================================================== -->
+  <div class="tc" id="tab-tiktok">
+    <div class="channel-header" style="border-left-color:var(--tt)">
+      <div>
+        <h2>TikTok</h2>
+        <div class="job">Job: Awareness — cold discovery engine</div>
+        <div class="source"><span class="dot"></span>Source: Manual export · API not in scope</div>
+      </div>
+      <div class="nstar">★ North-Star: FYP reach + new followers</div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card hit">
+        <div class="kpi-label">Total Views</div>
+        <div class="kpi-result">
+          <div class="kpi-value">1,795</div>
+          <div class="kpi-status hit">Baseline</div>
+        </div>
+        <div class="kpi-meta"><span class="kpi-goal">Jun goal: <span>2,500 (+39%)</span></span></div>
+      </div>
+      <div class="kpi-card hit">
+        <div class="kpi-label">New Followers</div>
+        <div class="kpi-result">
+          <div class="kpi-value">+52</div>
+          <div class="kpi-status hit">Strong</div>
+        </div>
+        <div class="kpi-meta"><span class="kpi-goal">Jun goal: <span>+75</span></span></div>
+      </div>
+      <div class="kpi-card hit">
+        <div class="kpi-label">Profile Visits</div>
+        <div class="kpi-result">
+          <div class="kpi-value">99</div>
+          <div class="kpi-status hit">+50%</div>
+        </div>
+        <div class="kpi-meta"><span class="kpi-goal">Jun goal: <span>130 (+30%)</span></span></div>
+      </div>
+      <div class="kpi-card hit">
+        <div class="kpi-label">FYP Traffic Share</div>
+        <div class="kpi-result">
+          <div class="kpi-value">87.8%</div>
+          <div class="kpi-status hit">Algorithmic</div>
+        </div>
+        <div class="kpi-meta"><span class="kpi-goal">Algorithm signal</span></div>
+      </div>
+    </div>
+
+    <div class="data-card">
+      <h3>Full Metrics — May vs June Target <span class="badge">Source: SMM Report</span></h3>
+      <table class="data-table">
+        <thead><tr><th>Metric</th><th class="right">May Actual</th><th class="right">Jun Goal</th><th class="right">Read</th><th class="right">Status</th></tr></thead>
+        <tbody>
+          <tr><td class="metric">Total Views</td><td class="right result">1,795</td><td class="right goal">2,500 (+39%)</td><td class="right delta up">Baseline solid</td><td class="right"><span class="status-pill hit">On track</span></td></tr>
+          <tr><td class="metric">New Followers</td><td class="right result">+52</td><td class="right goal">+75</td><td class="right delta up">Organic growth</td><td class="right"><span class="status-pill hit">On track</span></td></tr>
+          <tr><td class="metric">Profile Visits</td><td class="right result">99</td><td class="right goal">130 (+30%)</td><td class="right delta up">+50% MoM</td><td class="right"><span class="status-pill hit">On track</span></td></tr>
+          <tr><td class="metric">FYP traffic share</td><td class="right result">87.8%</td><td class="right goal">Maintain ≥80%</td><td class="right delta up">Pure discovery</td><td class="right"><span class="status-pill hit">Hit</span></td></tr>
+          <tr><td class="metric">Total followers</td><td class="right result">— pending</td><td class="right goal">Track</td><td class="right delta flat">Need export</td><td class="right"><span class="status-pill pending">Pending</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="insight"><strong>Healthy organic discovery channel.</strong> 87.8% of traffic from FYP = TikTok's algorithm is actively pushing content. No paid lift needed for awareness — keep posting cadence, lean into Real Estate Transactions content (cross-channel top performer).</div>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- LINKEDIN TAB -->
+  <!-- ==================================================================== -->
+  <div class="tc" id="tab-linkedin">
+    <div class="channel-header" style="border-left-color:var(--li)">
+      <div>
+        <h2>LinkedIn</h2>
+        <div class="job">Job: Positioning / authority · 6,819 followers · seanklangston-skillsup</div>
+        <div class="source blocked"><span class="dot"></span>Status: Admin access blocked · email reminder pending to Sean</div>
+      </div>
+      <div class="nstar">★ North-Star: Post impressions to professional audience</div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card hit">
+        <div class="kpi-label">Followers (Total)</div>
+        <div class="kpi-result">
+          <div class="kpi-value">6,819</div>
+          <div class="kpi-status hit">Baseline</div>
+        </div>
+        <div class="kpi-meta"><span class="kpi-goal">Jun goal: <span>+50 (+0.7%)</span></span></div>
+      </div>
+      <div class="kpi-card behind">
+        <div class="kpi-label">Impressions</div>
+        <div class="kpi-result">
+          <div class="kpi-value">499</div>
+          <div class="kpi-status behind">+33%</div>
+        </div>
+        <div class="kpi-meta"><span class="kpi-goal">Jun goal: <span>749 (+50%)</span></span></div>
+      </div>
+      <div class="kpi-card behind">
+        <div class="kpi-label">Reach-to-follower ratio</div>
+        <div class="kpi-result">
+          <div class="kpi-value">7.3%</div>
+          <div class="kpi-status behind">Low</div>
+        </div>
+        <div class="kpi-meta"><span class="kpi-goal">Biggest opportunity</span></div>
+      </div>
+      <div class="kpi-card hit">
+        <div class="kpi-label">Connections</div>
+        <div class="kpi-result">
+          <div class="kpi-value">6,277</div>
+          <div class="kpi-status hit">Strong</div>
+        </div>
+        <div class="kpi-meta"><span class="kpi-goal">B2B network</span></div>
+      </div>
+    </div>
+
+    <div class="data-card">
+      <h3>Full Metrics — May vs June Target <span class="badge">Source: SMM Report</span></h3>
+      <table class="data-table">
+        <thead><tr><th>Metric</th><th class="right">May Actual</th><th class="right">Jun Goal</th><th class="right">Read</th><th class="right">Status</th></tr></thead>
+        <tbody>
+          <tr><td class="metric">Followers (total)</td><td class="right result">6,819</td><td class="right goal">+50</td><td class="right delta flat">Mature audience</td><td class="right"><span class="status-pill ontrack">On track</span></td></tr>
+          <tr><td class="metric">Connections</td><td class="right result">6,277</td><td class="right goal">Maintain</td><td class="right delta flat">Strong B2B</td><td class="right"><span class="status-pill hit">Hit</span></td></tr>
+          <tr><td class="metric">Impressions</td><td class="right result">499</td><td class="right goal">749 (+50%)</td><td class="right delta up">+33% MoM</td><td class="right"><span class="status-pill behind">Behind</span></td></tr>
+          <tr><td class="metric">Reach % of followers</td><td class="right result">7.3%</td><td class="right goal">15%+</td><td class="right delta down">Worst conversion</td><td class="right"><span class="status-pill miss">Format gap</span></td></tr>
+          <tr><td class="metric">Native LI posts/wk</td><td class="right result">— pending</td><td class="right goal">2/wk (text + video)</td><td class="right delta flat">Need access</td><td class="right"><span class="status-pill pending">Pending</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="insight warn"><strong>Biggest underutilized channel.</strong> LinkedIn has 6,819 followers + 6,277 connections — but only 499 impressions. That's a 7.3% reach-to-follower ratio (the worst on any channel). Cause: content format isn't built for LI distribution (LI rewards comments + dwell time, not video views). June fix: 2 native LI posts/wk (text + 1 short video), Sean posting as person not page.</div>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- YOUTUBE TAB -->
+  <!-- ==================================================================== -->
+  <div class="tc" id="tab-youtube">
+    <div class="channel-header" style="border-left-color:var(--yt)">
+      <div>
+        <h2>YouTube</h2>
+        <div class="job">Job: Positioning / be recognised · skillsupwithseanklangston</div>
+        <div class="source blocked"><span class="dot"></span>Status: Editor/admin access blocked · email reminder pending to Sean</div>
+      </div>
+      <div class="nstar">★ North-Star: Avg view duration on Blueprint content</div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card behind">
+        <div class="kpi-label">Views</div>
+        <div class="kpi-result">
+          <div class="kpi-value">1,223</div>
+          <div class="kpi-status behind">61% of goal</div>
+        </div>
+        <div class="kpi-meta"><span class="kpi-goal">Jun goal: <span>2,000+</span></span></div>
+        <div class="progress"><div class="progress-fill behind" style="width:61%"></div></div>
+      </div>
+      <div class="kpi-card behind">
+        <div class="kpi-label">Watch Hours</div>
+        <div class="kpi-result">
+          <div class="kpi-value">7.9</div>
+          <div class="kpi-status behind">53%</div>
+        </div>
+        <div class="kpi-meta"><span class="kpi-goal">Jun goal: <span>15+</span></span></div>
+        <div class="progress"><div class="progress-fill behind" style="width:53%"></div></div>
+      </div>
+      <div class="kpi-card behind">
+        <div class="kpi-label">Subscribers (Net)</div>
+        <div class="kpi-result">
+          <div class="kpi-value">+5</div>
+          <div class="kpi-status behind">33% of goal</div>
+        </div>
+        <div class="kpi-meta"><span class="kpi-goal">Jun goal: <span>+15</span></span></div>
+        <div class="progress"><div class="progress-fill behind" style="width:33%"></div></div>
+      </div>
+      <div class="kpi-card behind">
+        <div class="kpi-label">CTR</div>
+        <div class="kpi-result">
+          <div class="kpi-value">2.3%</div>
+          <div class="kpi-status behind">58% of goal</div>
+        </div>
+        <div class="kpi-meta"><span class="kpi-goal">Jun goal: <span>4.0%</span></span></div>
+        <div class="progress"><div class="progress-fill behind" style="width:58%"></div></div>
+      </div>
+      <div class="kpi-card ontrack">
+        <div class="kpi-label">Monthly Audience</div>
+        <div class="kpi-result">
+          <div class="kpi-value">417</div>
+          <div class="kpi-status ontrack">70% of goal</div>
+        </div>
+        <div class="kpi-meta"><span class="kpi-goal">Jun goal: <span>600+</span></span></div>
+        <div class="progress"><div class="progress-fill" style="width:70%"></div></div>
+      </div>
+      <div class="kpi-card hit">
+        <div class="kpi-label">Impressions</div>
+        <div class="kpi-result">
+          <div class="kpi-value">3,800</div>
+          <div class="kpi-status hit">Discovery</div>
+        </div>
+        <div class="kpi-meta"><span class="kpi-goal">Grow reach</span></div>
+      </div>
+    </div>
+
+    <div class="split-21">
+      <div class="data-card">
+        <h3>Top Shorts (May) <span class="badge">Source: YouTube Executive Report</span></h3>
+        <div class="top-list">
+          <div class="top-item"><span class="rank">1</span><span class="title">Magic Johnson's #1 Real Estate Advice</span><span class="value">339</span></div>
+          <div class="top-item"><span class="rank">2</span><span class="title">Private Lenders for Real Estate Investing</span><span class="value">238</span></div>
+          <div class="top-item"><span class="rank">3</span><span class="title">Amazon Depends on This to Win</span><span class="value">110</span></div>
+          <div class="top-item"><span class="rank">4</span><span class="title">Massive Salary to Retire Early</span><span class="value">87</span></div>
+          <div class="top-item"><span class="rank">5</span><span class="title">Your Tenant Pays The Mortgage</span><span class="value">79</span></div>
+        </div>
+      </div>
+      <div class="data-card">
+        <h3>Traffic Sources</h3>
+        <table class="data-table">
+          <tbody>
+            <tr><td class="metric">Shorts Feed</td><td class="right result">76.6%</td></tr>
+            <tr><td class="metric">Other / Direct / Search</td><td class="right result">10.3%</td></tr>
+            <tr><td class="metric">Suggested Videos</td><td class="right result">5.2%</td></tr>
+            <tr><td class="metric">Channel Pages</td><td class="right result">4.6%</td></tr>
+            <tr><td class="metric">Browse Features</td><td class="right result">3.3%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="data-card">
+      <h3>Top Long-Form (May)</h3>
+      <table class="data-table">
+        <thead><tr><th>Title</th><th class="right">Views</th><th class="right">Watch Time</th><th class="right">CTR</th></tr></thead>
+        <tbody>
+          <tr><td>Renovate a Rental Property</td><td class="right result">41</td><td class="right">2.67 hrs</td><td class="right delta up">3.62%</td></tr>
+          <tr><td>Build Wealth Through Real Estate</td><td class="right result">31</td><td class="right">0.33 hrs</td><td class="right delta up">5.71%</td></tr>
+          <tr><td>Buy Your First Investment Property</td><td class="right result">28</td><td class="right">0.83 hrs</td><td class="right delta up">4.48%</td></tr>
+          <tr><td>3 Key Ways to Build Wealth Through Real Estate</td><td class="right result">24</td><td class="right">0.48 hrs</td><td class="right delta flat">1.99%</td></tr>
+          <tr><td>Real Estate Investing with a Job</td><td class="right result">15</td><td class="right">0.53 hrs</td><td class="right delta flat">1.78%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="insight"><strong>The signal:</strong> Private Lending content showed the strongest retention (89%+ avg view duration on the Private Lenders Short). Recurring Private Lending series + property-specific long-form videos are the June priorities. CTR lift from 2.3% to 4% comes from shorter, higher-curiosity titles + better thumbnails.</div>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- PAID + WEBINAR TAB -->
+  <!-- ==================================================================== -->
+  <div class="tc" id="tab-paid">
+    <div class="channel-header" style="border-left-color:var(--gold)">
+      <div>
+        <h2>Paid Ads + Webinar Performance</h2>
+        <div class="job">Job: Sell · Protégé webinar conversion · $1,200 cycle budget</div>
+        <div class="source"><span class="dot"></span>Source: Meta Ads Manager export + Zoom Performance Report</div>
+      </div>
+      <div class="nstar">★ North-Star: Cost per attendee (not just CPA)</div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card hit">
+        <div class="kpi-label">CPA (Paid Reg)</div>
+        <div class="kpi-result">
+          <div class="kpi-value">$7.66</div>
+          <div class="kpi-status hit">Near target</div>
+        </div>
+        <div class="kpi-meta"><span class="kpi-goal">Target: <span>$6 (Demond)</span></span><span class="kpi-delta up">28 paid regs</span></div>
+      </div>
+      <div class="kpi-card miss">
+        <div class="kpi-label">Attendance Rate</div>
+        <div class="kpi-result">
+          <div class="kpi-value">5%</div>
+          <div class="kpi-status miss">Critical miss</div>
+        </div>
+        <div class="kpi-meta"><span class="kpi-goal">Jun goal: <span>25%+</span></span><span class="kpi-delta down">9 of 171</span></div>
+        <div class="progress"><div class="progress-fill miss" style="width:20%"></div></div>
+      </div>
+      <div class="kpi-card behind">
+        <div class="kpi-label">Cost per Attendee</div>
+        <div class="kpi-result">
+          <div class="kpi-value">$107+</div>
+          <div class="kpi-status behind">Webinar leak</div>
+        </div>
+        <div class="kpi-meta"><span class="kpi-goal">Driven by attendance fix</span></div>
+      </div>
+      <div class="kpi-card hit">
+        <div class="kpi-label">Total Registrants</div>
+        <div class="kpi-result">
+          <div class="kpi-value">171</div>
+          <div class="kpi-status hit">Demand exists</div>
+        </div>
+        <div class="kpi-meta"><span class="kpi-goal">28 paid + 143 organic</span></div>
+      </div>
+    </div>
+
+    <div class="section-title">Funnel — May 21 webinar (full picture)</div>
+    <div class="funnel">
+      <div class="funnel-step">
+        <div class="l">Ad Spend</div>
+        <div class="v">$215</div>
+        <div class="pct">Webinar conv campaign</div>
+      </div>
+      <div class="funnel-arrow">▶</div>
+      <div class="funnel-step">
+        <div class="l">Impressions</div>
+        <div class="v">6,163</div>
+      </div>
+      <div class="funnel-arrow">▶</div>
+      <div class="funnel-step">
+        <div class="l">Paid Registrations</div>
+        <div class="v">28</div>
+        <div class="pct">$7.66 CPA</div>
+      </div>
+      <div class="funnel-arrow">▶</div>
+      <div class="funnel-step">
+        <div class="l">Total Registrations</div>
+        <div class="v">171</div>
+        <div class="pct">+143 organic</div>
+      </div>
+      <div class="funnel-arrow">▶</div>
+      <div class="funnel-step problem">
+        <div class="l">Attended</div>
+        <div class="v">9</div>
+        <div class="pct">5% show rate</div>
+      </div>
+    </div>
+
+    <div class="split">
+      <div class="data-card">
+        <h3>May 21 Campaign Performance <span class="badge">Source: Meta Ads Manager</span></h3>
+        <table class="data-table">
+          <thead><tr><th>Campaign</th><th class="right">Spend</th><th class="right">Result</th><th class="right">CPA</th></tr></thead>
+          <tbody>
+            <tr><td class="metric">Webinar Conv (May 21)</td><td class="right result">$214.51</td><td class="right result">28 regs</td><td class="right delta up">$7.66</td></tr>
+            <tr><td class="metric">Engagement (still active)</td><td class="right result">$119.96</td><td class="right result">246 visits</td><td class="right delta up">$0.49</td></tr>
+          </tbody>
+        </table>
+        <div class="insight warn" style="margin-top:14px"><strong>Action item:</strong> pause "SKLES — Engagement — May 2026" today. Campaign is still live but has no defined next step — burning $5/day on the wrong objective.</div>
+      </div>
+
+      <div class="data-card">
+        <h3>May 21 Webinar Event <span class="badge">Source: Zoom Performance Report</span></h3>
+        <table class="data-table">
+          <tbody>
+            <tr><td class="metric">Topic</td><td class="right result">How To Become Financially Independent</td></tr>
+            <tr><td class="metric">Actual start</td><td class="right">11:53 AM EST</td></tr>
+            <tr><td class="metric">Duration</td><td class="right">42 min</td></tr>
+            <tr><td class="metric">Registrants</td><td class="right result">171</td></tr>
+            <tr><td class="metric">Attended</td><td class="right delta down">9</td></tr>
+            <tr><td class="metric">Attendance rate</td><td class="right delta down">5%</td></tr>
+            <tr><td class="metric">Q&A questions (via Chat)</td><td class="right result">8</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-title">Jun 30 webinar — restructure plan</div>
+    <div class="data-card">
+      <h3>Lever structure + targets</h3>
+      <table class="data-table">
+        <thead><tr><th>Lever</th><th>What it does</th><th class="right">Budget</th><th class="right">Target</th></tr></thead>
+        <tbody>
+          <tr><td class="metric">Lever 1 — Protégé Conv</td><td>Reels-style video ads, 4 variants, 2-week runway</td><td class="right goal">$900-1,000</td><td class="right result">CPA $6-10 · maintain</td></tr>
+          <tr><td class="metric">Lever 2 — Boost Organic</td><td>Boost high-fit posts (member recognition, RE Transactions)</td><td class="right goal">$200-300</td><td class="right result">Event-driven</td></tr>
+          <tr><td class="metric">Attendance fix</td><td>6-touchpoint reminder seq + SMS + re-engagement to no-shows</td><td class="right goal">$0 marginal</td><td class="right result">Show rate 25%+</td></tr>
+          <tr><td class="metric">Time slot</td><td>7:00 PM EST (vs May's 12 PM)</td><td class="right goal">Locked</td><td class="right result">Structural lift</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="insight"><strong>The leverage point:</strong> ad campaign already hit its CPA target. The Jun 30 win comes from converting registrants to attendees, not from getting cheaper registrations. Reminder sequence + 7pm time slot + SMS turn-on + ad-copy-to-webinar-opening match = the package.</div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <strong>SKLES Marketing Dashboard · v1 (frontend preview)</strong><br>
+    Backend wiring: Meta API (FB Main + FB Skills Up + IG) · YouTube Analytics API · LinkedIn manual export · Zoom export.<br>
+    Pre-filled with May 2026 data from SMM Report (Sean's team) + YouTube Executive Report + Zoom Performance Report + Meta Ads Manager export.
+  </div>
+
+</div>
+
+<script>
+function switchTab(target, el){
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tc').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-' + target).classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+// Period button highlight (display only — no data switch yet)
+document.querySelectorAll('.period-btn').forEach(btn => {
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+</script>
+
+</body>
+</html>
