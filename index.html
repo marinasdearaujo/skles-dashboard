@@ -1096,7 +1096,7 @@ window.applyOrganic = function(from, to){
       n.innerHTML = '<strong>Full analytics live.</strong> Watch time, views and subscriber growth pulled from the YouTube Analytics API.';
     } else {
       n.className = 'insight warn';
-      n.innerHTML = '<strong>Public stats are live</strong> — subscribers, total views, video count, and per-video public views. Deeper analytics (watch time, CTR, traffic sources, retention) need channel-owner authorization; YouTube Studio "manager" access is not enough for the API. Once Sean authorizes as the owner, these fill in automatically.';
+      n.innerHTML = '<strong>Public stats are live</strong> — subscribers, total views, video count, and per-video public views. These are <b>all-time totals</b>, so they do not move with the date filter yet. The windowed YouTube metrics (watch time, CTR, traffic sources, retention, views in a period) need channel-owner authorization — YouTube Studio "manager" access is not enough for the API. Once Sean authorizes as the owner, those fill in and start responding to the filter automatically.';
     }
   }
 })();
