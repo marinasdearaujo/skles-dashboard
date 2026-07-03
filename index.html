@@ -987,7 +987,7 @@ function switchTab(target, el){
   }
   function apply(from, to){ render(from, to); renderOverview(from, to); if(window.applyOrganic) window.applyOrganic(from, to); }
   if(fromEl && toEl){
-    fromEl.min = launch; toEl.max = todayStr();
+    fromEl.min = '2026-01-01'; toEl.max = todayStr();
     fromEl.value = launch; toEl.value = todayStr();
     fromEl.addEventListener('change', function(){ clearChips(); apply(fromEl.value||launch, toEl.value||todayStr()); });
     toEl.addEventListener('change', function(){ clearChips(); apply(fromEl.value||launch, toEl.value||todayStr()); });
@@ -997,7 +997,7 @@ function switchTab(target, el){
       clearChips(); this.classList.add('active');
       var days = parseInt(this.getAttribute('data-days'),10), to = todayStr(), from;
       if(days===0){ from = launch; }
-      else { var d = new Date(); d.setDate(d.getDate()-(days-1)); from = d.toISOString().slice(0,10); if(from<launch) from = launch; }
+      else { var d = new Date(); d.setDate(d.getDate()-(days-1)); from = d.toISOString().slice(0,10); }
       if(fromEl) fromEl.value = from;
       if(toEl) toEl.value = to;
       apply(from, to);
