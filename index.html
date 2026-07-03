@@ -1032,11 +1032,10 @@ window.applyOrganic = function(from, to){
   var igU = document.getElementById('ig-live-updated'); if(igU) igU.textContent = sub;
   var igK = document.getElementById('ig-live-kpis');
   if(igK){
-    var g = ig.follower_growth||0;
     igK.innerHTML =
-      card('Reach', fmt(ig.reach), label, ig.reach?'hit':'pending')
+      card('Followers', fmt(ig.followers), 'total', 'hit')
+    + card('Reach', fmt(ig.reach), label, ig.reach?'hit':'pending')
     + card('Profile Views', fmt(ig.profile_views), label, ig.profile_views?'hit':'pending')
-    + card('Follower Growth', (g>0?'+':'')+fmt(g), label, g>=0?'ontrack':'behind')
     + card('Engagement Rate', (ig.engagement_rate||0).toFixed(1)+'%', 'interactions ÷ reach', 'hit')
     + card('Website Clicks', fmt(ig.website_clicks), label, 'pending');
   }
