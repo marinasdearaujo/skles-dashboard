@@ -162,6 +162,11 @@ h1,h2,h3,.st,.kpi-label,.tab{font-family:'Montserrat',sans-serif}
 
 @media(max-width:980px){.split,.split-21{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:640px){.kpi-grid{grid-template-columns:1fr}.funnel{flex-direction:column}}
+
+/* Live (Meta API) block */
+.live-badge{display:inline-flex;align-items:center;gap:6px;font-size:9px;font-weight:800;letter-spacing:1px;color:var(--up);background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.4);border-radius:20px;padding:3px 10px;text-transform:uppercase;margin-left:8px}
+.live-badge .pulse{width:7px;height:7px;border-radius:50%;background:var(--up);box-shadow:0 0 0 0 rgba(34,197,94,.6);animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.5)}70%{box-shadow:0 0 0 7px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
 </style>
 </head>
 <body>
@@ -189,13 +194,13 @@ h1,h2,h3,.st,.kpi-label,.tab{font-family:'Montserrat',sans-serif}
     <button class="period-btn">Q3 2026 (Quarter)</button>
     <button class="period-btn">All Time</button>
     <div class="period-spacer"></div>
-    <div class="period-note">Backend wiring next · frontend preview</div>
+    <div class="period-note">Paid tab: live via Meta API · other channels: manual export</div>
   </div>
 
   <!-- DATA SOURCE STATUS -->
   <div class="source-bar">
     <span style="text-transform:uppercase;letter-spacing:1.5px;font-weight:600">Data sources:</span>
-    <span class="live"><span class="dot live"></span> Live API (planned: Meta)</span>
+    <span class="live"><span class="dot live"></span> Live API: Meta — connected (Paid tab)</span>
     <span class="export"><span class="dot export"></span> Manual export (YouTube, FB until API)</span>
     <span class="blocked"><span class="dot blocked"></span> Blocked on access (LinkedIn, YouTube admin)</span>
   </div>
@@ -826,6 +831,24 @@ h1,h2,h3,.st,.kpi-label,.tab{font-family:'Montserrat',sans-serif}
       <div class="nstar">★ North-Star: Cost per attendee (not just CPA)</div>
     </div>
 
+    <!-- ===== LIVE (Meta API) — Jul 15 campaign ===== -->
+    <div class="section-title">Live — Jul 15 campaign
+      <span class="live-badge"><span class="pulse"></span> Live · Meta API</span>
+    </div>
+    <div class="section-sub">Pulled straight from the Meta Marketing API for the two live campaigns. <span id="live-updated" style="color:var(--gold)"></span></div>
+    <div class="kpi-grid" id="live-kpis"></div>
+    <div class="data-card">
+      <h3>Live campaign breakdown <span class="badge">Meta API</span></h3>
+      <table class="data-table">
+        <thead><tr><th>Campaign</th><th class="right">Spend</th><th class="right">Impressions</th><th class="right">Reach</th><th class="right">Clicks</th><th class="right">CTR</th><th class="right">Results</th></tr></thead>
+        <tbody id="live-rows"></tbody>
+      </table>
+      <div class="insight" id="live-note" style="margin-top:14px"></div>
+    </div>
+
+    <div class="section-title">May 21 webinar — baseline retrospective</div>
+    <div class="section-sub">The prior cycle, kept for comparison. The live block above is the current Jul 15 push.</div>
+
     <div class="kpi-grid">
       <div class="kpi-card hit">
         <div class="kpi-label">CPA (Paid Reg)</div>
@@ -949,6 +972,7 @@ h1,h2,h3,.st,.kpi-label,.tab{font-family:'Montserrat',sans-serif}
 
 </div>
 
+<script src="skles-dashboard-data.js"></script>
 <script>
 function switchTab(target, el){
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -965,6 +989,70 @@ document.querySelectorAll('.period-btn').forEach(btn => {
     this.classList.add('active');
   });
 });
+
+/* ===== Live (Meta API) render ===== */
+(function renderLive(){
+  var D = window.SKLES_DATA;
+  if(!D || !D.campaigns) return;
+  var w = D.campaigns.webinar || {}, e = D.campaigns.ebook || {};
+  var fmt = function(n){ return (Math.round(n||0)).toLocaleString('en-US'); };
+  var money = function(n){ return '$' + (Number(n||0)).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); };
+  var spend = (w.spend||0)+(e.spend||0);
+  var imps  = (w.impressions||0)+(e.impressions||0);
+  var reach = (w.reach||0)+(e.reach||0);
+  var clicks= (w.clicks||0)+(e.clicks||0);
+  var ctr   = imps ? (clicks/imps*100) : 0;
+  var budget = (w.daily_budget||0)+(e.daily_budget||0);
+  var live = imps>0;
+
+  var upd = document.getElementById('live-updated');
+  if(upd) upd.textContent = 'Updated ' + (D.last_updated||'') + ' · source: ' + (D.source||'Meta API');
+
+  var card = function(label, value, metaHtml, cls){
+    return '<div class="kpi-card '+(cls||'pending')+'">'
+      + '<div class="kpi-label">'+label+'</div>'
+      + '<div class="kpi-result"><div class="kpi-value">'+value+'</div></div>'
+      + '<div class="kpi-meta">'+(metaHtml||'')+'</div></div>';
+  };
+  var kpis = document.getElementById('live-kpis');
+  if(kpis){
+    kpis.innerHTML =
+      card('Total Spend', money(spend), '<span class="kpi-goal">of <span>'+money(budget)+'/day</span> combined</span>', live?'ontrack':'pending')
+    + card('Impressions', fmt(imps), '<span class="kpi-goal">since launch</span>', live?'ontrack':'pending')
+    + card('Reach', fmt(reach), '<span class="kpi-goal">unique people</span>', live?'ontrack':'pending')
+    + card('Link Clicks', fmt(clicks), '<span class="kpi-goal">CTR <span>'+ctr.toFixed(2)+'%</span></span>', live?'ontrack':'pending')
+    + card('Webinar Registrations', fmt(w.registrations), '<span class="kpi-goal">cost/reg <span>'+(w.registrations?money(w.cost_per_reg):'—')+'</span></span>', w.registrations?'hit':'pending')
+    + card('Ebook Downloads', fmt(e.leads), '<span class="kpi-goal">cost/lead <span>'+(e.leads?money(e.cost_per_lead):'—')+'</span></span>', e.leads?'hit':'pending');
+  }
+
+  var rowsEl = document.getElementById('live-rows');
+  if(rowsEl){
+    var row = function(name, c, result){
+      var r = c.impressions ? (c.clicks/c.impressions*100).toFixed(2)+'%' : '—';
+      return '<tr><td class="metric">'+name+'</td>'
+        + '<td class="right result">'+money(c.spend)+'</td>'
+        + '<td class="right">'+fmt(c.impressions)+'</td>'
+        + '<td class="right">'+fmt(c.reach)+'</td>'
+        + '<td class="right">'+fmt(c.clicks)+'</td>'
+        + '<td class="right">'+r+'</td>'
+        + '<td class="right result">'+result+'</td></tr>';
+    };
+    rowsEl.innerHTML =
+      row('Webinar Jul 15 <span class="status-pill '+(w.status==='ACTIVE'?'hit':'pending')+'">'+(w.status||'')+'</span>', w, (w.registrations||0)+' regs')
+    + row('Ebook Lead-Gen <span class="status-pill '+(e.status==='ACTIVE'?'hit':'pending')+'">'+(e.status||'')+'</span>', e, (e.leads||0)+' leads');
+  }
+
+  var note = document.getElementById('live-note');
+  if(note){
+    if(!live){
+      note.className = 'insight warn';
+      note.innerHTML = '<strong>Delivery just started.</strong> Both campaigns are live and paused-free, but Meta reports impressions and spend a few hours after the first delivery (and 2 warm-audience ads are still clearing review). Numbers here fill in automatically on the next data pull.';
+    } else {
+      note.className = 'insight';
+      note.innerHTML = '<strong>Live.</strong> ' + fmt(imps) + ' impressions and ' + money(spend) + ' spent so far across both campaigns. Webinar CPA target is $6-10 per registration — watch the cost/reg card as volume builds toward Jul 15.';
+    }
+  }
+})();
 </script>
 
 </body>
