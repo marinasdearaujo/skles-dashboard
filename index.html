@@ -176,6 +176,27 @@ h1,h2,h3,.st,.kpi-label,.tab{font-family:'Montserrat',sans-serif}
 .live-badge{display:inline-flex;align-items:center;gap:6px;font-size:9px;font-weight:800;letter-spacing:1px;color:var(--up);background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.4);border-radius:20px;padding:3px 10px;text-transform:uppercase;margin-left:8px}
 .live-badge .pulse{width:7px;height:7px;border-radius:50%;background:var(--up);box-shadow:0 0 0 0 rgba(34,197,94,.6);animation:pulse 1.8s infinite}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.5)}70%{box-shadow:0 0 0 7px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
+
+/* Overview — status board */
+.ov-hero{display:flex;align-items:center;gap:22px;padding:22px 26px;border-radius:14px;margin-bottom:26px;border:1px solid var(--navy-line);background:linear-gradient(135deg,var(--navy),var(--navy-mid));border-left:6px solid var(--gold)}
+.ov-hero.good{border-left-color:var(--up)}
+.ov-hero.watch{border-left-color:var(--warn)}
+.ov-hero.problem{border-left-color:var(--down)}
+.ov-hero .big{font-family:'Montserrat';font-weight:800;font-size:14px;letter-spacing:1px;text-transform:uppercase;padding:9px 16px;border-radius:8px;white-space:nowrap}
+.ov-hero.good .big{background:rgba(34,197,94,.15);color:var(--up)}
+.ov-hero.watch .big{background:rgba(245,158,11,.15);color:var(--warn)}
+.ov-hero.problem .big{background:rgba(239,68,68,.15);color:var(--down)}
+.ov-hero .txt{font-size:15px;color:var(--cream);line-height:1.55}
+.ov-hero .txt b{color:#fff;font-weight:700}
+.ov-flag{display:flex;align-items:flex-start;gap:12px;padding:13px 16px;background:var(--navy);border:1px solid var(--navy-line);border-radius:10px;margin-bottom:10px;border-left:4px solid var(--flat)}
+.ov-flag.good{border-left-color:var(--up)}
+.ov-flag.watch{border-left-color:var(--warn)}
+.ov-flag.problem{border-left-color:var(--down)}
+.ov-flag.info{border-left-color:var(--dim)}
+.ov-flag .ic{font-size:15px;line-height:1.5}
+.ov-flag .bd{font-size:13.5px;color:var(--cream);line-height:1.5}
+.ov-flag .bd b{color:#fff}
+.ov-flag .tg{display:block;font-size:9.5px;text-transform:uppercase;letter-spacing:1px;color:var(--dim);font-weight:700;margin-bottom:3px}
 </style>
 </head>
 <body>
@@ -236,151 +257,19 @@ h1,h2,h3,.st,.kpi-label,.tab{font-family:'Montserrat',sans-serif}
   <!-- ==================================================================== -->
   <div class="tc active" id="tab-overview">
 
-    <div class="section-title">Health snapshot — all channels</div>
-    <div class="section-sub">Quick read on whether each channel hit its May target. Status colors: green = hit, gold = on track, amber = behind, red = miss.</div>
+    <div id="ov-hero"></div>
 
-    <div class="kpi-grid">
-      <div class="kpi-card hit">
-        <div class="kpi-label">Instagram · Followers</div>
-        <div class="kpi-result">
-          <div class="kpi-value">11,043</div>
-          <div class="kpi-status hit">Hit</div>
-        </div>
-        <div class="kpi-meta">
-          <span class="kpi-goal">Goal: <span>+200/mo</span></span>
-          <span class="kpi-delta up">+144 May</span>
-        </div>
-        <div class="progress"><div class="progress-fill hit" style="width:72%"></div></div>
-      </div>
+    <div class="section-title">Jul 15 webinar campaign <span class="live-badge"><span class="pulse"></span> Live</span></div>
+    <div class="section-sub" id="ov-camp-sub">The push that matters right now. These reflect the date range selected above.</div>
+    <div class="kpi-grid" id="ov-campaign"></div>
 
-      <div class="kpi-card ontrack">
-        <div class="kpi-label">Instagram · Reach</div>
-        <div class="kpi-result">
-          <div class="kpi-value">1,292</div>
-          <div class="kpi-status hit">+59%</div>
-        </div>
-        <div class="kpi-meta">
-          <span class="kpi-goal">Jun goal: <span>1,650</span></span>
-          <span class="kpi-delta up">+58.7%</span>
-        </div>
-        <div class="progress"><div class="progress-fill" style="width:78%"></div></div>
-      </div>
+    <div class="section-title">Channel health at a glance</div>
+    <div class="section-sub">Where each channel stands right now. Open a tab above to go deeper.</div>
+    <div class="kpi-grid" id="ov-channels"></div>
 
-      <div class="kpi-card hit">
-        <div class="kpi-label">FB Main · Total Views</div>
-        <div class="kpi-result">
-          <div class="kpi-value">27,428</div>
-          <div class="kpi-status hit">+171%</div>
-        </div>
-        <div class="kpi-meta">
-          <span class="kpi-goal">Goal: <span>25,000+</span></span>
-          <span class="kpi-delta up">Ad-boosted</span>
-        </div>
-        <div class="progress"><div class="progress-fill hit" style="width:100%"></div></div>
-      </div>
-
-      <div class="kpi-card hit">
-        <div class="kpi-label">FB Skills Up · Total Views</div>
-        <div class="kpi-result">
-          <div class="kpi-value">6,600</div>
-          <div class="kpi-status hit">+1,225%</div>
-        </div>
-        <div class="kpi-meta">
-          <span class="kpi-goal">Goal: <span>5,000+</span></span>
-          <span class="kpi-delta up">Webinar push</span>
-        </div>
-        <div class="progress"><div class="progress-fill hit" style="width:100%"></div></div>
-      </div>
-
-      <div class="kpi-card hit">
-        <div class="kpi-label">TikTok · New Followers</div>
-        <div class="kpi-result">
-          <div class="kpi-value">+52</div>
-          <div class="kpi-status hit">Hit</div>
-        </div>
-        <div class="kpi-meta">
-          <span class="kpi-goal">Jun goal: <span>+75</span></span>
-          <span class="kpi-delta up">87.8% FYP</span>
-        </div>
-        <div class="progress"><div class="progress-fill" style="width:69%"></div></div>
-      </div>
-
-      <div class="kpi-card behind">
-        <div class="kpi-label">LinkedIn · Reach</div>
-        <div class="kpi-result">
-          <div class="kpi-value">499</div>
-          <div class="kpi-status behind">Behind</div>
-        </div>
-        <div class="kpi-meta">
-          <span class="kpi-goal">Jun goal: <span>749</span></span>
-          <span class="kpi-delta up">+33%</span>
-        </div>
-        <div class="progress"><div class="progress-fill behind" style="width:67%"></div></div>
-      </div>
-
-      <div class="kpi-card behind">
-        <div class="kpi-label">YouTube · Views</div>
-        <div class="kpi-result">
-          <div class="kpi-value">1,223</div>
-          <div class="kpi-status behind">61% of goal</div>
-        </div>
-        <div class="kpi-meta">
-          <span class="kpi-goal">Jun goal: <span>2,000+</span></span>
-          <span class="kpi-delta up">+5 subs</span>
-        </div>
-        <div class="progress"><div class="progress-fill behind" style="width:61%"></div></div>
-      </div>
-
-      <div class="kpi-card miss">
-        <div class="kpi-label">Webinar · Attendance</div>
-        <div class="kpi-result">
-          <div class="kpi-value">5%</div>
-          <div class="kpi-status miss">Miss</div>
-        </div>
-        <div class="kpi-meta">
-          <span class="kpi-goal">Jun goal: <span>25%+</span></span>
-          <span class="kpi-delta down">9 of 171</span>
-        </div>
-        <div class="progress"><div class="progress-fill miss" style="width:20%"></div></div>
-      </div>
-    </div>
-
-    <div class="insight">
-      <strong>This month's signal:</strong> Real Estate Transactions posts were the top performer on 3 of 5 channels (IG, FB Main, FB Skills Up). Member-recognition and deal-recognition content is the content lane to amplify in June. The webinar campaign's 5% attendance rate is the biggest leverage point — the ad campaign hit its CPA target ($7.66 vs $6 goal), but registrants aren't showing up.
-    </div>
-
-    <div class="section-title">May 21 webinar funnel</div>
-    <div class="section-sub">The cost-per-registration target was nearly met. The leak is between registration and attendance.</div>
-
-    <div class="funnel">
-      <div class="funnel-step">
-        <div class="l">Ad Impressions</div>
-        <div class="v">6,163</div>
-        <div class="pct">Webinar conv campaign</div>
-      </div>
-      <div class="funnel-arrow">▶</div>
-      <div class="funnel-step">
-        <div class="l">Paid Registrations</div>
-        <div class="v">28</div>
-        <div class="pct">$7.66 CPA · target $6</div>
-      </div>
-      <div class="funnel-arrow">▶</div>
-      <div class="funnel-step">
-        <div class="l">Total Registrations</div>
-        <div class="v">171</div>
-        <div class="pct">28 paid + 143 organic</div>
-      </div>
-      <div class="funnel-arrow">▶</div>
-      <div class="funnel-step problem">
-        <div class="l">Attended</div>
-        <div class="v">9</div>
-        <div class="pct">5% show rate</div>
-      </div>
-    </div>
-
-    <div class="insight danger">
-      <strong>Funnel diagnosis:</strong> ad campaign worked, webinar event mechanics failed. Industry baseline show rate is 30-40%; strong is 50%+. 162 registrants didn't show. June fix priorities: 7pm EST time slot (already locked), 6-touchpoint reminder sequence including SMS, ad-copy-to-webinar-opening match check, re-engagement of May 21 no-shows.
-    </div>
+    <div class="section-title">Needs attention</div>
+    <div class="section-sub">Auto-flagged from the live data \u2014 the shortlist of what to fix.</div>
+    <div id="ov-attention"></div>
 
   </div>
 
@@ -1039,7 +928,64 @@ function switchTab(target, el){
   var launch = D.launch_date || '2026-07-03';
   var fromEl = document.getElementById('date-from'), toEl = document.getElementById('date-to');
   var clearChips = function(){ document.querySelectorAll('.range-chip').forEach(function(c){ c.classList.remove('active'); }); };
-  function apply(from, to){ render(from, to); if(window.applyOrganic) window.applyOrganic(from, to); }
+  function daysToWebinar(){ var d = Math.ceil((new Date('2026-07-15T19:00:00-04:00') - new Date())/86400000); return d>0 ? d : 0; }
+  function organicWin(from, to){
+    var O = window.SKLES_ORGANIC; if(!O || !O.windows) return null;
+    var days = 30; if(from && to){ days = Math.round((new Date(to)-new Date(from))/86400000)+1; }
+    var key = days<=7 ? "7" : (days<=14 ? "14" : "30");
+    return { key: key, w: O.windows[key] || O.windows["30"] };
+  }
+  function renderOverview(from, to){
+    var w = D.campaigns.webinar||{}, e = D.campaigns.ebook||{};
+    var wa = agg(w.daily, from, to), ea = agg(e.daily, from, to);
+    var spend = wa.spend+ea.spend, imps = wa.impressions+ea.impressions;
+    var regs = wa.registrations, cpr = regs ? wa.spend/regs : 0, live = imps>0, dtw = daysToWebinar();
+    var hero = document.getElementById('ov-hero');
+    if(hero){
+      var cls, big, txt;
+      if(!live){ cls='watch'; big='Warming up'; txt='Both campaigns are <b>live and unpaused</b>, but no impressions landed in this date range yet. Meta reports delivery a few hours after it starts. <b>'+dtw+' days</b> to the Jul 15 webinar.'; }
+      else if(!regs){ cls='problem'; big='Traffic, no regs'; txt='<b>'+fmt(imps)+'</b> impressions and <b>'+money(spend)+'</b> spent, but <b>0 registrations</b> so far. Check the registration page and the pixel. <b>'+dtw+' days</b> to go.'; }
+      else if(cpr<=10){ cls='good'; big='On target'; txt='<b>'+fmt(regs)+'</b> registrations at <b>'+money(cpr)+'</b> each (target $6-10). Delivery is healthy. <b>'+dtw+' days</b> to the webinar, the game now is show-up rate.'; }
+      else { cls='watch'; big='Cost high'; txt='<b>'+fmt(regs)+'</b> registrations at <b>'+money(cpr)+'</b> each, above the $6-10 target. Worth a creative or audience look. <b>'+dtw+' days</b> to go.'; }
+      hero.className='ov-hero '+cls;
+      hero.innerHTML='<div class="big">'+big+'</div><div class="txt">'+txt+'</div>';
+    }
+    var ov = document.getElementById('ov-campaign');
+    if(ov){
+      var cpc = function(l,v,m,c){ return '<div class="kpi-card '+(c||'pending')+'"><div class="kpi-label">'+l+'</div><div class="kpi-result"><div class="kpi-value">'+v+'</div></div><div class="kpi-meta"><span class="kpi-goal">'+m+'</span></div></div>'; };
+      ov.innerHTML =
+        cpc('Spend', money(spend), 'in range', live?'ontrack':'pending')
+      + cpc('Registrations', fmt(regs), (regs?'at <span>'+money(cpr)+'</span>/reg':'target $6-10'), regs?(cpr<=10?'hit':'behind'):'pending')
+      + cpc('Impressions', fmt(imps), 'in range', live?'ontrack':'pending')
+      + cpc('Days to webinar', dtw, 'Jul 15, 7pm EST', dtw<=3?'behind':'ontrack');
+    }
+    var ch = document.getElementById('ov-channels');
+    if(ch){
+      var Y = window.SKLES_YOUTUBE||{}, yc = (Y.channel||{});
+      var ow = organicWin(from,to); var ig = ow?ow.w.ig:{}, fb = ow?ow.w.fb:{};
+      var chc = function(l,v,m,c){ return '<div class="kpi-card '+(c||'ontrack')+'"><div class="kpi-label">'+l+'</div><div class="kpi-result"><div class="kpi-value">'+v+'</div></div><div class="kpi-meta"><span class="kpi-goal">'+m+'</span></div></div>'; };
+      ch.innerHTML =
+        chc('Instagram · Reach', fmt(ig.reach||0), (ow?'last '+ow.key+'d':'')+' · ER '+((ig.engagement_rate||0).toFixed(0))+'%', (ig.reach>0?'hit':'pending'))
+      + chc('FB Skills Up', fmt(fb.page_engagements||0)+' eng', 'organic'+(ow?' · last '+ow.key+'d':''), (fb.page_engagements>0?'ontrack':'behind'))
+      + chc('YouTube · Subs', fmt(yc.subs||0), fmt(yc.views||0)+' total views', 'hit')
+      + chc('YouTube · Analytics', (Y.analytics?'Live':'Pending'), (Y.analytics?'watch time + CTR':'owner auth needed'), (Y.analytics?'hit':'behind'));
+    }
+    var at = document.getElementById('ov-attention');
+    if(at){
+      var flags = [];
+      if(!live) flags.push(['watch','&#9203;','Delivery','Campaigns are live but not showing impressions in this range yet. If it persists past a few hours, check ad review status in Ads Manager.']);
+      else if(!regs) flags.push(['problem','&#9888;','Registrations','Traffic is flowing ('+fmt(imps)+' impressions) but <b>no registrations</b> yet. Confirm the Zoom registration page loads and the pixel fires.']);
+      else if(cpr>10) flags.push(['watch','&#128178;','Cost per reg','At <b>'+money(cpr)+'</b> per registration, above the $6-10 target. Test a stronger hook or trim weak ads.']);
+      else flags.push(['good','&#9989;','Campaign','Registrations coming in at <b>'+money(cpr)+'</b> each, inside target. Focus shifts to show-up rate for Jul 15.']);
+      var ow2 = organicWin(from,to); var fbnow = ow2 ? ow2.w.fb : {};
+      if((fbnow.page_engagements||0)===0) flags.push(['watch','&#128216;','FB Skills Up','The Skills Up page has <b>no organic engagement</b> in this window. It needs posting activity, right now it only carries ads.']);
+      var Y2 = window.SKLES_YOUTUBE||{};
+      if(!Y2.analytics) flags.push(['watch','&#9654;','YouTube analytics','Deep YouTube metrics (watch time, CTR, traffic) are not connected yet, waiting on channel-owner authorization.']);
+      flags.push(['info','&#128193;','Manual channels','TikTok and LinkedIn are not in the live feed, they stay manual for now.']);
+      at.innerHTML = flags.map(function(f){ return '<div class="ov-flag '+f[0]+'"><span class="ic">'+f[1]+'</span><div class="bd"><span class="tg">'+f[2]+'</span>'+f[3]+'</div></div>'; }).join('');
+    }
+  }
+  function apply(from, to){ render(from, to); renderOverview(from, to); if(window.applyOrganic) window.applyOrganic(from, to); }
   if(fromEl && toEl){
     fromEl.min = launch; toEl.max = todayStr();
     fromEl.value = launch; toEl.value = todayStr();
@@ -1061,6 +1007,7 @@ function switchTab(target, el){
   var hu = document.getElementById('hdr-updated');
   if(hu && D.last_updated) hu.textContent = 'Updated ' + D.last_updated;
 
+  renderOverview(launch, todayStr());
   render(launch, todayStr());
 })();
 
