@@ -209,7 +209,7 @@ h1,h2,h3,.st,.kpi-label,.tab{font-family:'Montserrat',sans-serif}
       <button class="range-chip" data-days="30">Last 30d</button>
     </div>
     <div class="period-spacer"></div>
-    <div class="period-note">Filters the live campaign data (Paid tab)</div>
+    <div class="period-note">Filters the live data — campaign + organic</div>
   </div>
 
   <!-- DATA SOURCE STATUS -->
@@ -224,7 +224,6 @@ h1,h2,h3,.st,.kpi-label,.tab{font-family:'Montserrat',sans-serif}
   <div class="tabs">
     <div class="tab active" onclick="switchTab('overview',this)">Overview</div>
     <div class="tab" onclick="switchTab('instagram',this)">Instagram</div>
-    <div class="tab" onclick="switchTab('fb-main',this)">FB Main</div>
     <div class="tab" onclick="switchTab('fb-skles',this)">FB Skills Up</div>
     <div class="tab" onclick="switchTab('tiktok',this)">TikTok</div>
     <div class="tab" onclick="switchTab('linkedin',this)">LinkedIn</div>
@@ -400,7 +399,7 @@ h1,h2,h3,.st,.kpi-label,.tab{font-family:'Montserrat',sans-serif}
 
     <!-- ===== LIVE (Meta API) — organic IG ===== -->
     <div class="section-title">Live — organic <span class="live-badge"><span class="pulse"></span> Live · Meta API</span></div>
-    <div class="section-sub">@seanklangston.skillsup · last 30 days · <span id="ig-live-updated" style="color:var(--gold)"></span></div>
+    <div class="section-sub">@seanklangston.skillsup · <span id="ig-live-updated" style="color:var(--gold)"></span></div>
     <div class="kpi-grid" id="ig-live-kpis"></div>
 
     <div class="section-title" style="margin-top:26px">Monthly report — May baseline</div>
@@ -466,73 +465,6 @@ h1,h2,h3,.st,.kpi-label,.tab{font-family:'Montserrat',sans-serif}
   </div>
 
   <!-- ==================================================================== -->
-  <!-- FB MAIN TAB -->
-  <!-- ==================================================================== -->
-  <div class="tc" id="tab-fb-main">
-    <div class="channel-header" style="border-left-color:var(--fb)">
-      <div>
-        <h2>Facebook — Main Profile (Motivates)</h2>
-        <div class="job">Job: Trust + follower base anchor · seanklangston.motivates</div>
-        <div class="source"><span class="dot"></span>Source: Manual export from Meta Business Suite · API access requested</div>
-      </div>
-      <div class="nstar">★ North-Star: Engagement Rate (eng ÷ reach)</div>
-    </div>
-
-    <div class="kpi-grid">
-      <div class="kpi-card hit">
-        <div class="kpi-label">Total Views</div>
-        <div class="kpi-result">
-          <div class="kpi-value">27,428</div>
-          <div class="kpi-status hit">+171%</div>
-        </div>
-        <div class="kpi-meta"><span class="kpi-goal">Jun goal: <span>25,000+</span></span><span class="kpi-delta up">Ad-boosted</span></div>
-      </div>
-      <div class="kpi-card hit">
-        <div class="kpi-label">Engagement</div>
-        <div class="kpi-result">
-          <div class="kpi-value">1,493</div>
-          <div class="kpi-status hit">+55%</div>
-        </div>
-        <div class="kpi-meta"><span class="kpi-goal">Jun goal: <span>1,800</span></span><span class="kpi-delta up">+55%</span></div>
-      </div>
-      <div class="kpi-card ontrack">
-        <div class="kpi-label">Watch Time</div>
-        <div class="kpi-result">
-          <div class="kpi-value">6h 18m</div>
-          <div class="kpi-status hit">+44%</div>
-        </div>
-        <div class="kpi-meta"><span class="kpi-goal">Jun goal: <span>8h+</span></span><span class="kpi-delta up">+44%</span></div>
-      </div>
-      <div class="kpi-card pending">
-        <div class="kpi-label">Followers (Total)</div>
-        <div class="kpi-result">
-          <div class="kpi-value">—</div>
-          <div class="kpi-status pending">Pending</div>
-        </div>
-        <div class="kpi-meta"><span class="kpi-goal">Need from: <span>Page Insights</span></span></div>
-      </div>
-    </div>
-
-    <div class="data-card">
-      <h3>Full Metrics — May vs June Target <span class="badge">Source: SMM Report</span></h3>
-      <table class="data-table">
-        <thead><tr><th>Metric</th><th class="right">May Actual</th><th class="right">Jun Goal</th><th class="right">Read</th><th class="right">Status</th></tr></thead>
-        <tbody>
-          <tr><td class="metric">Total Views</td><td class="right result">27,428</td><td class="right goal">25,000+</td><td class="right delta flat">Ad-inflated</td><td class="right"><span class="status-pill hit">Hit</span></td></tr>
-          <tr><td class="metric">Engagement</td><td class="right result">1,493</td><td class="right goal">1,800 (+20%)</td><td class="right delta up">+55% MoM</td><td class="right"><span class="status-pill ontrack">On track</span></td></tr>
-          <tr><td class="metric">Watch Time</td><td class="right result">6h 18m</td><td class="right goal">8h+</td><td class="right delta up">+44%</td><td class="right"><span class="status-pill hit">Hit pace</span></td></tr>
-          <tr><td class="metric">Views from External Link</td><td class="right result">59.3%</td><td class="right goal">Track</td><td class="right delta flat">Webinar ads</td><td class="right"><span class="status-pill ontrack">Noted</span></td></tr>
-          <tr><td class="metric">Photos share</td><td class="right result">26.4%</td><td class="right goal">Increase video share</td><td class="right delta flat">Heavy on photos</td><td class="right"><span class="status-pill behind">Shift mix</span></td></tr>
-          <tr><td class="metric">Followers (total)</td><td class="right result">— pending</td><td class="right goal">+5-8%</td><td class="right delta flat">Need export</td><td class="right"><span class="status-pill pending">Pending</span></td></tr>
-          <tr><td class="metric">Organic ER (post-ad isolation)</td><td class="right result">— pending</td><td class="right goal">≥4%</td><td class="right delta flat">Need calc</td><td class="right"><span class="status-pill pending">Pending</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="insight warn"><strong>Caveat:</strong> May view explosion (+171%) is driven by webinar ad spend, not organic momentum. Once Jun 30 webinar wraps, isolate organic baseline — that's the honest trust-anchor metric going forward.</div>
-  </div>
-
-  <!-- ==================================================================== -->
   <!-- FB SKLES TAB -->
   <!-- ==================================================================== -->
   <div class="tc" id="tab-fb-skles">
@@ -547,7 +479,7 @@ h1,h2,h3,.st,.kpi-label,.tab{font-family:'Montserrat',sans-serif}
 
     <!-- ===== LIVE (Meta API) — organic FB Skills Up ===== -->
     <div class="section-title">Live — organic <span class="live-badge"><span class="pulse"></span> Live · Meta API</span></div>
-    <div class="section-sub">Skills Up page · last 30 days · <span id="fb-live-updated" style="color:var(--gold)"></span></div>
+    <div class="section-sub">Skills Up page · <span id="fb-live-updated" style="color:var(--gold)"></span></div>
     <div class="kpi-grid" id="fb-live-kpis"></div>
 
     <div class="section-title" style="margin-top:26px">Monthly report — May baseline</div>
@@ -1094,11 +1026,12 @@ function switchTab(target, el){
   var launch = D.launch_date || '2026-07-03';
   var fromEl = document.getElementById('date-from'), toEl = document.getElementById('date-to');
   var clearChips = function(){ document.querySelectorAll('.range-chip').forEach(function(c){ c.classList.remove('active'); }); };
+  function apply(from, to){ render(from, to); if(window.applyOrganic) window.applyOrganic(from, to); }
   if(fromEl && toEl){
     fromEl.min = launch; toEl.max = todayStr();
     fromEl.value = launch; toEl.value = todayStr();
-    fromEl.addEventListener('change', function(){ clearChips(); render(fromEl.value||launch, toEl.value||todayStr()); });
-    toEl.addEventListener('change', function(){ clearChips(); render(fromEl.value||launch, toEl.value||todayStr()); });
+    fromEl.addEventListener('change', function(){ clearChips(); apply(fromEl.value||launch, toEl.value||todayStr()); });
+    toEl.addEventListener('change', function(){ clearChips(); apply(fromEl.value||launch, toEl.value||todayStr()); });
   }
   document.querySelectorAll('.range-chip').forEach(function(chip){
     chip.addEventListener('click', function(){
@@ -1108,7 +1041,7 @@ function switchTab(target, el){
       else { var d = new Date(); d.setDate(d.getDate()-(days-1)); from = d.toISOString().slice(0,10); if(from<launch) from = launch; }
       if(fromEl) fromEl.value = from;
       if(toEl) toEl.value = to;
-      render(from, to);
+      apply(from, to);
     });
   });
 
@@ -1118,10 +1051,16 @@ function switchTab(target, el){
   render(launch, todayStr());
 })();
 
-/* ===== Organic (Meta API) render ===== */
-(function renderOrganic(){
+/* ===== Organic (Meta API) render — window-aware, driven by the date filter ===== */
+window.applyOrganic = function(from, to){
   var O = window.SKLES_ORGANIC;
-  if(!O) return;
+  if(!O || !O.windows) return;
+  var days = 30;
+  if(from && to){ days = Math.round((new Date(to) - new Date(from))/86400000) + 1; }
+  var key = days<=7 ? "7" : (days<=14 ? "14" : "30");
+  var win = O.windows[key] || O.windows["30"];
+  var label = "last " + key + " days";
+  var ig = win.ig || {}, fb = win.fb || {};
   var fmt = function(n){ return (Math.round(n||0)).toLocaleString('en-US'); };
   var card = function(label, value, meta, cls){
     return '<div class="kpi-card '+(cls||'ontrack')+'">'
@@ -1129,28 +1068,31 @@ function switchTab(target, el){
       + '<div class="kpi-result"><div class="kpi-value">'+value+'</div></div>'
       + '<div class="kpi-meta"><span class="kpi-goal">'+(meta||'')+'</span></div></div>';
   };
-  var ig = O.ig || {}, fb = O.fb_skillsup || {};
-  var igU = document.getElementById('ig-live-updated');
-  if(igU) igU.textContent = 'updated ' + (O.last_updated||'');
+  var sub = label + ' · updated ' + (O.last_updated||'');
+  var igU = document.getElementById('ig-live-updated'); if(igU) igU.textContent = sub;
   var igK = document.getElementById('ig-live-kpis');
   if(igK){
     var g = ig.follower_growth||0;
     igK.innerHTML =
-      card('Reach', fmt(ig.reach), O.window, ig.reach?'hit':'pending')
-    + card('Profile Views', fmt(ig.profile_views), O.window, ig.profile_views?'hit':'pending')
-    + card('Follower Growth', (g>0?'+':'')+fmt(g), O.window, g>=0?'ontrack':'behind')
+      card('Reach', fmt(ig.reach), label, ig.reach?'hit':'pending')
+    + card('Profile Views', fmt(ig.profile_views), label, ig.profile_views?'hit':'pending')
+    + card('Follower Growth', (g>0?'+':'')+fmt(g), label, g>=0?'ontrack':'behind')
     + card('Engagement Rate', (ig.engagement_rate||0).toFixed(1)+'%', 'interactions ÷ reach', 'hit')
-    + card('Website Clicks', fmt(ig.website_clicks), O.window, 'pending');
+    + card('Website Clicks', fmt(ig.website_clicks), label, 'pending');
   }
-  var fbU = document.getElementById('fb-live-updated');
-  if(fbU) fbU.textContent = 'updated ' + (O.last_updated||'');
+  var fbU = document.getElementById('fb-live-updated'); if(fbU) fbU.textContent = sub;
   var fbK = document.getElementById('fb-live-kpis');
   if(fbK){
     fbK.innerHTML =
       card('Page Fans', fmt(fb.fans), 'total', 'ontrack')
-    + card('Page Engagements', fmt(fb.page_engagements), O.window, fb.page_engagements?'hit':'pending')
-    + card('Page Views', fmt(fb.page_views), O.window, fb.page_views?'hit':'pending');
+    + card('Page Engagements', fmt(fb.page_engagements), label, fb.page_engagements?'hit':'pending')
+    + card('Page Views', fmt(fb.page_views), label, fb.page_views?'hit':'pending');
   }
+};
+(function(){
+  var L = (window.SKLES_DATA && window.SKLES_DATA.launch_date) || '2026-07-03';
+  var today = new Date().toISOString().slice(0,10);
+  window.applyOrganic(L, today);
 })();
 </script>
 
