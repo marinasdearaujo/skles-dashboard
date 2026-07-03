@@ -36,6 +36,15 @@ h1,h2,h3,.st,.kpi-label,.tab{font-family:'Montserrat',sans-serif}
 .period-btn.active{background:var(--gold);border-color:var(--gold);color:var(--navy-deep)}
 .period-spacer{flex:1}
 .period-note{font-size:10px;color:var(--very-dim);font-style:italic;align-self:center;padding-right:10px}
+.period-bar{align-items:center;flex-wrap:wrap}
+.range-label{font-family:'Montserrat';font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gold);align-self:center;margin-right:4px}
+.date-input{background:var(--navy-deep);border:1px solid var(--navy-line);border-radius:6px;color:var(--text);font-family:'Roboto';font-size:12px;padding:6px 10px;color-scheme:dark}
+.date-input:focus{outline:none;border-color:var(--gold)}
+.range-sep{color:var(--very-dim);align-self:center}
+.range-chips{display:flex;gap:5px;margin-left:8px}
+.range-chip{padding:6px 12px;font-size:11px;font-weight:600;cursor:pointer;color:var(--dim);background:transparent;border:1px solid var(--navy-line);border-radius:6px;font-family:'Montserrat';letter-spacing:.3px;transition:.2s}
+.range-chip:hover{color:var(--text);border-color:var(--gold-dim)}
+.range-chip.active{background:var(--gold);border-color:var(--gold);color:var(--navy-deep)}
 
 /* Tabs */
 .tabs{display:flex;gap:0;margin-bottom:20px;border-bottom:2px solid var(--navy-line);overflow-x:auto}
@@ -182,19 +191,25 @@ h1,h2,h3,.st,.kpi-label,.tab{font-family:'Montserrat',sans-serif}
       </div>
     </div>
     <div class="meta">
-      <div class="period">MAY 2026 (MONTH 0 BASELINE) → JUN 2026 (MONTH 1 TARGETS)</div>
-      <div class="updated">Last updated: Jun 5, 2026</div>
+      <div class="period">JUL 15 WEBINAR CAMPAIGN &middot; LIVE</div>
+      <div class="updated" id="hdr-updated">Live &middot; auto-updated via Meta API</div>
     </div>
   </div>
 
-  <!-- PERIOD SELECTOR -->
+  <!-- DATE RANGE FILTER -->
   <div class="period-bar">
-    <button class="period-btn active">May 2026 (Baseline)</button>
-    <button class="period-btn">Jun 2026 (Live)</button>
-    <button class="period-btn">Q3 2026 (Quarter)</button>
-    <button class="period-btn">All Time</button>
+    <span class="range-label">Date range</span>
+    <input type="date" id="date-from" class="date-input">
+    <span class="range-sep">&#8594;</span>
+    <input type="date" id="date-to" class="date-input">
+    <div class="range-chips">
+      <button class="range-chip active" data-days="0">Since launch</button>
+      <button class="range-chip" data-days="7">Last 7d</button>
+      <button class="range-chip" data-days="14">Last 14d</button>
+      <button class="range-chip" data-days="30">Last 30d</button>
+    </div>
     <div class="period-spacer"></div>
-    <div class="period-note">Paid tab: live via Meta API · other channels: manual export</div>
+    <div class="period-note">Filters the live campaign data (Paid tab)</div>
   </div>
 
   <!-- DATA SOURCE STATUS -->
@@ -997,76 +1012,110 @@ function switchTab(target, el){
   window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
-// Period button highlight (display only — no data switch yet)
-document.querySelectorAll('.period-btn').forEach(btn => {
-  btn.addEventListener('click', function(){
-    document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
-    this.classList.add('active');
-  });
-});
-
-/* ===== Live (Meta API) render ===== */
-(function renderLive(){
+/* ===== Live (Meta API) render — date-range aware ===== */
+(function(){
   var D = window.SKLES_DATA;
   if(!D || !D.campaigns) return;
-  var w = D.campaigns.webinar || {}, e = D.campaigns.ebook || {};
   var fmt = function(n){ return (Math.round(n||0)).toLocaleString('en-US'); };
   var money = function(n){ return '$' + (Number(n||0)).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); };
-  var spend = (w.spend||0)+(e.spend||0);
-  var imps  = (w.impressions||0)+(e.impressions||0);
-  var reach = (w.reach||0)+(e.reach||0);
-  var clicks= (w.clicks||0)+(e.clicks||0);
-  var ctr   = imps ? (clicks/imps*100) : 0;
-  var budget = (w.daily_budget||0)+(e.daily_budget||0);
-  var live = imps>0;
 
-  var upd = document.getElementById('live-updated');
-  if(upd) upd.textContent = 'Updated ' + (D.last_updated||'') + ' · source: ' + (D.source||'Meta API');
-
+  function agg(daily, from, to){
+    var t = {spend:0,impressions:0,reach:0,clicks:0,registrations:0,leads:0};
+    (daily||[]).forEach(function(r){
+      if(r.date >= from && r.date <= to){
+        t.spend+=r.spend||0; t.impressions+=r.impressions||0; t.reach+=r.reach||0;
+        t.clicks+=r.clicks||0; t.registrations+=r.registrations||0; t.leads+=r.leads||0;
+      }
+    });
+    return t;
+  }
   var card = function(label, value, metaHtml, cls){
     return '<div class="kpi-card '+(cls||'pending')+'">'
       + '<div class="kpi-label">'+label+'</div>'
       + '<div class="kpi-result"><div class="kpi-value">'+value+'</div></div>'
       + '<div class="kpi-meta">'+(metaHtml||'')+'</div></div>';
   };
-  var kpis = document.getElementById('live-kpis');
-  if(kpis){
-    kpis.innerHTML =
-      card('Total Spend', money(spend), '<span class="kpi-goal">of <span>'+money(budget)+'/day</span> combined</span>', live?'ontrack':'pending')
-    + card('Impressions', fmt(imps), '<span class="kpi-goal">since launch</span>', live?'ontrack':'pending')
-    + card('Reach', fmt(reach), '<span class="kpi-goal">unique people</span>', live?'ontrack':'pending')
-    + card('Link Clicks', fmt(clicks), '<span class="kpi-goal">CTR <span>'+ctr.toFixed(2)+'%</span></span>', live?'ontrack':'pending')
-    + card('Webinar Registrations', fmt(w.registrations), '<span class="kpi-goal">cost/reg <span>'+(w.registrations?money(w.cost_per_reg):'—')+'</span></span>', w.registrations?'hit':'pending')
-    + card('Ebook Downloads', fmt(e.leads), '<span class="kpi-goal">cost/lead <span>'+(e.leads?money(e.cost_per_lead):'—')+'</span></span>', e.leads?'hit':'pending');
-  }
 
-  var rowsEl = document.getElementById('live-rows');
-  if(rowsEl){
-    var row = function(name, c, result){
-      var r = c.impressions ? (c.clicks/c.impressions*100).toFixed(2)+'%' : '—';
-      return '<tr><td class="metric">'+name+'</td>'
-        + '<td class="right result">'+money(c.spend)+'</td>'
-        + '<td class="right">'+fmt(c.impressions)+'</td>'
-        + '<td class="right">'+fmt(c.reach)+'</td>'
-        + '<td class="right">'+fmt(c.clicks)+'</td>'
-        + '<td class="right">'+r+'</td>'
-        + '<td class="right result">'+result+'</td></tr>';
-    };
-    rowsEl.innerHTML =
-      row('Webinar Jul 15 <span class="status-pill '+(w.status==='ACTIVE'?'hit':'pending')+'">'+(w.status||'')+'</span>', w, (w.registrations||0)+' regs')
-    + row('Ebook Lead-Gen <span class="status-pill '+(e.status==='ACTIVE'?'hit':'pending')+'">'+(e.status||'')+'</span>', e, (e.leads||0)+' leads');
-  }
+  function render(from, to){
+    var w = D.campaigns.webinar||{}, e = D.campaigns.ebook||{};
+    var wa = agg(w.daily, from, to), ea = agg(e.daily, from, to);
+    var spend=wa.spend+ea.spend, imps=wa.impressions+ea.impressions, reach=wa.reach+ea.reach, clicks=wa.clicks+ea.clicks;
+    var ctr = imps ? (clicks/imps*100) : 0;
+    var budget = (w.daily_budget||0)+(e.daily_budget||0);
+    var live = imps>0;
+    var cpr = wa.registrations ? wa.spend/wa.registrations : 0;
+    var cpl = ea.leads ? ea.spend/ea.leads : 0;
 
-  var note = document.getElementById('live-note');
-  if(note){
-    if(!live){
-      note.className = 'insight warn';
-      note.innerHTML = '<strong>Delivery just started.</strong> Both campaigns are live and paused-free, but Meta reports impressions and spend a few hours after the first delivery (and 2 warm-audience ads are still clearing review). Numbers here fill in automatically on the next data pull.';
-    } else {
-      note.className = 'insight';
-      note.innerHTML = '<strong>Live.</strong> ' + fmt(imps) + ' impressions and ' + money(spend) + ' spent so far across both campaigns. Webinar CPA target is $6-10 per registration — watch the cost/reg card as volume builds toward Jul 15.';
+    var upd = document.getElementById('live-updated');
+    if(upd) upd.textContent = 'Updated ' + (D.last_updated||'') + ' · showing ' + from + ' → ' + to;
+
+    var kpis = document.getElementById('live-kpis');
+    if(kpis){
+      kpis.innerHTML =
+        card('Total Spend', money(spend), '<span class="kpi-goal">of <span>'+money(budget)+'/day</span> combined</span>', live?'ontrack':'pending')
+      + card('Impressions', fmt(imps), '<span class="kpi-goal">in range</span>', live?'ontrack':'pending')
+      + card('Reach', fmt(reach), '<span class="kpi-goal">in range</span>', live?'ontrack':'pending')
+      + card('Link Clicks', fmt(clicks), '<span class="kpi-goal">CTR <span>'+ctr.toFixed(2)+'%</span></span>', live?'ontrack':'pending')
+      + card('Webinar Registrations', fmt(wa.registrations), '<span class="kpi-goal">cost/reg <span>'+(wa.registrations?money(cpr):'—')+'</span></span>', wa.registrations?'hit':'pending')
+      + card('Ebook Downloads', fmt(ea.leads), '<span class="kpi-goal">cost/lead <span>'+(ea.leads?money(cpl):'—')+'</span></span>', ea.leads?'hit':'pending');
+    }
+
+    var rowsEl = document.getElementById('live-rows');
+    if(rowsEl){
+      var row = function(name, c, a, result){
+        var r = a.impressions ? (a.clicks/a.impressions*100).toFixed(2)+'%' : '—';
+        return '<tr><td class="metric">'+name+'</td>'
+          + '<td class="right result">'+money(a.spend)+'</td>'
+          + '<td class="right">'+fmt(a.impressions)+'</td>'
+          + '<td class="right">'+fmt(a.reach)+'</td>'
+          + '<td class="right">'+fmt(a.clicks)+'</td>'
+          + '<td class="right">'+r+'</td>'
+          + '<td class="right result">'+result+'</td></tr>';
+      };
+      rowsEl.innerHTML =
+        row('Webinar Jul 15 <span class="status-pill '+(w.status==='ACTIVE'?'hit':'pending')+'">'+(w.status||'')+'</span>', w, wa, wa.registrations+' regs')
+      + row('Ebook Lead-Gen <span class="status-pill '+(e.status==='ACTIVE'?'hit':'pending')+'">'+(e.status||'')+'</span>', e, ea, ea.leads+' leads');
+    }
+
+    var note = document.getElementById('live-note');
+    if(note){
+      if(!live){
+        note.className = 'insight warn';
+        note.innerHTML = '<strong>No delivery in this range yet.</strong> Campaigns went live Jul 3 and Meta reports impressions and spend a few hours after first delivery. Widen the range or check back soon — numbers fill in automatically on the next data pull.';
+      } else {
+        note.className = 'insight';
+        note.innerHTML = '<strong>Live.</strong> ' + fmt(imps) + ' impressions and ' + money(spend) + ' in the selected range. Webinar CPA target is $6-10 per registration.';
+      }
     }
   }
+
+  // ---- date-range controls ----
+  function todayStr(){ return new Date().toISOString().slice(0,10); }
+  var launch = D.launch_date || '2026-07-03';
+  var fromEl = document.getElementById('date-from'), toEl = document.getElementById('date-to');
+  var clearChips = function(){ document.querySelectorAll('.range-chip').forEach(function(c){ c.classList.remove('active'); }); };
+  if(fromEl && toEl){
+    fromEl.min = launch; toEl.max = todayStr();
+    fromEl.value = launch; toEl.value = todayStr();
+    fromEl.addEventListener('change', function(){ clearChips(); render(fromEl.value||launch, toEl.value||todayStr()); });
+    toEl.addEventListener('change', function(){ clearChips(); render(fromEl.value||launch, toEl.value||todayStr()); });
+  }
+  document.querySelectorAll('.range-chip').forEach(function(chip){
+    chip.addEventListener('click', function(){
+      clearChips(); this.classList.add('active');
+      var days = parseInt(this.getAttribute('data-days'),10), to = todayStr(), from;
+      if(days===0){ from = launch; }
+      else { var d = new Date(); d.setDate(d.getDate()-(days-1)); from = d.toISOString().slice(0,10); if(from<launch) from = launch; }
+      if(fromEl) fromEl.value = from;
+      if(toEl) toEl.value = to;
+      render(from, to);
+    });
+  });
+
+  var hu = document.getElementById('hdr-updated');
+  if(hu && D.last_updated) hu.textContent = 'Updated ' + D.last_updated;
+
+  render(launch, todayStr());
 })();
 
 /* ===== Organic (Meta API) render ===== */
