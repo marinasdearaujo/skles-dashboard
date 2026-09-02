@@ -183,7 +183,7 @@
       <div class="fstack" id="fstack"></div>
       <div class="fdetail" id="fdetail"></div>
     </div>
-    <div class="callout" style="margin-top:26px"><b>One correction from the Zoom exports:</b> the 1 August session ran with registration disabled and drew no attendees, so August was effectively one webinar, not two. The 25 August session had 5 registrants and 1 attendee, who stayed 45 of the 55 minutes. The four who registered and did not show wrote their reasons on the form: "time freedom", "family", "because I'm broke". The audience is the right one. The show-up rate is the problem.</div>
+    <div class="callout" style="margin-top:26px"><b>One read from the Zoom exports:</b> strip out the hosts and the webinar drew <b>3 real attendees</b>, who stayed nearly the full hour, that's strong retention, not a dead room. The people who registered and didn't show wrote their reasons on the form: "time freedom", "family", "because I'm broke". And the relational meeting that followed turned <b>4 participants into the first sale</b>. The audience is the right one, and it converts when it shows up. The show-up rate is the lever.</div>
     <p class="fn"><b>Notes.</b> Benchmarks are typical industry ranges for coaching / info-product funnels, directional, not exact. The "July" column is the prior month, for a month-over-month read; a dash means the metric is brand-new (no prior period) or has no standard benchmark. The dashboard's API tokens expired on Sept 1, so several figures were compiled manually from the platforms and the team's monthly reports; reconnecting the tokens restores automatic reporting.</p>
   </div>
 </section>
@@ -195,7 +195,7 @@
     <h2 class="sec">The story the numbers tell together</h2>
     <div style="max-width:72ch;font-size:16.5px;line-height:1.75;color:var(--text);margin-top:22px">
       <p style="margin:0 0 16px">August was the month the funnel finally captured. The ebook turned <b>$773 into 30 leads at $25.77 each</b>, from a page that recorded <b>zero</b> the month before. The top of the funnel is healthy on its own: <b>TikTok pulled 12,000 views</b> almost entirely from strangers, while <b>LinkedIn barely reached its own 7,270 followers</b>, and YouTube has the volume but holds only <b>29 seconds</b> of attention per view.</p>
-      <p style="margin:0 0 16px">Then the ramp thins, fast. Thirty leads became <b>5 webinar registrations</b>, five became <b>1 attendee</b>, and that one attendee became the <b>first Apprentice</b>. The audience is right, the no-shows wrote "time freedom", "family", "because I'm broke". What leaks is the step between: the guide-delivery email opens at just <b>17.7%</b> and its follow-ups drew no clicks, and while broadcasts open at a healthy <b>36%</b>, the webinar invitations produced <b>5 clicks across 507 sends</b>. People are reading and not acting.</p>
+      <p style="margin:0 0 16px">Then the ramp thins, but it converts when people show up: the webinar drew <b>3 real attendees</b> (once you strip out the hosts) who stayed nearly the full hour, and the relational meeting turned <b>4 participants into the first Apprentice</b>, a 1-in-4 close. The audience is right and it buys when it's in the room, the no-shows wrote "time freedom", "family", "because I'm broke". What leaks is the step between: the guide-delivery email opens at just <b>17.7%</b> and its follow-ups drew no clicks, and while broadcasts open at a healthy <b>36%</b>, the webinar invitations produced <b>5 clicks across 507 sends</b>. People are reading and not acting.</p>
       <p style="margin:0;font-family:'Merriweather',Georgia,serif;font-size:19px;font-weight:900;color:var(--text);line-height:1.35">Across every layer the pattern is the same: attention isn't the problem, conversion is. The reach, the opens, the ad click-through, all above benchmark. The leak is at the ask, the form, the email CTA, the show-up, and that's copy and mechanics, not spend.</p>
     </div>
   </div>
@@ -295,11 +295,11 @@ const STAGES=[
   {k:'The warm-lead room',t:'Live relational meeting',obj:'Conversion (relational)',badge:'b-conv',
    strat:'A live, more personal session for warmer leads who have not bought yet but are close, plus members. Relational, not a hard pitch. Rodney also runs direct outreach to warm leads. Together this is the room that nudges hot leads into Apprentice.',
    chans:['Live meeting (2nd & 4th Wed)','Warm-lead outreach (Rodney)','Warm-lead invites','Members'],
-   kpis:[['Meeting cadence','2nd & 4th Wed','—','recurring','flat'],['Registered','~10 +2 regulars','—','new — to establish','flat'],['Attended','1 unique','—','of ~10 registered','down'],['Bought Apprentice','0','—','the goal','flat'],['Warm-lead outreach','with Rodney','—','data pending','flat']]},
+   kpis:[['Meeting cadence','2nd & 4th Wed','—','recurring','flat'],['Participants','4','—','new','flat'],['Bought Apprentice','1','—','1 of 4 · 25%','up'],['Warm-lead outreach','with Rodney','—','data pending','flat']]},
   {k:'Bottom of funnel',t:'Convert · retain · ascend',obj:'Conversion + Retention',badge:'b-both',
    strat:'Apprentice is the entry conversion. The ladder moves members to Protégé and Accelerator, and the relational meeting keeps them in the room.',
    chans:['Apprentice $8.99/mo','Protégé / Accelerator','Relational meeting (retention)'],
-   kpis:[['Webinar attendance','20%','—','35–50% typical','down'],['Attendee watch time','82%','—','strong signal','up'],['Apprentice signups','1','0','first month','up'],['Lead → member','3.3%','—','1–5% typical','flat'],['LTV : CAC','TBD','—','≥ 3:1 target','flat']]}
+   kpis:[['Webinar attendees','3','—','excl. hosts · stayed ~1h','flat'],['Attendee watch time','~78%','—','strong signal','up'],['Apprentice signups','1','0','first month','up'],['Lead → member','3.3%','—','1–5% typical','flat'],['LTV : CAC','TBD','—','≥ 3:1 target','flat']]}
 ];
 const stack=document.getElementById('fstack'), det=document.getElementById('fdetail');
 STAGES.forEach((s,i)=>{
