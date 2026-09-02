@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SKLES August Review</title>
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700;900&family=Poppins:wght@400;500;600;700;800&display=swap">
+<style>
+  :root{
+    --bg:#f7f3ea; --surface:#ffffff; --surface2:#fbf8f1;
+    --navy:#112250; --navy2:#1b2f5e; --ink:#0a1533;
+    --tan:#E0C58F; --tan-deep:#a8823f;
+    --text:#1e2a44; --muted:#5d6b7e; --line:#e6dfce;
+    --good:#2fa37a; --warn:#c2882f; --bad:#c25b4e;
+    --pos:#6a8fd0; --conv:#c98a2f;
+    --shadow:0 14px 40px rgba(17,34,80,.08);
+  }
+  :root:not([data-theme="light"]){@media (prefers-color-scheme:dark){
+    --bg:#0c1631; --surface:#152449; --surface2:#111e40;
+    --text:#e9edf6; --muted:#9fb0c7; --line:#26386a; --tan-deep:#E0C58F;
+    --pos:#7ea3e0; --shadow:0 14px 40px rgba(0,0,0,.4);
+  }}
+  :root[data-theme="dark"]{
+    --bg:#0c1631; --surface:#152449; --surface2:#111e40;
+    --text:#e9edf6; --muted:#9fb0c7; --line:#26386a; --tan-deep:#E0C58F;
+    --pos:#7ea3e0; --shadow:0 14px 40px rgba(0,0,0,.4);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'Poppins',system-ui,Arial,sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+  h1,h2,h3{font-family:'Merriweather',Georgia,serif;text-wrap:balance;margin:0}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--tan-deep);margin:0 0 12px}
+  .num{font-variant-numeric:tabular-nums}
+  section{padding:60px 0}
+  .band-navy{background:linear-gradient(150deg,var(--navy),var(--navy2));color:#eaf0fb}
+  .band-navy .eyebrow{color:var(--tan)}
+  .band-cream{background:var(--surface2)}
+  h2.sec{font-size:clamp(26px,3.5vw,34px);font-weight:900;color:var(--text);line-height:1.15}
+  .band-navy h2.sec{color:#fff}
+  .sec-sub{color:var(--muted);max-width:64ch;margin:12px 0 0;font-size:16px}
+  .band-navy .sec-sub{color:#c1cce0}
+
+  .hero{padding:74px 0 58px}
+  .hero h1{font-size:clamp(34px,6vw,58px);line-height:1.08;font-weight:900;color:#fff}
+  .hero h1 .g{color:var(--tan)}
+  .hero .lede{font-size:18px;line-height:1.6;color:#c7d2e6;max-width:60ch;margin:20px 0 0}
+  .hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:38px}
+  .hstat{background:rgba(224,197,143,.08);border:1px solid rgba(224,197,143,.28);border-radius:14px;padding:18px}
+  .hstat b{display:block;font-family:'Merriweather',serif;font-weight:900;font-size:28px;color:var(--tan);line-height:1}
+  .hstat span{display:block;font-size:12px;color:#aeb9d0;margin-top:8px}
+
+  .ov{display:grid;grid-template-columns:1.3fr 1fr;gap:26px;margin-top:30px;align-items:start}
+  .ov .txt p{margin:0 0 14px;color:var(--muted);font-size:15.5px}
+  .ov .txt b{color:var(--text)}
+  .ladder{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:var(--shadow)}
+  .ladder .lh{font-size:12px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--tan-deep);margin-bottom:14px}
+  .rung{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line);font-size:14.5px}
+  .rung:last-child{border-bottom:none}
+  .rung b{color:var(--text)} .rung .pr{font-family:'Merriweather',serif;font-weight:900;color:var(--tan-deep);font-variant-numeric:tabular-nums}
+
+  .fwrap{display:grid;grid-template-columns:340px 1fr;gap:26px;margin-top:34px;align-items:start}
+  .fstack{display:flex;flex-direction:column;gap:8px}
+  .fstage{border:none;text-align:left;cursor:pointer;color:#fff;border-radius:12px;padding:16px 20px;background:linear-gradient(135deg,var(--navy),var(--navy2));border:2px solid transparent;transition:transform .15s,border-color .15s;width:100%}
+  .fstage:nth-child(1){width:100%} .fstage:nth-child(2){width:90%} .fstage:nth-child(3){width:78%} .fstage:nth-child(4){width:64%}
+  .fstage.on{border-color:var(--tan);transform:translateX(4px)}
+  .fstage .fs-k{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--tan);opacity:.9}
+  .fstage .fs-t{font-family:'Merriweather',serif;font-weight:900;font-size:17px;margin-top:3px}
+  .fstage .fs-o{font-size:11.5px;color:#c1cce0;margin-top:4px}
+  .fdetail{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:var(--shadow);min-height:300px}
+  .badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;border-radius:20px;padding:4px 12px;margin-bottom:12px}
+  .b-pos{background:rgba(106,143,208,.16);color:var(--pos)} .b-conv{background:rgba(201,138,47,.16);color:var(--conv)}
+  .b-both{background:rgba(47,163,122,.16);color:var(--good)}
+  .fdetail h3{font-size:22px;margin-bottom:8px;color:var(--text)}
+  .fdetail .strat{color:var(--muted);font-size:15px;margin:0 0 18px}
+  .chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px}
+  .chip{font-size:12px;font-weight:600;color:var(--muted);background:var(--surface2);border:1px solid var(--line);border-radius:20px;padding:5px 12px}
+  .kpi{width:100%;border-collapse:collapse;font-size:13.5px}
+  .kpi th{text-align:left;font-size:10.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);padding:0 10px 8px;border-bottom:2px solid var(--line)}
+  .kpi td{padding:10px;border-bottom:1px solid var(--line);vertical-align:middle;font-variant-numeric:tabular-nums}
+  .kpi tr:last-child td{border-bottom:none}
+  .kpi .m{font-weight:600;color:var(--text);font-variant-numeric:normal}
+  .kpi .now{font-family:'Merriweather',serif;font-weight:900;font-size:16px;color:var(--text)}
+  .trend{font-size:11px;font-weight:700}
+  .t-up{color:var(--good)} .t-down{color:var(--bad)} .t-flat{color:var(--muted)}
+
+  .reads{display:grid;gap:14px;margin-top:30px}
+  .read{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px 24px;display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:start;box-shadow:var(--shadow)}
+  .read .fig{font-family:'Merriweather',serif;font-size:28px;font-weight:900;line-height:1;font-variant-numeric:tabular-nums;min-width:120px;color:var(--tan-deep)}
+  .read.warn .fig{color:var(--bad)} .read.good .fig{color:var(--good)}
+  .read h3{font-family:'Poppins',sans-serif;font-size:16px;font-weight:600;margin:0 0 6px}
+  .read p{margin:0;color:var(--muted);font-size:14.5px}
+  .read .math{display:block;margin-top:8px;font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+  .proj{width:100%;border-collapse:collapse;margin-top:26px;font-size:14px}
+  .proj th{text-align:left;font-size:10.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);padding:0 12px 9px;border-bottom:2px solid var(--line)}
+  .proj td{padding:12px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+  .proj tr:last-child td{border-bottom:none}
+  .proj tr.now-row{background:rgba(224,197,143,.1)}
+  .proj .mo{font-weight:700;color:var(--text)}
+  .grid2{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:26px}
+  .ue{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
+  .ue .k{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+  .ue .v{font-family:'Merriweather',serif;font-weight:900;font-size:24px;color:var(--text);margin-top:6px;line-height:1}
+  .ue .d{font-size:12px;color:var(--muted);margin-top:6px}
+
+  .cro{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:30px}
+  .crocard{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--tan);border-radius:12px;padding:20px 22px;box-shadow:var(--shadow)}
+  .crocard .t{font-weight:700;color:var(--text);font-size:15px;margin-bottom:6px}
+  .crocard .b{font-size:13.5px;color:var(--muted);line-height:1.55}
+  .crocard .m{display:inline-block;margin-top:10px;font-size:11.5px;font-weight:700;color:var(--tan-deep);background:rgba(224,197,143,.14);border-radius:20px;padding:4px 12px}
+  .okr{display:flex;flex-direction:column;gap:18px;margin-top:30px}
+  .obj{background:rgba(255,255,255,.04);border:1px solid rgba(224,197,143,.28);border-radius:16px;padding:22px 26px}
+  .obj .oh{display:flex;align-items:baseline;gap:14px;margin-bottom:14px}
+  .obj .otag{font-family:'Merriweather',serif;font-weight:900;color:var(--tan);font-size:15px}
+  .obj .otitle{font-family:'Merriweather',serif;font-weight:900;color:#fff;font-size:20px}
+  .krs{display:grid;grid-template-columns:repeat(2,1fr);gap:8px 22px}
+  .kr{display:flex;gap:11px;font-size:14px;color:#d3ddee;padding:6px 0;border-top:1px solid rgba(224,197,143,.14)}
+  .kr .from{color:var(--tan);font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+
+  .callout{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--tan);border-radius:12px;padding:18px 22px;margin-top:24px;font-size:14.5px;color:var(--text)}
+  .band-navy .callout{background:rgba(224,197,143,.08);border-color:rgba(224,197,143,.3);color:#e8eefb}
+  .disc{font-size:12.5px;color:var(--muted);margin-top:16px;font-style:italic}
+  .fn{margin:24px 0 0;max-width:70ch;font-size:13px;line-height:1.55;color:var(--muted);padding-top:14px;border-top:1px solid var(--line)}
+  .scroll{overflow-x:auto}
+  footer{padding:40px 0;background:var(--ink);color:#8290b0;text-align:center;font-size:12.5px}
+  footer b{color:var(--tan)}
+  @media (max-width:860px){
+    .hero-stats{grid-template-columns:repeat(2,1fr)} .ov,.fwrap{grid-template-columns:1fr}
+    .fstage{width:100% !important} .cro,.krs{grid-template-columns:1fr}
+    .read{grid-template-columns:1fr;gap:8px} .grid2{grid-template-columns:1fr 1fr}
+  }
+  @media (prefers-reduced-motion:reduce){ .fstage{transition:none} }
+</style>
+
+<!-- HERO -->
+<div class="band-navy">
+  <div class="wrap hero">
+    <p class="eyebrow">SKLES · Monthly Strategic Review · August 2026</p>
+    <h1>The funnel<br>came <span class="g">online.</span></h1>
+    <p class="lede">August was the first month the machine converted end to end, and the first month we have a customer to measure against. The strategy holds; from here it's volume and unit economics.</p>
+    <div class="hero-stats">
+      <div class="hstat"><b class="num">$1,104</b><span>Paid spend · $1,200 budget</span></div>
+      <div class="hstat"><b class="num">30</b><span>Ebook leads · $25.77 each</span></div>
+      <div class="hstat"><b class="num">1</b><span>First Apprentice member</span></div>
+      <div class="hstat"><b class="num">6.4%</b><span>Landing-page conversion (the leak)</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- STRATEGY OVERVIEW -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">The strategy in brief</p>
+    <h2 class="sec">Reach wide, warm the hot ones, keep the members</h2>
+    <div class="ov">
+      <div class="txt">
+        <p>Cold audience meets SKLES through <b>organic content and paid ads</b>, and is captured with a <b>free ebook</b>. The <b>recorded Fast Track webinar</b> then introduces the whole system to a broad audience, relational in tone, scalable, no live host each time.</p>
+        <p>Leads who warm up get the <b>live relational meeting</b>, a more personal room for people who haven't bought yet but are close. It nudges the hottest leads toward <b>Apprentice</b>, and it keeps existing members in the room too.</p>
+        <p style="color:var(--text)"><b>August validated the bet:</b> the first member came through this path, and the ebook engine beat its cost target.</p>
+      </div>
+      <div class="ladder">
+        <div class="lh">The ascension ladder</div>
+        <div class="rung"><b>Free ebook / webinar</b><span class="pr">$0</span></div>
+        <div class="rung"><b>Apprentice</b><span class="pr">$8.99/mo</span></div>
+        <div class="rung"><b>Protégé</b><span class="pr">$2,499</span></div>
+        <div class="rung"><b>Enterpriser / Accelerator</b><span class="pr">$9,999</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INTERACTIVE FUNNEL -->
+<section class="band-cream">
+  <div class="wrap">
+    <p class="eyebrow">Click a stage</p>
+    <h2 class="sec">The funnel, stage by stage</h2>
+    <p class="sec-sub">Each stage has a different job, positioning or conversion, and its own scoreboard. Select a stage to see the strategy, the channels, and how August compares to May's baseline and a typical benchmark.</p>
+    <div class="fwrap">
+      <div class="fstack" id="fstack"></div>
+      <div class="fdetail" id="fdetail"></div>
+    </div>
+    <p class="fn"><b>Notes.</b> Benchmarks are typical industry ranges for coaching / info-product funnels, directional, not exact. "May" is the channel baseline from the June planning cycle. The dashboard's API tokens expired on Sept 1, so several figures were compiled manually from the platforms and the team's monthly reports; reconnecting the tokens restores automatic reporting.</p>
+  </div>
+</section>
+
+<!-- FINANCIAL + PROJECTION -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">Unlocked in August</p>
+    <h2 class="sec">The first sale changes what we can measure</h2>
+    <p class="sec-sub">Until this month there was no customer, so we could only count cost and volume. One Apprentice unlocks the metrics that decide whether the business works, retention, ascension, and lifetime value against acquisition cost. Read the numbers below as a starting line, not a scorecard.</p>
+    <div class="grid2">
+      <div class="ue"><div class="k">Cost per lead</div><div class="v num">$25.77</div><div class="d">under the $30 target</div></div>
+      <div class="ue"><div class="k">Blended CAC</div><div class="v num">~$1,104</div><div class="d">falls as leads scale</div></div>
+      <div class="ue"><div class="k">Starting MRR</div><div class="v num">$8.99</div><div class="d">recurring, month 1 of many</div></div>
+      <div class="ue"><div class="k">LTV : CAC</div><div class="v num">TBD</div><div class="d">target ≥ 3:1</div></div>
+    </div>
+
+    <h3 class="sec" style="font-size:20px;margin-top:44px">A conservative path to the ideal state</h3>
+    <p class="sec-sub">If we fix the landing page, scale the proven ebook engine, and the nurture starts moving leads to members, here's a directional four-month view. The point isn't the exact figures, it's the shape: a small recurring base that compounds, and the first ascension that changes the math entirely.</p>
+    <div class="scroll">
+    <table class="proj">
+      <thead><tr><th>Month</th><th>Leads</th><th>New members</th><th>Active members</th><th>Recurring MRR</th><th>One-time ascension</th></tr></thead>
+      <tbody>
+        <tr class="now-row"><td class="mo">Aug · actual</td><td>30</td><td>1</td><td>1</td><td class="num">$9</td><td>—</td></tr>
+        <tr><td class="mo">Sep</td><td>45</td><td>3</td><td>4</td><td class="num">$36</td><td>—</td></tr>
+        <tr><td class="mo">Oct</td><td>60</td><td>5</td><td>9</td><td class="num">$81</td><td>—</td></tr>
+        <tr><td class="mo">Nov</td><td>80</td><td>7</td><td>15</td><td class="num">~$135</td><td class="num">1 × Protégé $2,499</td></tr>
+        <tr><td class="mo">Dec</td><td>100</td><td>9</td><td>22</td><td class="num">~$198</td><td class="num">1–2 Protégé</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="callout"><b>Why the ascension is the whole game:</b> a single Protégé at $2,499 covers roughly <b>two months of the entire ad budget</b>; an Enterpriser covers a full cycle nine times over. The recurring MRR keeps the lights on and proves retention; the ascensions are where the model actually pays. The relational meeting is the engine meant to drive them, which is why <b>tracking retention and ascension is Objective 4.</b></div>
+    <p class="disc">Illustrative and conservative. Assumes the landing page moves from 6.4% toward 10%, ebook budget scales against the proven $25.77 CPL, and lead-to-member climbs from 3.3% toward 8–10% as the nurture matures. Not a forecast, a target to steer by.</p>
+  </div>
+</section>
+
+<!-- THE STORY -->
+<section class="band-cream">
+  <div class="wrap">
+    <p class="eyebrow">What the numbers say</p>
+    <h2 class="sec">The story behind the data</h2>
+    <p class="sec-sub">Three readings the KPIs don't show on their own. The landing-page leak is the fourth, and it's diagnosed in the funnel above.</p>
+    <div class="reads">
+      <div class="read warn">
+        <div class="fig">3.3%</div>
+        <div>
+          <h3>Thirty leads produced one member.</h3>
+          <p>The first Apprentice is real progress and it's also the entire conversion. The distance between an ebook download and a paid membership is where August's budget went, and it's the stretch of the funnel with the least built behind it, which is exactly what the nurture and the relational meeting are now filling.
+          <span class="math">30 leads → 7 webinar registrations → 1 Apprentice · $1,104 spend</span></p>
+        </div>
+      </div>
+      <div class="read good">
+        <div class="fig">242% <span style="font-size:16px;color:var(--muted)">vs</span> 8.3%</div>
+        <div>
+          <h3>TikTok reaches strangers. LinkedIn barely reaches its own followers.</h3>
+          <p>TikTok pulled 12,000 views against 4,963 followers, almost all from the For You page, meaning the content is distributed on merit, not served to a list. LinkedIn, with 7,270 followers, returned 603 impressions. Same month, same team, opposite outcomes, and the cheapest fix is on the weaker side.
+          <span class="math">TikTok 12,000 views ÷ 4,963 followers · LinkedIn 603 impressions ÷ 7,270 followers</span></p>
+        </div>
+      </div>
+      <div class="read warn">
+        <div class="fig">29s</div>
+        <div>
+          <h3>YouTube volume is high, retention is the constraint.</h3>
+          <p>33 videos returned 1,968 views and 15.8 watch hours, about 29 seconds of attention per view. Publishing more won't fix that. The three long-form videos that broke 5% click-through for the first time are the format worth repeating.
+          <span class="math">15.8 watch hours ÷ 1,968 views · ~60 views per video · 8 long-form vs 25 Shorts</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CRO -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">Adjust, don't rebuild</p>
+    <h2 class="sec">What's working, what to optimize</h2>
+    <p class="sec-sub">The strategy stays. These tighten what already works, mostly on the conversion side, to get more from the same spend and reach.</p>
+    <div class="cro">
+      <div class="crocard"><div class="t">✓ Working — press on it</div><div class="b">The ebook engine ($25.77 CPL, 13.6% CTR), TikTok's FYP-driven growth, YouTube quality climbing four months running, and the funnel now converting. Scale these, don't touch them.</div><span class="m">the proven core</span></div>
+      <div class="crocard"><div class="t">1 · Lift the landing page</div><div class="b">Add the member testimonials and FAQ (already built) and tighten the form. Moving 6.4% → 10% is roughly 50% more leads on the same spend.</div><span class="m">+50% leads, same budget</span></div>
+      <div class="crocard"><div class="t">2 · Scale the proven engine</div><div class="b">The ebook campaign beats its cost target. Shift more budget onto the one channel we know converts.</div><span class="m">CPL $25.77 &lt; $30</span></div>
+      <div class="crocard"><div class="t">3 · Turn on retargeting</div><div class="b">Re-serve ebook visitors who didn't convert, allowed under the Financial ad category as an own-list audience. Needs the web-audience terms accepted.</div><span class="m">cheap, warm traffic</span></div>
+      <div class="crocard"><div class="t">4 · Warm-lead meeting → conversion</div><div class="b">The live relational meeting is the new lever for hot leads who haven't bought. Invite warm leads (opened nurture, watched the webinar) and track how many convert.</div><span class="m">new conversion path</span></div>
+      <div class="crocard"><div class="t">5 · Reformat LinkedIn</div><div class="b">Stop treating it like a video channel. Native text posts built for comments and dwell, the biggest upside of any channel.</div><span class="m">worst → opportunity</span></div>
+      <div class="crocard"><div class="t">6 · Fix the dashboard</div><div class="b">Correct the lead-count field (read 0 while Meta recorded 30) and re-authorize the YouTube and Meta-organic tokens so the live view is trustworthy again.</div><span class="m">measurement hygiene</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- OKRs -->
+<section class="band-navy">
+  <div class="wrap">
+    <p class="eyebrow">A way to keep score</p>
+    <h2 class="sec">Proposal: run Sept–Oct on OKRs</h2>
+    <p class="sec-sub">Now that the funnel is consolidating, give the cycle a spine: a few clear objectives with measurable key results tied to August's baselines, so the next review compares against a target, not a vibe.</p>
+    <div class="okr">
+      <div class="obj"><div class="oh"><span class="otag">O1</span><span class="otitle">Make the funnel a predictable engine</span></div><div class="krs">
+        <div class="kr"><span class="from">30 → 60</span><span>ebook leads per month</span></div>
+        <div class="kr"><span class="from">≤ $25</span><span>cost per lead</span></div>
+        <div class="kr"><span class="from">6.4% → 10%</span><span>landing-page conversion</span></div>
+        <div class="kr"><span class="from">1 → 4</span><span>Apprentice signups per month by October</span></div>
+      </div></div>
+      <div class="obj"><div class="oh"><span class="otag">O2</span><span class="otitle">Grow the webinar &amp; meeting pipeline</span></div><div class="krs">
+        <div class="kr"><span class="from">→ 40</span><span>webinar registrations per cycle</span></div>
+        <div class="kr"><span class="from">≥ 10%</span><span>registration → Apprentice</span></div>
+      </div></div>
+      <div class="obj"><div class="oh"><span class="otag">O3</span><span class="otitle">Rebuild reach, lead with what works</span></div><div class="krs">
+        <div class="kr"><span class="from">1,968 → 3,500</span><span>YouTube monthly views</span></div>
+        <div class="kr"><span class="from">8 + 4</span><span>"Investor Rule" Shorts + renovation videos</span></div>
+        <div class="kr"><span class="from">+200</span><span>TikTok followers per month</span></div>
+        <div class="kr"><span class="from">4–5</span><span>Tuesday recognition boosts per cycle</span></div>
+      </div></div>
+      <div class="obj"><div class="oh"><span class="otag">O4</span><span class="otitle">Prove the unit economics</span></div><div class="krs">
+        <div class="kr"><span class="from">Set up</span><span>LTV:CAC tracking (retention + ascension)</span></div>
+        <div class="kr"><span class="from">10% → 15%</span><span>email open rate</span></div>
+        <div class="kr"><span class="from">Log</span><span>member milestones as a retention signal</span></div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap"><b>SKLES</b> · August 2026 Strategic Review · prepared by Marina Scheffer &nbsp;·&nbsp; Live well by doing good.</div></footer>
+
+<script>
+const STAGES=[
+  {k:'Top of funnel',t:'Awareness & discovery',obj:'Positioning',badge:'b-pos',
+   strat:'Reach cold audience with founder-voice, proof and problem-solution content, then capture the warmest with a free ebook via paid ads.',
+   chans:['TikTok','Instagram','YouTube Shorts','LinkedIn','Meta ebook ads'],
+   kpis:[['TikTok views','12,000','1,795','FYP-driven','up'],['Instagram followers','11,711','11,043','steady growth','up'],['YouTube views','1,968','1,223','—','up'],['Ebook CTR','13.6%','—','~1–2% typical','up'],['Cost per lead','$25.77','$85 (CPA)','$20–50','up']]},
+  {k:'Middle of funnel',t:'Recorded webinar & nurture',obj:'Positioning (broad)',badge:'b-pos',
+   strat:'The recorded Fast Track webinar introduces the whole system to a broad audience, relational in tone and scalable, no live host each time. Email nurture teaches from the guide alongside it.',
+   chans:['Recorded webinar (Zoom)','Ebook','Email nurture (GetResponse)'],
+   kpis:[['Ebook leads','30','—','new baseline','flat'],['Landing-page conversion','6.4%','—','20–40% typical','down'],['Email open rate','&gt;10%','—','~21% typical','down'],['Webinar registrations','7','—','new baseline','flat']]},
+  {k:'The warm-lead room',t:'Live relational meeting',obj:'Conversion (relational)',badge:'b-conv',
+   strat:'A live, more personal session for warmer leads who have not bought yet but are close, plus members. Relational, not a hard pitch. It is the room that nudges hot leads into Apprentice.',
+   chans:['Live meeting (2nd & 4th Wed)','Warm-lead invites','Members'],
+   kpis:[['Meeting cadence','2nd & 4th Wed','—','recurring','flat'],['Warm-lead → Apprentice','building','—','the goal','flat'],['Attendance','tracking','—','—','flat']]},
+  {k:'Bottom of funnel',t:'Convert · retain · ascend',obj:'Conversion + Retention',badge:'b-both',
+   strat:'Apprentice is the entry conversion. The ladder moves members to Protégé and Accelerator, and the relational meeting keeps them in the room.',
+   chans:['Apprentice $8.99/mo','Protégé / Accelerator','Relational meeting (retention)'],
+   kpis:[['Apprentice signups','1','—','first','flat'],['Registration → Apprentice','14%','—','2–10% typical','up'],['Lead → member','3.3%','—','1–5% typical','flat'],['LTV : CAC','TBD','—','≥ 3:1 target','flat']]}
+];
+const stack=document.getElementById('fstack'), det=document.getElementById('fdetail');
+STAGES.forEach((s,i)=>{
+  const b=document.createElement('button');b.className='fstage'+(i===0?' on':'');
+  b.innerHTML=`<div class="fs-k">${s.k}</div><div class="fs-t">${s.t}</div><div class="fs-o">Objective: ${s.obj}</div>`;
+  b.onclick=()=>{document.querySelectorAll('.fstage').forEach(x=>x.classList.remove('on'));b.classList.add('on');render(i);};
+  stack.appendChild(b);
+});
+function trend(t){return t==='up'?'<span class="trend t-up">▲</span>':t==='down'?'<span class="trend t-down">▼</span>':'<span class="trend t-flat">■</span>';}
+function render(i){
+  const s=STAGES[i];
+  det.innerHTML=`<span class="badge ${s.badge}">Objective · ${s.obj}</span>
+    <h3>${s.t}</h3><p class="strat">${s.strat}</p>
+    <div class="chips">${s.chans.map(c=>`<span class="chip">${c}</span>`).join('')}</div>
+    <table class="kpi"><thead><tr><th>KPI</th><th>August</th><th>May</th><th>Benchmark</th></tr></thead><tbody>
+    ${s.kpis.map(k=>`<tr><td class="m">${k[0]}</td><td class="now">${k[1]} ${trend(k[4])}</td><td>${k[2]}</td><td>${k[3]}</td></tr>`).join('')}
+    </tbody></table>`;
+}
+render(0);
+</script>
+
+</body>
+</html>
