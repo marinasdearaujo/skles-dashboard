@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SKLES Ops Board</title>
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700;900&family=Poppins:wght@400;500;600;700;800&display=swap">
+<style>
+  :root{
+    --bg:#f4efe4; --surface:#ffffff; --surface2:#fbf8f1;
+    --navy:#112250; --navy2:#1b2f5e; --ink:#0a1533;
+    --tan:#E0C58F; --tan-deep:#a8823f;
+    --text:#1e2a44; --muted:#5d6b7e; --line:#e6dfce;
+    --shadow:0 8px 26px rgba(17,34,80,.08);
+    --yt:#c0392b; --social:#2f80c9; --funnel:#2fa37a;
+    --p-founder:#c99a3f; --p-recog:#2fa37a; --p-proof:#3f78c9;
+    --p-blueprint:#8a63c0; --p-funnel:#c2762f; --p-problem:#c25b4e; --p-video:#c0392b;
+  }
+  :root:not([data-theme="light"]){@media (prefers-color-scheme:dark){
+    --bg:#0b1430; --surface:#152449; --surface2:#101d3e;
+    --text:#e9edf6; --muted:#9fb0c7; --line:#26386a; --tan-deep:#E0C58F;
+    --shadow:0 8px 26px rgba(0,0,0,.4);
+  }}
+  :root[data-theme="dark"]{
+    --bg:#0b1430; --surface:#152449; --surface2:#101d3e;
+    --text:#e9edf6; --muted:#9fb0c7; --line:#26386a; --tan-deep:#E0C58F;
+    --shadow:0 8px 26px rgba(0,0,0,.4);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'Poppins',system-ui,Arial,sans-serif;font-size:15px}
+  h1,h2,h3{font-family:'Merriweather',Georgia,serif;margin:0}
+  .num{font-variant-numeric:tabular-nums}
+  button{font-family:inherit;cursor:pointer}
+
+  header{background:linear-gradient(150deg,var(--navy),var(--navy2));color:#fff;padding:20px 26px 0}
+  .htop{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;max-width:1500px;margin:0 auto}
+  .brand{font-family:'Merriweather',serif;font-weight:900;font-size:22px}
+  .brand .g{color:var(--tan)}
+  .brand .sub{font-size:12px;color:#aeb9d0;font-family:'Poppins';font-weight:500;margin-top:2px}
+  .theme-btn{background:rgba(224,197,143,.12);border:1px solid rgba(224,197,143,.35);color:var(--tan);border-radius:8px;padding:7px 12px;font-size:12.5px;font-weight:600}
+  .tabs{display:flex;gap:4px;max-width:1500px;margin:16px auto 0}
+  .tab{background:transparent;border:none;color:#aeb9d0;padding:12px 20px;font-size:14px;font-weight:600;border-bottom:3px solid transparent;border-radius:8px 8px 0 0}
+  .tab.on{color:#fff;border-bottom-color:var(--tan);background:rgba(255,255,255,.05)}
+
+  main{max-width:1500px;margin:0 auto;padding:20px 26px 60px}
+  .toolbar{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+  .boards{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .boards button{background:transparent;border:none;padding:9px 16px;font-size:13.5px;font-weight:700;color:var(--muted);display:flex;align-items:center;gap:7px}
+  .boards button .dot{width:9px;height:9px;border-radius:50%}
+  .boards button.on{background:var(--navy);color:#fff}
+  .filters{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  .chip{border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600}
+  .chip.on{background:var(--tan);border-color:var(--tan);color:var(--navy)}
+  .spacer{flex:1}
+  .btn{background:var(--navy);color:#fff;border:none;border-radius:9px;padding:9px 16px;font-size:13px;font-weight:600}
+  .btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+  .saved{font-size:12px;color:var(--muted)}
+
+  /* board */
+  .board{display:flex;gap:16px;overflow-x:auto;padding-bottom:12px;align-items:flex-start}
+  .col{background:var(--surface2);border:1px solid var(--line);border-radius:14px;min-width:280px;width:280px;flex:0 0 auto;display:flex;flex-direction:column}
+  .colhead{display:flex;justify-content:space-between;align-items:center;padding:14px 16px 10px}
+  .colhead .ct{font-weight:700;font-size:13px;letter-spacing:.6px;text-transform:uppercase;color:var(--text)}
+  .colhead .cnt{font-size:12px;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:1px 9px;font-weight:700}
+  .cards{padding:4px 12px 14px;display:flex;flex-direction:column;gap:10px;min-height:40px}
+  .cards.dragover{background:rgba(224,197,143,.12);border-radius:10px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:12px 13px;box-shadow:var(--shadow);cursor:pointer;border-left:4px solid var(--tan)}
+  .card:hover{border-color:var(--tan)}
+  .card .cm{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+  .card .date{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.3px}
+  .card .star{color:var(--p-recog);font-size:13px}
+  .pill{display:inline-block;font-size:10.5px;font-weight:700;border-radius:20px;padding:2px 9px;color:#fff}
+  .card .brief{font-size:13px;line-height:1.45;color:var(--text);margin:7px 0 8px}
+  .card .foot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+  .chans{display:flex;gap:4px;flex-wrap:wrap}
+  .ch{font-size:9.5px;font-weight:700;color:var(--muted);background:var(--surface2);border:1px solid var(--line);border-radius:5px;padding:2px 5px}
+  .owner{font-size:10.5px;font-weight:700;color:var(--tan-deep)}
+
+  /* calendar */
+  .cal{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+  .calhead{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}
+  .calhead h2{font-size:20px;color:var(--text)}
+  .callegend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+  .callegend span{display:inline-flex;align-items:center;gap:5px}
+  .lg{width:10px;height:10px;border-radius:3px;display:inline-block}
+  .calgrid{display:grid;grid-template-columns:repeat(7,1fr)}
+  .cdow{padding:10px;text-align:center;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line)}
+  .cday{min-height:110px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:6px 7px;position:relative}
+  .cday:nth-child(7n){border-right:none}
+  .cday.out{background:var(--surface2);opacity:.55}
+  .cday .dn{font-size:12px;font-weight:700;color:var(--muted);margin-bottom:5px}
+  .cday.today .dn{color:var(--tan-deep)}
+  .cev{font-size:10.5px;font-weight:700;border-radius:5px;padding:2px 6px;margin-bottom:3px;color:#fff}
+  .cev.webinar{background:var(--navy)} .cev.meeting{background:var(--p-recog)}
+  .ci{font-size:10.5px;line-height:1.3;border-radius:5px;padding:3px 6px;margin-bottom:3px;color:#fff;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  /* plan */
+  .plan{display:flex;flex-direction:column;gap:22px}
+  .card2{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:var(--shadow)}
+  .eyebrow{font-size:11.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tan-deep);margin:0 0 8px}
+  .card2 h2{font-size:21px;margin-bottom:6px;color:var(--text)}
+  .pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px}
+  .pcard{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:14px;border-top:4px solid var(--tan)}
+  .pcard b{display:block;font-size:13.5px;color:var(--text);margin-bottom:4px}
+  .pcard span{font-size:12px;color:var(--muted);line-height:1.5}
+  .funnelmini{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13px}
+  .fstep{background:var(--surface2);border:1px solid var(--line);border-radius:8px;padding:8px 13px;font-weight:600;color:var(--text)}
+  .arrow{color:var(--tan-deep);font-weight:800}
+
+  /* modal */
+  .ov{position:fixed;inset:0;background:rgba(10,21,51,.55);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
+  .ov.on{display:flex}
+  .modal{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px;width:100%;max-width:460px;box-shadow:0 30px 70px rgba(0,0,0,.4);max-height:90vh;overflow:auto}
+  .modal h3{font-size:18px;margin-bottom:16px}
+  .fld{margin-bottom:13px}
+  .fld label{display:block;font-size:11.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+  .fld input,.fld select,.fld textarea{width:100%;font-family:inherit;font-size:14px;border:1px solid var(--line);background:var(--surface2);color:var(--text);border-radius:8px;padding:9px 11px}
+  .fld textarea{min-height:60px;resize:vertical}
+  .modrow{display:flex;gap:10px}
+  .modact{display:flex;justify-content:space-between;gap:10px;margin-top:18px}
+  .link{background:none;border:none;color:var(--p-problem);font-size:13px;font-weight:600}
+
+  @media (max-width:720px){ .pgrid{grid-template-columns:1fr} .cday{min-height:76px} }
+</style>
+
+<header>
+  <div class="htop">
+    <div>
+      <div class="brand">SKLES<span class="g">.</span> Ops Board</div>
+      <div class="sub">Content &amp; funnel planner — Sept 2026</div>
+    </div>
+    <button class="theme-btn" id="themeBtn">◐ Theme</button>
+  </div>
+  <div class="tabs">
+    <button class="tab on" data-tab="board">Board</button>
+    <button class="tab" data-tab="cal">Calendar</button>
+    <button class="tab" data-tab="plan">Plan</button>
+  </div>
+</header>
+
+<main>
+  <!-- BOARD -->
+  <div id="board-view">
+    <div class="toolbar">
+      <div class="boards" id="boardSwitch"></div>
+      <div class="filters" id="pillarFilters"></div>
+      <div class="spacer"></div>
+      <span class="saved" id="saved"></span>
+      <button class="btn" id="addCard">+ Add</button>
+      <button class="btn ghost" id="resetBtn">Reset</button>
+    </div>
+    <div class="board" id="board"></div>
+  </div>
+
+  <!-- CALENDAR -->
+  <div id="cal-view" style="display:none">
+    <div class="cal">
+      <div class="calhead">
+        <h2>September 2026</h2>
+        <div class="callegend">
+          <span><span class="lg" style="background:var(--yt)"></span>YouTube</span>
+          <span><span class="lg" style="background:var(--social)"></span>Social</span>
+          <span><span class="lg" style="background:var(--funnel)"></span>Funnel</span>
+          <span><span class="lg" style="background:var(--navy)"></span>Webinar</span>
+          <span><span class="lg" style="background:var(--p-recog)"></span>Meeting</span>
+        </div>
+      </div>
+      <div class="calgrid" id="calGrid"></div>
+    </div>
+  </div>
+
+  <!-- PLAN -->
+  <div id="plan-view" style="display:none">
+    <div class="plan">
+      <div class="card2">
+        <p class="eyebrow">The model</p>
+        <h2>One shoot, every channel. Escalate, don't blast.</h2>
+        <p style="color:var(--muted);font-size:14px;margin:6px 0 14px;max-width:70ch">Sean records once a month (~10 min). Each piece is cut per channel. Every week has one theme and one promo focus that climbs the funnel.</p>
+        <div class="pgrid">
+          <div class="pcard"><b>Founder Story</b><span>Sean, first person, specific and vulnerable.</span></div>
+          <div class="pcard"><b>Problem → Solution</b><span>The 50-year plan is broken; the 5-to-10-year alternative.</span></div>
+          <div class="pcard"><b>Proof / Math</b><span>$40k equity/yr, real deal numbers, "rent is 100% interest."</span></div>
+          <div class="pcard"><b>6-Step Blueprint</b><span>One step, plain language, mentor voice.</span></div>
+          <div class="pcard"><b>Recognition ★</b><span>Member win or Sean listing. Boosted every Tuesday.</span></div>
+          <div class="pcard"><b>Funnel Push</b><span>Guide / webinar / Apprentice CTA per week's focus.</span></div>
+        </div>
+      </div>
+      <div class="card2">
+        <p class="eyebrow">The funnel it feeds</p>
+        <h2>Recorded acquisition, relational retention</h2>
+        <div class="funnelmini">
+          <span class="fstep">Ads + organic</span><span class="arrow">→</span>
+          <span class="fstep">Free guide</span><span class="arrow">→</span>
+          <span class="fstep">Email nurture</span><span class="arrow">→</span>
+          <span class="fstep">Recorded webinar</span><span class="arrow">→</span>
+          <span class="fstep">Apprentice $8.99</span><span class="arrow">→</span>
+          <span class="fstep">Protégé / Accelerator</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="ov" id="ov">
+  <div class="modal">
+    <h3 id="modTitle">Edit card</h3>
+    <div class="fld"><label>Title / brief</label><textarea id="f-brief"></textarea></div>
+    <div class="modrow">
+      <div class="fld" style="flex:1"><label>Board</label><select id="f-board"></select></div>
+      <div class="fld" style="flex:1"><label>Pillar</label><select id="f-pillar"></select></div>
+    </div>
+    <div class="modrow">
+      <div class="fld" style="flex:1"><label>Format</label><input id="f-fmt"></div>
+      <div class="fld" style="flex:1"><label>Date</label><input id="f-date" type="date"></div>
+    </div>
+    <div class="modrow">
+      <div class="fld" style="flex:1"><label>Owner</label><input id="f-owner"></div>
+      <div class="fld" style="flex:1"><label>CTA</label><input id="f-cta"></div>
+    </div>
+    <div class="fld"><label>Channels / platforms (comma separated)</label><input id="f-chans" placeholder="IG, TikTok"></div>
+    <div class="modact">
+      <button class="link" id="f-del">Delete</button>
+      <div><button class="btn ghost" id="f-cancel">Cancel</button> <button class="btn" id="f-save">Save</button></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const BOARDS=[{id:'youtube',name:'YouTube',color:getcss('--yt')},{id:'social',name:'Social',color:getcss('--social')},{id:'funnel',name:'Funnel',color:getcss('--funnel')}];
+const STATUS=['Ideas','To Produce','Scheduled','Published'];
+const PILLARS={'Founder Story':'--p-founder','Problem → Solution':'--p-problem','Proof / Math':'--p-proof','6-Step Blueprint':'--p-blueprint','Recognition':'--p-recog','Funnel Push':'--p-funnel','Video':'--p-video','Email':'--p-funnel','Landing page':'--p-blueprint'};
+function getcss(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+
+// events shown on calendar (reference only)
+const EVENTS=[
+  {date:'2026-09-02',label:'🎥 Recorded webinar',type:'webinar'},
+  {date:'2026-09-09',label:'🎥 Recorded webinar',type:'webinar'},
+  {date:'2026-09-10',label:'👥 Coaching meeting',type:'meeting'},
+  {date:'2026-09-16',label:'🎥 Recorded webinar',type:'webinar'},
+  {date:'2026-09-23',label:'🎥 Recorded webinar',type:'webinar'},
+  {date:'2026-09-24',label:'👥 Coaching meeting',type:'meeting'},
+  {date:'2026-09-30',label:'🎥 Recorded webinar',type:'webinar'}
+];
+
+function iso(y,m,d){return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;}
+
+function seedCards(){
+  const c=[]; let id=1;
+  const wkStarts=[1,8,15,22,29]; // Mondays-ish anchors in Sept
+  // SOCIAL: 5/week rhythm
+  const socialRhythm=[
+    {off:0,day:'Mon',pillar:'Founder Story',fmt:'Reel',chans:['IG','TikTok','FB'],owner:'Sean → Valerie',cta:'—'},
+    {off:1,day:'Tue',pillar:'Recognition',fmt:'Carousel',chans:['IG','FB','LinkedIn'],owner:'Valerie',boost:true,cta:'—'},
+    {off:2,day:'Wed',pillar:'Proof / Math',fmt:'Reel',chans:['IG','TikTok','FB'],owner:'Valerie',cta:'Free guide'},
+    {off:3,day:'Thu',pillar:'Funnel Push',fmt:'Story',chans:['IG','FB'],owner:'Valerie',cta:'Webinar'},
+    {off:4,day:'Fri',pillar:'Proof / Math',fmt:'Post',chans:['LinkedIn'],owner:'Valerie',cta:'—'}
+  ];
+  const themes=['The 50-year plan is broken','One deal, real numbers','Start without cash or credit','Live well by doing good','Two choices'];
+  wkStarts.forEach((mon,wi)=>{
+    socialRhythm.forEach(r=>{
+      const d=mon+r.off; if(d>30) return;
+      c.push({id:id++,board:'social',date:iso(2026,9,d),day:r.day,pillar:r.pillar,fmt:r.fmt,chans:r.chans,owner:r.owner,cta:r.cta,boost:!!r.boost,
+        brief:`${themes[wi]} — ${r.pillar}${r.boost?' (boost candidate ★)':''}`,status:'To Produce'});
+    });
+    // YOUTUBE: 1 long-form + 2 shorts / week
+    if(mon<=29){
+      c.push({id:id++,board:'youtube',date:iso(2026,9,mon+1),day:'Tue',pillar:'Video',fmt:'Long-form',chans:['YouTube'],owner:'Sean · Marissa',cta:'Subscribe',brief:`Renovation / walkthrough video — ${themes[wi]}`,status:'To Produce'});
+      c.push({id:id++,board:'youtube',date:iso(2026,9,mon+2),day:'Wed',pillar:'Video',fmt:'Short',chans:['YouTube','TikTok'],owner:'Marissa',cta:'Subscribe',brief:`"Investor Rule of the Week" — Short #${wi*2+1}`,status:'To Produce'});
+      c.push({id:id++,board:'youtube',date:iso(2026,9,mon+4),day:'Fri',pillar:'Video',fmt:'Short',chans:['YouTube','TikTok'],owner:'Marissa',cta:'Subscribe',brief:`"Investor Rule of the Week" — Short #${wi*2+2}`,status:'To Produce'});
+    }
+  });
+  // FUNNEL: emails / LPs / automations
+  const funnel=[
+    {d:1,pillar:'Landing page',fmt:'LP',owner:'Marina',brief:'Ebook LP — add testimonials + FAQ, tighten form',cta:'—'},
+    {d:3,pillar:'Email',fmt:'Automation',owner:'Marina',brief:'Audit nurture Phase A/B — fix low-click CTAs',cta:'—'},
+    {d:8,pillar:'Funnel Push',fmt:'Ad',owner:'Marina',brief:'Test direct-to-webinar ad (split / add to ebook campaign)',cta:'Register'},
+    {d:11,pillar:'Email',fmt:'Broadcast',owner:'Marina',brief:'Monthly newsletter broadcast to the list',cta:'Webinar'},
+    {d:15,pillar:'Funnel Push',fmt:'Ad',owner:'Marina · Sean',brief:'Turn on retargeting (accept web-audience terms)',cta:'—'},
+    {d:22,pillar:'Email',fmt:'Automation',owner:'Marina',brief:'Webinar reminder + replay sequence (get registrants to watch)',cta:'Watch'},
+    {d:29,pillar:'Email',fmt:'Broadcast',owner:'Marina',brief:'End-of-month recap + next webinar invite',cta:'Register'}
+  ];
+  funnel.forEach(f=>c.push({id:id++,board:'funnel',date:iso(2026,9,f.d),day:'',pillar:f.pillar,fmt:f.fmt,chans:[],owner:f.owner,cta:f.cta,brief:f.brief,status:'To Produce'}));
+  return c;
+}
+
+const LS='skles_ops_v2';
+let cards=load()||seedCards();
+let board='youtube', filter=null, editing=null;
+
+function load(){try{const v=localStorage.getItem(LS);return v?JSON.parse(v):null;}catch(e){return null;}}
+function save(){try{localStorage.setItem(LS,JSON.stringify(cards));flash('Saved ✓');}catch(e){flash('(not saved)');}}
+function flash(t){const e=document.getElementById('saved');if(e){e.textContent=t;setTimeout(()=>{if(e.textContent===t)e.textContent='';},1600);}}
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+function pcolor(p){return css(PILLARS[p]||'--tan');}
+function esc(s){return (s||'').replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));}
+function fdate(isoStr){if(!isoStr)return '';const d=new Date(isoStr+'T00:00:00');return d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});}
+
+function cardHTML(c){
+  const chans=c.chans.map(x=>`<span class="ch">${x}</span>`).join('');
+  return `<div class="card" data-id="${c.id}" draggable="true" style="border-left-color:${pcolor(c.pillar)}">
+    <div class="cm"><span class="date">${c.date?fdate(c.date):'—'}</span>${c.boost?'<span class="star">★</span>':''}</div>
+    <span class="pill" style="background:${pcolor(c.pillar)}">${c.pillar}</span>
+    <div class="brief">${esc(c.brief)}</div>
+    <div class="foot"><div class="chans">${chans||`<span class="ch">${esc(c.fmt)}</span>`}</div><span class="owner">${esc(c.owner)}</span></div>
+  </div>`;
+}
+function renderBoard(){
+  const el=document.getElementById('board');el.innerHTML='';
+  STATUS.forEach(st=>{
+    let list=cards.filter(c=>c.board===board && c.status===st);
+    if(filter) list=list.filter(c=>c.pillar===filter);
+    list.sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+    const col=document.createElement('div');col.className='col';
+    col.innerHTML=`<div class="colhead"><span class="ct">${st}</span><span class="cnt num">${list.length}</span></div>
+      <div class="cards" data-st="${st}">${list.map(cardHTML).join('')}</div>`;
+    el.appendChild(col);
+  });
+  wireDnD();
+  document.querySelectorAll('.card').forEach(c=>c.addEventListener('click',()=>openModal(+c.dataset.id)));
+}
+function wireDnD(){
+  document.querySelectorAll('.card').forEach(card=>{
+    card.addEventListener('dragstart',e=>{e.dataTransfer.setData('id',card.dataset.id);card.style.opacity=.4;});
+    card.addEventListener('dragend',()=>card.style.opacity=1);
+  });
+  document.querySelectorAll('.cards').forEach(z=>{
+    z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('dragover');});
+    z.addEventListener('dragleave',()=>z.classList.remove('dragover'));
+    z.addEventListener('drop',e=>{e.preventDefault();z.classList.remove('dragover');
+      const c=cards.find(x=>x.id===+e.dataTransfer.getData('id'));if(!c)return;c.status=z.dataset.st;save();renderBoard();});
+  });
+}
+function renderBoardSwitch(){
+  const b=document.getElementById('boardSwitch');
+  b.innerHTML=BOARDS.map(bd=>`<button data-b="${bd.id}" class="${bd.id===board?'on':''}"><span class="dot" style="background:${bd.color}"></span>${bd.name}</button>`).join('');
+  b.querySelectorAll('button').forEach(btn=>btn.onclick=()=>{board=btn.dataset.b;filter=null;renderBoardSwitch();renderFilters();renderBoard();});
+}
+function renderFilters(){
+  const used=[...new Set(cards.filter(c=>c.board===board).map(c=>c.pillar))];
+  const box=document.getElementById('pillarFilters');
+  box.innerHTML='<span class="chip'+(!filter?' on':'')+'" data-p="">All</span>'+used.map(p=>`<span class="chip${filter===p?' on':''}" data-p="${p}" style="${filter===p?'':'border-left:3px solid '+pcolor(p)}">${p}</span>`).join('');
+  box.querySelectorAll('.chip').forEach(ch=>ch.onclick=()=>{filter=ch.dataset.p||null;renderFilters();renderBoard();});
+}
+
+/* calendar */
+function renderCal(){
+  const grid=document.getElementById('calGrid');
+  const dows=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  let html=dows.map(d=>`<div class="cdow">${d}</div>`).join('');
+  const first=new Date(2026,8,1); const startDow=first.getDay(); // Sept=month index 8
+  const daysInMonth=30;
+  const cells=[];
+  for(let i=0;i<startDow;i++) cells.push(null);
+  for(let d=1;d<=daysInMonth;d++) cells.push(d);
+  while(cells.length%7!==0) cells.push(null);
+  const today=new Date();
+  cells.forEach(d=>{
+    if(d===null){html+=`<div class="cday out"></div>`;return;}
+    const ds=iso(2026,9,d);
+    const evs=EVENTS.filter(e=>e.date===ds).map(e=>`<div class="cev ${e.type}">${e.label}</div>`).join('');
+    const items=cards.filter(c=>c.date===ds).map(c=>{
+      const col=BOARDS.find(b=>b.id===c.board).color;
+      return `<div class="ci" data-id="${c.id}" style="background:${col}" title="${esc(c.brief)}">${esc(c.brief)}</div>`;
+    }).join('');
+    const isToday=(today.getFullYear()===2026&&today.getMonth()===8&&today.getDate()===d);
+    html+=`<div class="cday${isToday?' today':''}"><div class="dn">${d}</div>${evs}${items}</div>`;
+  });
+  grid.innerHTML=html;
+  grid.querySelectorAll('.ci').forEach(el=>el.onclick=()=>openModal(+el.dataset.id));
+}
+
+/* modal */
+function openModal(id){
+  editing = id? cards.find(c=>c.id===id) : {id:Math.max(0,...cards.map(c=>c.id))+1,board:board,date:'',pillar:'Founder Story',fmt:'Reel',chans:[],owner:'',cta:'—',brief:'',status:'Ideas',isNew:true};
+  document.getElementById('modTitle').textContent=id?'Edit card':'New card';
+  document.getElementById('f-brief').value=editing.brief;
+  document.getElementById('f-board').innerHTML=BOARDS.map(b=>`<option value="${b.id}"${b.id===editing.board?' selected':''}>${b.name}</option>`).join('');
+  document.getElementById('f-pillar').innerHTML=Object.keys(PILLARS).map(p=>`<option${p===editing.pillar?' selected':''}>${p}</option>`).join('');
+  document.getElementById('f-fmt').value=editing.fmt;
+  document.getElementById('f-date').value=editing.date||'';
+  document.getElementById('f-owner').value=editing.owner||'';
+  document.getElementById('f-cta').value=editing.cta||'';
+  document.getElementById('f-chans').value=(editing.chans||[]).join(', ');
+  document.getElementById('f-del').style.visibility=id?'visible':'hidden';
+  document.getElementById('ov').classList.add('on');
+}
+function closeModal(){document.getElementById('ov').classList.remove('on');editing=null;}
+document.getElementById('f-save').onclick=()=>{
+  if(!editing)return;
+  editing.brief=document.getElementById('f-brief').value;
+  editing.board=document.getElementById('f-board').value;
+  editing.pillar=document.getElementById('f-pillar').value;
+  editing.fmt=document.getElementById('f-fmt').value;
+  editing.date=document.getElementById('f-date').value;
+  editing.owner=document.getElementById('f-owner').value;
+  editing.cta=document.getElementById('f-cta').value;
+  editing.chans=document.getElementById('f-chans').value.split(',').map(s=>s.trim()).filter(Boolean);
+  if(editing.isNew){delete editing.isNew;cards.push(editing);}
+  save();refresh();closeModal();
+};
+document.getElementById('f-del').onclick=()=>{if(editing){cards=cards.filter(c=>c.id!==editing.id);save();refresh();closeModal();}};
+document.getElementById('f-cancel').onclick=closeModal;
+document.getElementById('ov').onclick=e=>{if(e.target.id==='ov')closeModal();};
+document.getElementById('addCard').onclick=()=>openModal(null);
+document.getElementById('resetBtn').onclick=()=>{if(confirm('Reset to the seeded Sept plan? Your changes will be lost.')){cards=seedCards();save();refresh();}};
+
+function refresh(){renderBoardSwitch();renderFilters();renderBoard();renderCal();}
+
+/* tabs */
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));
+  ['board','cal','plan'].forEach(v=>document.getElementById(v+'-view').style.display=(v===t.dataset.tab)?'':'none');
+  if(t.dataset.tab==='cal') renderCal();
+});
+/* theme */
+const root=document.documentElement;
+document.getElementById('themeBtn').onclick=()=>{
+  const cur=root.getAttribute('data-theme');
+  const next=cur==='dark'?'light':(cur==='light'?'dark':(matchMedia('(prefers-color-scheme:dark)').matches?'light':'dark'));
+  root.setAttribute('data-theme',next);refresh();
+};
+
+refresh();
+</script>
+
+</body>
+</html>
