@@ -315,7 +315,7 @@ function seedCards(){
        hook:t=>`The math on ${t.toLowerCase()}`, copy:t=>'Show real numbers: equity built, cash flow, "rent is 100% interest".', visual:'Reel with number overlays.'},
     4:{pillar:'Funnel Push',fmt:'Story',chans:['IG','FB'],owner:'Valerie',cta:'Webinar',mix:'proven',
        hook:t=>'Your next step', copy:t=>'Drive to the free guide and the recorded webinar. Register link.', visual:'Story with link sticker + countdown.'},
-    5:{pillar:'Proof / Math',fmt:'Post',chans:['LinkedIn'],owner:'Valerie',cta:'—',mix:'repurpose',
+    5:{pillar:'Proof / Math',fmt:'Post',chans:['LinkedIn'],owner:'Valerie',cta:'—',mix:'proven',
        hook:t=>`${t} — for professionals`, copy:t=>'Native LinkedIn text post, no outbound link in the body. Reframe the week’s proof for a pro audience.', visual:'Native text + single image.'}
   };
   const ytByDow={2:'long',3:'short',5:'short'};
@@ -325,29 +325,36 @@ function seedCards(){
     {pillar:'Landing page',fmt:'LP',owner:'Marina',mix:'proven',hook:'Ebook LP — add testimonials + FAQ',copy:'Add member testimonials and an FAQ block, tighten the form. Lift landing-page conversion.',cta:'—'},
     {pillar:'Email',fmt:'Automation',owner:'Marina',mix:'proven',hook:'Audit nurture Phase A/B',copy:'Opens are healthy, clicks are not. Rewrite the low-click CTAs across the flow.',cta:'—'},
     {pillar:'Funnel Push',fmt:'Ad',owner:'Marina',mix:'experiment',hook:'Test direct-to-webinar ad',copy:'Split from, or add to, the ebook campaign. Send colder traffic straight to the recorded webinar.',cta:'Register'},
-    {pillar:'Email',fmt:'Automation',owner:'Marina',mix:'repurpose',hook:'Webinar reminder + replay sequence',copy:'Get registrants to actually watch: reminder before, replay link after for no-shows.',cta:'Watch'},
-    {pillar:'Email',fmt:'Broadcast',owner:'Marina',mix:'repurpose',hook:'End-of-month recap + next invite',copy:'Recap the month’s wins and invite to the next webinar.',cta:'Register'}
+    {pillar:'Email',fmt:'Automation',owner:'Marina',mix:'proven',hook:'Webinar reminder + replay sequence',copy:'Get registrants to actually watch: reminder before, replay link after for no-shows.',cta:'Watch'},
+    {pillar:'Email',fmt:'Broadcast',owner:'Marina',mix:'proven',hook:'End-of-month recap + next invite',copy:'Recap the month’s wins and invite to the next webinar.',cta:'Register'}
   ];
   const OCT_FUNNEL=[
     {pillar:'Funnel Push',fmt:'Ad',owner:'Marina · Sean',mix:'experiment',hook:'Launch retargeting ads',copy:'Site + engagement audiences live at a low daily budget. Bring warm traffic back to the webinar.',cta:'Register'},
     {pillar:'Landing page',fmt:'LP',owner:'Marina',mix:'experiment',hook:'A/B test the ebook LP headline',copy:'Run two headline variants against each other. Keep the winner, kill the loser.',cta:'—'},
     {pillar:'Landing page',fmt:'Lead magnet',owner:'Marina',mix:'experiment',hook:'New lead magnet — checklist or quiz',copy:'Test a second entry point beyond the ebook: a short checklist or a "which strategy fits you" quiz.',cta:'Download'},
     {pillar:'Email',fmt:'Automation',owner:'Marina',mix:'proven',hook:'Webinar follow-up — book a call',copy:'Add a post-webinar sequence that invites attendees to book a call or take the Apprentice offer.',cta:'Book a call'},
-    {pillar:'Email',fmt:'Broadcast',owner:'Marina',mix:'repurpose',hook:'Q4 push + next webinar invite',copy:'Frame the last stretch of the year. Value first, clear invite to the next session.',cta:'Register'}
+    {pillar:'Email',fmt:'Broadcast',owner:'Marina',mix:'proven',hook:'Q4 push + next webinar invite',copy:'Frame the last stretch of the year. Value first, clear invite to the next session.',cta:'Register'}
   ];
   function build(y,m,daysN,themes,funnelTasks){
     let weekIdx=0, firstMon=false; const funnelPlaced=new Set();
+    const priorMonth=(m===9?'August':'September');
     for(let d=1; d<=daysN; d++){
       const dow=new Date(y,m-1,d).getDay();
       if(dow===1){ weekIdx = firstMon? weekIdx+1 : 1; firstMon=true; }
-      if(dow<1||dow>5) continue;
+      if(dow===0) continue; // skip Sundays
       const wi=weekIdx % themes.length, t=themes[wi], date=iso(y,m,d);
-      const s=socialByDow[dow];
-      if(s) c.push(mk({id:id++,board:'social',date,pillar:s.pillar,fmt:s.fmt,chans:s.chans.slice(),owner:s.owner,cta:s.cta,boost:!!s.boost,mix:s.mix,hook:s.hook(t),copy:s.copy(t),visual:s.visual}));
-      const yt=ytByDow[dow];
-      if(yt==='long') c.push(mk({id:id++,board:'youtube',date,pillar:'Video',fmt:'Long-form',chans:['YouTube'],owner:'Sean · Marissa',cta:'Subscribe',mix:'proven',hook:`Renovation walkthrough — ${t}`,copy:'Full walkthrough tied to the week’s theme. Pull 2–3 Shorts out of it.',visual:'16:9, chaptered, b-roll of the property.'}));
-      if(yt==='short'){ shortN++; c.push(mk({id:id++,board:'youtube',date,pillar:'Video',fmt:'Short',chans:['YouTube','TikTok'],owner:'Marissa',cta:'Subscribe',mix:'repurpose',hook:`Investor Rule #${shortN}`,copy:'One rule in ~30s. Cut from the long-form walkthrough. Hook in the first 2 seconds, vertical.',visual:'9:16 Short, big captions.'})); }
-      if(!funnelPlaced.has(weekIdx)){ const f=funnelTasks[weekIdx % funnelTasks.length]; if(f){ c.push(mk({id:id++,board:'funnel',date,pillar:f.pillar,fmt:f.fmt,chans:[],owner:f.owner,cta:f.cta||'—',mix:f.mix,hook:f.hook,copy:f.copy,visual:''})); funnelPlaced.add(weekIdx); } }
+      if(dow>=1&&dow<=5){
+        const s=socialByDow[dow];
+        if(s) c.push(mk({id:id++,board:'social',date,pillar:s.pillar,fmt:s.fmt,chans:s.chans.slice(),owner:s.owner,cta:s.cta,boost:!!s.boost,mix:s.mix,hook:s.hook(t),copy:s.copy(t),visual:s.visual}));
+        const yt=ytByDow[dow];
+        if(yt==='long') c.push(mk({id:id++,board:'youtube',date,pillar:'Video',fmt:'Long-form',chans:['YouTube'],owner:'Sean · Marissa',cta:'Subscribe',mix:'proven',hook:`Renovation walkthrough — ${t}`,copy:'Full walkthrough tied to the week’s theme. Pull 2–3 Shorts out of it.',visual:'16:9, chaptered, b-roll of the property.'}));
+        if(yt==='short'){
+          if(dow===3){ shortN++; c.push(mk({id:id++,board:'youtube',date,pillar:'Video',fmt:'Short',chans:['YouTube','TikTok'],owner:'Marissa',cta:'Subscribe',mix:'proven',hook:`Investor Rule #${shortN}`,copy:'New Short: one rule in ~30s, cut from this week’s walkthrough. Hook in the first 2 seconds, vertical.',visual:'9:16 Short, big captions.'})); }
+          else { c.push(mk({id:id++,board:'youtube',date,pillar:'Video',fmt:'Repost',chans:['YouTube','TikTok'],owner:'Marissa',cta:'Subscribe',mix:'repurpose',hook:`Re-run a top ${priorMonth} Short`,copy:`Repost one of last month’s (${priorMonth}) best-performing Shorts/Reels as-is. Pick a proven winner, don’t remake it.`,visual:'Re-use the original video; refresh the caption only.'})); }
+        }
+        if(!funnelPlaced.has(weekIdx)){ const f=funnelTasks[weekIdx % funnelTasks.length]; if(f){ c.push(mk({id:id++,board:'funnel',date,pillar:f.pillar,fmt:f.fmt,chans:[],owner:f.owner,cta:f.cta||'—',mix:f.mix,hook:f.hook,copy:f.copy,visual:''})); funnelPlaced.add(weekIdx); } }
+      }
+      if(dow===6){ c.push(mk({id:id++,board:'social',date,pillar:'Recognition',fmt:'Repost',chans:['IG','FB'],owner:'Valerie',mix:'repurpose',hook:`Repost — best ${priorMonth} post`,copy:`Re-run one of last month’s (${priorMonth}) top posts as-is: grab the highest-reach Reel or a Recognition win and repost it with a fresh caption. No remake, just recycle the winner.`,visual:'Re-use the original asset; refresh caption + first frame.'})); }
     }
   }
   build(2026,9,30,SEPT_THEMES,SEPT_FUNNEL);
