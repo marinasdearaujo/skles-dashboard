@@ -614,13 +614,13 @@ function renderColFilters(){
   const mixOpts=Object.keys(MIX).map(k=>`<option value="${k}"${mixFilter===k?' selected':''}>${MIX[k].label}</option>`).join('');
   const active=filter||fPlatform||fFormat||fOwner||fStatus||mixFilter||fDate;
   box.innerHTML=
-    sel('pillar','Pillar',pillars,filter||'')+
+    `<span class="fsel">Date <input type="date" data-f="date" min="2026-09-01" max="2026-10-31" value="${fDate}"></span>`+
     sel('platform','Channel',platforms,fPlatform)+
+    sel('pillar','Pillar',pillars,filter||'')+
     sel('format','Format',formats,fFormat)+
     sel('owner','Owner',owners,fOwner)+
-    sel('status','Status',STATUS,fStatus)+
     `<span class="fsel">Mix <select data-f="mix"><option value="">All</option>${mixOpts}</select></span>`+
-    `<span class="fsel">Date <input type="date" data-f="date" min="2026-09-01" max="2026-10-31" value="${fDate}"></span>`+
+    sel('status','Status',STATUS,fStatus)+
     (active?`<button class="btn ghost" id="clearF" style="padding:6px 12px">Clear filters</button>`:'');
   box.querySelectorAll('select,input').forEach(s=>s.onchange=()=>{const f=s.dataset.f,v=s.value;
     if(f==='pillar')filter=v||null;else if(f==='platform')fPlatform=v;else if(f==='format')fFormat=v;else if(f==='owner')fOwner=v;else if(f==='status')fStatus=v;else if(f==='mix')mixFilter=v||null;else if(f==='date')fDate=v;
