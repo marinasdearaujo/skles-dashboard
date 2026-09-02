@@ -57,6 +57,15 @@
   .filters{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
   .chip{border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600}
   .chip.on{background:var(--tan);border-color:var(--tan);color:var(--navy)}
+  .mixmeter{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:11px 16px;box-shadow:var(--shadow);display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:16px}
+  .mixtitle{font-size:11px;font-weight:700;color:var(--tan-deep);letter-spacing:.6px;text-transform:uppercase;white-space:nowrap}
+  .mixbar{flex:1;min-width:180px;height:13px;border-radius:8px;overflow:hidden;display:flex;border:1px solid var(--line)}
+  .mixseg{height:100%}
+  .mixlegend{display:flex;gap:14px;flex-wrap:wrap}
+  .mixlegend button{background:none;border:none;display:flex;align-items:center;gap:6px;color:var(--muted);font-weight:600;font-size:12px;padding:2px 4px;border-radius:6px}
+  .mixlegend button.on{background:var(--surface2);color:var(--text)}
+  .mixlegend .sw{width:11px;height:11px;border-radius:3px}
+  .mixlegend b{color:var(--text)}
   .btn{background:var(--navy);color:#fff;border:none;border-radius:9px;padding:9px 16px;font-size:13px;font-weight:600}
   .btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
   .saved{font-size:12px;color:var(--muted)}
@@ -99,7 +108,10 @@
   .calwrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
   .cal{min-width:1120px;background:var(--surface)}
   .calhead{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap;gap:12px}
-  .calhead h2{font-size:20px;color:var(--text)}
+  .calnav{display:flex;align-items:center;gap:14px}
+  .calnav h2{font-size:20px;color:var(--text);min-width:190px;text-align:center}
+  .calnav button{background:var(--surface2);border:1px solid var(--line);color:var(--text);border-radius:8px;width:34px;height:34px;font-size:13px;font-weight:700}
+  .calnav button:disabled{opacity:.3;cursor:default}
   .callegend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
   .callegend span{display:inline-flex;align-items:center;gap:5px}
   .lg{width:10px;height:10px;border-radius:3px;display:inline-block}
@@ -139,10 +151,14 @@
   .fld textarea{min-height:64px;resize:vertical}
   .modrow{display:flex;gap:10px}
   .sechead{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--tan-deep);margin:20px 0 8px;border-top:1px solid var(--line);padding-top:16px}
-  .subitem{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;background:var(--surface2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-bottom:7px;font-size:13px}
+  .subitem{display:flex;justify-content:space-between;gap:10px;align-items:center;background:var(--surface2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-bottom:7px;font-size:13px}
   .subitem .x{color:var(--p-problem);font-weight:700;cursor:pointer;flex:0 0 auto}
-  .subitem a{color:var(--p-proof);font-weight:600;text-decoration:none;word-break:break-all}
+  .subitem a,.subitem .fa{color:var(--p-proof);font-weight:600;text-decoration:none;word-break:break-all;cursor:pointer}
   .subitem .who{font-size:10.5px;color:var(--muted);font-weight:700}
+  .thumb{width:34px;height:34px;border-radius:6px;object-fit:cover;flex:0 0 auto;border:1px solid var(--line)}
+  .drop{border:1.5px dashed var(--line);border-radius:9px;padding:14px;text-align:center;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px}
+  .drop.over{border-color:var(--tan);background:rgba(224,197,143,.1);color:var(--tan-deep)}
+  .note{font-size:11px;color:var(--muted);line-height:1.4;margin:6px 2px 0}
   .addrow{display:flex;gap:8px;margin-top:6px}
   .addrow input{flex:1}
   .addrow .btn{padding:9px 13px}
@@ -172,6 +188,7 @@
     <button class="btn ghost" id="resetBtn">Reset</button>
   </div>
   <div class="filters" id="pillarFilters" style="margin-bottom:16px"></div>
+  <div id="mixMeter" class="mixmeter"></div>
 
   <div id="work"></div>
 
@@ -212,16 +229,21 @@
       <div class="fld" style="flex:1"><label>CTA</label><input id="f-cta"></div>
       <div class="fld" style="flex:1"><label>Channels (comma)</label><input id="f-chans" placeholder="IG, TikTok"></div>
     </div>
-    <div class="fld"><label>Visual / asset note</label><input id="f-visual"></div>
-    <div class="fld"><label>Link (draft, doc, post URL)</label><input id="f-link" placeholder="https://"></div>
+    <div class="modrow">
+      <div class="fld" style="flex:1"><label>Content mix (70·20·10)</label><select id="f-mix"></select></div>
+      <div class="fld" style="flex:1"><label>Visual / asset note</label><input id="f-visual"></div>
+    </div>
 
     <div class="sechead">Attachments</div>
     <div id="att-list"></div>
+    <div class="drop" id="att-drop">📎 Drop files here or click to upload</div>
+    <input type="file" id="att-file" multiple hidden>
     <div class="addrow">
-      <input id="att-label" placeholder="Label (e.g. Canva draft)">
+      <input id="att-label" placeholder="or add a link — label">
       <input id="att-url" placeholder="https://">
-      <button class="btn" id="att-add">Add</button>
+      <button class="btn" id="att-add">Add link</button>
     </div>
+    <p class="note" id="att-note"></p>
 
     <div class="sechead">Comments</div>
     <div id="cmt-list"></div>
@@ -244,73 +266,105 @@ const BCOLOR={youtube:'--yt',social:'--social',funnel:'--funnel'};
 const VIEWS=[{id:'list',name:'List'},{id:'calendar',name:'Calendar'},{id:'kanban',name:'Kanban'}];
 const STATUS=['Ideas','To Produce','Scheduled','Published'];
 const PILLARS={'Founder Story':'--p-founder','Problem → Solution':'--p-problem','Proof / Math':'--p-proof','6-Step Blueprint':'--p-blueprint','Recognition':'--p-recog','Funnel Push':'--p-funnel','Video':'--p-video','Email':'--p-email','Landing page':'--p-lp'};
+const MONTHS=[{y:2026,m:9,daysN:30,label:'September 2026'},{y:2026,m:10,daysN:31,label:'October 2026'}];
+const MIX={proven:{label:'Proven',color:'#2fa37a',target:70},repurpose:{label:'Repurpose',color:'#3f78c9',target:20},experiment:{label:'Experiment',color:'#c99a3f',target:10}};
 function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+function iso(y,m,d){return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;}
 
 const EVENTS=[
-  {date:'2026-09-02',label:'🎥 Recorded webinar',type:'webinar'},
-  {date:'2026-09-09',label:'🎥 Recorded webinar',type:'webinar'},
-  {date:'2026-09-10',label:'👥 Coaching meeting',type:'meeting'},
-  {date:'2026-09-16',label:'🎥 Recorded webinar',type:'webinar'},
-  {date:'2026-09-23',label:'🎥 Recorded webinar',type:'webinar'},
-  {date:'2026-09-24',label:'👥 Coaching meeting',type:'meeting'},
-  {date:'2026-09-30',label:'🎥 Recorded webinar',type:'webinar'}
+  {date:'2026-09-01',label:'🎥 Recorded webinar',type:'webinar'},
+  {date:'2026-09-08',label:'🎥 Recorded webinar',type:'webinar'},
+  {date:'2026-09-09',label:'👥 Coaching meeting',type:'meeting'},
+  {date:'2026-09-15',label:'🎥 Recorded webinar',type:'webinar'},
+  {date:'2026-09-22',label:'🎥 Recorded webinar',type:'webinar'},
+  {date:'2026-09-23',label:'👥 Coaching meeting',type:'meeting'},
+  {date:'2026-09-29',label:'🎥 Recorded webinar',type:'webinar'},
+  {date:'2026-10-06',label:'🎥 Recorded webinar',type:'webinar'},
+  {date:'2026-10-13',label:'🎥 Recorded webinar',type:'webinar'},
+  {date:'2026-10-14',label:'👥 Coaching meeting',type:'meeting'},
+  {date:'2026-10-20',label:'🎥 Recorded webinar',type:'webinar'},
+  {date:'2026-10-27',label:'🎥 Recorded webinar',type:'webinar'},
+  {date:'2026-10-28',label:'👥 Coaching meeting',type:'meeting'}
 ];
-function iso(y,m,d){return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;}
 
 function seedCards(){
   const c=[]; let id=1; let shortN=0;
-  const mk=o=>Object.assign({comments:[],attachments:[],link:'',visual:'',status:'To Produce'},o);
-  const weeks=[1,8,15,22,29];
-  const themes=['The 50-year plan is broken','One deal, real numbers','Start without cash or credit','Live well by doing good','Two choices'];
-  const social=[
-    {off:0,pillar:'Founder Story',fmt:'Reel',chans:['IG','TikTok','FB'],owner:'Sean → Valerie',cta:'—',
-     hook:t=>t, copy:t=>`Sean, first person: the story behind "${t.toLowerCase()}". Specific and honest, no hype.`, visual:'Talking-head Reel, captions burned in.'},
-    {off:1,pillar:'Recognition',fmt:'Carousel',chans:['IG','FB','LinkedIn'],owner:'Valerie',boost:true,cta:'—',
-     hook:t=>'Member spotlight', copy:t=>`Celebrate a member win or a Sean listing tied to "${t.toLowerCase()}". Boost on Tuesday. ★`, visual:'Carousel: quote card + proof shot.'},
-    {off:2,pillar:'Proof / Math',fmt:'Reel',chans:['IG','TikTok','FB'],owner:'Valerie',cta:'Free guide',
-     hook:t=>`The math on ${t.toLowerCase()}`, copy:t=>'Show real numbers: equity built, cash flow, "rent is 100% interest".', visual:'Reel with number overlays.'},
-    {off:3,pillar:'Funnel Push',fmt:'Story',chans:['IG','FB'],owner:'Valerie',cta:'Webinar',
-     hook:t=>'Your next step', copy:t=>'Drive to the free guide and the recorded webinar. Register link.', visual:'Story with link sticker + countdown.'},
-    {off:4,pillar:'Proof / Math',fmt:'Post',chans:['LinkedIn'],owner:'Valerie',cta:'—',
-     hook:t=>`${t} — for professionals`, copy:t=>'Native LinkedIn text post, no outbound link in the body. Reframe the week’s proof for a pro audience.', visual:'Native text + single image.'}
+  const mk=o=>Object.assign({comments:[],attachments:[],visual:'',status:'To Produce',mix:'proven'},o);
+  const socialByDow={
+    1:{pillar:'Founder Story',fmt:'Reel',chans:['IG','TikTok','FB'],owner:'Sean → Valerie',cta:'—',mix:'proven',
+       hook:t=>t, copy:t=>`Sean, first person: the story behind "${t.toLowerCase()}". Specific and honest, no hype.`, visual:'Talking-head Reel, captions burned in.'},
+    2:{pillar:'Recognition',fmt:'Carousel',chans:['IG','FB','LinkedIn'],owner:'Valerie',boost:true,cta:'—',mix:'proven',
+       hook:t=>'Member spotlight', copy:t=>`Celebrate a member win or a Sean listing tied to "${t.toLowerCase()}". Boost on Tuesday. ★`, visual:'Carousel: quote card + proof shot.'},
+    3:{pillar:'Proof / Math',fmt:'Reel',chans:['IG','TikTok','FB'],owner:'Valerie',cta:'Free guide',mix:'proven',
+       hook:t=>`The math on ${t.toLowerCase()}`, copy:t=>'Show real numbers: equity built, cash flow, "rent is 100% interest".', visual:'Reel with number overlays.'},
+    4:{pillar:'Funnel Push',fmt:'Story',chans:['IG','FB'],owner:'Valerie',cta:'Webinar',mix:'proven',
+       hook:t=>'Your next step', copy:t=>'Drive to the free guide and the recorded webinar. Register link.', visual:'Story with link sticker + countdown.'},
+    5:{pillar:'Proof / Math',fmt:'Post',chans:['LinkedIn'],owner:'Valerie',cta:'—',mix:'repurpose',
+       hook:t=>`${t} — for professionals`, copy:t=>'Native LinkedIn text post, no outbound link in the body. Reframe the week’s proof for a pro audience.', visual:'Native text + single image.'}
+  };
+  const ytByDow={2:'long',3:'short',5:'short'};
+  const SEPT_THEMES=['The 50-year plan is broken','One deal, real numbers','Start without cash or credit','Live well by doing good','Two choices'];
+  const OCT_THEMES=['Your first deal, step by step','Good debt vs bad debt','Cash flow while you sleep','From renter to owner','Finish the year with a plan'];
+  const SEPT_FUNNEL=[
+    {pillar:'Landing page',fmt:'LP',owner:'Marina',mix:'proven',hook:'Ebook LP — add testimonials + FAQ',copy:'Add member testimonials and an FAQ block, tighten the form. Lift landing-page conversion.',cta:'—'},
+    {pillar:'Email',fmt:'Automation',owner:'Marina',mix:'proven',hook:'Audit nurture Phase A/B',copy:'Opens are healthy, clicks are not. Rewrite the low-click CTAs across the flow.',cta:'—'},
+    {pillar:'Funnel Push',fmt:'Ad',owner:'Marina',mix:'experiment',hook:'Test direct-to-webinar ad',copy:'Split from, or add to, the ebook campaign. Send colder traffic straight to the recorded webinar.',cta:'Register'},
+    {pillar:'Email',fmt:'Automation',owner:'Marina',mix:'repurpose',hook:'Webinar reminder + replay sequence',copy:'Get registrants to actually watch: reminder before, replay link after for no-shows.',cta:'Watch'},
+    {pillar:'Email',fmt:'Broadcast',owner:'Marina',mix:'repurpose',hook:'End-of-month recap + next invite',copy:'Recap the month’s wins and invite to the next webinar.',cta:'Register'}
   ];
-  weeks.forEach((mon,wi)=>{
-    const t=themes[wi];
-    social.forEach(r=>{const d=mon+r.off; if(d>30)return;
-      c.push(mk({id:id++,board:'social',date:iso(2026,9,d),pillar:r.pillar,fmt:r.fmt,chans:r.chans,owner:r.owner,cta:r.cta,boost:!!r.boost,hook:r.hook(t),copy:r.copy(t),visual:r.visual}));});
-    if(mon<=29){
-      c.push(mk({id:id++,board:'youtube',date:iso(2026,9,mon+1),pillar:'Video',fmt:'Long-form',chans:['YouTube'],owner:'Sean · Marissa',cta:'Subscribe',hook:`Renovation walkthrough — ${t}`,copy:'Full walkthrough tied to the week’s theme. Pull 2–3 Shorts out of it.',visual:'16:9, chaptered, b-roll of the property.'}));
-      [1,2].forEach(k=>{shortN++;const day=mon+(k===1?2:4);
-        c.push(mk({id:id++,board:'youtube',date:iso(2026,9,day),pillar:'Video',fmt:'Short',chans:['YouTube','TikTok'],owner:'Marissa',cta:'Subscribe',hook:`Investor Rule #${shortN}`,copy:'One rule in ~30s. Hook in the first 2 seconds, vertical.',visual:'9:16 Short, big captions.'}));});
+  const OCT_FUNNEL=[
+    {pillar:'Funnel Push',fmt:'Ad',owner:'Marina · Sean',mix:'experiment',hook:'Launch retargeting ads',copy:'Site + engagement audiences live at a low daily budget. Bring warm traffic back to the webinar.',cta:'Register'},
+    {pillar:'Landing page',fmt:'LP',owner:'Marina',mix:'experiment',hook:'A/B test the ebook LP headline',copy:'Run two headline variants against each other. Keep the winner, kill the loser.',cta:'—'},
+    {pillar:'Landing page',fmt:'Lead magnet',owner:'Marina',mix:'experiment',hook:'New lead magnet — checklist or quiz',copy:'Test a second entry point beyond the ebook: a short checklist or a "which strategy fits you" quiz.',cta:'Download'},
+    {pillar:'Email',fmt:'Automation',owner:'Marina',mix:'proven',hook:'Webinar follow-up — book a call',copy:'Add a post-webinar sequence that invites attendees to book a call or take the Apprentice offer.',cta:'Book a call'},
+    {pillar:'Email',fmt:'Broadcast',owner:'Marina',mix:'repurpose',hook:'Q4 push + next webinar invite',copy:'Frame the last stretch of the year. Value first, clear invite to the next session.',cta:'Register'}
+  ];
+  function build(y,m,daysN,themes,funnelTasks){
+    let weekIdx=0, firstMon=false; const funnelPlaced=new Set();
+    for(let d=1; d<=daysN; d++){
+      const dow=new Date(y,m-1,d).getDay();
+      if(dow===1){ weekIdx = firstMon? weekIdx+1 : 1; firstMon=true; }
+      if(dow<1||dow>5) continue;
+      const wi=weekIdx % themes.length, t=themes[wi], date=iso(y,m,d);
+      const s=socialByDow[dow];
+      if(s) c.push(mk({id:id++,board:'social',date,pillar:s.pillar,fmt:s.fmt,chans:s.chans.slice(),owner:s.owner,cta:s.cta,boost:!!s.boost,mix:s.mix,hook:s.hook(t),copy:s.copy(t),visual:s.visual}));
+      const yt=ytByDow[dow];
+      if(yt==='long') c.push(mk({id:id++,board:'youtube',date,pillar:'Video',fmt:'Long-form',chans:['YouTube'],owner:'Sean · Marissa',cta:'Subscribe',mix:'proven',hook:`Renovation walkthrough — ${t}`,copy:'Full walkthrough tied to the week’s theme. Pull 2–3 Shorts out of it.',visual:'16:9, chaptered, b-roll of the property.'}));
+      if(yt==='short'){ shortN++; c.push(mk({id:id++,board:'youtube',date,pillar:'Video',fmt:'Short',chans:['YouTube','TikTok'],owner:'Marissa',cta:'Subscribe',mix:'repurpose',hook:`Investor Rule #${shortN}`,copy:'One rule in ~30s. Cut from the long-form walkthrough. Hook in the first 2 seconds, vertical.',visual:'9:16 Short, big captions.'})); }
+      if(!funnelPlaced.has(weekIdx)){ const f=funnelTasks[weekIdx % funnelTasks.length]; if(f){ c.push(mk({id:id++,board:'funnel',date,pillar:f.pillar,fmt:f.fmt,chans:[],owner:f.owner,cta:f.cta||'—',mix:f.mix,hook:f.hook,copy:f.copy,visual:''})); funnelPlaced.add(weekIdx); } }
     }
-  });
-  const funnel=[
-    {d:1,pillar:'Landing page',fmt:'LP',owner:'Marina',hook:'Ebook LP — add testimonials + FAQ',copy:'Add member testimonials and an FAQ block, tighten the form. Lift landing-page conversion.',cta:'—'},
-    {d:3,pillar:'Email',fmt:'Automation',owner:'Marina',hook:'Audit nurture Phase A/B',copy:'Opens are healthy, clicks are not. Rewrite the low-click CTAs across the flow.',cta:'—'},
-    {d:8,pillar:'Funnel Push',fmt:'Ad',owner:'Marina',hook:'Test direct-to-webinar ad',copy:'Split from, or add to, the ebook campaign. Send colder traffic straight to the recorded webinar.',cta:'Register'},
-    {d:11,pillar:'Email',fmt:'Broadcast',owner:'Marina',hook:'Monthly newsletter broadcast',copy:'One-time send to the whole list. Value first, webinar invite second.',cta:'Webinar'},
-    {d:15,pillar:'Funnel Push',fmt:'Ad',owner:'Marina · Sean',hook:'Turn on retargeting',copy:'Accept the web-audience terms, then retarget site + engagement audiences at a low daily budget.',cta:'—'},
-    {d:22,pillar:'Email',fmt:'Automation',owner:'Marina',hook:'Webinar reminder + replay sequence',copy:'Get registrants to actually watch: reminder before, replay link after for no-shows.',cta:'Watch'},
-    {d:29,pillar:'Email',fmt:'Broadcast',owner:'Marina',hook:'End-of-month recap + next invite',copy:'Recap the month’s wins and invite to the next webinar.',cta:'Register'}
-  ];
-  funnel.forEach(f=>c.push(mk({id:id++,board:'funnel',date:iso(2026,9,f.d),pillar:f.pillar,fmt:f.fmt,chans:[],owner:f.owner,cta:f.cta,hook:f.hook,copy:f.copy,visual:''})));
+  }
+  build(2026,9,30,SEPT_THEMES,SEPT_FUNNEL);
+  build(2026,10,31,OCT_THEMES,OCT_FUNNEL);
   return c;
 }
 
-const LS='skles_ops_v3', LSF='skles_ops_fb_v1';
+/* ---- IndexedDB for real file attachments (per-browser) ---- */
+const IDB={db:null,
+  open(){return this.db?Promise.resolve(this.db):new Promise((res,rej)=>{const r=indexedDB.open('skles_ops_files',1);
+    r.onupgradeneeded=e=>e.target.result.createObjectStore('files');
+    r.onsuccess=e=>{this.db=e.target.result;res(this.db);}; r.onerror=e=>rej(e);});},
+  async put(id,blob){const db=await this.open();return new Promise((res,rej)=>{const tx=db.transaction('files','readwrite');tx.objectStore('files').put(blob,id);tx.oncomplete=()=>res();tx.onerror=e=>rej(e);});},
+  async get(id){const db=await this.open();return new Promise((res,rej)=>{const tx=db.transaction('files','readonly');const q=tx.objectStore('files').get(id);q.onsuccess=()=>res(q.result);q.onerror=e=>rej(e);});},
+  async del(id){const db=await this.open();return new Promise(res=>{const tx=db.transaction('files','readwrite');tx.objectStore('files').delete(id);tx.oncomplete=()=>res();});}
+};
+function fmtSize(b){if(!b)return'';const u=['B','KB','MB'];let i=0,n=b;while(n>=1024&&i<2){n/=1024;i++;}return n.toFixed(n<10&&i>0?1:0)+u[i];}
+
+const LS='skles_ops_v4', LSF='skles_ops_fb_v1';
 let cards=load(LS)||seedCards();
 let feedback=load(LSF)||[];
-let channel='all', view='calendar', filter=null, editing=null, showFb=false;
+let channel='all', view='calendar', filter=null, editing=null, showFb=false, calIdx=0, mixFilter=null;
 
 function load(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null;}catch(e){return null;}}
-function save(){try{localStorage.setItem(LS,JSON.stringify(cards));flash('Saved ✓');}catch(e){flash('(not saved)');}}
+function save(){try{localStorage.setItem(LS,JSON.stringify(cards));flash('Saved ✓');}catch(e){flash('(storage full)');}}
 function saveFb(){try{localStorage.setItem(LSF,JSON.stringify(feedback));}catch(e){}}
 function flash(t){const e=document.getElementById('saved');if(e){e.textContent=t;setTimeout(()=>{if(e.textContent===t)e.textContent='';},1600);}}
 function pcolor(p){return css(PILLARS[p]||'--tan');}
 function bcolor(b){return css(BCOLOR[b]||'--tan');}
 function esc(s){return (s||'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
 function fdate(s){if(!s)return '';const d=new Date(s+'T00:00:00');return d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});}
-function inScope(c){return (channel==='all'||c.board===channel) && (!filter||c.pillar===filter);}
+function inScope(c){return (channel==='all'||c.board===channel) && (!filter||c.pillar===filter) && (!mixFilter||(c.mix||'proven')===mixFilter);}
+function isFile(a){return a.kind==='file'||(a.id&&!a.url);}
 
 /* ---- KANBAN ---- */
 function renderKanban(el){
@@ -328,7 +382,8 @@ function renderKanban(el){
 function cardHTML(c){
   const chans=(c.chans||[]).map(x=>`<span class="ch">${x}</span>`).join('')||`<span class="ch">${esc(c.fmt)}</span>`;
   const nc=(c.comments||[]).length, na=(c.attachments||[]).length;
-  const badges=[nc?`<span class="mini">💬 ${nc}</span>`:'',na?`<span class="mini">📎 ${na}</span>`:''].join('');
+  const m=MIX[c.mix||'proven'];
+  const badges=[`<span class="mini"><span style="width:8px;height:8px;border-radius:50%;background:${m.color};display:inline-block"></span>${m.label}</span>`,nc?`<span class="mini">💬 ${nc}</span>`:'',na?`<span class="mini">📎 ${na}</span>`:''].join('');
   return `<div class="card" data-id="${c.id}" draggable="true" style="border-left-color:${pcolor(c.pillar)}">
     <div class="cm"><span class="date">${c.date?fdate(c.date):'—'}</span>${c.boost?'<span class="star">★</span>':''}</div>
     <span class="pill" style="background:${pcolor(c.pillar)}">${c.pillar}</span>
@@ -362,32 +417,39 @@ function renderList(el){
     <td class="l-hook">${esc(c.hook||c.copy)}${c.boost?' ★':''}</td>
     <td>${esc(c.cta||'—')}</td>
     <td>${esc(c.owner)}</td>
+    <td><span class="st-tag" style="border-color:${MIX[c.mix||'proven'].color};color:${MIX[c.mix||'proven'].color}">${MIX[c.mix||'proven'].label}</span></td>
     <td><span class="st-tag">${c.status}</span></td>
   </tr>`).join('');
   el.innerHTML=`<div class="listwrap"><table class="list">
-    <thead><tr><th>Date</th><th>Board</th><th>Pillar</th><th>Format</th><th>Hook / brief</th><th>CTA</th><th>Owner</th><th>Status</th></tr></thead>
-    <tbody>${rows||'<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:30px">No cards in this view.</td></tr>'}</tbody>
+    <thead><tr><th>Date</th><th>Board</th><th>Pillar</th><th>Format</th><th>Hook / brief</th><th>CTA</th><th>Owner</th><th>Mix</th><th>Status</th></tr></thead>
+    <tbody>${rows||'<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:30px">No cards in this view.</td></tr>'}</tbody>
   </table></div>`;
   el.querySelectorAll('tbody tr[data-id]').forEach(r=>r.addEventListener('click',()=>openModal(+r.dataset.id)));
 }
 
 /* ---- CALENDAR ---- */
 function renderCal(el){
+  const M=MONTHS[calIdx];
   const dows=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   let cells=dows.map(d=>`<div class="cdow">${d}</div>`).join('');
-  const startDow=new Date(2026,8,1).getDay();
-  const arr=[];for(let i=0;i<startDow;i++)arr.push(null);for(let d=1;d<=30;d++)arr.push(d);while(arr.length%7)arr.push(null);
+  const startDow=new Date(M.y,M.m-1,1).getDay();
+  const arr=[];for(let i=0;i<startDow;i++)arr.push(null);for(let d=1;d<=M.daysN;d++)arr.push(d);while(arr.length%7)arr.push(null);
   const today=new Date();
   arr.forEach(d=>{
     if(d===null){cells+=`<div class="cday out"></div>`;return;}
-    const ds=iso(2026,9,d);
+    const ds=iso(M.y,M.m,d);
     const evs=EVENTS.filter(e=>e.date===ds).map(e=>`<div class="cev ${e.type}">${e.label}</div>`).join('');
     const items=cards.filter(c=>c.date===ds&&inScope(c)).map(c=>`<div class="ci" data-id="${c.id}" style="background:${bcolor(c.board)}" title="${esc(c.hook)}">${esc(c.hook||c.copy)}</div>`).join('');
-    const isT=(today.getFullYear()===2026&&today.getMonth()===8&&today.getDate()===d);
+    const isT=(today.getFullYear()===M.y&&today.getMonth()===M.m-1&&today.getDate()===d);
     cells+=`<div class="cday${isT?' today':''}"><div class="dn">${d}</div>${evs}${items}</div>`;
   });
   el.innerHTML=`<div class="calwrap"><div class="cal">
-    <div class="calhead"><h2>September 2026</h2>
+    <div class="calhead">
+      <div class="calnav">
+        <button id="calPrev" ${calIdx===0?'disabled':''}>◀</button>
+        <h2>${M.label}</h2>
+        <button id="calNext" ${calIdx===MONTHS.length-1?'disabled':''}>▶</button>
+      </div>
       <div class="callegend">
         <span><span class="lg" style="background:var(--yt)"></span>YouTube</span>
         <span><span class="lg" style="background:var(--social)"></span>Social</span>
@@ -397,6 +459,8 @@ function renderCal(el){
       </div></div>
     <div class="calgrid">${cells}</div>
   </div></div>`;
+  el.querySelector('#calPrev').onclick=()=>{if(calIdx>0){calIdx--;render();}};
+  el.querySelector('#calNext').onclick=()=>{if(calIdx<MONTHS.length-1){calIdx++;render();}};
   el.querySelectorAll('.ci').forEach(x=>x.addEventListener('click',()=>openModal(+x.dataset.id)));
 }
 
@@ -420,29 +484,50 @@ document.getElementById('fb-add').onclick=()=>{
 };
 
 /* ---- MODAL ---- */
+function g(i){return document.getElementById(i);}
 function openModal(id){
-  editing = id? JSON.parse(JSON.stringify(cards.find(c=>c.id===id))) : {id:Math.max(0,...cards.map(c=>c.id))+1,board:(channel==='all'?'social':channel),date:'',pillar:'Founder Story',fmt:'Reel',chans:[],owner:'',cta:'—',hook:'',copy:'',visual:'',link:'',status:'Ideas',comments:[],attachments:[],isNew:true};
-  document.getElementById('modTitle').textContent=id?'Edit card':'New card';
-  document.getElementById('modSub').textContent=BOARDS.find(b=>b.id===editing.board).name+' board';
+  editing = id? JSON.parse(JSON.stringify(cards.find(c=>c.id===id))) : {id:Math.max(0,...cards.map(c=>c.id))+1,board:(channel==='all'?'social':channel),date:'',pillar:'Founder Story',fmt:'Reel',chans:[],owner:'',cta:'—',hook:'',copy:'',visual:'',status:'Ideas',comments:[],attachments:[],isNew:true};
+  g('modTitle').textContent=id?'Edit card':'New card';
+  g('modSub').textContent=BOARDS.find(b=>b.id===editing.board).name+' board';
   g('f-hook').value=editing.hook||''; g('f-copy').value=editing.copy||'';
   g('f-board').innerHTML=BOARDS.filter(b=>b.id!=='all').map(b=>`<option value="${b.id}"${b.id===editing.board?' selected':''}>${b.name}</option>`).join('');
   g('f-pillar').innerHTML=Object.keys(PILLARS).map(p=>`<option${p===editing.pillar?' selected':''}>${p}</option>`).join('');
   g('f-status').innerHTML=STATUS.map(s=>`<option${s===editing.status?' selected':''}>${s}</option>`).join('');
   g('f-fmt').value=editing.fmt||''; g('f-date').value=editing.date||''; g('f-owner').value=editing.owner||'';
   g('f-cta').value=editing.cta||''; g('f-chans').value=(editing.chans||[]).join(', ');
-  g('f-visual').value=editing.visual||''; g('f-link').value=editing.link||'';
+  g('f-visual').value=editing.visual||'';
+  g('f-mix').innerHTML=Object.keys(MIX).map(k=>`<option value="${k}"${(editing.mix||'proven')===k?' selected':''}>${MIX[k].label} (${MIX[k].target}%)</option>`).join('');
   g('f-del').style.visibility=id?'visible':'hidden';
+  g('att-note').textContent='Uploaded files are stored in this browser and are private to you. For files the whole team should open, add a Drive or Canva link instead.';
   renderAtt();renderCmt();
   document.getElementById('ov').classList.add('on');
 }
-function g(i){return document.getElementById(i);}
-function renderAtt(){
+async function renderAtt(){
   const l=g('att-list');const a=editing.attachments||[];
-  l.innerHTML=a.map((x,i)=>`<div class="subitem"><a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.label||x.url)}</a><span class="x" data-i="${i}">✕</span></div>`).join('');
-  l.querySelectorAll('.x').forEach(b=>b.onclick=()=>{editing.attachments.splice(+b.dataset.i,1);renderAtt();});
+  l.innerHTML=a.map((x,i)=>{
+    if(isFile(x)) return `<div class="subitem"><span class="fa" data-o="${i}">📎 ${esc(x.name||'file')} <span class="who">${fmtSize(x.size)}</span></span><span class="x" data-i="${i}">✕</span></div>`;
+    return `<div class="subitem"><a href="${esc(x.url)}" target="_blank" rel="noopener">🔗 ${esc(x.label||x.url)}</a><span class="x" data-i="${i}">✕</span></div>`;
+  }).join('');
+  l.querySelectorAll('.x').forEach(b=>b.onclick=async()=>{const i=+b.dataset.i;const x=editing.attachments[i];if(isFile(x)&&x.id)await IDB.del(x.id);editing.attachments.splice(i,1);renderAtt();});
+  l.querySelectorAll('.fa').forEach(b=>b.onclick=async()=>{const x=editing.attachments[+b.dataset.o];const blob=await IDB.get(x.id);if(!blob){alert('This file is not in this browser.');return;}const u=URL.createObjectURL(blob);window.open(u,'_blank');setTimeout(()=>URL.revokeObjectURL(u),60000);});
 }
+async function addFiles(files){
+  editing.attachments=editing.attachments||[];
+  for(const f of files){
+    if(f.size>60*1024*1024){alert(f.name+' is over 60MB, skipped.');continue;}
+    const fid='f'+Date.now()+Math.random().toString(36).slice(2,7);
+    try{await IDB.put(fid,f);editing.attachments.push({kind:'file',id:fid,name:f.name,mime:f.type,size:f.size});}
+    catch(e){alert('Could not store '+f.name);}
+  }
+  renderAtt();
+}
+g('att-file').onchange=e=>{addFiles([...e.target.files]);e.target.value='';};
+g('att-drop').onclick=()=>g('att-file').click();
+g('att-drop').addEventListener('dragover',e=>{e.preventDefault();g('att-drop').classList.add('over');});
+g('att-drop').addEventListener('dragleave',()=>g('att-drop').classList.remove('over'));
+g('att-drop').addEventListener('drop',e=>{e.preventDefault();g('att-drop').classList.remove('over');if(e.dataTransfer.files.length)addFiles([...e.dataTransfer.files]);});
 g('att-add').onclick=()=>{const label=g('att-label').value.trim(),url=g('att-url').value.trim();if(!url)return;
-  editing.attachments=editing.attachments||[];editing.attachments.push({label,url});g('att-label').value='';g('att-url').value='';renderAtt();};
+  editing.attachments=editing.attachments||[];editing.attachments.push({kind:'link',label,url});g('att-label').value='';g('att-url').value='';renderAtt();};
 function renderCmt(){
   const l=g('cmt-list');const cm=editing.comments||[];
   l.innerHTML=cm.map((x,i)=>`<div class="subitem"><span><span class="who">${esc(x.by||'—')}</span> · ${esc(x.text)}</span><span class="x" data-i="${i}">✕</span></div>`).join('');
@@ -457,7 +542,7 @@ g('f-save').onclick=()=>{
   editing.pillar=g('f-pillar').value; editing.status=g('f-status').value; editing.fmt=g('f-fmt').value;
   editing.date=g('f-date').value; editing.owner=g('f-owner').value; editing.cta=g('f-cta').value;
   editing.chans=g('f-chans').value.split(',').map(s=>s.trim()).filter(Boolean);
-  editing.visual=g('f-visual').value; editing.link=g('f-link').value;
+  editing.visual=g('f-visual').value; editing.mix=g('f-mix').value;
   const isNew=editing.isNew; delete editing.isNew;
   if(isNew){cards.push(editing);} else {const i=cards.findIndex(c=>c.id===editing.id);if(i>=0)cards[i]=editing;}
   save();render();closeModal();
@@ -467,7 +552,7 @@ g('f-cancel').onclick=closeModal;
 function closeModal(){document.getElementById('ov').classList.remove('on');editing=null;}
 document.getElementById('ov').onclick=e=>{if(e.target.id==='ov')closeModal();};
 document.getElementById('addCard').onclick=()=>openModal(null);
-document.getElementById('resetBtn').onclick=()=>{if(confirm('Reset to the seeded Sept plan? Your changes will be lost.')){cards=seedCards();save();render();}};
+document.getElementById('resetBtn').onclick=()=>{if(confirm('Reset to the seeded Sept + Oct plan? Your changes will be lost.')){cards=seedCards();save();render();}};
 
 /* ---- CHROME ---- */
 function renderChannels(){
@@ -489,12 +574,26 @@ function renderFilters(){
 }
 document.getElementById('fbTab').onclick=()=>{showFb=!showFb;render();};
 
+function renderMix(){
+  const el=document.getElementById('mixMeter');
+  const scope=cards.filter(c=>(channel==='all'||c.board===channel)&&(!filter||c.pillar===filter));
+  const total=scope.length||1;
+  const counts={proven:0,repurpose:0,experiment:0};
+  scope.forEach(c=>{const k=c.mix||'proven';counts[k]=(counts[k]||0)+1;});
+  const keys=['proven','repurpose','experiment'];
+  const bar=keys.map(k=>`<div class="mixseg" style="width:${(counts[k]/total*100).toFixed(1)}%;background:${MIX[k].color}"></div>`).join('');
+  const leg=keys.map(k=>`<button data-m="${k}" class="${mixFilter===k?'on':''}"><span class="sw" style="background:${MIX[k].color}"></span>${MIX[k].label} <b>${Math.round(counts[k]/total*100)}%</b> <span style="color:var(--muted)">/ ${MIX[k].target}%</span></button>`).join('');
+  el.innerHTML=`<span class="mixtitle">70·20·10 mix</span><div class="mixbar">${bar}</div><div class="mixlegend">${leg}</div>`;
+  el.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{mixFilter=(mixFilter===b.dataset.m?null:b.dataset.m);render();});
+}
+
 function render(){
   renderChannels();renderViews();renderFilters();
   document.getElementById('fbTab').classList.toggle('on',showFb);
-  const w=document.getElementById('work'), f=document.getElementById('feedback-view');
+  const w=document.getElementById('work'), f=document.getElementById('feedback-view'), mm=document.getElementById('mixMeter');
   const showAdd=!showFb; document.getElementById('addCard').style.display=showAdd?'':'none'; document.getElementById('resetBtn').style.display=showAdd?'':'none';
-  if(showFb){w.style.display='none';f.style.display='';renderFb();return;}
+  if(showFb){w.style.display='none';f.style.display='';mm.style.display='none';renderFb();return;}
+  mm.style.display='';renderMix();
   f.style.display='none';w.style.display='';w.innerHTML='';
   if(view==='kanban')renderKanban(w);
   else if(view==='list')renderList(w);
