@@ -66,6 +66,9 @@
   .mixlegend button.on{background:var(--surface2);color:var(--text)}
   .mixlegend .sw{width:11px;height:11px;border-radius:3px}
   .mixlegend b{color:var(--text)}
+  #colFilters{gap:12px}
+  .fsel{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);font-weight:600}
+  .fsel select{font-family:inherit;font-size:12.5px;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:8px;padding:6px 9px;font-weight:600}
   .btn{background:var(--navy);color:#fff;border:none;border-radius:9px;padding:9px 16px;font-size:13px;font-weight:600}
   .btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
   .saved{font-size:12px;color:var(--muted)}
@@ -203,7 +206,8 @@
     <button class="btn" id="addCard">+ Add</button>
     <button class="btn ghost" id="resetBtn">Reset</button>
   </div>
-  <div class="filters" id="pillarFilters" style="margin-bottom:16px"></div>
+  <div class="filters" id="pillarFilters" style="margin-bottom:12px"></div>
+  <div class="bar" id="colFilters" style="margin-bottom:16px"></div>
   <div id="mixMeter" class="mixmeter"></div>
 
   <div id="work"></div>
@@ -369,6 +373,7 @@ const DB='https://rifa-mae-default-rtdb.firebaseio.com/skles-ops';
 const TEAM=['Marina','Valerie','Marissa','Sean','Rodney'];
 let cards=[], feedback=[], currentUser=null, lastHash='';
 let channel='all', view='calendar', filter=null, editing=null, showFb=false, calIdx=0, mixFilter=null;
+let fPlatform='', fFormat='', fOwner='', fStatus='';
 
 async function dbGet(p){try{const r=await fetch(`${DB}/${p}.json`);return r.ok?await r.json():null;}catch(e){return null;}}
 async function dbPut(p,v){try{const r=await fetch(`${DB}/${p}.json`,{method:'PUT',body:JSON.stringify(v)});return r.ok;}catch(e){return false;}}
@@ -385,7 +390,13 @@ function pcolor(p){return css(PILLARS[p]||'--tan');}
 function bcolor(b){return css(BCOLOR[b]||'--tan');}
 function esc(s){return (s||'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
 function fdate(s){if(!s)return '';const d=new Date(s+'T00:00:00');return d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});}
-function inScope(c){return (channel==='all'||c.board===channel) && (!filter||c.pillar===filter) && (!mixFilter||(c.mix||'proven')===mixFilter);}
+function inScope(c){return (channel==='all'||c.board===channel)
+  && (!filter||c.pillar===filter)
+  && (!mixFilter||(c.mix||'proven')===mixFilter)
+  && (!fPlatform||(c.chans||[]).includes(fPlatform))
+  && (!fFormat||c.fmt===fFormat)
+  && (!fOwner||c.owner===fOwner)
+  && (!fStatus||c.status===fStatus);}
 function isFile(a){return a.kind==='file'||(a.data&&!a.url);}
 
 /* ---- KANBAN ---- */
@@ -434,6 +445,7 @@ function renderList(el){
   const rows=list.map(c=>`<tr data-id="${c.id}">
     <td class="l-date">${c.date?fdate(c.date):'—'}</td>
     <td><span class="cdot" style="background:${bcolor(c.board)}"></span>${BOARDS.find(b=>b.id===c.board).name}</td>
+    <td>${(c.chans||[]).map(x=>`<span class="ch">${esc(x)}</span>`).join(' ')||'—'}</td>
     <td><span class="st-tag" style="border-color:${pcolor(c.pillar)};color:${pcolor(c.pillar)}">${c.pillar}</span></td>
     <td>${esc(c.fmt)}</td>
     <td class="l-hook">${esc(c.hook||c.copy)}${c.boost?' ★':''}</td>
@@ -443,8 +455,8 @@ function renderList(el){
     <td><span class="st-tag">${c.status}</span></td>
   </tr>`).join('');
   el.innerHTML=`<div class="listwrap"><table class="list">
-    <thead><tr><th>Date</th><th>Board</th><th>Pillar</th><th>Format</th><th>Hook / brief</th><th>CTA</th><th>Owner</th><th>Mix</th><th>Status</th></tr></thead>
-    <tbody>${rows||'<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:30px">No cards in this view.</td></tr>'}</tbody>
+    <thead><tr><th>Date</th><th>Board</th><th>Channels</th><th>Pillar</th><th>Format</th><th>Hook / brief</th><th>CTA</th><th>Owner</th><th>Mix</th><th>Status</th></tr></thead>
+    <tbody>${rows||'<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:30px">No cards match these filters.</td></tr>'}</tbody>
   </table></div>`;
   el.querySelectorAll('tbody tr[data-id]').forEach(r=>r.addEventListener('click',()=>openModal(+r.dataset.id)));
 }
@@ -597,6 +609,19 @@ function renderFilters(){
 }
 document.getElementById('fbTab').onclick=()=>{showFb=!showFb;render();};
 
+function renderColFilters(){
+  const box=document.getElementById('colFilters');
+  const scope=cards.filter(c=>channel==='all'||c.board===channel);
+  const uniq=a=>[...new Set(a.filter(Boolean))].sort();
+  const platforms=uniq(scope.flatMap(c=>c.chans||[]));
+  const owners=uniq(scope.map(c=>c.owner));
+  const formats=uniq(scope.map(c=>c.fmt));
+  const sel=(id,label,opts,cur)=>`<span class="fsel">${label} <select data-f="${id}"><option value="">All</option>${opts.map(o=>`<option${o===cur?' selected':''}>${esc(o)}</option>`).join('')}</select></span>`;
+  const active=fPlatform||fFormat||fOwner||fStatus||filter||mixFilter;
+  box.innerHTML=sel('platform','Channel',platforms,fPlatform)+sel('format','Format',formats,fFormat)+sel('owner','Owner',owners,fOwner)+sel('status','Status',STATUS,fStatus)+(active?`<button class="btn ghost" id="clearF" style="padding:6px 12px">Clear filters</button>`:'');
+  box.querySelectorAll('select').forEach(s=>s.onchange=()=>{const f=s.dataset.f,v=s.value;if(f==='platform')fPlatform=v;else if(f==='format')fFormat=v;else if(f==='owner')fOwner=v;else if(f==='status')fStatus=v;render();});
+  const cb=document.getElementById('clearF');if(cb)cb.onclick=()=>{fPlatform=fFormat=fOwner=fStatus='';filter=null;mixFilter=null;render();};
+}
 function renderMix(){
   const el=document.getElementById('mixMeter');
   const scope=cards.filter(c=>(channel==='all'||c.board===channel)&&(!filter||c.pillar===filter));
@@ -615,7 +640,9 @@ function render(){
   document.getElementById('fbTab').classList.toggle('on',showFb);
   const w=document.getElementById('work'), f=document.getElementById('feedback-view'), mm=document.getElementById('mixMeter');
   const showAdd=!showFb; document.getElementById('addCard').style.display=showAdd?'':'none'; document.getElementById('resetBtn').style.display=showAdd?'':'none';
-  if(showFb){w.style.display='none';f.style.display='';mm.style.display='none';renderFb();return;}
+  const cf=document.getElementById('colFilters');
+  if(showFb){w.style.display='none';f.style.display='';mm.style.display='none';cf.style.display='none';renderFb();return;}
+  cf.style.display='';renderColFilters();
   mm.style.display='';renderMix();
   f.style.display='none';w.style.display='';w.innerHTML='';
   if(view==='kanban')renderKanban(w);
