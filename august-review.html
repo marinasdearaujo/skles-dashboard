@@ -143,10 +143,10 @@
     <h1>The funnel<br>came <span class="g">online.</span></h1>
     <p class="lede">August was the first month the machine converted end to end, and the first month we have a customer to measure against. The strategy holds; from here it's volume and unit economics.</p>
     <div class="hero-stats">
-      <div class="hstat"><b class="num">$1,104</b><span>Paid spend · $1,200 budget</span></div>
-      <div class="hstat"><b class="num">30</b><span>Ebook leads · $25.77 each</span></div>
-      <div class="hstat"><b class="num">1</b><span>First Apprentice member</span></div>
-      <div class="hstat"><b class="num">6.4%</b><span>Landing-page conversion (the leak)</span></div>
+      <div class="hstat"><b class="num">30</b><span>Ebook leads <b style="color:#6fd6a6;font-weight:700">▲ up from ~0 in July</b></span></div>
+      <div class="hstat"><b class="num">$25.77</b><span>Cost per lead <b style="color:#6fd6a6;font-weight:700">▲ under the $30 goal</b></span></div>
+      <div class="hstat"><b class="num">13.6%</b><span>Ebook CTR <b style="color:#6fd6a6;font-weight:700">▲ ~7× the ~2% norm</b></span></div>
+      <div class="hstat"><b class="num">1</b><span>First Apprentice <b style="color:#6fd6a6;font-weight:700">▲ first sale ever</b></span></div>
     </div>
   </div>
 </div>
@@ -178,12 +178,13 @@
   <div class="wrap">
     <p class="eyebrow">Click a stage</p>
     <h2 class="sec">The funnel, stage by stage</h2>
-    <p class="sec-sub">Each stage has a different job, positioning or conversion, and its own scoreboard. Select a stage to see the strategy, the channels, and how August compares to May's baseline and a typical benchmark.</p>
+    <p class="sec-sub">Each stage has a different job, positioning or conversion, and its own scoreboard. Select a stage to see the strategy, the channels, and how August compares to July (the prior month) and a typical benchmark.</p>
     <div class="fwrap">
       <div class="fstack" id="fstack"></div>
       <div class="fdetail" id="fdetail"></div>
     </div>
-    <p class="fn"><b>Notes.</b> Benchmarks are typical industry ranges for coaching / info-product funnels, directional, not exact. "May" is the channel baseline from the June planning cycle. The dashboard's API tokens expired on Sept 1, so several figures were compiled manually from the platforms and the team's monthly reports; reconnecting the tokens restores automatic reporting.</p>
+    <div class="callout" style="margin-top:26px"><b>One correction from the Zoom exports:</b> the 1 August session ran with registration disabled and drew no attendees, so August was effectively one webinar, not two. The 25 August session had 5 registrants and 1 attendee, who stayed 45 of the 55 minutes. The four who registered and did not show wrote their reasons on the form: "time freedom", "family", "because I'm broke". The audience is the right one. The show-up rate is the problem.</div>
+    <p class="fn"><b>Notes.</b> Benchmarks are typical industry ranges for coaching / info-product funnels, directional, not exact. The "July" column is the prior month, for a month-over-month read; a dash means the metric is brand-new (no prior period) or has no standard benchmark. The dashboard's API tokens expired on Sept 1, so several figures were compiled manually from the platforms and the team's monthly reports; reconnecting the tokens restores automatic reporting.</p>
   </div>
 </section>
 
@@ -231,7 +232,7 @@
         <div>
           <h3>Thirty leads produced one member.</h3>
           <p>The first Apprentice is real progress and it's also the entire conversion. The distance between an ebook download and a paid membership is where August's budget went, and it's the stretch of the funnel with the least built behind it, which is exactly what the nurture and the relational meeting are now filling.
-          <span class="math">30 leads → 7 webinar registrations → 1 Apprentice · $1,104 spend</span></p>
+          <span class="math">30 leads → 5 webinar registrations → 1 attendee → 1 Apprentice · $1,104 spend</span></p>
         </div>
       </div>
       <div class="read good">
@@ -248,6 +249,23 @@
           <h3>YouTube volume is high, retention is the constraint.</h3>
           <p>33 videos returned 1,968 views and 15.8 watch hours, about 29 seconds of attention per view. Publishing more won't fix that. The three long-form videos that broke 5% click-through for the first time are the format worth repeating.
           <span class="math">15.8 watch hours ÷ 1,968 views · ~60 views per video · 8 long-form vs 25 Shorts</span></p>
+        </div>
+      </div>
+    </div>
+      <div class="read warn">
+        <div class="fig">17.7%</div>
+        <div>
+          <h3>The guide delivery email is barely being opened.</h3>
+          <p>Someone who has just asked for a download opens the email carrying it at 50% to 70%. Ours opens at 17.7%, and the two follow-ups after it produced zero clicks between them. Whatever is behind it, the subject line, the sender name, or the file already being handed over on the page, this is a new lead's first contact with the brand.
+          <span class="math">E1 34 sends · 17.7% open · 2 clicks &nbsp;·&nbsp; E2 23 sends · 0 clicks &nbsp;·&nbsp; E3 18 sends · 0 clicks, 1 unsubscribe</span></p>
+        </div>
+      </div>
+      <div class="read">
+        <div class="fig">36% / 1%</div>
+        <div>
+          <h3>They open everything and click almost nothing.</h3>
+          <p>783 broadcast sends returned a 36.1% open rate with zero bounces, zero spam complaints and zero unsubscribes. That is a healthy, engaged list by any benchmark. But the three webinar invitations produced 5 clicks across 507 sends. The attention is there. The ask is not converting it.
+          <span class="math">"I'm not doing another big webinar" 39.3% open, 4 clicks · "What we're covering" 32.3%, 0 clicks · "Two days out" 28.1%, 1 click</span></p>
         </div>
       </div>
     </div>
@@ -311,19 +329,19 @@ const STAGES=[
   {k:'Top of funnel',t:'Awareness & discovery',obj:'Positioning',badge:'b-pos',
    strat:'Reach cold audience with founder-voice, proof and problem-solution content, then capture the warmest with a free ebook via paid ads.',
    chans:['TikTok','Instagram','YouTube Shorts','LinkedIn','Meta ebook ads'],
-   kpis:[['TikTok views','12,000','1,795','FYP-driven','up'],['Instagram followers','11,711','11,043','steady growth','up'],['YouTube views','1,968','1,223','—','up'],['Ebook CTR','13.6%','—','~1–2% typical','up'],['Cost per lead','$25.77','$85 (CPA)','$20–50','up']]},
+   kpis:[['TikTok views','12,000','9,563','no absolute std','up'],['Instagram followers','11,711','11,431','+1–2%/mo typical','up'],['YouTube views','1,968','—','size-dependent','flat'],['Ebook CTR','13.6%','11.4%','~1–2% typical','up'],['Cost per lead','$25.77','— (0 leads)','$20–50','up']]},
   {k:'Middle of funnel',t:'Recorded webinar & nurture',obj:'Positioning (broad)',badge:'b-pos',
-   strat:'The recorded Fast Track webinar introduces the whole system to a broad audience, relational in tone and scalable, no live host each time. Email nurture teaches from the guide alongside it.',
+   strat:'The recorded Fast Track webinar introduces the whole system to a broad audience, relational in tone and scalable, no live host each time. Email nurture teaches from the guide alongside it. The list opens well above benchmark, but the calls to action are not converting that attention: 507 webinar-sequence sends produced 5 clicks.',
    chans:['Recorded webinar (Zoom)','Ebook','Email nurture (GetResponse)'],
-   kpis:[['Ebook leads','30','—','new baseline','flat'],['Landing-page conversion','6.4%','—','20–40% typical','down'],['Email open rate','&gt;10%','—','~21% typical','down'],['Webinar registrations','7','—','new baseline','flat']]},
+   kpis:[['Ebook leads','30','0','new — form was broken','up'],['Landing-page conversion','6.4%','0%','20–40% typical','up'],['Guide delivery · open rate','17.7%','—','50–70% typical','down'],['Broadcast open rate','36.1%','—','~21% typical','up'],['Broadcast click rate','2.6%','—','2–3% typical','flat'],['Webinar sequence · clicks','5 of 507','—','2–3% typical','down'],['Webinar registrations','5','0','new — just launched','up']]},
   {k:'The warm-lead room',t:'Live relational meeting',obj:'Conversion (relational)',badge:'b-conv',
    strat:'A live, more personal session for warmer leads who have not bought yet but are close, plus members. Relational, not a hard pitch. It is the room that nudges hot leads into Apprentice.',
    chans:['Live meeting (2nd & 4th Wed)','Warm-lead invites','Members'],
-   kpis:[['Meeting cadence','2nd & 4th Wed','—','recurring','flat'],['Warm-lead → Apprentice','building','—','the goal','flat'],['Attendance','tracking','—','—','flat']]},
+   kpis:[['Meeting cadence','2nd & 4th Wed','—','recurring by design','flat'],['Warm-lead → Apprentice','building','—','new — to establish','flat'],['Attendance','tracking','—','new — to establish','flat']]},
   {k:'Bottom of funnel',t:'Convert · retain · ascend',obj:'Conversion + Retention',badge:'b-both',
    strat:'Apprentice is the entry conversion. The ladder moves members to Protégé and Accelerator, and the relational meeting keeps them in the room.',
    chans:['Apprentice $8.99/mo','Protégé / Accelerator','Relational meeting (retention)'],
-   kpis:[['Apprentice signups','1','—','first','flat'],['Registration → Apprentice','14%','—','2–10% typical','up'],['Lead → member','3.3%','—','1–5% typical','flat'],['LTV : CAC','TBD','—','≥ 3:1 target','flat']]}
+   kpis:[['Webinar attendance','20%','—','35–50% typical','down'],['Attendee watch time','82%','—','strong signal','up'],['Apprentice signups','1','0','first month','up'],['Lead → member','3.3%','—','1–5% typical','flat'],['LTV : CAC','TBD','—','≥ 3:1 target','flat']]}
 ];
 const stack=document.getElementById('fstack'), det=document.getElementById('fdetail');
 STAGES.forEach((s,i)=>{
@@ -338,7 +356,7 @@ function render(i){
   det.innerHTML=`<span class="badge ${s.badge}">Objective · ${s.obj}</span>
     <h3>${s.t}</h3><p class="strat">${s.strat}</p>
     <div class="chips">${s.chans.map(c=>`<span class="chip">${c}</span>`).join('')}</div>
-    <table class="kpi"><thead><tr><th>KPI</th><th>August</th><th>May</th><th>Benchmark</th></tr></thead><tbody>
+    <table class="kpi"><thead><tr><th>KPI</th><th>August</th><th>July</th><th>Benchmark</th></tr></thead><tbody>
     ${s.kpis.map(k=>`<tr><td class="m">${k[0]}</td><td class="now">${k[1]} ${trend(k[4])}</td><td>${k[2]}</td><td>${k[3]}</td></tr>`).join('')}
     </tbody></table>`;
 }
