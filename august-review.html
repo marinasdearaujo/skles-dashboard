@@ -65,7 +65,7 @@
   .fwrap{display:grid;grid-template-columns:340px 1fr;gap:26px;margin-top:34px;align-items:start}
   .fstack{display:flex;flex-direction:column;gap:8px}
   .fstage{border:none;text-align:left;cursor:pointer;color:#fff;border-radius:12px;padding:16px 20px;background:linear-gradient(135deg,var(--navy),var(--navy2));border:2px solid transparent;transition:transform .15s,border-color .15s;width:100%}
-  .fstage:nth-child(1){width:100%} .fstage:nth-child(2){width:90%} .fstage:nth-child(3){width:78%} .fstage:nth-child(4){width:64%}
+  .fstage:nth-child(1){width:100%} .fstage:nth-child(2){width:90%} .fstage:nth-child(3){width:80%} .fstage:nth-child(4){width:68%} .fstage:nth-child(5){width:56%}
   .fstage.on{border-color:var(--tan);transform:translateX(4px)}
   .fstage .fs-k{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--tan);opacity:.9}
   .fstage .fs-t{font-family:'Merriweather',serif;font-weight:900;font-size:17px;margin-top:3px}
@@ -293,6 +293,9 @@
         <tr><td>Lift the ebook landing page (testimonials, FAQ, tighter form)</td><td>Marina</td><td>Sep · wk 1</td></tr>
         <tr><td>Fix the email CTAs, lift clicks (opens are already fine)</td><td>Marina</td><td>Sep · wk 1</td></tr>
         <tr><td>Test a direct-to-webinar ad (split from, or added to, the ebook campaign)</td><td>Marina</td><td>Sep · wk 2</td></tr>
+        <tr><td>Get webinar registrants to actually watch (reminder + replay sequence)</td><td>Marina</td><td>Sep · wk 2</td></tr>
+        <tr><td>Improve the live meeting: show-up reminders + a soft close in the room</td><td>Marina · Rodney</td><td>Sep · wk 2</td></tr>
+        <tr><td>Build a follow-up / re-engagement sequence for no-shows and non-buyers</td><td>Marina</td><td>Sep · wk 2</td></tr>
         <tr><td>Turn on retargeting (accept the web-audience terms)</td><td>Marina · Sean</td><td>Sep · wk 2</td></tr>
         <tr><td>Reconnect the dashboard, YouTube owner access + fresh Meta token</td><td>Sean · Valerie</td><td>Sep · wk 1</td></tr>
         <tr><td>Renovation / walkthrough content + "Investor Rule" Shorts series</td><td>Marissa · Sean</td><td>Sep · ongoing</td></tr>
@@ -317,14 +320,18 @@ const STAGES=[
    strat:'The ebook captures the lead; the email flow teaches from it and drives to the recorded webinar. The list opens well above benchmark, but the calls to action are not converting that attention.',
    chans:['Ebook','Email nurture (GetResponse)'],
    kpis:[['Ebook leads','30','0','new — form was broken','up'],['Landing-page conversion','6.4%','0%','20–40% typical','up'],['Guide delivery · open','17.7%','—','50–70% typical','down'],['Broadcast (newsletter) open','36.1%','—','~21% typical','up'],['Broadcast click','2.6%','—','2–3% typical','flat'],['Webinar-invite clicks','~1.0%','—','2–3% typical','down']]},
-  {k:'The conversion event',t:'Recorded webinar',obj:'Conversion',badge:'b-conv',
-   strat:'The recorded Fast Track presentation runs on a recurring cadence and closes on the Apprentice offer. It converts on its own, no live host needed, people register, watch the recording, and buy.',
+  {k:'Conversion · cold traffic',t:'Recorded webinar',obj:'Conversion',badge:'b-conv',
+   strat:'The scalable conversion event for the broad, colder audience. The recorded Fast Track presentation runs on a recurring cadence and closes on the Apprentice offer, no live host needed, people register, watch, and buy.',
    chans:['Recorded webinar (Zoom)','Nurture hand-off'],
-   kpis:[['Registered','8','—','new baseline','flat'],['Live attendees','~0','—','async · recorded','flat'],['Apprentice sale','1','—','from 8 registrants','up']]},
-  {k:'Bottom of funnel',t:'Meeting · membership · ascension',obj:'Conversion + Retention',badge:'b-both',
-   strat:'The live relational meeting warms hot leads and keeps members, and Rodney runs direct outreach alongside it. Apprentice is the entry, and the ladder climbs to Protégé and Accelerator.',
-   chans:['Live meeting (2nd & 4th Wed)','Warm-lead outreach (Rodney)','Apprentice $8.99','Protégé / Accelerator'],
-   kpis:[['Meeting registered','14','—','new','flat'],['Meeting participants','3','—','of 14 registered','down'],['Meeting sales','0','—','the goal','flat'],['Apprentice signups','1','0','first month','up'],['Warm-lead outreach','with Rodney','—','data pending','flat'],['LTV : CAC','TBD','—','≥ 3:1 target','flat']]}
+   kpis:[['Registered','8','—','new baseline','flat'],['Live attendees','0','—','the 2 on Zoom were hosts','flat'],['Apprentice sale','1','—','from 8 registrants','up']]},
+  {k:'Conversion · warm leads',t:'Live relational meeting',obj:'Conversion (relational)',badge:'b-conv',
+   strat:'The conversion event for hotter, closer leads, a live and personal room, relational rather than a hard pitch. Right now it draws registrations but few show, and it has not closed yet.',
+   chans:['Live meeting (2nd & 4th Wed)','Warm-lead invites','Members'],
+   kpis:[['Registered','14','—','new','flat'],['Participants','3','—','of 14 registered','down'],['Sales','0','—','the goal','flat']]},
+  {k:'Bottom of funnel',t:'Retention & outreach',obj:'Retention',badge:'b-both',
+   strat:'Keep members in the room and re-engage the ones who registered but did not convert. Rodney runs direct outreach; a follow-up email sequence for no-shows and non-buyers is the missing piece.',
+   chans:['Follow-up emails','Warm-lead outreach (Rodney)','Apprentice $8.99','Protégé / Accelerator'],
+   kpis:[['Members','1','0','first month','up'],['Warm-lead outreach','with Rodney','—','data pending','flat'],['Follow-up sequence','to build','—','the next build','flat'],['Lead → member','3.3%','—','1–5% typical','flat'],['LTV : CAC','TBD','—','≥ 3:1 target','flat']]}
 ];
 const stack=document.getElementById('fstack'), det=document.getElementById('fdetail');
 STAGES.forEach((s,i)=>{
