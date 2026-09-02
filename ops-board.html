@@ -173,9 +173,25 @@
       <div class="brand">SKLES<span class="g">.</span> Ops Board</div>
       <div class="sub">Content &amp; funnel planner</div>
     </div>
-    <button class="theme-btn" id="themeBtn">◐ Theme</button>
+    <div style="display:flex;gap:10px;align-items:center">
+      <span id="userChip" style="color:#aeb9d0;font-size:12.5px;font-weight:600"></span>
+      <button class="theme-btn" id="logoutBtn" style="display:none">Log out</button>
+      <button class="theme-btn" id="themeBtn">◐ Theme</button>
+    </div>
   </div>
 </header>
+
+<div class="ov on" id="login">
+  <div class="modal" style="max-width:380px">
+    <div style="font-family:'Merriweather',serif;font-weight:900;font-size:24px;color:var(--navy);margin-bottom:2px">SKLES<span style="color:var(--tan-deep)">.</span> Ops Board</div>
+    <div class="msub">Sign in to the shared team board</div>
+    <div class="fld"><label>Who are you?</label><select id="login-name"></select></div>
+    <div class="fld"><label id="login-pinlabel">PIN</label><input id="login-pin" type="password" inputmode="numeric" placeholder="4–6 digit PIN"></div>
+    <div id="login-msg" style="font-size:12px;color:var(--p-problem);min-height:16px"></div>
+    <button class="btn" id="login-go" style="width:100%">Enter</button>
+    <p class="note" style="margin-top:12px">First time? Pick your name and set a PIN, that becomes your login. This board is shared with the SKLES team.</p>
+  </div>
+</div>
 
 <main>
   <div class="bar">
@@ -339,32 +355,31 @@ function seedCards(){
   return c;
 }
 
-/* ---- IndexedDB for real file attachments (per-browser) ---- */
-const IDB={db:null,
-  open(){return this.db?Promise.resolve(this.db):new Promise((res,rej)=>{const r=indexedDB.open('skles_ops_files',1);
-    r.onupgradeneeded=e=>e.target.result.createObjectStore('files');
-    r.onsuccess=e=>{this.db=e.target.result;res(this.db);}; r.onerror=e=>rej(e);});},
-  async put(id,blob){const db=await this.open();return new Promise((res,rej)=>{const tx=db.transaction('files','readwrite');tx.objectStore('files').put(blob,id);tx.oncomplete=()=>res();tx.onerror=e=>rej(e);});},
-  async get(id){const db=await this.open();return new Promise((res,rej)=>{const tx=db.transaction('files','readonly');const q=tx.objectStore('files').get(id);q.onsuccess=()=>res(q.result);q.onerror=e=>rej(e);});},
-  async del(id){const db=await this.open();return new Promise(res=>{const tx=db.transaction('files','readwrite');tx.objectStore('files').delete(id);tx.oncomplete=()=>res();});}
-};
 function fmtSize(b){if(!b)return'';const u=['B','KB','MB'];let i=0,n=b;while(n>=1024&&i<2){n/=1024;i++;}return n.toFixed(n<10&&i>0?1:0)+u[i];}
 
-const LS='skles_ops_v4', LSF='skles_ops_fb_v1';
-let cards=load(LS)||seedCards();
-let feedback=load(LSF)||[];
+/* ---- Firebase Realtime Database (shared, via REST) ---- */
+const DB='https://rifa-mae-default-rtdb.firebaseio.com/skles-ops';
+const TEAM=['Marina','Valerie','Marissa','Sean','Rodney'];
+let cards=[], feedback=[], currentUser=null, lastHash='';
 let channel='all', view='calendar', filter=null, editing=null, showFb=false, calIdx=0, mixFilter=null;
 
-function load(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null;}catch(e){return null;}}
-function save(){try{localStorage.setItem(LS,JSON.stringify(cards));flash('Saved ✓');}catch(e){flash('(storage full)');}}
-function saveFb(){try{localStorage.setItem(LSF,JSON.stringify(feedback));}catch(e){}}
+async function dbGet(p){try{const r=await fetch(`${DB}/${p}.json`);return r.ok?await r.json():null;}catch(e){return null;}}
+async function dbPut(p,v){try{const r=await fetch(`${DB}/${p}.json`,{method:'PUT',body:JSON.stringify(v)});return r.ok;}catch(e){return false;}}
+async function dbPatch(p,v){try{const r=await fetch(`${DB}/${p}.json`,{method:'PATCH',body:JSON.stringify(v)});return r.ok;}catch(e){return false;}}
+async function dbDel(p){try{const r=await fetch(`${DB}/${p}.json`,{method:'DELETE'});return r.ok;}catch(e){return false;}}
+function arr2obj(a){const o={};a.forEach(c=>o['c'+c.id]=c);return o;}
+function slug(n){return n.toLowerCase().replace(/[^a-z0-9]/g,'');}
+async function saveCard(card){card.updatedBy=currentUser;card.updatedAt=Date.now();const i=cards.findIndex(c=>c.id===card.id);if(i<0)cards.push(card);else cards[i]=card;flash('Saving…');flash(await dbPut('cards/c'+card.id,card)?'Saved ✓':'(offline)');lastHash=JSON.stringify([cards,feedback]);}
+async function deleteCard(id){cards=cards.filter(c=>c.id!==id);await dbDel('cards/c'+id);flash('Deleted');lastHash=JSON.stringify([cards,feedback]);}
+async function saveFb(){await dbPut('feedback',feedback);lastHash=JSON.stringify([cards,feedback]);}
+async function bulkSaveCards(){flash('Saving…');flash(await dbPut('cards',arr2obj(cards))?'Saved ✓':'(offline)');lastHash=JSON.stringify([cards,feedback]);}
 function flash(t){const e=document.getElementById('saved');if(e){e.textContent=t;setTimeout(()=>{if(e.textContent===t)e.textContent='';},1600);}}
 function pcolor(p){return css(PILLARS[p]||'--tan');}
 function bcolor(b){return css(BCOLOR[b]||'--tan');}
 function esc(s){return (s||'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
 function fdate(s){if(!s)return '';const d=new Date(s+'T00:00:00');return d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});}
 function inScope(c){return (channel==='all'||c.board===channel) && (!filter||c.pillar===filter) && (!mixFilter||(c.mix||'proven')===mixFilter);}
-function isFile(a){return a.kind==='file'||(a.id&&!a.url);}
+function isFile(a){return a.kind==='file'||(a.data&&!a.url);}
 
 /* ---- KANBAN ---- */
 function renderKanban(el){
@@ -401,7 +416,7 @@ function wireDnD(){
     z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('dragover');});
     z.addEventListener('dragleave',()=>z.classList.remove('dragover'));
     z.addEventListener('drop',e=>{e.preventDefault();z.classList.remove('dragover');
-      const c=cards.find(x=>x.id===+e.dataTransfer.getData('id'));if(!c)return;c.status=z.dataset.st;save();render();});
+      const c=cards.find(x=>x.id===+e.dataTransfer.getData('id'));if(!c)return;c.status=z.dataset.st;saveCard(c);render();});
   });
 }
 function bindCards(){document.querySelectorAll('.card').forEach(c=>c.addEventListener('click',()=>openModal(+c.dataset.id)));}
@@ -478,7 +493,7 @@ function renderFb(){
 }
 document.getElementById('fb-add').onclick=()=>{
   const txt=document.getElementById('fb-txt').value.trim();if(!txt)return;
-  const by=document.getElementById('fb-by').value.trim();
+  const by=document.getElementById('fb-by').value.trim()||currentUser;
   feedback.unshift({txt,by,at:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'}),done:false});
   saveFb();document.getElementById('fb-txt').value='';renderFb();
 };
@@ -488,7 +503,7 @@ function g(i){return document.getElementById(i);}
 function openModal(id){
   editing = id? JSON.parse(JSON.stringify(cards.find(c=>c.id===id))) : {id:Math.max(0,...cards.map(c=>c.id))+1,board:(channel==='all'?'social':channel),date:'',pillar:'Founder Story',fmt:'Reel',chans:[],owner:'',cta:'—',hook:'',copy:'',visual:'',status:'Ideas',comments:[],attachments:[],isNew:true};
   g('modTitle').textContent=id?'Edit card':'New card';
-  g('modSub').textContent=BOARDS.find(b=>b.id===editing.board).name+' board';
+  g('modSub').textContent=BOARDS.find(b=>b.id===editing.board).name+' board'+(editing.updatedBy?' · last edited by '+editing.updatedBy:'');
   g('f-hook').value=editing.hook||''; g('f-copy').value=editing.copy||'';
   g('f-board').innerHTML=BOARDS.filter(b=>b.id!=='all').map(b=>`<option value="${b.id}"${b.id===editing.board?' selected':''}>${b.name}</option>`).join('');
   g('f-pillar').innerHTML=Object.keys(PILLARS).map(p=>`<option${p===editing.pillar?' selected':''}>${p}</option>`).join('');
@@ -498,28 +513,30 @@ function openModal(id){
   g('f-visual').value=editing.visual||'';
   g('f-mix').innerHTML=Object.keys(MIX).map(k=>`<option value="${k}"${(editing.mix||'proven')===k?' selected':''}>${MIX[k].label} (${MIX[k].target}%)</option>`).join('');
   g('f-del').style.visibility=id?'visible':'hidden';
-  g('att-note').textContent='Uploaded files are stored in this browser and are private to you. For files the whole team should open, add a Drive or Canva link instead.';
+  g('att-note').textContent='Files up to 900KB are shared with the whole team through the board. For anything larger, add a Drive or Canva link instead.';
+  g('cmt-by').value=currentUser||'';
   renderAtt();renderCmt();
   document.getElementById('ov').classList.add('on');
 }
-async function renderAtt(){
+function renderAtt(){
   const l=g('att-list');const a=editing.attachments||[];
   l.innerHTML=a.map((x,i)=>{
     if(isFile(x)) return `<div class="subitem"><span class="fa" data-o="${i}">📎 ${esc(x.name||'file')} <span class="who">${fmtSize(x.size)}</span></span><span class="x" data-i="${i}">✕</span></div>`;
     return `<div class="subitem"><a href="${esc(x.url)}" target="_blank" rel="noopener">🔗 ${esc(x.label||x.url)}</a><span class="x" data-i="${i}">✕</span></div>`;
   }).join('');
-  l.querySelectorAll('.x').forEach(b=>b.onclick=async()=>{const i=+b.dataset.i;const x=editing.attachments[i];if(isFile(x)&&x.id)await IDB.del(x.id);editing.attachments.splice(i,1);renderAtt();});
-  l.querySelectorAll('.fa').forEach(b=>b.onclick=async()=>{const x=editing.attachments[+b.dataset.o];const blob=await IDB.get(x.id);if(!blob){alert('This file is not in this browser.');return;}const u=URL.createObjectURL(blob);window.open(u,'_blank');setTimeout(()=>URL.revokeObjectURL(u),60000);});
+  l.querySelectorAll('.x').forEach(b=>b.onclick=()=>{editing.attachments.splice(+b.dataset.i,1);renderAtt();});
+  l.querySelectorAll('.fa').forEach(b=>b.onclick=()=>openData(editing.attachments[+b.dataset.o]));
 }
-async function addFiles(files){
-  editing.attachments=editing.attachments||[];
-  for(const f of files){
-    if(f.size>60*1024*1024){alert(f.name+' is over 60MB, skipped.');continue;}
-    const fid='f'+Date.now()+Math.random().toString(36).slice(2,7);
-    try{await IDB.put(fid,f);editing.attachments.push({kind:'file',id:fid,name:f.name,mime:f.type,size:f.size});}
-    catch(e){alert('Could not store '+f.name);}
-  }
-  renderAtt();
+function openData(x){if(!x.data){alert('File data missing.');return;}const w=window.open();if(!w)return;if((x.mime||'').startsWith('image/'))w.document.write('<title>'+esc(x.name||'')+'</title><img src="'+x.data+'" style="max-width:100%">');else w.location=x.data;}
+function addFiles(files){
+  editing.attachments=editing.attachments||[];let pend=files.length;if(!pend)return;
+  files.forEach(f=>{
+    if(f.size>900*1024){alert(f.name+' is over 900KB. For big files add a Drive or Canva link instead, so the whole team can open it.');pend--;if(!pend)renderAtt();return;}
+    const rd=new FileReader();
+    rd.onload=()=>{editing.attachments.push({kind:'file',name:f.name,mime:f.type,size:f.size,data:rd.result});pend--;if(!pend)renderAtt();};
+    rd.onerror=()=>{pend--;if(!pend)renderAtt();};
+    rd.readAsDataURL(f);
+  });
 }
 g('att-file').onchange=e=>{addFiles([...e.target.files]);e.target.value='';};
 g('att-drop').onclick=()=>g('att-file').click();
@@ -530,11 +547,11 @@ g('att-add').onclick=()=>{const label=g('att-label').value.trim(),url=g('att-url
   editing.attachments=editing.attachments||[];editing.attachments.push({kind:'link',label,url});g('att-label').value='';g('att-url').value='';renderAtt();};
 function renderCmt(){
   const l=g('cmt-list');const cm=editing.comments||[];
-  l.innerHTML=cm.map((x,i)=>`<div class="subitem"><span><span class="who">${esc(x.by||'—')}</span> · ${esc(x.text)}</span><span class="x" data-i="${i}">✕</span></div>`).join('');
+  l.innerHTML=cm.map((x,i)=>`<div class="subitem"><span><span class="who">${esc(x.by||'—')}</span>${x.at?' · '+esc(x.at):''} · ${esc(x.text)}</span><span class="x" data-i="${i}">✕</span></div>`).join('');
   l.querySelectorAll('.x').forEach(b=>b.onclick=()=>{editing.comments.splice(+b.dataset.i,1);renderCmt();});
 }
-g('cmt-add').onclick=()=>{const by=g('cmt-by').value.trim(),text=g('cmt-txt').value.trim();if(!text)return;
-  editing.comments=editing.comments||[];editing.comments.push({by,text});g('cmt-txt').value='';renderCmt();};
+g('cmt-add').onclick=()=>{const by=g('cmt-by').value.trim()||currentUser,text=g('cmt-txt').value.trim();if(!text)return;
+  editing.comments=editing.comments||[];editing.comments.push({by,text,at:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'})});g('cmt-txt').value='';renderCmt();};
 
 g('f-save').onclick=()=>{
   if(!editing)return;
@@ -543,16 +560,15 @@ g('f-save').onclick=()=>{
   editing.date=g('f-date').value; editing.owner=g('f-owner').value; editing.cta=g('f-cta').value;
   editing.chans=g('f-chans').value.split(',').map(s=>s.trim()).filter(Boolean);
   editing.visual=g('f-visual').value; editing.mix=g('f-mix').value;
-  const isNew=editing.isNew; delete editing.isNew;
-  if(isNew){cards.push(editing);} else {const i=cards.findIndex(c=>c.id===editing.id);if(i>=0)cards[i]=editing;}
-  save();render();closeModal();
+  delete editing.isNew;
+  saveCard(editing);render();closeModal();
 };
-g('f-del').onclick=()=>{if(editing){cards=cards.filter(c=>c.id!==editing.id);save();render();closeModal();}};
+g('f-del').onclick=()=>{if(editing){deleteCard(editing.id);render();closeModal();}};
 g('f-cancel').onclick=closeModal;
 function closeModal(){document.getElementById('ov').classList.remove('on');editing=null;}
 document.getElementById('ov').onclick=e=>{if(e.target.id==='ov')closeModal();};
 document.getElementById('addCard').onclick=()=>openModal(null);
-document.getElementById('resetBtn').onclick=()=>{if(confirm('Reset to the seeded Sept + Oct plan? Your changes will be lost.')){cards=seedCards();save();render();}};
+document.getElementById('resetBtn').onclick=()=>{if(confirm('Reset the SHARED board to the seeded Sept + Oct plan? This replaces everyone’s cards.')){cards=seedCards();bulkSaveCards();render();}};
 
 /* ---- CHROME ---- */
 function renderChannels(){
@@ -604,9 +620,67 @@ const root=document.documentElement;
 document.getElementById('themeBtn').onclick=()=>{
   const cur=root.getAttribute('data-theme');
   const next=cur==='dark'?'light':(cur==='light'?'dark':(matchMedia('(prefers-color-scheme:dark)').matches?'light':'dark'));
-  root.setAttribute('data-theme',next);render();
+  root.setAttribute('data-theme',next);if(currentUser)render();
 };
-render();
+document.getElementById('logoutBtn').onclick=()=>{localStorage.removeItem('skles_ops_sess');location.reload();};
+
+/* ---- Login + live sync ---- */
+let _users={};
+async function ensureUsers(){let u=await dbGet('users');if(!u||!Object.keys(u).length){u={};TEAM.forEach(n=>u[slug(n)]={name:n});await dbPut('users',u);}return u;}
+function showLogin(users){
+  _users=users;
+  const sel=g('login-name');
+  sel.innerHTML=Object.values(users).map(u=>`<option value="${slug(u.name)}">${u.name}</option>`).join('');
+  sel.onchange=updatePinLabel; updatePinLabel();
+  g('login').classList.add('on');
+}
+function updatePinLabel(){
+  const u=_users[g('login-name').value];
+  g('login-pinlabel').textContent=(u&&u.pin)?'Enter your PIN':'Create a PIN (4–6 digits)';
+  g('login-pin').value=''; g('login-msg').textContent='';
+}
+async function doLogin(){
+  const key=g('login-name').value, pin=g('login-pin').value.trim(), msg=g('login-msg');
+  const users=await dbGet('users')||{}; const u=users[key];
+  if(!u){msg.textContent='Unknown user.';return;}
+  if(!/^\d{4,6}$/.test(pin)){msg.textContent='PIN must be 4 to 6 digits.';return;}
+  if(!u.pin){await dbPatch('users/'+key,{pin});}
+  else if(u.pin!==pin){msg.textContent='Wrong PIN. Try again.';return;}
+  currentUser=u.name; localStorage.setItem('skles_ops_sess',u.name);
+  await showApp();
+}
+g('login-go').onclick=doLogin;
+g('login-pin').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+
+async function loadData(){
+  const co=await dbGet('cards');
+  if(!co||!Object.keys(co).length){cards=seedCards();await bulkSaveCards();}
+  else cards=Object.values(co);
+  const fb=await dbGet('feedback'); feedback=Array.isArray(fb)?fb:(fb?Object.values(fb):[]);
+  lastHash=JSON.stringify([cards,feedback]);
+}
+async function showApp(){
+  g('login').classList.remove('on');
+  g('userChip').textContent='👤 '+currentUser;
+  g('logoutBtn').style.display='';
+  await loadData(); render(); startPoll();
+}
+let polling=false;
+function startPoll(){ if(polling)return; polling=true; setInterval(async()=>{
+  if(editing||document.hidden||g('ov').classList.contains('on'))return;
+  const co=await dbGet('cards'), fb=await dbGet('feedback');
+  const nc=co?Object.values(co):[], nf=Array.isArray(fb)?fb:(fb?Object.values(fb):[]);
+  const h=JSON.stringify([nc,nf]);
+  if(h!==lastHash){cards=nc;feedback=nf;lastHash=h;render();}
+}, 4000); }
+
+async function init(){
+  const users=await ensureUsers();
+  const sess=localStorage.getItem('skles_ops_sess');
+  if(sess&&users[slug(sess)]){currentUser=sess;await showApp();}
+  else showLogin(users);
+}
+init();
 </script>
 
 </body>
