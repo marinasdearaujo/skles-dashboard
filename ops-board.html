@@ -231,7 +231,8 @@
     <h3 id="modTitle">Edit card</h3>
     <div class="msub" id="modSub"></div>
     <div class="fld"><label>Hook / headline</label><input id="f-hook"></div>
-    <div class="fld"><label>Copy / caption</label><textarea id="f-copy"></textarea></div>
+    <div class="fld"><label>Briefing</label><textarea id="f-copy" placeholder="What this piece is and how to make it"></textarea></div>
+    <div class="fld"><label>Copy / caption</label><textarea id="f-caption" placeholder="The actual post text — written when producing"></textarea></div>
     <div class="modrow">
       <div class="fld" style="flex:1"><label>Board</label><select id="f-board"></select></div>
       <div class="fld" style="flex:1"><label>Pillar</label><select id="f-pillar"></select></div>
@@ -308,7 +309,7 @@ const EVENTS=[
 
 function seedCards(){
   const c=[]; let id=1; let shortN=0;
-  const mk=o=>Object.assign({comments:[],attachments:[],visual:'',status:'To Produce',mix:'proven'},o);
+  const mk=o=>Object.assign({comments:[],attachments:[],visual:'',caption:'',status:'To Produce',mix:'proven'},o);
   const socialByDow={
     1:{pillar:'Founder Story',fmt:'Reel',chans:['IG','TikTok','FB'],owner:'Sean → Valerie',cta:'—',mix:'proven',
        hook:t=>t, copy:t=>`Sean, first person: the story behind "${t.toLowerCase()}". Specific and honest, no hype.`, visual:'Talking-head Reel, captions burned in.'},
@@ -520,10 +521,10 @@ document.getElementById('fb-add').onclick=()=>{
 /* ---- MODAL ---- */
 function g(i){return document.getElementById(i);}
 function openModal(id){
-  editing = id? JSON.parse(JSON.stringify(cards.find(c=>c.id===id))) : {id:Math.max(0,...cards.map(c=>c.id))+1,board:(channel==='all'?'social':channel),date:'',pillar:'Founder Story',fmt:'Reel',chans:[],owner:'',cta:'—',hook:'',copy:'',visual:'',status:'Ideas',comments:[],attachments:[],isNew:true};
+  editing = id? JSON.parse(JSON.stringify(cards.find(c=>c.id===id))) : {id:Math.max(0,...cards.map(c=>c.id))+1,board:(channel==='all'?'social':channel),date:'',pillar:'Founder Story',fmt:'Reel',chans:[],owner:'',cta:'—',hook:'',copy:'',caption:'',visual:'',status:'Ideas',mix:'proven',comments:[],attachments:[],isNew:true};
   g('modTitle').textContent=id?'Edit card':'New card';
   g('modSub').textContent=BOARDS.find(b=>b.id===editing.board).name+' board'+(editing.updatedBy?' · last edited by '+editing.updatedBy:'');
-  g('f-hook').value=editing.hook||''; g('f-copy').value=editing.copy||'';
+  g('f-hook').value=editing.hook||''; g('f-copy').value=editing.copy||''; g('f-caption').value=editing.caption||'';
   g('f-board').innerHTML=BOARDS.filter(b=>b.id!=='all').map(b=>`<option value="${b.id}"${b.id===editing.board?' selected':''}>${b.name}</option>`).join('');
   g('f-pillar').innerHTML=Object.keys(PILLARS).map(p=>`<option${p===editing.pillar?' selected':''}>${p}</option>`).join('');
   g('f-status').innerHTML=STATUS.map(s=>`<option${s===editing.status?' selected':''}>${s}</option>`).join('');
@@ -574,7 +575,7 @@ g('cmt-add').onclick=()=>{const by=g('cmt-by').value.trim()||currentUser,text=g(
 
 g('f-save').onclick=()=>{
   if(!editing)return;
-  editing.hook=g('f-hook').value; editing.copy=g('f-copy').value; editing.board=g('f-board').value;
+  editing.hook=g('f-hook').value; editing.copy=g('f-copy').value; editing.caption=g('f-caption').value; editing.board=g('f-board').value;
   editing.pillar=g('f-pillar').value; editing.status=g('f-status').value; editing.fmt=g('f-fmt').value;
   editing.date=g('f-date').value; editing.owner=g('f-owner').value; editing.cta=g('f-cta').value;
   editing.chans=g('f-chans').value.split(',').map(s=>s.trim()).filter(Boolean);
