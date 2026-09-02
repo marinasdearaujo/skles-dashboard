@@ -68,7 +68,7 @@
   .mixlegend b{color:var(--text)}
   #colFilters{gap:12px}
   .fsel{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);font-weight:600}
-  .fsel select{font-family:inherit;font-size:12.5px;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:8px;padding:6px 9px;font-weight:600}
+  .fsel select,.fsel input{font-family:inherit;font-size:12.5px;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:8px;padding:6px 9px;font-weight:600}
   .btn{background:var(--navy);color:#fff;border:none;border-radius:9px;padding:9px 16px;font-size:13px;font-weight:600}
   .btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
   .saved{font-size:12px;color:var(--muted)}
@@ -206,7 +206,6 @@
     <button class="btn" id="addCard">+ Add</button>
     <button class="btn ghost" id="resetBtn">Reset</button>
   </div>
-  <div class="filters" id="pillarFilters" style="margin-bottom:12px"></div>
   <div class="bar" id="colFilters" style="margin-bottom:16px"></div>
   <div id="mixMeter" class="mixmeter"></div>
 
@@ -373,7 +372,7 @@ const DB='https://rifa-mae-default-rtdb.firebaseio.com/skles-ops';
 const TEAM=['Marina','Valerie','Marissa','Sean','Rodney'];
 let cards=[], feedback=[], currentUser=null, lastHash='';
 let channel='all', view='calendar', filter=null, editing=null, showFb=false, calIdx=0, mixFilter=null;
-let fPlatform='', fFormat='', fOwner='', fStatus='';
+let fPlatform='', fFormat='', fOwner='', fStatus='', fDate='';
 
 async function dbGet(p){try{const r=await fetch(`${DB}/${p}.json`);return r.ok?await r.json():null;}catch(e){return null;}}
 async function dbPut(p,v){try{const r=await fetch(`${DB}/${p}.json`,{method:'PUT',body:JSON.stringify(v)});return r.ok;}catch(e){return false;}}
@@ -396,7 +395,8 @@ function inScope(c){return (channel==='all'||c.board===channel)
   && (!fPlatform||(c.chans||[]).includes(fPlatform))
   && (!fFormat||c.fmt===fFormat)
   && (!fOwner||c.owner===fOwner)
-  && (!fStatus||c.status===fStatus);}
+  && (!fStatus||c.status===fStatus)
+  && (!fDate||c.date===fDate);}
 function isFile(a){return a.kind==='file'||(a.data&&!a.url);}
 
 /* ---- KANBAN ---- */
@@ -593,19 +593,12 @@ document.getElementById('resetBtn').onclick=()=>{if(confirm('Reset the SHARED bo
 function renderChannels(){
   const b=document.getElementById('channelSeg');
   b.innerHTML=BOARDS.map(bd=>`<button data-b="${bd.id}" class="${bd.id===channel&&!showFb?'on':''}">${bd.id!=='all'?`<span class="dot" style="background:${bcolor(bd.id)}"></span>`:''}${bd.name}</button>`).join('');
-  b.querySelectorAll('button').forEach(btn=>btn.onclick=()=>{channel=btn.dataset.b;filter=null;showFb=false;render();});
+  b.querySelectorAll('button').forEach(btn=>btn.onclick=()=>{channel=btn.dataset.b;filter=null;mixFilter=null;fPlatform=fFormat=fOwner=fStatus=fDate='';showFb=false;render();});
 }
 function renderViews(){
   const b=document.getElementById('viewSeg');
   b.innerHTML=VIEWS.map(v=>`<button data-v="${v.id}" class="${v.id===view&&!showFb?'on':''}">${v.name}</button>`).join('');
   b.querySelectorAll('button').forEach(btn=>btn.onclick=()=>{view=btn.dataset.v;showFb=false;render();});
-}
-function renderFilters(){
-  if(showFb){document.getElementById('pillarFilters').innerHTML='';return;}
-  const used=[...new Set(cards.filter(c=>channel==='all'||c.board===channel).map(c=>c.pillar))];
-  const box=document.getElementById('pillarFilters');
-  box.innerHTML='<span class="chip'+(!filter?' on':'')+'" data-p="">All pillars</span>'+used.map(p=>`<span class="chip${filter===p?' on':''}" data-p="${p}" style="${filter===p?'':'border-left:3px solid '+pcolor(p)}">${p}</span>`).join('');
-  box.querySelectorAll('.chip').forEach(ch=>ch.onclick=()=>{filter=ch.dataset.p||null;render();});
 }
 document.getElementById('fbTab').onclick=()=>{showFb=!showFb;render();};
 
@@ -613,14 +606,26 @@ function renderColFilters(){
   const box=document.getElementById('colFilters');
   const scope=cards.filter(c=>channel==='all'||c.board===channel);
   const uniq=a=>[...new Set(a.filter(Boolean))].sort();
+  const pillars=uniq(scope.map(c=>c.pillar));
   const platforms=uniq(scope.flatMap(c=>c.chans||[]));
   const owners=uniq(scope.map(c=>c.owner));
   const formats=uniq(scope.map(c=>c.fmt));
-  const sel=(id,label,opts,cur)=>`<span class="fsel">${label} <select data-f="${id}"><option value="">All</option>${opts.map(o=>`<option${o===cur?' selected':''}>${esc(o)}</option>`).join('')}</select></span>`;
-  const active=fPlatform||fFormat||fOwner||fStatus||filter||mixFilter;
-  box.innerHTML=sel('platform','Channel',platforms,fPlatform)+sel('format','Format',formats,fFormat)+sel('owner','Owner',owners,fOwner)+sel('status','Status',STATUS,fStatus)+(active?`<button class="btn ghost" id="clearF" style="padding:6px 12px">Clear filters</button>`:'');
-  box.querySelectorAll('select').forEach(s=>s.onchange=()=>{const f=s.dataset.f,v=s.value;if(f==='platform')fPlatform=v;else if(f==='format')fFormat=v;else if(f==='owner')fOwner=v;else if(f==='status')fStatus=v;render();});
-  const cb=document.getElementById('clearF');if(cb)cb.onclick=()=>{fPlatform=fFormat=fOwner=fStatus='';filter=null;mixFilter=null;render();};
+  const sel=(id,label,opts,cur)=>`<span class="fsel">${label} <select data-f="${id}"><option value="">All</option>${opts.map(o=>`<option value="${esc(o)}"${o===cur?' selected':''}>${esc(o)}</option>`).join('')}</select></span>`;
+  const mixOpts=Object.keys(MIX).map(k=>`<option value="${k}"${mixFilter===k?' selected':''}>${MIX[k].label}</option>`).join('');
+  const active=filter||fPlatform||fFormat||fOwner||fStatus||mixFilter||fDate;
+  box.innerHTML=
+    sel('pillar','Pillar',pillars,filter||'')+
+    sel('platform','Channel',platforms,fPlatform)+
+    sel('format','Format',formats,fFormat)+
+    sel('owner','Owner',owners,fOwner)+
+    sel('status','Status',STATUS,fStatus)+
+    `<span class="fsel">Mix <select data-f="mix"><option value="">All</option>${mixOpts}</select></span>`+
+    `<span class="fsel">Date <input type="date" data-f="date" min="2026-09-01" max="2026-10-31" value="${fDate}"></span>`+
+    (active?`<button class="btn ghost" id="clearF" style="padding:6px 12px">Clear filters</button>`:'');
+  box.querySelectorAll('select,input').forEach(s=>s.onchange=()=>{const f=s.dataset.f,v=s.value;
+    if(f==='pillar')filter=v||null;else if(f==='platform')fPlatform=v;else if(f==='format')fFormat=v;else if(f==='owner')fOwner=v;else if(f==='status')fStatus=v;else if(f==='mix')mixFilter=v||null;else if(f==='date')fDate=v;
+    render();});
+  const cb=document.getElementById('clearF');if(cb)cb.onclick=()=>{filter=null;mixFilter=null;fPlatform=fFormat=fOwner=fStatus=fDate='';render();};
 }
 function renderMix(){
   const el=document.getElementById('mixMeter');
@@ -636,7 +641,7 @@ function renderMix(){
 }
 
 function render(){
-  renderChannels();renderViews();renderFilters();
+  renderChannels();renderViews();
   document.getElementById('fbTab').classList.toggle('on',showFb);
   const w=document.getElementById('work'), f=document.getElementById('feedback-view'), mm=document.getElementById('mixMeter');
   const showAdd=!showFb; document.getElementById('addCard').style.display=showAdd?'':'none'; document.getElementById('resetBtn').style.display=showAdd?'':'none';
