@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ops Board — How to use it</title>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#112250; --tan:#E0C58F; --ink:#1a2438; --muted:#5d6b7e;
+    --bg:#f7f5f0; --card:#ffffff; --line:#e7e1d4; --soft:#faf7f1;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --ink:#eef1f7; --muted:#9aa6bb; --bg:#0d1426; --card:#141d33; --line:#25314e; --soft:#18223c;
+  }}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font-family:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
+       font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:820px;margin:0 auto;padding:0 20px 80px}
+
+  header{background:var(--navy);border-bottom:3px solid var(--tan);padding:44px 20px 40px;margin-bottom:38px}
+  header .inner{max-width:820px;margin:0 auto}
+  .brand{font-weight:700;letter-spacing:.14em;font-size:12px;color:var(--tan);margin:0 0 14px}
+  h1{font-family:'Merriweather',Georgia,serif;font-weight:900;font-size:clamp(26px,4.4vw,36px);
+     line-height:1.18;color:#fff;margin:0 0 12px}
+  header p{color:#c3cde0;margin:0;max-width:60ch}
+  header a.cta{display:inline-block;margin-top:22px;background:var(--tan);color:var(--navy);
+     text-decoration:none;font-weight:700;padding:12px 26px;border-radius:9px}
+
+  h2{font-family:'Merriweather',Georgia,serif;font-size:21px;margin:44px 0 6px;color:var(--ink)}
+  h2 .n{color:var(--tan);margin-right:10px}
+  h2+.lede{color:var(--muted);margin:0 0 18px}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin:16px 0}
+  ol.steps{margin:0;padding-left:20px}
+  ol.steps>li{margin:0 0 12px;padding-left:4px}
+  ol.steps>li:last-child{margin-bottom:0}
+  ul.plain{margin:10px 0 0;padding-left:20px}
+  ul.plain li{margin:0 0 8px}
+
+  .k{display:inline-block;background:var(--soft);border:1px solid var(--line);border-radius:6px;
+     padding:1px 7px;font-size:13px;font-weight:600;white-space:nowrap}
+  .tan{color:#8a6a24;font-weight:600}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tan{color:var(--tan)}}
+
+  table{width:100%;border-collapse:collapse;margin:14px 0 0;font-size:14px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-weight:600;color:var(--muted);font-size:12.5px;text-transform:uppercase;letter-spacing:.04em}
+  .scroll{overflow-x:auto}
+
+  .note{background:var(--soft);border-left:3px solid var(--tan);border-radius:0 10px 10px 0;
+        padding:14px 18px;margin:16px 0;color:var(--muted)}
+  .note b{color:var(--ink)}
+  footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+  a{color:inherit}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <p class="brand">SKLES · OPS BOARD</p>
+    <h1>How to use the board</h1>
+    <p>Everything we publish lives here now: YouTube, social, and the funnel. This walks you through it end to end. Five minutes and you're set.</p>
+    <a class="cta" href="https://marinasdearaujo.github.io/skles-dashboard/ops-board.html">Open the board →</a>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <h2><span class="n">1</span>Getting in</h2>
+  <p class="lede">One time only. After this it remembers you on that device.</p>
+  <div class="card">
+    <ol class="steps">
+      <li>Open <a href="https://marinasdearaujo.github.io/skles-dashboard/ops-board.html">the board</a>.</li>
+      <li>Pick your name from the dropdown.</li>
+      <li>Type any 4–6 digit PIN you'll remember and hit enter. The first time you do this it <em>creates</em> your PIN. Every time after, it's just your login.</li>
+    </ol>
+    <div class="note">
+      <b>Your name isn't in the list?</b> Tell Marina and it gets added. The PIN is only there so edits show who made them, so don't reuse a bank PIN.
+    </div>
+  </div>
+
+  <h2><span class="n">2</span>The three boards</h2>
+  <p class="lede">Top row of buttons. Each one holds a different kind of work.</p>
+  <div class="card">
+    <div class="scroll"><table>
+      <thead><tr><th>Board</th><th>What lives on it</th><th>Mostly</th></tr></thead>
+      <tbody>
+        <tr><td><b>YouTube</b></td><td>Long-form walkthroughs and the Shorts cut from them</td><td>Sean, Marissa</td></tr>
+        <tr><td><b>Social</b></td><td>Reels, carousels, stories, LinkedIn, FB group posts</td><td>Valerie</td></tr>
+        <tr><td><b>Funnel</b></td><td>Emails, landing pages, webinar promo</td><td>Marina, Rodney</td></tr>
+        <tr><td><b>All</b></td><td>Everything at once, when you want the full picture</td><td>—</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <h2><span class="n">3</span>The three views</h2>
+  <p class="lede">Same cards, three ways of looking at them. Use whichever suits you — switching doesn't change anything.</p>
+  <div class="card">
+    <ul class="plain">
+      <li><b>List</b> — closest to the old spreadsheet. Every piece as a row, sorted by date. Best for scanning the month.</li>
+      <li><b>Calendar</b> — the month laid out. Webinars and meetings are marked. Use the arrows to move between September and October.</li>
+      <li><b>Kanban</b> — four columns showing where each piece stands. Drag a card between columns to move it along.</li>
+    </ul>
+  </div>
+
+  <h2><span class="n">4</span>How a piece of content moves</h2>
+  <p class="lede">Left to right. This is the whole workflow.</p>
+  <div class="card">
+    <div class="scroll"><table>
+      <thead><tr><th>Column</th><th>Means</th></tr></thead>
+      <tbody>
+        <tr><td><span class="k">Ideas</span></td><td>Someone suggested it. Nothing committed, no date needed.</td></tr>
+        <tr><td><span class="k">To Produce</span></td><td>Approved and being made — filming, editing, writing, designing.</td></tr>
+        <tr><td><span class="k">Scheduled</span></td><td>Finished and queued to go out. Nothing left to do.</td></tr>
+        <tr><td><span class="k">Published</span></td><td>Live.</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note">Drag your own cards across as you go. If everyone keeps their column honest, nobody has to ask for a status update.</div>
+  </div>
+
+  <h2><span class="n">5</span>Opening a card</h2>
+  <p class="lede">Single click, anywhere on it.</p>
+  <div class="card">
+    <p style="margin:0 0 10px">Inside you get the full brief: the hook, the copy, the caption, the visual direction, the channels, the CTA, who owns it, and the dates. Edit anything, then <span class="k">Save</span>.</p>
+    <ul class="plain">
+      <li><b>Comments</b> — feedback goes here, on the card itself, so it isn't buried in email. Everyone sees it.</li>
+      <li><b>Attachments</b> — drop the actual file in, up to 900KB. Anything bigger, paste a Drive or Canva link instead.</li>
+    </ul>
+  </div>
+
+  <h2><span class="n">6</span>Publish date vs. produce by</h2>
+  <p class="lede">The part that keeps video from going out late.</p>
+  <div class="card">
+    <p style="margin:0 0 10px">Each card carries two dates:</p>
+    <ul class="plain">
+      <li><b>Publish date</b> — when it goes out.</li>
+      <li><b>Produce by</b> — when filming and editing have to be <em>finished</em>. The board fills this in automatically based on format, and you can override it.</li>
+    </ul>
+    <p style="margin:14px 0 0">A small tag on the card counts down the runway. It reads <span class="k">12d runway</span> while there's room, turns <span class="tan">amber</span> at two days out, and goes <span style="color:#c83e3e;font-weight:600">red</span> if the produce-by date has passed and the card still isn't Scheduled.</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Format</th><th>Lead time</th></tr></thead>
+      <tbody>
+        <tr><td>Long-form walkthrough</td><td>14 days</td></tr>
+        <tr><td>Short (cut from existing footage)</td><td>4 days</td></tr>
+        <tr><td>Reel / carousel</td><td>3 days</td></tr>
+        <tr><td>Repost</td><td>1 day</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note">These are starting numbers, not rules. If a walkthrough realistically needs three weeks, set the date to three weeks and the board follows you.</div>
+  </div>
+
+  <h2><span class="n">7</span>The 70 · 20 · 10 meter</h2>
+  <p class="lede">Keeps the mix deliberate instead of accidental.</p>
+  <div class="card">
+    <p style="margin:0 0 10px">Every card is tagged one of three ways:</p>
+    <ul class="plain">
+      <li><b>Proven (70%)</b> — fresh content close to what already works for us.</li>
+      <li><b>Repurpose (20%)</b> — re-running our best past posts, or recutting long-form into Shorts.</li>
+      <li><b>Experiment (10%)</b> — genuinely new bets. A new lead magnet, a new format, an A/B test.</li>
+    </ul>
+    <p style="margin:14px 0 0">The meter shows where we actually are against those targets. Click any segment to filter down to just those cards.</p>
+  </div>
+
+  <h2><span class="n">8</span>A few things worth knowing</h2>
+  <div class="card">
+    <ul class="plain">
+      <li><b>It saves by itself.</b> There's no publish step — hit Save on a card and everyone has it within a few seconds.</li>
+      <li><b>Everyone sees everything.</b> There are no private cards, so if you'd rather something wasn't on the board, keep it in email.</li>
+      <li><b>Nothing on it is locked.</b> September and October are a starting draft. Move things, kill things, add things.</li>
+      <li><b>Found something clunky?</b> There's a <span class="k">Feedback</span> tab. That's the backlog for the board itself — use it.</li>
+    </ul>
+  </div>
+
+  <footer>
+    SKLES Ops Board · questions to Marina · <a href="https://marinasdearaujo.github.io/skles-dashboard/ops-board.html">marinasdearaujo.github.io/skles-dashboard/ops-board.html</a>
+  </footer>
+</div>
+
+</body>
+</html>
