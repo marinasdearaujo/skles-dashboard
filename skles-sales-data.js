@@ -5,17 +5,24 @@
 window.SKLES_SALES = {
   last_updated: "Sep 09, 2026 · counted from GetResponse",
 
-  // Counted from the GetResponse lists on Sep 9 2026, not guessed.
-  // Apprentice Members list = 4 (2 of them joined Aug 2026, in the funnel window).
-  apprentice_total: 4,
-  apprentice_this_cycle: 2,
-  // Protege' Members list = 9, minus Sean's own address = 8 real customers.
-  // 2 are recent: Aug 15 and Sep 6. The Sep 6 one was already an Apprentice
-  // since Feb, so that is a documented ascension, not a cold sale.
-  protege_total: 8,
-  protege_this_cycle: 2,
-  protege_ascended_from_apprentice: 1,
-  enterpriser_total: 0,     // $9,999 one-time
+  // Actual revenue from the GetResponse Courses report, which is the system of
+  // record. List membership was a poor proxy: it counts anyone ever added,
+  // including Sean himself and older cohorts, so it overstated sales badly.
+  //
+  // AUGUST 2026 (1 Aug - 31 Aug), the first full month of the funnel:
+  //   3 sales · $2,016.98 revenue · $773.07 ad spend · 2.61x return
+  //   1 x Protege' 6 Step Blueprint  $1,999.00
+  //   2 x Apprentice Intro           $17.98  (2 x $8.99)
+  revenue_by_month: {
+    "2026-08": { sales: 3, revenue: 2016.98, protege: 1, apprentice: 2 }
+  },
+  apprentice_total: 2,       // paying, August
+  protege_total: 1,          // paying, August
+
+  // NOTE: the Protege' course transacted at $1,999, not the $2,499 shown on the
+  // landing page. Use the transacted figure for any economics.
+  protege_price_actual: 1999,
+
   prices: { apprentice: 8.99, protege: 2499, enterpriser: 9999 },
 
   // Monthly projection from the August review. Goals elsewhere are pro-rated
@@ -85,7 +92,7 @@ window.SKLES_SALES = {
       sales: 0                     // none closed
     },
     retention: {
-      active_members: 4,
+      active_members: 10,   // active students, GetResponse Courses, August
       churned: 0,
       outreach_contacts: null,     // Rodney's warm-lead calls
       outreach_converted: null,
