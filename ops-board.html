@@ -87,6 +87,9 @@
   .owner{font-size:10.5px;font-weight:700;color:var(--tan-deep)}
   .badges{display:flex;gap:6px;margin-top:6px}
   .mini{font-size:10px;color:var(--muted);display:inline-flex;align-items:center;gap:3px}
+  .srclinks{display:flex;flex-wrap:wrap;gap:8px;margin-top:7px}
+  .srclinks a{font-size:11.5px;font-weight:600;text-decoration:none;padding:4px 10px;border-radius:999px;background:rgba(224,197,143,.18);color:inherit;border:1px solid rgba(224,197,143,.45)}
+  .srclinks a:hover{background:rgba(224,197,143,.34)}
   .rw{padding:1px 6px;border-radius:999px;font-weight:600;cursor:help}
   .rw-ok{background:rgba(122,138,160,.14);color:var(--muted)}
   .rw-soon{background:rgba(224,197,143,.30);color:#8a6a24}
@@ -256,7 +259,7 @@
       <div class="fld" style="flex:1"><label>Visual / asset note</label><input id="f-visual"></div>
     </div>
     <div class="modrow">
-      <div class="fld"><label>🎬 Source footage <span style="font-weight:400;opacity:.65">— which recording to cut this from</span></label><textarea id="f-source" placeholder="e.g. re-cut the Jul 30 Reel, or the raw file in Rodney's video sheet"></textarea></div>
+      <div class="fld"><label>🎬 Source footage <span style="font-weight:400;opacity:.65">— which recording to cut this from</span></label><textarea id="f-source" placeholder="e.g. re-cut the Jul 30 Reel, or the raw file in Rodney's video sheet"></textarea><div id="f-source-links" class="srclinks"></div></div>
     </div>
 
     <div class="sechead">Attachments</div>
@@ -393,6 +396,20 @@ function defaultProduceBy(c){
   const d=new Date(c.date+'T00:00:00'); d.setDate(d.getDate()-leadDaysFor(c));
   return d.toISOString().slice(0,10);
 }
+/* Source footage can hold several URLs. A textarea renders them as dead text,
+   so mirror them underneath as real links you can click. */
+function renderSourceLinks(){
+  const box = g('f-source-links'); if(!box) return;
+  const urls = ((g('f-source').value)||'').match(/https?:\/\/[^\s]+/g) || [];
+  box.innerHTML = urls.map(u => {
+    const label = /instagram\.com/.test(u) ? 'Published Reel'
+                : /riverside/.test(u)       ? 'Raw footage'
+                : /docs\.google/.test(u)    ? 'Video sheet'
+                : 'Open link';
+    return `<a href="${u}" target="_blank" rel="noopener">${label} \u2197</a>`;
+  }).join('');
+}
+
 /* Returns null when nothing needs saying, else {level,label,title}. */
 function runway(c){
   if(c.status==='Published'||c.status==='Scheduled') return null;
@@ -570,6 +587,8 @@ function openModal(id){
   g('f-cta').value=editing.cta||''; g('f-chans').value=(editing.chans||[]).join(', ');
   g('f-visual').value=editing.visual||'';
   g('f-source').value=editing.source||'';
+  renderSourceLinks();
+  g('f-source').oninput=renderSourceLinks;
   g('f-mix').innerHTML=Object.keys(MIX).map(k=>`<option value="${k}"${(editing.mix||'proven')===k?' selected':''}>${MIX[k].label} (${MIX[k].target}%)</option>`).join('');
   g('f-del').style.visibility=id?'visible':'hidden';
   g('att-note').textContent='Files up to 900KB are shared with the whole team through the board. For anything larger, add a Drive or Canva link instead.';
