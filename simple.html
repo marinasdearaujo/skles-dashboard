@@ -56,6 +56,31 @@
   .dch .g{text-align:right;font-size:11px;color:var(--soft)}
   .dch.dim{opacity:.5}
   .dch.dim .v{font-family:'Poppins';font-size:12px;font-weight:500}
+  .cv{margin-top:8px}
+  .cvh{border:1px solid var(--line);border-left:3px solid var(--tan-deep);border-radius:12px;background:var(--card);padding:16px 19px;margin-bottom:12px}
+  .cvh h3{font-family:'Merriweather',Georgia,serif;font-size:17px;font-weight:900}
+  .cvh .job{font-size:11.5px;color:var(--soft);margin-top:3px}
+  .cvh .ns{font-size:11px;color:var(--tan-deep);font-weight:600;margin-top:6px}
+  .cvk{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:1px;background:var(--line);
+       border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:12px}
+  .cvk .c{background:var(--card);padding:15px 17px}
+  .cvk .k{font-size:9px;text-transform:uppercase;letter-spacing:1.3px;color:var(--soft);font-weight:700}
+  .cvk .v{font-family:'Merriweather',Georgia,serif;font-weight:900;font-size:23px;margin-top:5px;line-height:1.1}
+  .cvk .s{font-size:10.5px;color:var(--soft);margin-top:3px}
+  .cvk .s b{font-weight:700}
+  .cvk .s.ok b{color:var(--good)}.cvk .s.off b{color:var(--warn)}.cvk .s.no b{color:var(--bad)}
+  .cvt{width:100%;border-collapse:collapse;font-size:12.5px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
+  .cvt th{text-align:left;font-size:9px;text-transform:uppercase;letter-spacing:1.3px;color:var(--soft);
+          font-weight:700;padding:10px 14px;border-bottom:1px solid var(--line)}
+  .cvt td{padding:10px 14px;border-bottom:1px solid var(--line2)}
+  .cvt tr:last-child td{border-bottom:none}
+  .cvt .n{font-family:'Merriweather';font-weight:900;text-align:right}
+  .cvt .g{text-align:right;color:var(--soft)}
+  .cvt .st{text-align:right;font-weight:700;font-size:11px}
+  .cvt .st.ok{color:var(--good)}.cvt .st.off{color:var(--warn)}.cvt .st.no{color:var(--bad)}.cvt .st.na{color:var(--soft);font-weight:400}
+  .gap{border:1px dashed var(--line);border-radius:12px;padding:18px 20px;background:rgba(255,255,255,.5);
+       font-size:12.5px;color:var(--soft);line-height:1.6}
+  .gap b{color:var(--navy)}
   .econ{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);
         border:1px solid var(--line);border-radius:12px;overflow:hidden}
   .e{background:var(--card);padding:16px 18px}
@@ -104,7 +129,8 @@
     <span class="flabel" style="margin-left:6px">View</span>
     <div class="seg" id="seg-chan"></div>
   </div>
-  <h2>The funnel <span class="hint">the five stages from the Sept&ndash;Nov plan &middot; click one to open it</span></h2>
+  <div id="chanview"></div>
+  <h2 id="fn-head">The funnel <span class="hint">the five stages from the Sept&ndash;Nov plan &middot; click one to open it</span></h2>
   <div class="fn" id="funnel"></div>
   <h2>Unit economics</h2>
   <div class="econ" id="econ"></div>
@@ -131,7 +157,7 @@ var money=function(v){return '$'+n(v).toLocaleString('en-US',{maximumFractionDig
 
 var ST={range:'month', chan:'funnel', open:null, retention:12, ascension:10, from:null, to:null};
 var RANGES=[{k:'day',l:'Today'},{k:'week',l:'Week'},{k:'month',l:'Month'},{k:'quarter',l:'Quarter'},{k:'all',l:'Since launch'},{k:'custom',l:'Custom'}];
-var VIEWS=[{k:'funnel',l:'Funnel'},{k:'paid',l:'Meta Paid'},{k:'ig',l:'Instagram'},{k:'fb',l:'Facebook'},{k:'yt',l:'YouTube'}];
+var VIEWS=[{k:'funnel',l:'Funnel'},{k:'paid',l:'Meta Paid'},{k:'ig',l:'Instagram'},{k:'fb',l:'Facebook'},{k:'yt',l:'YouTube'},{k:'email',l:'Email'},{k:'outreach',l:'Outreach'}];
 
 function bounds(){
   var to=new Date(), from=new Date();
@@ -238,6 +264,96 @@ function drill(s){
   return out;
 }
 
+
+/* ---- Tactical channel view, same shape as the SE dashboard:
+   what the channel is for, its live KPIs against goal, then a full table. ---- */
+var CHANMETA={
+  paid:{title:'Meta Paid',job:'Job: buy attention and turn it into guide downloads',ns:'Cost per lead'},
+  ig:{title:'Instagram',job:'Job: awareness · Reels-led · @seanklangston.skillsup',ns:'Reach and non-follower reach'},
+  fb:{title:'Facebook — Skills Up page',job:'Job: community proof and reach for the group',ns:'Page engagements'},
+  yt:{title:'YouTube',job:'Job: long-form authority and Shorts reach',ns:'Monthly views'},
+  email:{title:'Email — GetResponse',job:'Job: turn a download into a webinar registration',ns:'Webinar invite click rate'},
+  outreach:{title:'Outreach',job:'Job: convert warm leads by talking to them',ns:'Contacts to conversion rate'}
+};
+function pctCls(a,t,lower){ if(a===null||t===null)return 'na';
+  var r = lower? t/Math.max(a,0.01) : a/t; return r>=1?'ok':r>=0.6?'off':'no'; }
+function pctTxt(a,t,lower){ if(a===null||a===undefined||!t)return '—';
+  var r = lower? t/Math.max(a,0.01)*100 : a/t*100; return Math.round(r)+'%'; }
+
+function channelView(){
+  var host=g('chanview');
+  if(ST.chan==='funnel'){ host.innerHTML=''; g('fn-head').style.display=''; return; }
+  g('fn-head').style.display='';
+  var m=CHANMETA[ST.chan]||{}, T=(S.channel_targets||{})[ST.chan]||{};
+  var p=paid(), o=organic(), yt=Y.channel||{}, e=C.ebook||{}, K2=S.kpis||{};
+  var rows=[];   // [label, actual, target, unit, lowerIsBetter]
+
+  if(ST.chan==='paid'){
+    var cpl=p.leads? p.spend/p.leads : null;
+    rows=[['Spend',p.spend,T.spend,'$'],['Impressions',p.impr,T.impressions,''],
+          ['Clicks',p.clicks,T.clicks,''],['CTR',p.impr?p.clicks/p.impr*100:null,T.ctr,'%'],
+          ['Guide downloads',p.leads,T.leads,''],['Webinar registrations',p.regs,T.regs,''],
+          ['Cost per lead',cpl,T.cpl,'$',true],
+          ['Landing page views',e.landing_page_views,null,''],
+          ['Landing page conversion',lpConv(),10,'%']];
+  } else if(ST.chan==='ig'){
+    var i=o.ig;
+    rows=[['Reach',i.reach,T.reach,''],['Profile views',i.profile_views,T.profile_views,''],
+          ['Followers',i.followers,null,''],['New followers',i.new_followers,T.new_followers,''],
+          ['Engagement rate',i.engagement_rate,T.engagement_rate,'%'],
+          ['Website clicks',i.website_clicks,T.website_clicks,'']];
+  } else if(ST.chan==='fb'){
+    var b=o.fb;
+    rows=[['Page views',b.page_views,T.page_views,''],['Page engagements',b.page_engagements,T.page_engagements,''],
+          ['Fans',b.fans,T.fans,'']];
+  } else if(ST.chan==='yt'){
+    rows=[['Subscribers',yt.subs,T.subs,''],['Total views (all-time)',yt.views,null,''],
+          ['Videos published (all-time)',yt.videos,null,''],
+          ['Views this month',null,T.views_month,''],['Uploads this month',null,T.uploads_month,'']];
+  } else if(ST.chan==='email'){
+    var nu=K2.nurture||{};
+    rows=[['Guide delivery open',nu.guide_delivery_open,50,'%'],['Broadcast open',nu.broadcast_open,15,'%'],
+          ['Broadcast click',nu.broadcast_click,3,'%'],['Webinar invite click',nu.webinar_invite_click,3,'%'],
+          ['Guide downloads',p.leads,45,''],['Registrations driven',p.regs,30,'']];
+  } else if(ST.chan==='outreach'){
+    var rt=K2.retention||{}, mt=K2.meeting||{};
+    rows=[['Contacts made',rt.outreach_contacts,40,''],['Converted',rt.outreach_converted,4,''],
+          ['Meeting registered',mt.registered,12,''],['Meeting participants',mt.participants,8,''],
+          ['Meeting sales',mt.sales,2,'']];
+  }
+
+  var live=rows.filter(function(r){return r[1]!==null&&r[1]!==undefined});
+  var missing=rows.filter(function(r){return r[1]===null||r[1]===undefined});
+  function shape(v,u){ return u==='$'?('$'+n(v).toFixed(2)) : u==='%'?(n(v).toFixed(1)+'%') : f(v); }
+
+  var head='<div class="cvh"><h3>'+m.title+'</h3><div class="job">'+m.job+'</div>'
+         + '<div class="ns">&#9733; North-star: '+m.ns+'</div></div>';
+
+  var cards = live.slice(0,4).map(function(r){
+    var cls=r[2]?pctCls(r[1],r[2],r[4]):'';
+    return '<div class="c"><div class="k">'+r[0]+'</div><div class="v">'+shape(r[1],r[3])+'</div>'
+         + '<div class="s '+cls+'">'+(r[2]?('goal '+shape(r[2],r[3])+' · <b>'+pctTxt(r[1],r[2],r[4])+'</b>'):'no goal set')+'</div></div>';
+  }).join('');
+  var kpis = cards? '<div class="cvk">'+cards+'</div>' : '';
+
+  var table = live.length? '<table class="cvt"><thead><tr><th>Metric</th><th style="text-align:right">Actual</th>'
+      + '<th style="text-align:right">Goal</th><th style="text-align:right">% to goal</th></tr></thead><tbody>'
+      + live.map(function(r){
+          return '<tr><td>'+r[0]+'</td><td class="n">'+shape(r[1],r[3])+'</td>'
+               + '<td class="g">'+(r[2]?shape(r[2],r[3]):'—')+'</td>'
+               + '<td class="st '+(r[2]?pctCls(r[1],r[2],r[4]):'na')+'">'+pctTxt(r[1],r[2],r[4])+'</td></tr>';
+        }).join('') + '</tbody></table>' : '';
+
+  var gap = missing.length? '<div class="gap" style="margin-top:12px"><b>Not tracked yet:</b> '
+      + missing.map(function(r){return r[0]}).join(', ')
+      + '. ' + (ST.chan==='email'?'GetResponse has an API, nothing is wired to it.'
+              : ST.chan==='outreach'?'There is no log for this at all, so it is invisible in every view.'
+              : ST.chan==='yt'?'Needs channel-owner authorization; manager access will not return it.'
+              : 'Needs a manual export.') + '</div>' : '';
+
+  host.innerHTML='<div class="cv">'+head+kpis+table+gap+'</div>';
+}
+
 function render(){
   g('stamp').textContent='Funnel · '+(D.last_updated||'');
   g('seg-range').innerHTML=RANGES.map(function(r){return '<button data-r="'+r.k+'" class="'+(ST.range===r.k?'on':'')+'">'+r.l+'</button>'}).join('');
@@ -276,7 +392,7 @@ function render(){
   g('funnel').onclick=function(e){var r=e.target.closest('.fr');if(!r)return;
     ST.open=ST.open===r.dataset.s?null:r.dataset.s;render();};
 
-  economics(); okrs();
+  channelView(); economics(); okrs();
   var o=organic();
   g('foot-note').textContent='Paid answers the date filter exactly. Organic snaps to Meta’s nearest window ('
     +o.window+'d). Goals are monthly, pro-rated to the period shown. Sales, email and meeting figures are entered by hand, last updated '
