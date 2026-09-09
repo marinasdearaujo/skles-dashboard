@@ -140,6 +140,7 @@
   <footer>
     <span id="foot-note"></span>
     <a href="index.html">Full report &rarr;</a>
+    <a href="submit.html">Submit numbers &rarr;</a>
     <a href="ops-board.html">Ops Board &rarr;</a>
   </footer>
 </div>
@@ -154,6 +155,38 @@ var C=D.campaigns||{}, K=S.kpis||{};
 var n=function(v){return +(v||0)}, g=function(i){return document.getElementById(i)};
 var f=function(v){return Math.round(n(v)).toLocaleString('en-US')};
 var money=function(v){return '$'+n(v).toLocaleString('en-US',{maximumFractionDigits:0})};
+
+/* Numbers the team submits on submit.html live in the same Firebase as the Ops
+   Board. Merge them over the static file so nobody has to redeploy to update a
+   figure, and so an empty field stays "not tracked" rather than becoming a zero. */
+function applySubmitted(m){
+  if(!m) return;
+  var w=m.weekly||{}, e=m.email||{}, z=m.zoom||{}, sl=m.sales||{};
+  S.kpis=S.kpis||{}; var K0=S.kpis;
+  K0.tof=K0.tof||{}; K0.nurture=K0.nurture||{}; K0.webinar=K0.webinar||{}; K0.meeting=K0.meeting||{}; K0.retention=K0.retention||{};
+  function set(o,k,v){ if(v!==null&&v!==undefined&&v!=='') o[k]=+v; }
+  set(K0.tof,'tiktok_views',w.tiktok_views);
+  set(K0.tof,'linkedin_impressions',w.linkedin_impressions);
+  set(K0.nurture,'guide_delivery_open',e.guide_delivery_open);
+  set(K0.nurture,'broadcast_open',e.broadcast_open);
+  set(K0.nurture,'broadcast_click',e.broadcast_click);
+  set(K0.nurture,'webinar_invite_click',e.webinar_invite_click);
+  set(K0.webinar,'live_attendees',z.live_attendees);
+  set(K0.meeting,'registered',z.meeting_registered);
+  set(K0.meeting,'participants',z.meeting_participants);
+  set(K0.meeting,'sales',z.meeting_sales);
+  set(S,'apprentice_total',sl.apprentice_total);
+  set(S,'protege_total',sl.protege_total);
+  set(K0.retention,'churned',sl.churned);
+  set(K0.retention,'active_members',sl.apprentice_total);
+  // outreach is a log, so count it rather than reading a field
+  var log=m.outreach? Object.keys(m.outreach).map(function(k){return m.outreach[k]}) : null;
+  if(log){
+    K0.retention.outreach_contacts = log.length;
+    K0.retention.outreach_converted = log.filter(function(o){return o.outcome==='joined'}).length;
+  }
+  S._submitted_by=m.updated_by; S._submitted_at=m.updated_at;
+}
 
 var ST={range:'month', chan:'funnel', open:null, retention:12, ascension:10, from:null, to:null};
 var RANGES=[{k:'day',l:'Today'},{k:'week',l:'Week'},{k:'month',l:'Month'},{k:'quarter',l:'Quarter'},{k:'all',l:'Since launch'},{k:'custom',l:'Custom'}];
@@ -396,7 +429,7 @@ function render(){
   var o=organic();
   g('foot-note').textContent='Paid answers the date filter exactly. Organic snaps to Meta’s nearest window ('
     +o.window+'d). Goals are monthly, pro-rated to the period shown. Sales, email and meeting figures are entered by hand, last updated '
-    +(S.last_updated||'—')+'.';
+    +(S._submitted_at? (S._submitted_at.slice(0,10)+' by '+(S._submitted_by||'someone')) : (S.last_updated||'—'))+'.';
 }
 
 function economics(){
@@ -462,6 +495,10 @@ function okrs(){
         }).join('') + '</div>';
   }).join('');
 }
+fetch('https://rifa-mae-default-rtdb.firebaseio.com/skles-ops/metrics.json')
+  .then(function(r){return r.ok?r.json():null})
+  .then(function(m){ applySubmitted(m); render(); })
+  .catch(function(){ render(); });
 render();
 })();
 </script>
