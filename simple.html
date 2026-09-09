@@ -232,14 +232,23 @@
           +   '<div class="pct '+cls+'">'+label+'</div>'
           + '</div>'
           + '<div class="drill'+(ST.open===s.id?' on':'')+'" data-d="'+s.id+'">'
-          +   CHANS.filter(function(c){return c.k!=='all'}).map(function(c){
-                var v=s.chan[c.k], alltime=false;
-                if(typeof v==='string' && v.indexOf('alltime:')===0){ alltime=true; v=+v.split(':')[1]; }
-                return '<div class="dch'+(v===null||alltime?' dim':'')+'"><div>'+c.l+'</div>'
-                     + '<div class="v">'+(v===null?'—':f(v))+'</div>'
-                     + '<div class="note">'+(v===null?'not attributed at this stage'
-                        : alltime?'all-time total, not in the sum, needs owner access to filter':'')+'</div></div>';
-              }).join('')
+          +   (function(){
+                // Only channels we can actually attribute to this stage. Listing the
+                // rest as "not attributed" was just noise on every row.
+                var rows = CHANS.filter(function(c){ return c.k!=='all' && s.chan[c.k]!==null; })
+                  .map(function(c){
+                    var v=s.chan[c.k], alltime=false;
+                    if(typeof v==='string' && v.indexOf('alltime:')===0){ alltime=true; v=+v.split(':')[1]; }
+                    return '<div class="dch'+(alltime?' dim':'')+'"><div>'+c.l+'</div>'
+                         + '<div class="v">'+f(v)+'</div>'
+                         + '<div class="note">'+(alltime?'all-time, not in the sum · needs owner access to filter':'')+'</div></div>';
+                  });
+                if(!rows.length) return '<div class="dch dim"><div>No channel attribution</div>'
+                  + '<div class="v">—</div><div class="note">'+(s.id==='prot'
+                      ? 'nothing in the funnel sells Protégé yet'
+                      : 'sales are recorded by hand, not traced back to a channel')+'</div></div>';
+                return rows.join('');
+              })()
           + '</div>';
       prev=s;
     });
