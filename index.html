@@ -78,6 +78,39 @@ h1,h2,h3,.st,.kpi-label,.tab{font-family:'Montserrat',sans-serif}
 .fnl-tgt.off{background:rgba(245,158,11,.16);color:var(--warn)}
 .fnl-tgt.bad{background:rgba(239,68,68,.16);color:var(--down)}
 @media(max-width:760px){.fnl-row{grid-template-columns:1fr}.fnl-side{padding-left:20px}}
+
+/* ---- Targets tab: deliberately flatter and quieter than the rest ---- */
+.tg-goal{display:flex;flex-wrap:wrap;align-items:center;gap:14px;padding:20px 22px;border:1px solid var(--navy-line);border-radius:12px;background:rgba(255,255,255,.02);margin-bottom:8px}
+.tg-goal label{font-size:10px;text-transform:uppercase;letter-spacing:1.6px;color:var(--dim);font-weight:600}
+.tg-goal select,.tg-goal input{background:var(--navy-deep);color:var(--text);border:1px solid var(--navy-line);border-radius:7px;padding:7px 10px;font-family:'Montserrat';font-size:13px;font-weight:600}
+.tg-goal input{width:64px;text-align:center}
+.tg-chain{display:flex;flex-direction:column;gap:0;margin-top:4px}
+.tg-step{display:grid;grid-template-columns:180px 120px 1fr;gap:18px;align-items:center;padding:15px 4px;border-bottom:1px solid rgba(255,255,255,.05)}
+.tg-step:last-child{border-bottom:none}
+.tg-step .lbl{font-size:12px;color:var(--dim)}
+.tg-step .val{font-family:'Montserrat';font-size:24px;font-weight:800;color:var(--text)}
+.tg-step .val.hi{color:var(--gold)}
+.tg-step .why{font-size:11.5px;color:var(--very-dim);line-height:1.5}
+.tg-step .why input{background:transparent;border:none;border-bottom:1px dashed var(--gold-dim);color:var(--gold);width:52px;text-align:center;font-weight:700;font-family:'Montserrat';font-size:11.5px;padding:1px 0}
+.tg-step .why input:focus{outline:none;border-bottom-color:var(--gold)}
+.tg-verdict{margin-top:16px;padding:16px 20px;border-radius:10px;font-size:13px;line-height:1.6}
+.tg-verdict.ok{background:rgba(34,197,94,.10);border:1px solid rgba(34,197,94,.3)}
+.tg-verdict.bad{background:rgba(239,68,68,.10);border:1px solid rgba(239,68,68,.3)}
+.tg-verdict b{color:var(--text)}
+.tg-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
+.tg-table th{text-align:left;font-size:9px;text-transform:uppercase;letter-spacing:1.4px;color:var(--dim);font-weight:600;padding:10px 12px;border-bottom:1px solid var(--navy-line)}
+.tg-table td{padding:12px;border-bottom:1px solid rgba(255,255,255,.05);color:var(--text)}
+.tg-table tr.now{background:rgba(212,169,91,.07)}
+.tg-table tr.now td:first-child{border-left:3px solid var(--gold)}
+.tg-table .muted{color:var(--very-dim)}
+.tg-table .a{font-family:'Montserrat';font-weight:700}
+.tg-act{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:6px}
+.tg-actcard{border:1px solid var(--navy-line);border-radius:10px;padding:16px 18px;background:rgba(255,255,255,.02)}
+.tg-actcard .n{font-family:'Montserrat';font-size:23px;font-weight:800;margin:4px 0 2px}
+.tg-actcard .k{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--dim);font-weight:600}
+.tg-actcard .s{font-size:11px;color:var(--very-dim);line-height:1.45}
+.tg-actcard.untracked{border-style:dashed;opacity:.75}
+@media(max-width:760px){.tg-step{grid-template-columns:1fr;gap:4px}}
 .section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--gold);margin:24px 0 12px;display:flex;align-items:center;gap:10px}
 .section-title:first-child{margin-top:0}
 .section-title::before{content:'';width:4px;height:14px;background:var(--gold);border-radius:2px}
@@ -267,6 +300,7 @@ h1,h2,h3,.st,.kpi-label,.tab{font-family:'Montserrat',sans-serif}
   <div class="tabs">
     <div class="tab active" onclick="switchTab('overview',this)">Overview</div>
     <div class="tab" onclick="switchTab('funnel',this)">Funnel</div>
+    <div class="tab" onclick="switchTab('targets',this)">Targets</div>
     <div class="tab" onclick="switchTab('instagram',this)">Instagram</div>
     <div class="tab" onclick="switchTab('fb-skles',this)">FB Skills Up</div>
     <div class="tab" onclick="switchTab('tiktok',this)">TikTok</div>
@@ -294,6 +328,47 @@ h1,h2,h3,.st,.kpi-label,.tab{font-family:'Montserrat',sans-serif}
     <div class="section-sub">Auto-flagged from the live data \u2014 the shortlist of what to fix.</div>
     <div id="ov-attention"></div>
 
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- TARGETS TAB -->
+  <!-- ==================================================================== -->
+  <div class="tc" id="tab-targets">
+    <div class="channel-header" style="border-left-color:var(--gold)">
+      <div>
+        <h2>Working backwards from the goal</h2>
+        <div class="job">Job: turn a revenue goal into the volume and the activity it actually takes</div>
+        <div class="source"><span class="dot"></span>Rates are our own measured numbers. Change any of them to see what the goal would need.</div>
+      </div>
+      <div class="nstar">&#9733; Start at the sale, work up</div>
+    </div>
+
+    <div class="section-title">The goal</div>
+    <div class="tg-goal">
+      <label for="tg-n">I want</label>
+      <input id="tg-n" type="number" min="1" max="20" value="1">
+      <label for="tg-what">of</label>
+      <select id="tg-what">
+        <option value="protege">Prot&eacute;g&eacute; &middot; $2,499</option>
+        <option value="apprentice">Apprentice &middot; $8.99/mo</option>
+      </select>
+      <label for="tg-by">by</label>
+      <select id="tg-by"></select>
+      <span id="tg-goalnote" style="font-size:11.5px;color:var(--very-dim);margin-left:auto"></span>
+    </div>
+
+    <div class="section-title" style="margin-top:22px">What that requires</div>
+    <div class="section-sub">Reading upward. Each line is the one above it divided by the rate we currently achieve.</div>
+    <div class="tg-chain" id="tg-chain"></div>
+    <div id="tg-verdict"></div>
+
+    <div class="section-title" style="margin-top:26px">So the work is</div>
+    <div class="section-sub">The activities that produce those numbers. These are the things we control.</div>
+    <div class="tg-act" id="tg-activities"></div>
+
+    <div class="section-title" style="margin-top:26px">Plan by month</div>
+    <div class="section-sub">The Sept to Nov projection, with actuals filled in as they land.</div>
+    <div style="overflow-x:auto"><table class="tg-table" id="tg-table"></table></div>
   </div>
 
   <!-- ==================================================================== -->
@@ -893,6 +968,131 @@ function switchTab(target, el){
 }
 
 
+
+/* ===== Targets: reverse-engineer a revenue goal into required activity ===== */
+var TG = { ascension: 10 };   // Apprentice -> Protege %, no data yet so it's an input
+
+function tgObserved(){
+  var D=window.SKLES_DATA||{}, O=window.SKLES_ORGANIC||{}, S=window.SKLES_SALES||{};
+  var c=D.campaigns||{}, e=c.ebook||{}, w=c.webinar||{}, n=function(v){return +(v||0)};
+  var aware = n(e.reach)+n(w.reach) + ((((O.windows||{})['30']||{}).ig)||{}).reach||0;
+  var leads = n(e.leads), qual = n(e.registrations)+n(w.registrations), appr = n(S.apprentice_total);
+  return {
+    aware:aware, leads:leads, qual:qual, appr:appr,
+    r_lead: aware? leads/aware*100 : 0.45,
+    r_qual: leads? qual/leads*100  : 53,
+    r_appr: qual ? appr/qual*100   : 2.9,
+    cpl:    leads? n(e.spend)/leads: 19.41,
+    cpl_recent: 6.32,
+    spend:  n(e.spend)+n(w.spend)
+  };
+}
+
+function renderTargets(){
+  var host=document.getElementById('tg-chain'); if(!host) return;
+  var S=window.SKLES_SALES||{}, ob=tgObserved();
+  var f=function(v){return Math.round(v).toLocaleString('en-US')};
+
+  // month picker, built from the plan
+  var sel=document.getElementById('tg-by');
+  if(sel && !sel.options.length){
+    var names={'08':'August','09':'September','10':'October','11':'November','12':'December'};
+    Object.keys(S.plan||{}).forEach(function(k){
+      var o=document.createElement('option'); o.value=k;
+      o.textContent=names[k.split('-')[1]]||k;
+      if(k==='2026-11') o.selected=true;
+      sel.appendChild(o);
+    });
+    sel.onchange=renderTargets;
+    document.getElementById('tg-n').oninput=renderTargets;
+    document.getElementById('tg-what').onchange=renderTargets;
+  }
+
+  var goalN=+(document.getElementById('tg-n').value||1);
+  var what=document.getElementById('tg-what').value;
+  var byKey=sel.value||'2026-11';
+
+  // months of runway left, so we can express the work per month
+  var now=new Date(), tgt=new Date(+byKey.split('-')[0], +byKey.split('-')[1]-1, 28);
+  var months=Math.max(1, Math.round((tgt-now)/(1000*60*60*24*30)));
+
+  var rows=[], needAppr, needQual, needLeads;
+  if(what==='protege'){
+    needAppr = goalN/(TG.ascension/100);
+    needQual = needAppr/(ob.r_appr/100);
+    needLeads= needQual/(ob.r_qual/100);
+    rows.push(['Prot&eacute;g&eacute; sales', goalN, 'The goal. $'+f(goalN*2499)+' of revenue.', true]);
+    rows.push(['Apprentice members', needAppr,
+      'at <input id="tg-asc" type="number" min="1" max="100" step="1" value="'+TG.ascension+'">% of members going on to Prot&eacute;g&eacute;. <b>We have no data on this yet</b>, so it is an assumption.']);
+  } else {
+    needAppr = goalN; needQual = needAppr/(ob.r_appr/100); needLeads = needQual/(ob.r_qual/100);
+    rows.push(['Apprentice members', goalN, 'The goal. $'+(goalN*8.99).toFixed(2)+' a month recurring.', true]);
+  }
+  rows.push(['Qualified leads', needQual, 'at our measured <b>'+ob.r_qual.toFixed(1)+'%</b> of leads registering for the webinar.']);
+  rows.push(['Guide downloads', needLeads, 'at our measured <b>'+ob.r_appr.toFixed(1)+'%</b> of registrations becoming members.']);
+  rows.push(['Ad spend', '$'+f(needLeads*ob.cpl_recent), 'at $'+ob.cpl_recent.toFixed(2)+' a lead, our rate since the landing page was fixed.']);
+
+  host.innerHTML = rows.map(function(r){
+    return '<div class="tg-step"><div class="lbl">'+r[0]+'</div>'
+      + '<div class="val'+(r[3]?' hi':'')+'">'+(typeof r[1]==='string'? r[1] : f(r[1]))+'</div>'
+      + '<div class="why">'+r[2]+'</div></div>';
+  }).join('');
+
+  var asc=document.getElementById('tg-asc');
+  if(asc) asc.oninput=function(){ TG.ascension=Math.max(1,+this.value||10); renderTargets(); };
+
+  // verdict against the money actually planned
+  var needSpend = needLeads*ob.cpl_recent, planSpend = 1170;
+  var v=document.getElementById('tg-verdict');
+  if(v){
+    if(needSpend<=planSpend){
+      v.className='tg-verdict ok';
+      v.innerHTML='<b>Reachable on the current plan.</b> This needs about $'+f(needSpend)
+        +' of ads, and the Sept to Nov budget is $'+f(planSpend)+'.';
+    } else {
+      var better = needQual/ (10/100);
+      v.className='tg-verdict bad';
+      v.innerHTML='<b>Not reachable at our current conversion.</b> This needs about $'+f(needSpend)
+        +' of ads against a planned $'+f(planSpend)+'. The blocker is the <b>'+ob.r_appr.toFixed(1)
+        +'%</b> of registrations that become members. Lift that to 10% and the same goal needs only about $'
+        +f((needQual*(ob.r_appr/100)/0.10)/(ob.r_qual/100)*ob.cpl_recent)+'. Cheaper to fix the funnel than to buy around it.';
+    }
+  }
+
+  // the controllable work
+  var perWebinar = 4;   // ~4 registrations per session, from the Zoom exports
+  var acts=[
+    ['Ad budget','$'+f(needSpend/months)+' / mo', 'For '+months+' month'+(months>1?'s':'')+' to hit the goal', false],
+    ['Webinars to run', f(needQual/perWebinar), 'At about '+perWebinar+' registrations a session', false],
+    ['Reach-outs', f(needQual), 'One conversation per registration. <b>Not tracked yet</b>', true],
+    ['Nurture emails live', '23', '3 ebook + 11 nurture + 9 reminder. <b>Sends not tracked</b>', true]
+  ];
+  var ah=document.getElementById('tg-activities');
+  if(ah) ah.innerHTML=acts.map(function(a){
+    return '<div class="tg-actcard'+(a[3]?' untracked':'')+'"><div class="k">'+a[0]+'</div>'
+      + '<div class="n">'+a[1]+'</div><div class="s">'+a[2]+'</div></div>';
+  }).join('');
+
+  // month table
+  var t=document.getElementById('tg-table');
+  if(t){
+    var nowKey=new Date().getFullYear()+'-'+String(new Date().getMonth()+1).padStart(2,'0');
+    var head='<thead><tr><th>Month</th><th>Leads</th><th>New members</th><th>Active</th><th>MRR</th><th>Prot&eacute;g&eacute;</th><th>Actual leads</th></tr></thead>';
+    var body=Object.keys(S.plan||{}).map(function(k){
+      var p=S.plan[k], isNow=k===nowKey;
+      var actual = isNow ? ob.leads : (k<nowKey ? '&mdash;' : '');
+      return '<tr class="'+(isNow?'now':'')+'"><td>'+k+(isNow?' <span class="muted">&middot; now</span>':'')+'</td>'
+        +'<td class="a">'+p.leads+'</td><td class="a">'+p.new_members+'</td><td>'+p.active_members+'</td>'
+        +'<td>$'+p.mrr+'</td><td>'+(p.protege?'<b>'+p.protege+'</b>':'<span class="muted">&mdash;</span>')+'</td>'
+        +'<td class="a" style="color:var(--gold)">'+actual+'</td></tr>';
+    }).join('');
+    t.innerHTML=head+'<tbody>'+body+'</tbody>';
+  }
+
+  var gn=document.getElementById('tg-goalnote');
+  if(gn) gn.innerHTML='Measured so far: '+f(ob.aware)+' reached &rarr; '+ob.leads+' leads &rarr; '+ob.qual+' registered &rarr; '+ob.appr+' member';
+}
+
 /* ===== Funnel: awareness -> leads -> qualified -> Apprentice -> Protege ===== */
 function renderFunnel(){
   var D = window.SKLES_DATA || {}, O = window.SKLES_ORGANIC || {},
@@ -1249,6 +1449,7 @@ window.applyOrganic = function(from, to){
 
 /* draw the funnel once the data files are in */
 try { renderFunnel(); } catch(e) { console.error('funnel render failed:', e); }
+try { renderTargets(); } catch(e) { console.error('targets render failed:', e); }
 </script>
 
 </body>
