@@ -255,6 +255,9 @@
       <div class="fld" style="flex:1"><label>Content mix (70·20·10)</label><select id="f-mix"></select></div>
       <div class="fld" style="flex:1"><label>Visual / asset note</label><input id="f-visual"></div>
     </div>
+    <div class="modrow">
+      <div class="fld"><label>🎬 Source footage <span style="font-weight:400;opacity:.65">— which recording to cut this from</span></label><textarea id="f-source" placeholder="e.g. re-cut the Jul 30 Reel, or the raw file in Rodney's video sheet"></textarea></div>
+    </div>
 
     <div class="sechead">Attachments</div>
     <div id="att-list"></div>
@@ -447,8 +450,9 @@ function cardHTML(c){
   const nc=(c.comments||[]).length, na=(c.attachments||[]).length;
   const m=MIX[c.mix||'proven'];
   const rw=runway(c);
+  const srcBadge = c.source ? `<span class="mini" title="${esc(c.source)}">🎬 source</span>` : '';
   const rwBadge=rw?`<span class="mini rw rw-${rw.level}" title="${esc(rw.title)}">${rw.level==='late'?'⚠ ':''}${rw.label}</span>`:'';
-  const badges=[`<span class="mini"><span style="width:8px;height:8px;border-radius:50%;background:${m.color};display:inline-block"></span>${m.label}</span>`,rwBadge,nc?`<span class="mini">💬 ${nc}</span>`:'',na?`<span class="mini">📎 ${na}</span>`:''].join('');
+  const badges=[`<span class="mini"><span style="width:8px;height:8px;border-radius:50%;background:${m.color};display:inline-block"></span>${m.label}</span>`,rwBadge,srcBadge,nc?`<span class="mini">💬 ${nc}</span>`:'',na?`<span class="mini">📎 ${na}</span>`:''].join('');
   return `<div class="card" data-id="${c.id}" draggable="true" style="border-left-color:${pcolor(c.pillar)}">
     <div class="cm"><span class="date">${c.date?fdate(c.date):'—'}</span>${c.boost?'<span class="star">★</span>':''}</div>
     <span class="pill" style="background:${pcolor(c.pillar)}">${c.pillar}</span>
@@ -565,6 +569,7 @@ function openModal(id){
   g('f-produceby').value=editing.produceBy||defaultProduceBy(editing);
   g('f-cta').value=editing.cta||''; g('f-chans').value=(editing.chans||[]).join(', ');
   g('f-visual').value=editing.visual||'';
+  g('f-source').value=editing.source||'';
   g('f-mix').innerHTML=Object.keys(MIX).map(k=>`<option value="${k}"${(editing.mix||'proven')===k?' selected':''}>${MIX[k].label} (${MIX[k].target}%)</option>`).join('');
   g('f-del').style.visibility=id?'visible':'hidden';
   g('att-note').textContent='Files up to 900KB are shared with the whole team through the board. For anything larger, add a Drive or Canva link instead.';
@@ -615,6 +620,7 @@ g('f-save').onclick=()=>{
   editing.produceBy=g('f-produceby').value;
   editing.chans=g('f-chans').value.split(',').map(s=>s.trim()).filter(Boolean);
   editing.visual=g('f-visual').value; editing.mix=g('f-mix').value;
+  editing.source=g('f-source').value;
   delete editing.isNew;
   saveCard(editing);render();closeModal();
 };
