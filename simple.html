@@ -140,6 +140,7 @@
   <footer>
     <span id="foot-note"></span>
     <a href="index.html">Full report &rarr;</a>
+    <a href="crm.html">Outreach CRM &rarr;</a>
     <a href="submit.html">Submit numbers &rarr;</a>
     <a href="ops-board.html">Ops Board &rarr;</a>
   </footer>
@@ -173,13 +174,14 @@ function applySubmitted(m){
   set(K0.tof,'linkedin_impressions',w.linkedin_impressions);
   set(K0.tof,'fbmain_reach',w.fbmain_reach);
 
-  // Rodney's outreach log on the Ops Board. Counted, never typed as a total.
-  var log = m.outreach? Object.keys(m.outreach).map(function(k){return m.outreach[k]}) : null;
-  if(log){
-    K0.retention.outreach_contacts = log.length;
-    K0.retention.outreach_converted = log.filter(function(o){
-      return o.outcome==='joined'||o.outcome==='protege'; }).length;
-    K0.retention.outreach_registered = log.filter(function(o){return o.outcome==='registered'}).length;
+  // Rodney's pipeline in the CRM. Counted from the stages, never typed as a total.
+  var crm = m.crm? Object.keys(m.crm).map(function(k){return m.crm[k]}) : null;
+  if(crm){
+    var st=function(names){ return crm.filter(function(p){return names.indexOf(p.stage)>=0}).length; };
+    K0.retention.outreach_contacts   = st(['contacted','spoke','registered','joined','no']);
+    K0.retention.outreach_registered = st(['registered','joined']);
+    K0.retention.outreach_converted  = st(['joined']);
+    K0.retention.outreach_pipeline   = crm.length;
   }
   // Email, webinar attendance and sales deliberately stay untouched here: they
   // belong to GetResponse and Zoom, and hand-entering them would just compete
@@ -357,7 +359,7 @@ function channelView(){
           ['Guide downloads',p.leads,45,''],['Registrations driven',p.regs,30,'']];
   } else if(ST.chan==='outreach'){
     var rt=K2.retention||{}, mt=K2.meeting||{};
-    rows=[['Contacts made',rt.outreach_contacts,40,''],['Registered from outreach',rt.outreach_registered,12,''],['Converted',rt.outreach_converted,4,''],
+    rows=[['In the pipeline',rt.outreach_pipeline,null,''],['Contacts made',rt.outreach_contacts,40,''],['Registered from outreach',rt.outreach_registered,12,''],['Converted',rt.outreach_converted,4,''],
           ['Meeting registered',mt.registered,12,''],['Meeting participants',mt.participants,8,''],
           ['Webinar real attendees',(Z.totals||{}).real_attendees,12,''],
           ['Sessions nobody attended',(Z.totals||{}).sessions_with_nobody,0,'',true],
@@ -389,7 +391,7 @@ function channelView(){
   var gap = missing.length? '<div class="gap" style="margin-top:12px"><b>Not tracked yet:</b> '
       + missing.map(function(r){return r[0]}).join(', ')
       + '. ' + (ST.chan==='email'?'Per-message stats need a separate pull; the account totals above are live.'
-              : ST.chan==='outreach'?'Log them on the Ops Board under Outreach and they count themselves.'
+              : ST.chan==='outreach'?'Work the pipeline in the CRM and these count themselves.'
               : ST.chan==='yt'?'Needs channel-owner authorization; manager access will not return it.'
               : ST.chan==='email'||ST.chan==='outreach'?'Waiting on the GetResponse and Zoom API keys.'
               : 'Needs a manual export.') + '</div>' : '';
@@ -505,9 +507,9 @@ function okrs(){
         }).join('') + '</div>';
   }).join('');
 }
-fetch('https://rifa-mae-default-rtdb.firebaseio.com/skles-ops/metrics.json')
+fetch('https://rifa-mae-default-rtdb.firebaseio.com/skles-ops.json?shallow=false')
   .then(function(r){return r.ok?r.json():null})
-  .then(function(m){ applySubmitted(m); render(); })
+  .then(function(all){ var m=(all&&all.metrics)||{}; if(all&&all.crm) m.crm=all.crm; applySubmitted(m); render(); })
   .catch(function(){ render(); });
 render();
 })();
