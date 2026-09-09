@@ -292,6 +292,14 @@
     g('a-asc').oninput=function(){ST.ascension=Math.max(0,+this.value||0);render();};
 
     // OKRs — every key result carries its own actual and target, not just a label
+    // These are lifetime figures on purpose: an OKR is judged over the cycle, not
+    // over whatever period the filter happens to be showing.
+    var all=paidAll();
+    var ebookDaily=((C.ebook||{}).daily||[]);
+    var ebookSpend=ebookDaily.reduce(function(a,r){return a+n(r.spend)},0);
+    var ebookLeads=ebookDaily.reduce(function(a,r){return a+n(r.leads)},0);
+    var cpl=ebookLeads?ebookSpend/ebookLeads:null;
+    var regToAppr=all.regs? appr/all.regs*100 : null;
     var mk=S.manual_kpis||{};
     var lpv=((C.ebook||{}).landing_page_views)||0;
     var lpConv = lpv? (ebookLeads/lpv*100) : null;
