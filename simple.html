@@ -161,30 +161,27 @@ var money=function(v){return '$'+n(v).toLocaleString('en-US',{maximumFractionDig
    figure, and so an empty field stays "not tracked" rather than becoming a zero. */
 function applySubmitted(m){
   if(!m) return;
-  var w=m.weekly||{}, e=m.email||{}, z=m.zoom||{}, sl=m.sales||{};
   S.kpis=S.kpis||{}; var K0=S.kpis;
-  K0.tof=K0.tof||{}; K0.nurture=K0.nurture||{}; K0.webinar=K0.webinar||{}; K0.meeting=K0.meeting||{}; K0.retention=K0.retention||{};
+  K0.tof=K0.tof||{}; K0.retention=K0.retention||{};
   function set(o,k,v){ if(v!==null&&v!==undefined&&v!=='') o[k]=+v; }
+
+  // Valerie's weekly export: the three channels no API reaches.
+  var w=m.weekly||{};
   set(K0.tof,'tiktok_views',w.tiktok_views);
   set(K0.tof,'linkedin_impressions',w.linkedin_impressions);
-  set(K0.nurture,'guide_delivery_open',e.guide_delivery_open);
-  set(K0.nurture,'broadcast_open',e.broadcast_open);
-  set(K0.nurture,'broadcast_click',e.broadcast_click);
-  set(K0.nurture,'webinar_invite_click',e.webinar_invite_click);
-  set(K0.webinar,'live_attendees',z.live_attendees);
-  set(K0.meeting,'registered',z.meeting_registered);
-  set(K0.meeting,'participants',z.meeting_participants);
-  set(K0.meeting,'sales',z.meeting_sales);
-  set(S,'apprentice_total',sl.apprentice_total);
-  set(S,'protege_total',sl.protege_total);
-  set(K0.retention,'churned',sl.churned);
-  set(K0.retention,'active_members',sl.apprentice_total);
-  // outreach is a log, so count it rather than reading a field
-  var log=m.outreach? Object.keys(m.outreach).map(function(k){return m.outreach[k]}) : null;
+  set(K0.tof,'fbmain_reach',w.fbmain_reach);
+
+  // Rodney's outreach log on the Ops Board. Counted, never typed as a total.
+  var log = m.outreach? Object.keys(m.outreach).map(function(k){return m.outreach[k]}) : null;
   if(log){
     K0.retention.outreach_contacts = log.length;
-    K0.retention.outreach_converted = log.filter(function(o){return o.outcome==='joined'}).length;
+    K0.retention.outreach_converted = log.filter(function(o){
+      return o.outcome==='joined'||o.outcome==='protege'; }).length;
+    K0.retention.outreach_registered = log.filter(function(o){return o.outcome==='registered'}).length;
   }
+  // Email, webinar attendance and sales deliberately stay untouched here: they
+  // belong to GetResponse and Zoom, and hand-entering them would just compete
+  // with wiring those APIs properly.
   S._submitted_by=m.updated_by; S._submitted_at=m.updated_at;
 }
 
@@ -350,7 +347,7 @@ function channelView(){
           ['Guide downloads',p.leads,45,''],['Registrations driven',p.regs,30,'']];
   } else if(ST.chan==='outreach'){
     var rt=K2.retention||{}, mt=K2.meeting||{};
-    rows=[['Contacts made',rt.outreach_contacts,40,''],['Converted',rt.outreach_converted,4,''],
+    rows=[['Contacts made',rt.outreach_contacts,40,''],['Registered from outreach',rt.outreach_registered,12,''],['Converted',rt.outreach_converted,4,''],
           ['Meeting registered',mt.registered,12,''],['Meeting participants',mt.participants,8,''],
           ['Meeting sales',mt.sales,2,'']];
   }
@@ -380,8 +377,9 @@ function channelView(){
   var gap = missing.length? '<div class="gap" style="margin-top:12px"><b>Not tracked yet:</b> '
       + missing.map(function(r){return r[0]}).join(', ')
       + '. ' + (ST.chan==='email'?'GetResponse has an API, nothing is wired to it.'
-              : ST.chan==='outreach'?'There is no log for this at all, so it is invisible in every view.'
+              : ST.chan==='outreach'?'Log them on the Ops Board under Outreach and they count themselves.'
               : ST.chan==='yt'?'Needs channel-owner authorization; manager access will not return it.'
+              : ST.chan==='email'||ST.chan==='outreach'?'Waiting on the GetResponse and Zoom API keys.'
               : 'Needs a manual export.') + '</div>' : '';
 
   host.innerHTML='<div class="cv">'+head+kpis+table+gap+'</div>';
