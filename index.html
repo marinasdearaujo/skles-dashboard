@@ -1028,8 +1028,8 @@ function renderTargets(){
     needAppr = goalN; needQual = needAppr/(ob.r_appr/100); needLeads = needQual/(ob.r_qual/100);
     rows.push(['Apprentice members', goalN, 'The goal. $'+(goalN*8.99).toFixed(2)+' a month recurring.', true]);
   }
-  rows.push(['Qualified leads', needQual, 'at our measured <b>'+ob.r_qual.toFixed(1)+'%</b> of leads registering for the webinar.']);
-  rows.push(['Guide downloads', needLeads, 'at our measured <b>'+ob.r_appr.toFixed(1)+'%</b> of registrations becoming members.']);
+  rows.push(['Qualified leads', needQual, 'at our measured <b>'+ob.r_appr.toFixed(1)+'%</b> of registrations becoming members.']);
+  rows.push(['Guide downloads', needLeads, 'at our measured <b>'+ob.r_qual.toFixed(1)+'%</b> of leads registering for the webinar.']);
   rows.push(['Ad spend', '$'+f(needLeads*ob.cpl_recent), 'at $'+ob.cpl_recent.toFixed(2)+' a lead, our rate since the landing page was fixed.']);
 
   host.innerHTML = rows.map(function(r){
@@ -1060,10 +1060,13 @@ function renderTargets(){
   }
 
   // the controllable work
-  var perWebinar = 4;   // ~4 registrations per session, from the Zoom exports
+  var perWebinar = 4;                 // ~4 registrations a session, from the Zoom exports
+  var sessions   = months*4.3;        // weekly, so roughly 4.3 a month
+  var needPerSession = needQual/sessions;
   var acts=[
     ['Ad budget','$'+f(needSpend/months)+' / mo', 'For '+months+' month'+(months>1?'s':'')+' to hit the goal', false],
-    ['Webinars to run', f(needQual/perWebinar), 'At about '+perWebinar+' registrations a session', false],
+    ['Registrations per webinar', f(needPerSession),
+     'Across '+f(sessions)+' weekly sessions. We average '+perWebinar+' today, so this is the gap.', false],
     ['Reach-outs', f(needQual), 'One conversation per registration. <b>Not tracked yet</b>', true],
     ['Nurture emails live', '23', '3 ebook + 11 nurture + 9 reminder. <b>Sends not tracked</b>', true]
   ];
