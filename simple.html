@@ -3,79 +3,94 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SKLES · Where we are</title>
+<title>SKLES · Performance</title>
 <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --navy:#112250; --navy-soft:#3d4d78; --tan:#E0C58F; --tan-deep:#8a6a24;
-    --bg:#F5F0E6; --card:#FFFFFF; --line:#E7DFCD; --muted:#6B7A93;
+    --navy:#112250; --soft:#5d6b7e; --tan:#E0C58F; --tan-deep:#8a6a24;
+    --bg:#F5F0E6; --card:#FFF; --line:#E7DFCD; --line2:#F0EADC;
     --good:#1E8E5A; --warn:#B8791A; --bad:#C1443E;
   }
   *{margin:0;padding:0;box-sizing:border-box}
-  body{background:var(--bg);color:var(--navy);
-       font-family:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
-       font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:860px;margin:0 auto;padding:0 24px 90px}
+  body{background:var(--bg);color:var(--navy);font-family:'Poppins',-apple-system,BlinkMacSystemFont,Arial,sans-serif;
+       font-size:14.5px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:940px;margin:0 auto;padding:0 22px 80px}
+  h2{font-size:10px;text-transform:uppercase;letter-spacing:2.2px;color:var(--soft);font-weight:700;margin:44px 0 14px}
+  h2 .hint{text-transform:none;letter-spacing:0;font-weight:400;font-size:11.5px;margin-left:10px;opacity:.8}
 
-  header{padding:52px 0 10px}
-  .brand{font-family:'Merriweather',Georgia,serif;font-weight:900;font-size:19px;letter-spacing:.4px}
+  header{padding:38px 0 0}
+  .brand{font-family:'Merriweather',Georgia,serif;font-weight:900;font-size:18px}
   .brand span{color:var(--tan-deep)}
-  .stamp{font-size:12px;color:var(--muted);margin-top:3px}
+  .stamp{font-size:11.5px;color:var(--soft);margin-top:2px}
 
-  .verdict{font-family:'Merriweather',Georgia,serif;font-weight:700;font-size:clamp(21px,3.3vw,29px);
-           line-height:1.35;margin:34px 0 8px;letter-spacing:-.2px}
-  .verdict em{font-style:normal;color:var(--tan-deep)}
-  .verdict-sub{color:var(--muted);font-size:14px;max-width:62ch}
+  /* filters */
+  .filters{position:sticky;top:0;z-index:20;background:var(--bg);padding:16px 0 12px;
+           margin-top:18px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .seg{display:flex;background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .seg button{border:none;background:transparent;padding:7px 13px;font:600 12px 'Poppins';color:var(--soft);cursor:pointer}
+  .seg button.on{background:var(--navy);color:#fff}
+  .seg button:hover:not(.on){background:var(--line2)}
+  .flabel{font-size:10px;text-transform:uppercase;letter-spacing:1.4px;color:var(--soft);font-weight:700;margin-right:2px}
+  .spacer{flex:1}
 
-  h2{font-size:10.5px;text-transform:uppercase;letter-spacing:2.2px;color:var(--muted);
-     font-weight:700;margin:52px 0 16px}
+  /* funnel table */
+  .fn{border:1px solid var(--line);border-radius:12px;background:var(--card);overflow:hidden}
+  .fr{display:grid;grid-template-columns:22px 1.7fr 90px 90px 82px;gap:12px;align-items:center;
+      padding:15px 18px;border-bottom:1px solid var(--line2);cursor:pointer;transition:background .12s}
+  .fr:last-of-type{border-bottom:none}
+  .fr:hover{background:var(--line2)}
+  .fr .caret{color:var(--soft);font-size:11px;transition:transform .18s}
+  .fr.open .caret{transform:rotate(90deg)}
+  .fr .name{font-weight:600}
+  .fr .name small{display:block;font-weight:400;font-size:11.5px;color:var(--soft);margin-top:1px}
+  .fr .num{font-family:'Merriweather',Georgia,serif;font-weight:900;font-size:21px;text-align:right}
+  .fr .goal{text-align:right;font-size:13px;color:var(--soft)}
+  .fr .pct{text-align:right;font-size:12px;font-weight:700}
+  .pct.ok{color:var(--good)} .pct.off{color:var(--warn)} .pct.no{color:var(--bad)} .pct.na{color:var(--soft);font-weight:400}
+  .drill{display:none;padding:4px 18px 18px 52px;border-bottom:1px solid var(--line2);background:#FDFBF6}
+  .drill.on{display:block}
+  .dch{display:grid;grid-template-columns:1fr 90px 1fr;gap:12px;padding:9px 0;border-bottom:1px solid var(--line2);font-size:13px}
+  .dch:last-child{border-bottom:none}
+  .dch .v{text-align:right;font-weight:700;font-family:'Merriweather'}
+  .dch .note{color:var(--soft);font-size:11.5px}
+  .dch.dim{opacity:.55}
+  .step{padding:3px 0 3px 52px;font-size:11.5px;color:var(--soft)}
+  .step b{font-family:'Merriweather';color:var(--navy);font-size:13px}
+  .step.bad b{color:var(--bad)}
 
-  /* the month, four numbers and nothing else */
-  .month{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;
-         background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden}
-  .m{background:var(--card);padding:20px 22px}
-  .m .k{font-size:10px;text-transform:uppercase;letter-spacing:1.4px;color:var(--muted);font-weight:600}
-  .m .v{font-family:'Merriweather',Georgia,serif;font-weight:900;font-size:31px;line-height:1.1;margin-top:7px}
-  .m .t{font-size:12px;color:var(--muted);margin-top:3px}
-  .m .t b{font-weight:700}
-  .ok{color:var(--good)} .off{color:var(--warn)} .no{color:var(--bad)}
+  /* economics */
+  .econ{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1px;background:var(--line);
+        border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .e{background:var(--card);padding:17px 19px}
+  .e .k{font-size:9.5px;text-transform:uppercase;letter-spacing:1.4px;color:var(--soft);font-weight:700}
+  .e .v{font-family:'Merriweather',Georgia,serif;font-weight:900;font-size:25px;margin-top:6px;line-height:1.1}
+  .e .s{font-size:11.5px;color:var(--soft);margin-top:3px}
+  .assump{margin-top:10px;font-size:11.5px;color:var(--soft)}
+  .assump input{background:transparent;border:none;border-bottom:1px dashed var(--tan-deep);color:var(--tan-deep);
+                width:44px;text-align:center;font-weight:700;font-family:'Poppins';font-size:11.5px}
+  .assump input:focus{outline:none;border-bottom-color:var(--navy)}
 
-  /* funnel: a plain vertical list, no chrome */
-  .fn{border-left:2px solid var(--line);margin-left:9px;padding-left:0}
-  .fs{position:relative;padding:0 0 4px 26px}
-  .fs::before{content:'';position:absolute;left:-7px;top:9px;width:12px;height:12px;border-radius:50%;
-              background:var(--card);border:2px solid var(--navy-soft)}
-  .fs.leak::before{border-color:var(--bad);background:var(--bad)}
-  .fs.dead::before{border-color:var(--bad);background:var(--card)}
-  .fs .n{font-family:'Merriweather',Georgia,serif;font-weight:900;font-size:26px;line-height:1.2}
-  .fs .n small{font-family:'Poppins';font-size:13px;font-weight:500;color:var(--muted);margin-left:9px}
-  .fs .d{font-size:13px;color:var(--muted);padding-bottom:20px;max-width:60ch}
-  .drop{font-size:12px;color:var(--muted);padding:0 0 16px 26px;margin-top:-14px}
-  .drop b{font-family:'Merriweather';font-size:14px;color:var(--navy)}
-  .drop.bad b{color:var(--bad)}
+  /* okrs */
+  .okr{border:1px solid var(--line);border-radius:12px;background:var(--card);overflow:hidden}
+  .o{padding:15px 18px;border-bottom:1px solid var(--line2)}
+  .o:last-child{border-bottom:none}
+  .o .t{font-weight:600;font-size:13.5px;margin-bottom:9px}
+  .o .t span{color:var(--tan-deep);font-family:'Merriweather';margin-right:7px}
+  .kr{display:grid;grid-template-columns:1fr 130px 54px;gap:12px;align-items:center;padding:5px 0;font-size:12.5px;color:var(--soft)}
+  .bar{height:5px;background:var(--line2);border-radius:99px;overflow:hidden}
+  .bar i{display:block;height:100%;background:var(--good);border-radius:99px}
+  .bar i.off{background:var(--warn)} .bar i.no{background:var(--bad)}
+  .kr .p{text-align:right;font-weight:700;font-size:11.5px;color:var(--navy)}
+  .kr .p.na{color:var(--soft);font-weight:400}
 
-  /* what it takes */
-  .takes{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px 26px}
-  .takes .row{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;padding:13px 0;border-bottom:1px solid var(--line)}
-  .takes .row:last-child{border-bottom:none;padding-bottom:0}
-  .takes .row:first-child{padding-top:0}
-  .takes .big{font-family:'Merriweather',Georgia,serif;font-weight:900;font-size:22px}
-  .takes .lbl{font-size:13px;color:var(--muted);flex:1;min-width:200px}
-  .swap{margin-top:18px;padding:15px 18px;background:rgba(224,197,143,.22);border-radius:9px;
-        font-size:13.5px;line-height:1.6}
-  .swap b{font-weight:700}
-
-  /* attention */
-  .att{display:flex;flex-direction:column;gap:10px}
-  .a{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--bad);
-     border-radius:9px;padding:15px 18px;font-size:13.5px;line-height:1.55}
-  .a.warn{border-left-color:var(--warn)}
-  .a b{display:block;margin-bottom:2px}
-  .a span{color:var(--muted)}
-
-  footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);
-         font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:8px 18px}
+  footer{margin-top:50px;padding-top:18px;border-top:1px solid var(--line);font-size:11.5px;color:var(--soft);
+         display:flex;flex-wrap:wrap;gap:8px 16px}
   footer a{color:var(--tan-deep)}
+  @media(max-width:700px){
+    .fr{grid-template-columns:18px 1fr 66px 60px;gap:8px}
+    .fr .goal{display:none}
+    .dch{grid-template-columns:1fr 70px}.dch .note{display:none}
+  }
 </style>
 </head>
 <body>
@@ -83,118 +98,215 @@
 
   <header>
     <div class="brand">SKLES<span>.</span></div>
-    <div class="stamp" id="stamp">Loading</div>
+    <div class="stamp" id="stamp"></div>
   </header>
 
-  <div class="verdict" id="verdict"></div>
-  <div class="verdict-sub" id="verdict-sub"></div>
+  <div class="filters">
+    <span class="flabel">Period</span>
+    <div class="seg" id="seg-range"></div>
+    <span class="flabel" style="margin-left:8px">Channel</span>
+    <div class="seg" id="seg-chan"></div>
+  </div>
 
-  <h2>This month</h2>
-  <div class="month" id="month"></div>
-
-  <h2>The funnel</h2>
+  <h2>The funnel <span class="hint">click any stage to open it</span></h2>
   <div class="fn" id="funnel"></div>
 
-  <h2>What one Protégé sale takes</h2>
-  <div class="takes" id="takes"></div>
+  <h2>Unit economics</h2>
+  <div class="econ" id="econ"></div>
+  <div class="assump" id="assump"></div>
 
-  <h2>Needs attention</h2>
-  <div class="att" id="attention"></div>
+  <h2>OKRs <span class="hint">Sept to Nov, from the August review</span></h2>
+  <div class="okr" id="okrs"></div>
 
   <footer>
-    <span>Live from Meta, refreshed every 3 hours. Sales entered by hand.</span>
-    <a href="index.html">Full dashboard →</a>
+    <span id="foot-note"></span>
+    <a href="index.html">Full report →</a>
     <a href="ops-board.html">Ops Board →</a>
   </footer>
 </div>
 
 <script src="skles-dashboard-data.js"></script>
 <script src="skles-organic-data.js"></script>
+<script src="skles-youtube-data.js"></script>
 <script src="skles-sales-data.js"></script>
 <script>
 (function(){
-  var D=window.SKLES_DATA||{}, O=window.SKLES_ORGANIC||{}, S=window.SKLES_SALES||{};
-  var c=D.campaigns||{}, e=c.ebook||{}, w=c.webinar||{};
-  var n=function(v){return +(v||0)}, f=function(v){return Math.round(n(v)).toLocaleString('en-US')};
+  var D=window.SKLES_DATA||{}, O=window.SKLES_ORGANIC||{}, Y=window.SKLES_YOUTUBE||{}, S=window.SKLES_SALES||{};
+  var C=D.campaigns||{}, n=function(v){return +(v||0)};
+  var f=function(v){return Math.round(n(v)).toLocaleString('en-US')};
   var g=function(id){return document.getElementById(id)};
+  var money=function(v){return '$'+n(v).toLocaleString('en-US',{maximumFractionDigits:0})};
 
-  var igReach=((((O.windows||{})['30']||{}).ig)||{}).reach||0;
-  var aware=n(e.reach)+n(w.reach)+n(igReach);
-  var leads=n(e.leads), qual=n(e.registrations)+n(w.registrations), appr=n(S.apprentice_total), prot=n(S.protege_total);
-  var spend=n(e.spend)+n(w.spend);
-  var cplRecent=6.32;
+  var ST={range:'all', chan:'all', open:null, retention:12, ascension:10};
 
-  var key=new Date().getFullYear()+'-'+String(new Date().getMonth()+1).padStart(2,'0');
-  var plan=(S.plan||{})[key]||{};
+  var RANGES=[{k:'7',l:'7 days'},{k:'30',l:'30 days'},{k:'month',l:'This month'},{k:'all',l:'Since launch'}];
+  var CHANS=[{k:'all',l:'All'},{k:'paid',l:'Meta Paid'},{k:'ig',l:'Instagram'},{k:'fb',l:'Facebook'},{k:'yt',l:'YouTube'}];
 
-  g('stamp').textContent='Where we are · '+(D.last_updated||'');
-
-  // rates
-  var rQual=leads?qual/leads*100:0, rAppr=qual?appr/qual*100:0;
-
-  g('verdict').innerHTML='The funnel works right up to the webinar, <em>then it stops.</em>';
-  g('verdict-sub').textContent=
-    f(leads)+' people took the guide and '+f(qual)+' registered for the training, which is a good rate. '
-    +'Only '+appr+' became a member, and nothing yet has sold Protégé, where the money is.';
-
-  // ---- this month ----
-  function tile(k,v,t,cls){
-    return '<div class="m"><div class="k">'+k+'</div><div class="v'+(cls?' '+cls:'')+'">'+v+'</div>'
-         + (t?'<div class="t">'+t+'</div>':'')+'</div>';
+  function rangeStart(){
+    var d=new Date();
+    if(ST.range==='7')  { d.setDate(d.getDate()-7);  return d; }
+    if(ST.range==='30') { d.setDate(d.getDate()-30); return d; }
+    if(ST.range==='month'){ return new Date(d.getFullYear(), d.getMonth(), 1); }
+    return new Date(2000,0,1);
   }
-  var leadCls = plan.leads ? (leads>=plan.leads?'ok':'off') : '';
-  var apprCls = plan.active_members ? (appr>=plan.active_members?'ok':'no') : '';
-  g('month').innerHTML =
-      tile('Leads', f(leads), plan.leads?('target <b>'+plan.leads+'</b>'):'', leadCls)
-    + tile('Members', f(appr), plan.active_members?('target <b>'+plan.active_members+'</b>'):'', apprCls)
-    + tile('Protégé', f(prot), 'target <b>'+(plan.protege||0)+'</b>', prot>=(plan.protege||0)?'':'no')
-    + tile('Ad spend', '$'+f(spend), '$'+cplRecent.toFixed(2)+' a lead');
 
-  // ---- funnel ----
-  var stages=[
-    {n:aware,   u:'reached',       d:'Ads and Instagram put SKLES in front of them.'},
-    {n:leads,   u:'took the guide',d:'Gave us an email address.'},
-    {n:qual,    u:'registered',    d:'Signed up for the recorded training on their own.'},
-    {n:appr,    u:'became members',d:'Apprentice, $8.99 a month.', leak:true},
-    {n:prot,    u:'bought Protégé',d:'Nothing in the funnel links to or mentions it.', dead:true}
-  ];
-  var html='', prev=null;
-  stages.forEach(function(s){
-    if(prev!==null){
-      var p=prev>0?(s.n/prev*100):0;
-      var bad=p<5;
-      html+='<div class="drop'+(bad?' bad':'')+'"><b>'+(p>=10?p.toFixed(0):p.toFixed(1))+'%</b> carried through</div>';
+  /* Paid is summed from the daily series so it answers the date filter honestly.
+     Organic only exists in fixed 7/14/30/month windows, so it snaps to the nearest. */
+  function paid(){
+    var from=rangeStart(), t={spend:0,reach:0,impr:0,clicks:0,leads:0,regs:0};
+    ['ebook','webinar'].forEach(function(k){
+      ((C[k]||{}).daily||[]).forEach(function(r){
+        if(new Date(r.date+'T00:00:00') < from) return;
+        t.spend+=n(r.spend); t.reach+=n(r.reach); t.impr+=n(r.impressions);
+        t.clicks+=n(r.clicks); t.leads+=n(r.leads); t.regs+=n(r.registrations);
+      });
+    });
+    return t;
+  }
+  function organic(){
+    var w=(O.windows||{})[ST.range==='all'?'month':(ST.range==='month'?'month':ST.range)]||{};
+    return {ig:w.ig||{}, fb:w.fb||{}};
+  }
+
+  function stages(){
+    var p=paid(), o=organic(), yt=(Y.channel||{});
+    var key=new Date().getFullYear()+'-'+String(new Date().getMonth()+1).padStart(2,'0');
+    var plan=(S.plan||{})[key]||{};
+
+    // per-channel contribution to each stage; null = channel can't be attributed there
+    var byChan={
+      aware:{paid:p.reach, ig:n(o.ig.reach), fb:n(o.fb.page_views), yt:n(yt.views)},
+      leads:{paid:p.leads, ig:null, fb:null, yt:null},
+      qual: {paid:p.regs,  ig:null, fb:null, yt:null},
+      appr: {paid:null,    ig:null, fb:null, yt:null},
+      prot: {paid:null,    ig:null, fb:null, yt:null}
+    };
+    function pick(stage, total){
+      if(ST.chan==='all') return total;
+      var v=byChan[stage][ST.chan];
+      return v===null? null : v;
     }
-    html+='<div class="fs'+(s.leak?' leak':'')+(s.dead?' dead':'')+'">'
-        + '<div class="n">'+f(s.n)+'<small>'+s.u+'</small></div>'
-        + '<div class="d">'+s.d+'</div></div>';
-    prev=s.n;
-  });
-  g('funnel').innerHTML=html;
+    var awareTotal=p.reach+n(o.ig.reach)+n(o.fb.page_views);
+    return [
+      {id:'aware', name:'Awareness', sub:'People we put a message in front of',
+       actual:pick('aware',awareTotal), goal:null, chan:byChan.aware},
+      {id:'leads', name:'Leads', sub:'Downloaded the Fast Track guide',
+       actual:pick('leads',p.leads), goal:plan.leads, chan:byChan.leads},
+      {id:'qual',  name:'Qualified leads', sub:'Registered for the recorded training',
+       actual:pick('qual',p.regs), goal:null, chan:byChan.qual},
+      {id:'appr',  name:'Apprentice members', sub:'$8.99 a month',
+       actual:ST.chan==='all'?n(S.apprentice_total):null, goal:plan.active_members, chan:byChan.appr},
+      {id:'prot',  name:'Protégé sales', sub:'$2,499 one-off · no acquisition path built yet',
+       actual:ST.chan==='all'?n(S.protege_total):null, goal:plan.protege, chan:byChan.prot}
+    ];
+  }
 
-  // ---- what it takes ----
-  var asc=0.10;
-  var needAppr=1/asc, needQual=rAppr?needAppr/(rAppr/100):0, needLeads=rQual?needQual/(rQual/100):0;
-  var needSpend=needLeads*cplRecent;
-  var betterQual=needAppr/0.10, betterLeads=rQual?betterQual/(rQual/100):0, betterSpend=betterLeads*cplRecent;
-  g('takes').innerHTML =
-      '<div class="row"><span class="big">'+f(needAppr)+'</span><span class="lbl">members, assuming 1 in 10 goes on to Protégé</span></div>'
-    + '<div class="row"><span class="big">'+f(needQual)+'</span><span class="lbl">registrations, at the '+rAppr.toFixed(1)+'% that become members today</span></div>'
-    + '<div class="row"><span class="big">'+f(needLeads)+'</span><span class="lbl">guide downloads, at the '+rQual.toFixed(0)+'% that register today</span></div>'
-    + '<div class="row"><span class="big">$'+f(needSpend)+'</span><span class="lbl">of ads, at $'+cplRecent.toFixed(2)+' a lead</span></div>'
-    + '<div class="swap">The quarter has <b>$1,170</b> budgeted, so that does not add up. '
-    + 'But lift registrations-to-members from <b>'+rAppr.toFixed(1)+'% to 10%</b> and the same sale needs only '
-    + '<b>'+f(betterLeads)+' leads</b> and <b>$'+f(betterSpend)+'</b>. Fixing the funnel is far cheaper than buying around it.</div>';
+  function chanLabel(k){ return (CHANS.filter(function(c){return c.k===k})[0]||{}).l||k; }
 
-  // ---- attention ----
-  var items=[];
-  items.push(['bad','Only '+rAppr.toFixed(1)+'% of registrations become members','This one number decides whether any budget works. Everything else in the funnel is healthy.']);
-  if(S.protege_path_built===false)
-    items.push(['bad','Protégé has no acquisition path','Nothing across 43 emails, the Apprentice page or the ebook funnel links to or mentions the $2,499 product.']);
-  items.push(['warn','Outreach and email sends are not tracked','Rodney’s calls and the nurture sequence are invisible, so we cannot tell what is working at the bottom of the funnel.']);
-  g('attention').innerHTML=items.map(function(i){
-    return '<div class="a '+(i[0]==='warn'?'warn':'')+'"><b>'+i[1]+'</b><span>'+i[2]+'</span></div>';
-  }).join('');
+  function render(){
+    g('stamp').textContent='Performance · '+(D.last_updated||'');
+
+    // filters
+    g('seg-range').innerHTML=RANGES.map(function(r){
+      return '<button data-r="'+r.k+'" class="'+(ST.range===r.k?'on':'')+'">'+r.l+'</button>';}).join('');
+    g('seg-chan').innerHTML=CHANS.map(function(c){
+      return '<button data-c="'+c.k+'" class="'+(ST.chan===c.k?'on':'')+'">'+c.l+'</button>';}).join('');
+    g('seg-range').onclick=function(e){ if(e.target.dataset.r){ST.range=e.target.dataset.r;render();} };
+    g('seg-chan').onclick =function(e){ if(e.target.dataset.c){ST.chan=e.target.dataset.c;render();} };
+
+    // funnel
+    var st=stages(), html='', prev=null;
+    st.forEach(function(s){
+      if(prev!==null && prev.actual!==null && s.actual!==null && prev.actual>0){
+        var pc=s.actual/prev.actual*100;
+        html+='<div class="step'+(pc<5?' bad':'')+'"><b>'+(pc>=10?pc.toFixed(0):pc.toFixed(1))+'%</b> carried through</div>';
+      }
+      var pct='', cls='na', label='—';
+      if(s.actual===null){ label='not attributed'; }
+      else if(s.goal){ var r=s.actual/s.goal*100; cls=r>=100?'ok':r>=60?'off':'no'; label=Math.round(r)+'%'; }
+      html+='<div class="fr'+(ST.open===s.id?' open':'')+'" data-s="'+s.id+'">'
+          +   '<div class="caret">▶</div>'
+          +   '<div class="name">'+s.name+'<small>'+s.sub+'</small></div>'
+          +   '<div class="num">'+(s.actual===null?'<span style="font-size:12px;color:var(--soft);font-family:Poppins">n/a</span>':f(s.actual))+'</div>'
+          +   '<div class="goal">'+(s.goal?'goal '+f(s.goal):'')+'</div>'
+          +   '<div class="pct '+cls+'">'+label+'</div>'
+          + '</div>'
+          + '<div class="drill'+(ST.open===s.id?' on':'')+'" data-d="'+s.id+'">'
+          +   CHANS.filter(function(c){return c.k!=='all'}).map(function(c){
+                var v=s.chan[c.k];
+                return '<div class="dch'+(v===null?' dim':'')+'"><div>'+c.l+'</div>'
+                     + '<div class="v">'+(v===null?'—':f(v))+'</div>'
+                     + '<div class="note">'+(v===null?'not attributed at this stage':'')+'</div></div>';
+              }).join('')
+          + '</div>';
+      prev=s;
+    });
+    g('funnel').innerHTML=html;
+    g('funnel').onclick=function(e){
+      var row=e.target.closest('.fr'); if(!row) return;
+      ST.open = ST.open===row.dataset.s ? null : row.dataset.s; render();
+    };
+
+    // economics
+    var p=paid(), appr=n(S.apprentice_total), prot=n(S.protege_total), cust=appr+prot;
+    var spend=p.spend;
+    var ltv = 8.99*ST.retention + (ST.ascension/100)*2499;
+    var rev = appr*8.99*1 + prot*2499;
+    var cac = cust? spend/cust : 0;
+    var roi = spend? (rev/spend*100) : 0;
+    var payback = (appr && ltv) ? cac/(8.99) : 0;
+    g('econ').innerHTML=
+        '<div class="e"><div class="k">Spend</div><div class="v">'+money(spend)+'</div><div class="s">'+chanLabel(ST.chan)+' · '+(RANGES.filter(function(r){return r.k===ST.range})[0]||{}).l+'</div></div>'
+      + '<div class="e"><div class="k">CAC</div><div class="v">'+(cust?money(cac):'—')+'</div><div class="s">'+cust+' customer'+(cust===1?'':'s')+'</div></div>'
+      + '<div class="e"><div class="k">LTV</div><div class="v">'+money(ltv)+'</div><div class="s">per member, blended</div></div>'
+      + '<div class="e"><div class="k">LTV : CAC</div><div class="v">'+(cac?(ltv/cac).toFixed(2)+'x':'—')+'</div><div class="s">target 3x</div></div>'
+      + '<div class="e"><div class="k">Payback</div><div class="v">'+(payback?Math.round(payback)+' mo':'—')+'</div><div class="s">on $8.99 a month</div></div>';
+    g('assump').innerHTML='Assuming a member stays <input id="a-ret" type="number" min="1" max="60" value="'+ST.retention+'"> months '
+      +'and <input id="a-asc" type="number" min="0" max="100" value="'+ST.ascension+'">% go on to Protégé. '
+      +'Neither is measured yet, so these are the two numbers to prove.';
+    g('a-ret').oninput=function(){ST.retention=Math.max(1,+this.value||12);render();};
+    g('a-asc').oninput=function(){ST.ascension=Math.max(0,+this.value||0);render();};
+
+    // OKRs
+    var all=paidAll(), cpl=all.leads?all.spend/all.leads:0;
+    var regToAppr = all.regs? appr/all.regs*100 : 0;
+    var okrs=[
+      ['O1','Make the funnel a predictable engine',[
+        ['Ebook leads per month', all.leads, 60],
+        ['Cost per lead under $25', cpl?Math.max(0,(25-cpl)/25*100):0, 100, cpl?('$'+cpl.toFixed(2)):'—'],
+        ['Apprentice signups per month', appr, 4]]],
+      ['O2','Grow the webinar & meeting pipeline',[
+        ['Webinar registrations per cycle', all.regs, 40],
+        ['Registration → Apprentice ≥10%', regToAppr, 10, regToAppr.toFixed(1)+'%']]],
+      ['O3','Rebuild reach, lead with what works',[
+        ['YouTube monthly views', n((Y.channel||{}).views), 3500],
+        ['TikTok followers per month', null, 200],
+        ['Shorts + renovation videos', null, 12]]],
+      ['O4','Prove the unit economics',[
+        ['LTV:CAC tracking live', cac?100:0, 100, cac?'set up':'—'],
+        ['Email open rate 10 → 15%', null, 15],
+        ['Member milestones logged', null, 100]]]
+    ];
+    g('okrs').innerHTML=okrs.map(function(o){
+      return '<div class="o"><div class="t"><span>'+o[0]+'</span>'+o[1]+'</div>'
+        + o[2].map(function(k){
+            if(k[1]===null) return '<div class="kr"><div>'+k[0]+'</div><div class="bar"></div><div class="p na">n/t</div></div>';
+            var pc=Math.min(100, k[1]/k[2]*100);
+            var cls=pc>=100?'':pc>=60?'off':'no';
+            return '<div class="kr"><div>'+k[0]+(k[3]?' <b style="color:var(--navy)">'+k[3]+'</b>':'')+'</div>'
+                 + '<div class="bar"><i class="'+cls+'" style="width:'+pc+'%"></i></div>'
+                 + '<div class="p">'+Math.round(pc)+'%</div></div>';
+          }).join('')
+        + '</div>';
+    }).join('');
+
+    g('foot-note').textContent='Paid figures answer the date filter. Organic snaps to the nearest window Meta provides. '
+      + 'Sales are entered by hand, last updated '+(S.last_updated||'—')+'. "n/t" means not tracked yet.';
+  }
+
+  function paidAll(){ var s=ST.range; ST.range='all'; var r=paid(); ST.range=s; return r; }
+
+  render();
 })();
 </script>
 </body>
