@@ -76,10 +76,13 @@
   .o:last-child{border-bottom:none}
   .o .t{font-weight:600;font-size:13.5px;margin-bottom:9px}
   .o .t span{color:var(--tan-deep);font-family:'Merriweather';margin-right:7px}
-  .kr{display:grid;grid-template-columns:1fr 130px 54px;gap:12px;align-items:center;padding:5px 0;font-size:12.5px;color:var(--soft)}
+  .kr{display:grid;grid-template-columns:1fr 118px 96px 46px;gap:12px;align-items:center;padding:5px 0;font-size:12.5px;color:var(--soft)}
   .bar{height:5px;background:var(--line2);border-radius:99px;overflow:hidden}
   .bar i{display:block;height:100%;background:var(--good);border-radius:99px}
   .bar i.off{background:var(--warn)} .bar i.no{background:var(--bad)}
+  .kv{text-align:right;font-size:12px;color:var(--soft);white-space:nowrap}
+  .kv b{font-family:'Merriweather';font-size:13.5px;color:var(--navy);font-weight:900}
+  .kv s{opacity:.6}
   .kr .p{text-align:right;font-weight:700;font-size:11.5px;color:var(--navy)}
   .kr .p.na{color:var(--soft);font-weight:400}
 
@@ -90,6 +93,7 @@
     .fr{grid-template-columns:18px 1fr 66px 60px;gap:8px}
     .fr .goal{display:none}
     .dch{grid-template-columns:1fr 70px}.dch .note{display:none}
+    .kr{grid-template-columns:1fr 96px 40px}.kr .bar{display:none}
   }
 </style>
 </head>
@@ -172,6 +176,13 @@
     var p=paid(), o=organic(), yt=(Y.channel||{});
     var key=new Date().getFullYear()+'-'+String(new Date().getMonth()+1).padStart(2,'0');
     var plan=(S.plan||{})[key]||{};
+    var sg=(S.stage_goals||{})[key]||{};          // goal per stage
+    var cg=(S.channel_goals||{})[key]||{};        // goal per stage per channel
+    // When a channel is selected the goal narrows to that channel's own goal.
+    function goalFor(stage){
+      if(ST.chan==='all') return sg[stage]||null;
+      return ((cg[ST.chan]||{})[stage])||null;
+    }
 
     // per-channel contribution to each stage; null = channel can't be attributed there
     var byChan={
@@ -189,15 +200,15 @@
     var awareTotal=p.reach+n(o.ig.reach)+n(o.fb.page_views);
     return [
       {id:'aware', name:'Awareness', sub:'People we put a message in front of',
-       actual:pick('aware',awareTotal), goal:null, chan:byChan.aware},
+       actual:pick('aware',awareTotal), goal:goalFor('awareness'), chan:byChan.aware, gkey:'awareness'},
       {id:'leads', name:'Leads', sub:'Downloaded the Fast Track guide',
-       actual:pick('leads',p.leads), goal:plan.leads, chan:byChan.leads},
+       actual:pick('leads',p.leads), goal:goalFor('leads'), chan:byChan.leads, gkey:'leads'},
       {id:'qual',  name:'Qualified leads', sub:'Registered for the recorded training',
-       actual:pick('qual',p.regs), goal:null, chan:byChan.qual},
+       actual:pick('qual',p.regs), goal:goalFor('qualified'), chan:byChan.qual, gkey:'qualified'},
       {id:'appr',  name:'Apprentice members', sub:'$8.99 a month',
-       actual:ST.chan==='all'?n(S.apprentice_total):null, goal:plan.active_members, chan:byChan.appr},
+       actual:ST.chan==='all'?n(S.apprentice_total):null, goal:goalFor('apprentice'), chan:byChan.appr, gkey:'apprentice'},
       {id:'prot',  name:'Protégé sales', sub:'$2,499 one-off · no acquisition path built yet',
-       actual:ST.chan==='all'?n(S.protege_total):null, goal:plan.protege, chan:byChan.prot}
+       actual:ST.chan==='all'?n(S.protege_total):null, goal:goalFor('protege'), chan:byChan.prot, gkey:'protege'}
     ];
   }
 
@@ -239,9 +250,11 @@
                   .map(function(c){
                     var v=s.chan[c.k], alltime=false;
                     if(typeof v==='string' && v.indexOf('alltime:')===0){ alltime=true; v=+v.split(':')[1]; }
+                    var cgoal = ((( S.channel_goals||{})[new Date().getFullYear()+'-'+String(new Date().getMonth()+1).padStart(2,'0')]||{})[c.k]||{})[s.gkey];
+                    var gtxt = cgoal ? ('goal '+f(cgoal)+' · '+Math.round(v/cgoal*100)+'%') : '';
                     return '<div class="dch'+(alltime?' dim':'')+'"><div>'+c.l+'</div>'
                          + '<div class="v">'+f(v)+'</div>'
-                         + '<div class="note">'+(alltime?'all-time, not in the sum · needs owner access to filter':'')+'</div></div>';
+                         + '<div class="note">'+(alltime?'all-time, not in the sum · needs owner access to filter':gtxt)+'</div></div>';
                   });
                 if(!rows.length) return '<div class="dch dim"><div>No channel attribution</div>'
                   + '<div class="v">—</div><div class="note">'+(s.id==='prot'
@@ -278,36 +291,54 @@
     g('a-ret').oninput=function(){ST.retention=Math.max(1,+this.value||12);render();};
     g('a-asc').oninput=function(){ST.ascension=Math.max(0,+this.value||0);render();};
 
-    // OKRs
-    var all=paidAll();
-    var ebookSpend=((C.ebook||{}).daily||[]).reduce(function(a,r){return a+n(r.spend)},0);
-    var ebookLeads=((C.ebook||{}).daily||[]).reduce(function(a,r){return a+n(r.leads)},0);
-    var cpl=ebookLeads?ebookSpend/ebookLeads:0;
-    var regToAppr = all.regs? appr/all.regs*100 : 0;
+    // OKRs — every key result carries its own actual and target, not just a label
+    var mk=S.manual_kpis||{};
+    var lpv=((C.ebook||{}).landing_page_views)||0;
+    var lpConv = lpv? (ebookLeads/lpv*100) : null;
+    var ltvcac = cac? (ltv/cac) : null;
     var okrs=[
       ['O1','Make the funnel a predictable engine',[
-        ['Ebook leads per month', all.leads, 60],
-        ['Cost per lead under $25', cpl?Math.max(0,(25-cpl)/25*100):0, 100, cpl?('$'+cpl.toFixed(2)):'—'],
-        ['Apprentice signups per month', appr, 4]]],
-      ['O2','Grow the webinar & meeting pipeline',[
-        ['Webinar registrations per cycle', all.regs, 40],
-        ['Registration → Apprentice ≥10%', regToAppr, 10, regToAppr.toFixed(1)+'%']]],
+        {n:'Ebook leads per month',      a:ebookLeads, t:60,  fmt:'int'},
+        {n:'Cost per lead',              a:cpl,        t:25,  fmt:'money', lower:true},
+        {n:'Landing page conversion',    a:lpConv,     t:10,  fmt:'pct'},
+        {n:'Apprentice signups',         a:appr,       t:4,   fmt:'int'}
+      ]],
+      ['O2','Grow the webinar and meeting pipeline',[
+        {n:'Webinar registrations',      a:all.regs,   t:40,  fmt:'int'},
+        {n:'Registration to Apprentice', a:regToAppr,  t:10,  fmt:'pct'}
+      ]],
       ['O3','Rebuild reach, lead with what works',[
-        ['YouTube monthly views', null, 3500],
-        ['TikTok followers per month', null, 200],
-        ['Shorts + renovation videos', null, 12]]],
+        {n:'YouTube views per month',    a:null,       t:3500, fmt:'int', why:'needs owner access'},
+        {n:'Instagram reach',            a:n((organic().ig||{}).reach), t:3000, fmt:'int'},
+        {n:'New TikTok followers',       a:mk.tiktok_new_followers, t:200, fmt:'int', why:'manual export'}
+      ]],
       ['O4','Prove the unit economics',[
-        ['LTV:CAC tracking live', cac?100:0, 100, cac?'set up':'—'],
-        ['Email open rate 10 → 15%', null, 15],
-        ['Member milestones logged', null, 100]]]
+        {n:'LTV to CAC ratio',           a:ltvcac,     t:3,   fmt:'x'},
+        {n:'Email open rate',            a:mk.email_open_rate, t:15, fmt:'pct', why:'from GetResponse'},
+        {n:'Warm-lead outreach logged',  a:mk.outreach_contacts, t:40, fmt:'int', why:'Rodney'}
+      ]]
     ];
+    function shape(v,fmt){
+      if(v===null||v===undefined) return '—';
+      if(fmt==='money') return '$'+n(v).toFixed(2);
+      if(fmt==='pct')   return n(v).toFixed(1)+'%';
+      if(fmt==='x')     return n(v).toFixed(2)+'x';
+      return f(v);
+    }
     g('okrs').innerHTML=okrs.map(function(o){
       return '<div class="o"><div class="t"><span>'+o[0]+'</span>'+o[1]+'</div>'
         + o[2].map(function(k){
-            if(k[1]===null) return '<div class="kr"><div>'+k[0]+'</div><div class="bar"></div><div class="p na">n/t</div></div>';
-            var pc=Math.min(100, k[1]/k[2]*100);
-            var cls=pc>=100?'':pc>=60?'off':'no';
-            return '<div class="kr"><div>'+k[0]+(k[3]?' <b style="color:var(--navy)">'+k[3]+'</b>':'')+'</div>'
+            if(k.a===null||k.a===undefined){
+              return '<div class="kr"><div>'+k.n+'</div>'
+                   + '<div class="kv">— <s>/ '+shape(k.t,k.fmt)+'</s></div>'
+                   + '<div class="bar"></div><div class="p na">'+(k.why||'not tracked')+'</div></div>';
+            }
+            // a lower-is-better target (cost per lead) scores full marks when under
+            var pc = k.lower ? Math.min(100, k.t/Math.max(k.a,0.01)*100)
+                             : Math.min(100, k.a/k.t*100);
+            var cls = pc>=100?'':pc>=60?'off':'no';
+            return '<div class="kr"><div>'+k.n+'</div>'
+                 + '<div class="kv"><b>'+shape(k.a,k.fmt)+'</b> / '+shape(k.t,k.fmt)+'</div>'
                  + '<div class="bar"><i class="'+cls+'" style="width:'+pc+'%"></i></div>'
                  + '<div class="p">'+Math.round(pc)+'%</div></div>';
           }).join('')
