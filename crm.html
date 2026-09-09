@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SKLES · Outreach CRM</title>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#112250;--soft:#5d6b7e;--tan:#E0C58F;--tan-deep:#8a6a24;
+        --bg:#F5F0E6;--card:#FFF;--line:#E7DFCD;--line2:#F0EADC;
+        --good:#1E8E5A;--warn:#B8791A;--bad:#C1443E}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--navy);font-family:'Poppins',-apple-system,Arial,sans-serif;font-size:14px;line-height:1.5}
+  .wrap{max-width:1500px;margin:0 auto;padding:0 20px 60px}
+  header{padding:26px 0 14px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;border-bottom:1px solid var(--line)}
+  .brand{font-family:'Merriweather',Georgia,serif;font-weight:900;font-size:17px}
+  .brand span{color:var(--tan-deep)}
+  .sub{font-size:11.5px;color:var(--soft)}
+  .spacer{flex:1}
+  .btn{background:var(--navy);color:#fff;border:none;border-radius:8px;padding:9px 16px;font:600 12.5px 'Poppins';cursor:pointer}
+  .btn.ghost{background:transparent;color:var(--navy);border:1px solid var(--line)}
+  .btn:hover{opacity:.9}
+  .who{font-size:12px;color:var(--soft)}
+
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:1px;background:var(--line);
+         border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:16px 0}
+  .stats .s{background:var(--card);padding:12px 15px}
+  .stats .n{font-family:'Merriweather',Georgia,serif;font-weight:900;font-size:21px}
+  .stats .k{font-size:9px;text-transform:uppercase;letter-spacing:1.2px;color:var(--soft);font-weight:700;margin-top:2px}
+
+  .board{display:grid;grid-template-columns:repeat(6,minmax(200px,1fr));gap:11px;margin-top:6px;overflow-x:auto;padding-bottom:8px}
+  .col{background:rgba(255,255,255,.55);border:1px solid var(--line);border-radius:11px;padding:11px;min-height:220px}
+  .col.over{background:rgba(224,197,143,.22);border-color:var(--tan-deep)}
+  .colh{display:flex;justify-content:space-between;align-items:center;font-size:10px;text-transform:uppercase;
+        letter-spacing:1.2px;font-weight:700;color:var(--soft);margin-bottom:9px}
+  .colh .c{background:var(--line2);border-radius:99px;padding:1px 7px;font-size:10px}
+  .cards{display:flex;flex-direction:column;gap:7px;min-height:120px}
+  .p{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--tan);border-radius:9px;
+     padding:10px 12px;cursor:grab;font-size:13px}
+  .p:hover{border-left-color:var(--tan-deep)}
+  .p .nm{font-weight:600}
+  .p .em{font-size:11px;color:var(--soft);word-break:break-all}
+  .p .mt{font-size:10.5px;color:var(--soft);margin-top:4px;display:flex;gap:8px;flex-wrap:wrap}
+  .p .mt b{font-weight:600;color:var(--navy)}
+  .p.hot{border-left-color:var(--good)}
+  .p.cold{opacity:.72}
+
+  .ov{position:fixed;inset:0;background:rgba(17,34,80,.45);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
+  .ov.on{display:flex}
+  .modal{background:var(--card);border-radius:14px;max-width:520px;width:100%;max-height:88vh;overflow:auto;padding:24px 26px}
+  .modal h3{font-family:'Merriweather',Georgia,serif;font-size:18px;margin-bottom:3px}
+  .fld{margin-top:12px}
+  .fld label{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:var(--soft);font-weight:700;display:block;margin-bottom:4px}
+  input,select,textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 11px;
+                        font:500 13px 'Poppins';color:var(--navy);background:var(--bg)}
+  textarea{min-height:76px;resize:vertical}
+  .hist{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
+  .hist .h{font-size:12px;padding:7px 0;border-bottom:1px solid var(--line2);color:var(--soft)}
+  .hist .h:last-child{border-bottom:none}
+  .hist .h b{color:var(--navy)}
+  .row{display:flex;gap:8px;margin-top:16px}
+  .msg{font-size:12px;font-weight:600;margin-top:8px;display:none}
+  .msg.on{display:block}
+  .login{max-width:330px;margin:70px auto;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px}
+  @media(max-width:900px){.board{grid-template-columns:repeat(6,240px)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="login" class="login">
+    <h3 style="font-family:'Merriweather';font-size:17px;margin-bottom:10px">Outreach CRM</h3>
+    <select id="who"></select>
+    <div style="height:8px"></div>
+    <input id="pin" type="password" inputmode="numeric" placeholder="Your Ops Board PIN">
+    <button class="btn" id="go" style="width:100%;margin-top:10px">Enter</button>
+    <div class="msg" id="lmsg" style="color:var(--bad)"></div>
+  </div>
+
+  <div id="app" style="display:none">
+    <header>
+      <div>
+        <div class="brand">SKLES<span>.</span> Outreach</div>
+        <div class="sub">Drag someone to the next stage as the conversation moves</div>
+      </div>
+      <div class="spacer"></div>
+      <span class="who" id="whoami"></span>
+      <button class="btn ghost" id="import">Import list</button>
+      <button class="btn" id="add">+ Add person</button>
+    </header>
+
+    <div class="stats" id="stats"></div>
+    <div class="board" id="board"></div>
+  </div>
+</div>
+
+<div class="ov" id="ov"><div class="modal" id="modal"></div></div>
+
+<script>
+var DB='https://rifa-mae-default-rtdb.firebaseio.com/skles-ops';
+var STAGES=[['to_contact','To contact'],['contacted','Contacted'],['spoke','Spoke'],
+            ['registered','Registered'],['joined','Joined'],['no','Not interested']];
+var USER=null, people=[], editing=null;
+function g(i){return document.getElementById(i)}
+function esc(s){return (s||'').replace(/[&<>"]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]})}
+
+fetch(DB+'/users.json').then(function(r){return r.json()}).then(function(u){
+  g('who').innerHTML=Object.keys(u||{}).map(function(k){return '<option value="'+k+'">'+u[k].name+'</option>'}).join('');
+});
+g('go').onclick=function(){
+  var k=g('who').value, pin=g('pin').value.trim();
+  fetch(DB+'/users/'+k+'.json').then(function(r){return r.json()}).then(function(u){
+    if(!u){ return show('lmsg','Unknown user.'); }
+    if(u.pin && u.pin!==pin){ return show('lmsg','That PIN does not match.'); }
+    USER=u.name; g('login').style.display='none'; g('app').style.display='';
+    g('whoami').textContent=USER; load();
+  });
+};
+function show(id,m){var e=g(id);e.textContent=m;e.className='msg on'}
+
+function load(){
+  fetch(DB+'/crm.json').then(function(r){return r.json()}).then(function(d){
+    people=Object.keys(d||{}).map(function(k){var x=d[k]||{};x._k=k;return x});
+    render();
+  });
+}
+
+function render(){
+  var by={}; STAGES.forEach(function(s){by[s[0]]=[]});
+  people.forEach(function(p){ (by[p.stage]||by.to_contact).push(p) });
+
+  var reached=people.filter(function(p){return p.stage!=='to_contact'}).length;
+  var joined=people.filter(function(p){return p.stage==='joined'}).length;
+  g('stats').innerHTML=[
+    ['In the pipeline',people.length],['Reached out',reached],
+    ['Spoke to',people.filter(function(p){return ['spoke','registered','joined'].indexOf(p.stage)>=0}).length],
+    ['Registered',people.filter(function(p){return ['registered','joined'].indexOf(p.stage)>=0}).length],
+    ['Joined',joined],
+    ['Conversion',reached? Math.round(joined/reached*100)+'%' : '—']
+  ].map(function(s){return '<div class="s"><div class="n">'+s[1]+'</div><div class="k">'+s[0]+'</div></div>'}).join('');
+
+  g('board').innerHTML=STAGES.map(function(s){
+    var list=by[s[0]]||[];
+    return '<div class="col" data-stage="'+s[0]+'">'
+      + '<div class="colh"><span>'+s[1]+'</span><span class="c">'+list.length+'</span></div>'
+      + '<div class="cards">'
+      + list.map(function(p){
+          var cls = p.source==='no_show'?' hot' : (p.stage==='no'?' cold':'');
+          return '<div class="p'+cls+'" draggable="true" data-k="'+p._k+'">'
+            + '<div class="nm">'+esc(p.name||'(no name)')+'</div>'
+            + (p.email?'<div class="em">'+esc(p.email)+'</div>':'')
+            + '<div class="mt">'+(p.source?'<b>'+esc(p.source)+'</b>':'')
+            + (p.last?'<span>'+esc(p.last)+'</span>':'')+'</div></div>';
+        }).join('')
+      + '</div></div>';
+  }).join('');
+  wire();
+}
+
+function wire(){
+  document.querySelectorAll('.p').forEach(function(el){
+    el.addEventListener('dragstart',function(e){e.dataTransfer.setData('k',el.dataset.k);el.style.opacity=.4});
+    el.addEventListener('dragend',function(){el.style.opacity=1});
+    el.addEventListener('click',function(){open(el.dataset.k)});
+  });
+  document.querySelectorAll('.col').forEach(function(c){
+    c.addEventListener('dragover',function(e){e.preventDefault();c.classList.add('over')});
+    c.addEventListener('dragleave',function(){c.classList.remove('over')});
+    c.addEventListener('drop',function(e){
+      e.preventDefault();c.classList.remove('over');
+      var k=e.dataTransfer.getData('k'), p=people.filter(function(x){return x._k===k})[0];
+      if(!p) return;
+      var from=p.stage; p.stage=c.dataset.stage; p.last=new Date().toISOString().slice(0,10);
+      p.history=(p.history||[]).concat([{at:p.last,by:USER,note:'moved '+from+' → '+p.stage}]);
+      save(p); render();
+    });
+  });
+}
+
+function save(p){
+  var body=Object.assign({},p); delete body._k;
+  return fetch(DB+'/crm/'+p._k+'.json',{method:'PUT',body:JSON.stringify(body)});
+}
+
+function open(k){
+  editing=people.filter(function(x){return x._k===k})[0]; if(!editing) return;
+  var p=editing;
+  g('modal').innerHTML=
+    '<h3>'+esc(p.name||'(no name)')+'</h3>'
+   +'<div class="sub" style="font-size:12px;color:var(--soft)">'+esc(p.email||'')+'</div>'
+   +'<div class="fld"><label>Name</label><input id="m-name" value="'+esc(p.name||'')+'"></div>'
+   +'<div class="fld"><label>Email</label><input id="m-email" value="'+esc(p.email||'')+'"></div>'
+   +'<div class="fld"><label>Phone</label><input id="m-phone" value="'+esc(p.phone||'')+'"></div>'
+   +'<div class="fld"><label>Where they came from</label><input id="m-source" value="'+esc(p.source||'')+'"></div>'
+   +'<div class="fld"><label>Stage</label><select id="m-stage">'
+     +STAGES.map(function(s){return '<option value="'+s[0]+'"'+(p.stage===s[0]?' selected':'')+'>'+s[1]+'</option>'}).join('')
+   +'</select></div>'
+   +'<div class="fld"><label>Add a note</label><textarea id="m-note" placeholder="What they said, what happens next"></textarea></div>'
+   +'<div class="row"><button class="btn" id="m-save">Save</button>'
+     +'<button class="btn ghost" id="m-close">Close</button>'
+     +'<span style="flex:1"></span>'
+     +'<button class="btn ghost" id="m-del" style="color:var(--bad)">Remove</button></div>'
+   +'<div class="hist">'+((p.history||[]).slice().reverse().map(function(h){
+        return '<div class="h"><b>'+esc(h.at)+'</b> · '+esc(h.by||'')+' · '+esc(h.note||'')+'</div>';
+      }).join('') || '<div class="h">Nothing logged yet.</div>')+'</div>';
+  g('ov').classList.add('on');
+  g('m-close').onclick=function(){g('ov').classList.remove('on')};
+  g('m-del').onclick=function(){
+    fetch(DB+'/crm/'+p._k+'.json',{method:'DELETE'}).then(function(){
+      people=people.filter(function(x){return x._k!==p._k});
+      g('ov').classList.remove('on'); render();
+    });
+  };
+  g('m-save').onclick=function(){
+    var note=g('m-note').value.trim();
+    p.name=g('m-name').value; p.email=g('m-email').value; p.phone=g('m-phone').value;
+    p.source=g('m-source').value; p.stage=g('m-stage').value;
+    p.last=new Date().toISOString().slice(0,10);
+    if(note) p.history=(p.history||[]).concat([{at:p.last,by:USER,note:note}]);
+    save(p).then(function(){g('ov').classList.remove('on');render()});
+  };
+}
+
+g('add').onclick=function(){
+  var entry={name:'',email:'',phone:'',source:'manual',stage:'to_contact',
+             last:new Date().toISOString().slice(0,10),history:[]};
+  fetch(DB+'/crm.json',{method:'POST',body:JSON.stringify(entry)})
+    .then(function(r){return r.json()}).then(function(res){
+      entry._k=res.name; people.push(entry); render(); open(res.name);
+    });
+};
+
+g('import').onclick=function(){
+  g('modal').innerHTML=
+    '<h3>Import a list</h3>'
+   +'<p style="font-size:12.5px;color:var(--soft);margin-top:4px">Export a list from GetResponse as CSV and paste it below, '
+   +'or type one person per line. It reads <b>name, email, phone</b> in that order, and skips anyone already here.</p>'
+   +'<div class="fld"><label>Paste here</label><textarea id="i-txt" style="min-height:150px" '
+   +'placeholder="Jane Doe, jane@example.com, 555 0100&#10;John Smith, john@example.com"></textarea></div>'
+   +'<div class="fld"><label>Where they came from</label><input id="i-src" value="webinar no-show"></div>'
+   +'<div class="row"><button class="btn" id="i-go">Import</button>'
+   +'<button class="btn ghost" id="i-close">Cancel</button></div><div class="msg" id="i-msg"></div>';
+  g('ov').classList.add('on');
+  g('i-close').onclick=function(){g('ov').classList.remove('on')};
+  g('i-go').onclick=function(){
+    var src=g('i-src').value.trim();
+    var have={}; people.forEach(function(p){ if(p.email) have[p.email.toLowerCase()]=1 });
+    var rows=g('i-txt').value.split('\n').map(function(l){return l.trim()}).filter(Boolean);
+    var added=0, chain=Promise.resolve();
+    rows.forEach(function(line){
+      var parts=line.split(/[,;\t]/).map(function(x){return x.trim().replace(/^"|"$/g,'')});
+      var email=(parts.filter(function(x){return x.indexOf('@')>0})[0]||'').toLowerCase();
+      var name=parts.filter(function(x){return x.indexOf('@')<0 && !/^[\d\s()+-]+$/.test(x)})[0]||'';
+      var phone=parts.filter(function(x){return /^[\d\s()+-]{7,}$/.test(x)})[0]||'';
+      if(/^(name|email|first)/i.test(name)) return;          // header row
+      if(email && have[email]) return;                        // already in the pipeline
+      if(!email && !name) return;
+      if(email) have[email]=1;
+      added++;
+      var entry={name:name,email:email,phone:phone,source:src,stage:'to_contact',
+                 last:new Date().toISOString().slice(0,10),
+                 history:[{at:new Date().toISOString().slice(0,10),by:USER,note:'imported from '+src}]};
+      chain=chain.then(function(){
+        return fetch(DB+'/crm.json',{method:'POST',body:JSON.stringify(entry)})
+          .then(function(r){return r.json()}).then(function(res){entry._k=res.name;people.push(entry)});
+      });
+    });
+    chain.then(function(){
+      var m=g('i-msg'); m.className='msg on'; m.style.color='var(--good)';
+      m.textContent=added+' added, '+(rows.length-added)+' skipped as duplicates or headers.';
+      render(); setTimeout(function(){g('ov').classList.remove('on')},1600);
+    });
+  };
+};
+g('ov').onclick=function(e){ if(e.target===g('ov')) g('ov').classList.remove('on') };
+</script>
+</body>
+</html>
