@@ -3,10 +3,18 @@
 // in the August strategic review so the dashboard and the plan agree.
 // Update, then push this file to the skles-dashboard repo.
 window.SKLES_SALES = {
-  last_updated: "Sep 09, 2026",
+  last_updated: "Sep 09, 2026 · counted from GetResponse",
 
-  apprentice_total: 1,      // $8.99/mo members, cumulative
-  protege_total: 0,         // $2,499 one-time
+  // Counted from the GetResponse lists on Sep 9 2026, not guessed.
+  // Apprentice Members list = 4 (2 of them joined Aug 2026, in the funnel window).
+  apprentice_total: 4,
+  apprentice_this_cycle: 2,
+  // Protege' Members list = 9, minus Sean's own address = 8 real customers.
+  // 2 are recent: Aug 15 and Sep 6. The Sep 6 one was already an Apprentice
+  // since Feb, so that is a documented ascension, not a cold sale.
+  protege_total: 8,
+  protege_this_cycle: 2,
+  protege_ascended_from_apprentice: 1,
   enterpriser_total: 0,     // $9,999 one-time
   prices: { apprentice: 8.99, protege: 2499, enterpriser: 9999 },
 
@@ -63,8 +71,8 @@ window.SKLES_SALES = {
     },
     nurture: {
       guide_delivery_open: null,   // %, GetResponse. Was 17.7% in August
-      broadcast_open: null,        // %, was 36.1%
-      broadcast_click: null,       // %, was 2.6%
+      broadcast_open: 38.1,        // live from GetResponse, Aug 1 to Sep 9
+      broadcast_click: 3.07,       // live from GetResponse, Aug 1 to Sep 9
       webinar_invite_click: null   // %, was ~1.0%
     },
     webinar: {
@@ -77,7 +85,7 @@ window.SKLES_SALES = {
       sales: 0                     // none closed
     },
     retention: {
-      active_members: 1,
+      active_members: 4,
       churned: 0,
       outreach_contacts: null,     // Rodney's warm-lead calls
       outreach_converted: null,
@@ -94,6 +102,9 @@ window.SKLES_SALES = {
     yt:     { subs: 450, views_month: 3500, uploads_month: 12 }
   },
 
-  // Nothing in the funnel links to or mentions Protégé yet.
-  protege_path_built: false
+  // The funnel emails still never mention Protégé, but people are buying it
+  // anyway through Sean directly and the course platform. So the gap is that
+  // the funnel doesn't ASSIST the sale, not that the sale never happens.
+  protege_path_built: false,
+  protege_sells_outside_funnel: true
 };
