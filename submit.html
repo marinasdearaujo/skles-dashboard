@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SKLES · Submit numbers</title>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#112250;--soft:#5d6b7e;--tan:#E0C58F;--tan-deep:#8a6a24;
+        --bg:#F5F0E6;--card:#FFF;--line:#E7DFCD;--line2:#F0EADC;--good:#1E8E5A;--bad:#C1443E}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--navy);font-family:'Poppins',-apple-system,Arial,sans-serif;font-size:14.5px;line-height:1.55}
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px 80px}
+  header{padding:34px 0 6px}
+  .brand{font-family:'Merriweather',Georgia,serif;font-weight:900;font-size:18px}
+  .brand span{color:var(--tan-deep)}
+  .sub{font-size:12px;color:var(--soft);margin-top:3px}
+  h2{font-size:10px;text-transform:uppercase;letter-spacing:2.2px;color:var(--soft);font-weight:700;margin:34px 0 4px}
+  .hint{font-size:12px;color:var(--soft);margin-bottom:12px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+  .row{display:grid;grid-template-columns:1fr 130px;gap:12px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line2)}
+  .row:last-child{border-bottom:none}
+  .row label{font-size:13px}
+  .row label small{display:block;color:var(--soft);font-size:11px}
+  input,select{border:1px solid var(--line);border-radius:8px;padding:8px 10px;font:500 13px 'Poppins';
+               color:var(--navy);background:var(--bg);width:100%}
+  input:focus,select:focus{outline:none;border-color:var(--tan-deep)}
+  .btn{background:var(--navy);color:#fff;border:none;border-radius:9px;padding:11px 22px;
+       font:700 13px 'Poppins';cursor:pointer;margin-top:14px}
+  .btn:hover{background:#1b3560}
+  .btn.ghost{background:transparent;color:var(--navy);border:1px solid var(--line)}
+  .msg{margin-top:10px;font-size:12.5px;font-weight:600;display:none}
+  .msg.on{display:block}
+  .msg.ok{color:var(--good)} .msg.err{color:var(--bad)}
+  .login{max-width:340px;margin:60px auto;text-align:left}
+  .grid3{display:grid;grid-template-columns:110px 1fr 130px;gap:8px;margin-bottom:8px}
+  .log{margin-top:12px;font-size:12.5px}
+  .log .i{display:grid;grid-template-columns:88px 1fr 110px 26px;gap:8px;padding:7px 0;border-bottom:1px solid var(--line2);align-items:center}
+  .log .i:last-child{border-bottom:none}
+  .log .x{cursor:pointer;color:var(--soft);text-align:right}
+  .tot{font-size:12px;color:var(--soft);margin-top:10px}
+  .tot b{color:var(--navy);font-family:'Merriweather'}
+  footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-size:11.5px;color:var(--soft)}
+  footer a{color:var(--tan-deep)}
+  @media(max-width:640px){.row{grid-template-columns:1fr}.grid3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">SKLES<span>.</span></div>
+    <div class="sub">Submit the numbers no API gives us. Saved straight to the dashboard.</div>
+  </header>
+
+  <div id="login" class="login card">
+    <h2 style="margin-top:0">Who are you</h2>
+    <select id="who"></select>
+    <div style="height:8px"></div>
+    <input id="pin" type="password" inputmode="numeric" placeholder="Your Ops Board PIN">
+    <button class="btn" id="go" style="width:100%">Enter</button>
+    <div class="msg err" id="lmsg"></div>
+    <div class="hint" style="margin-top:10px">Same name and PIN you use on the Ops Board.</div>
+  </div>
+
+  <div id="app" style="display:none">
+    <h2>This week's channel numbers</h2>
+    <div class="hint">TikTok, LinkedIn and the main Facebook page. Nothing reads these automatically yet.</div>
+    <div class="card" id="weekly"></div>
+
+    <h2>Email · GetResponse</h2>
+    <div class="hint">Until the GetResponse API is connected, these come from the reports tab.</div>
+    <div class="card" id="email"></div>
+
+    <h2>Webinar and meeting · Zoom</h2>
+    <div class="hint">From the Zoom attendance export after each session.</div>
+    <div class="card" id="zoom"></div>
+
+    <h2>Sales</h2>
+    <div class="hint">Running totals since launch.</div>
+    <div class="card" id="sales"></div>
+
+    <h2>Outreach log</h2>
+    <div class="hint">One line per person contacted. The dashboard counts these for you.</div>
+    <div class="card">
+      <div class="grid3">
+        <input id="o-date" type="date">
+        <input id="o-name" placeholder="Who you contacted">
+        <select id="o-out">
+          <option value="contacted">Contacted</option>
+          <option value="spoke">Spoke to them</option>
+          <option value="registered">Registered</option>
+          <option value="joined">Joined</option>
+          <option value="no">No answer</option>
+        </select>
+      </div>
+      <button class="btn ghost" id="o-add">Add to the log</button>
+      <div class="log" id="o-log"></div>
+      <div class="tot" id="o-tot"></div>
+    </div>
+
+    <button class="btn" id="save">Save everything</button>
+    <div class="msg" id="msg"></div>
+  </div>
+
+  <footer>
+    <a href="simple.html">← Back to the funnel</a> &nbsp;·&nbsp; <a href="ops-board.html">Ops Board</a>
+  </footer>
+</div>
+
+<script>
+var DB='https://rifa-mae-default-rtdb.firebaseio.com';
+var USER=null, OUTREACH=[];
+function g(i){return document.getElementById(i)}
+function num(v){return v===''||v===null||v===undefined?null:+v}
+
+var WEEKLY=[
+  ['tiktok_views','TikTok views','last 7 days'],
+  ['tiktok_followers','TikTok new followers','last 7 days'],
+  ['linkedin_impressions','LinkedIn impressions','last 7 days'],
+  ['linkedin_followers','LinkedIn new followers','last 7 days'],
+  ['fbmain_reach','Facebook Main reach','seanklangston.motivates']
+];
+var EMAIL=[
+  ['guide_delivery_open','Guide delivery open %','the email with the PDF'],
+  ['broadcast_open','Broadcast open %',''],
+  ['broadcast_click','Broadcast click %',''],
+  ['webinar_invite_click','Webinar invite click %','']
+];
+var ZOOM=[
+  ['live_attendees','Webinar live attendees','last session'],
+  ['meeting_registered','Meeting registered','2nd/4th Wednesday'],
+  ['meeting_participants','Meeting participants',''],
+  ['meeting_sales','Meeting sales','']
+];
+var SALES=[
+  ['apprentice_total','Apprentice members','$8.99/mo, running total'],
+  ['protege_total','Protégé sales','$2,499, running total'],
+  ['churned','Members churned','running total']
+];
+
+function fields(host, defs, vals){
+  g(host).innerHTML = defs.map(function(d){
+    var v = (vals&&vals[d[0]]!==undefined&&vals[d[0]]!==null)? vals[d[0]] : '';
+    return '<div class="row"><label>'+d[1]+(d[2]?'<small>'+d[2]+'</small>':'')+'</label>'
+         + '<input type="number" step="any" id="f-'+d[0]+'" value="'+v+'" placeholder="—"></div>';
+  }).join('');
+}
+function collect(defs){
+  var o={}; defs.forEach(function(d){ o[d[0]]=num(g('f-'+d[0]).value); }); return o;
+}
+
+fetch(DB+'/skles-ops/users.json').then(function(r){return r.json()}).then(function(u){
+  g('who').innerHTML=Object.keys(u||{}).map(function(k){return '<option value="'+k+'">'+u[k].name+'</option>'}).join('');
+});
+
+g('go').onclick=function(){
+  var k=g('who').value, pin=g('pin').value.trim();
+  fetch(DB+'/skles-ops/users/'+k+'.json').then(function(r){return r.json()}).then(function(u){
+    if(!u){ return fail('Unknown user.'); }
+    if(u.pin && u.pin!==pin){ return fail('That PIN does not match.'); }
+    USER=u.name;
+    g('login').style.display='none'; g('app').style.display='';
+    load();
+  });
+};
+function fail(m){ var e=g('lmsg'); e.textContent=m; e.className='msg err on'; }
+
+function load(){
+  fetch(DB+'/skles-ops/metrics.json').then(function(r){return r.json()}).then(function(m){
+    m=m||{};
+    fields('weekly',WEEKLY,m.weekly); fields('email',EMAIL,m.email);
+    fields('zoom',ZOOM,m.zoom);       fields('sales',SALES,m.sales);
+    OUTREACH = Object.keys(m.outreach||{}).map(function(k){ var x=m.outreach[k]; x._k=k; return x; });
+    drawLog();
+  });
+}
+
+function drawLog(){
+  OUTREACH.sort(function(a,b){return (b.date||'').localeCompare(a.date||'')});
+  g('o-log').innerHTML=OUTREACH.slice(0,25).map(function(o){
+    return '<div class="i"><div>'+(o.date||'')+'</div><div>'+(o.name||'')+'</div>'
+         + '<div>'+(o.outcome||'')+'</div><div class="x" data-k="'+o._k+'">✕</div></div>';
+  }).join('') || '<div class="hint" style="margin:0">Nothing logged yet.</div>';
+  var conv=OUTREACH.filter(function(o){return o.outcome==='joined'}).length;
+  var reg=OUTREACH.filter(function(o){return o.outcome==='registered'}).length;
+  g('o-tot').innerHTML='<b>'+OUTREACH.length+'</b> contacted · <b>'+reg+'</b> registered · <b>'+conv+'</b> joined';
+  g('o-log').onclick=function(e){
+    var k=e.target.dataset.k; if(!k) return;
+    fetch(DB+'/skles-ops/metrics/outreach/'+k+'.json',{method:'DELETE'}).then(function(){
+      OUTREACH=OUTREACH.filter(function(o){return o._k!==k}); drawLog();
+    });
+  };
+}
+
+g('o-add').onclick=function(){
+  var d=g('o-date').value||new Date().toISOString().slice(0,10);
+  var nm=g('o-name').value.trim(); if(!nm) return;
+  var entry={date:d, name:nm, outcome:g('o-out').value, by:USER, at:Date.now()};
+  fetch(DB+'/skles-ops/metrics/outreach.json',{method:'POST',body:JSON.stringify(entry)})
+    .then(function(r){return r.json()}).then(function(res){
+      entry._k=res.name; OUTREACH.push(entry); g('o-name').value=''; drawLog();
+    });
+};
+
+g('save').onclick=function(){
+  var payload={
+    weekly:collect(WEEKLY), email:collect(EMAIL), zoom:collect(ZOOM), sales:collect(SALES),
+    updated_by:USER, updated_at:new Date().toISOString()
+  };
+  fetch(DB+'/skles-ops/metrics.json',{method:'PATCH',body:JSON.stringify(payload)})
+    .then(function(r){
+      var m=g('msg');
+      m.textContent = r.ok? 'Saved. The dashboard will show these straight away.' : 'Could not save, try again.';
+      m.className='msg on '+(r.ok?'ok':'err');
+      setTimeout(function(){m.className='msg'},4000);
+    });
+};
+</script>
+</body>
+</html>
