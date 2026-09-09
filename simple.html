@@ -341,9 +341,13 @@ function channelView(){
           ['Videos published (all-time)',yt.videos,null,''],
           ['Views this month',null,T.views_month,''],['Uploads this month',null,T.uploads_month,'']];
   } else if(ST.chan==='email'){
-    var nu=K2.nurture||{};
-    rows=[['Guide delivery open',nu.guide_delivery_open,50,'%'],['Broadcast open',nu.broadcast_open,15,'%'],
-          ['Broadcast click',nu.broadcast_click,3,'%'],['Webinar invite click',nu.webinar_invite_click,3,'%'],
+    var nu=K2.nurture||{}, ep=S.email_performance||{};
+    rows=[['Open rate',ep.open_rate,15,'%'],['Click rate',ep.click_rate,3,'%'],
+          ['Click to open',ep.ctor,20,'%'],['Emails delivered',ep.delivered,null,''],
+          ['Opens',ep.opened,null,''],['Clicks',ep.clicked,null,''],
+          ['Unsubscribed',ep.unsubscribed,null,''],
+          ['Guide delivery open',nu.guide_delivery_open,50,'%'],
+          ['Webinar invite click',nu.webinar_invite_click,3,'%'],
           ['Guide downloads',p.leads,45,''],['Registrations driven',p.regs,30,'']];
   } else if(ST.chan==='outreach'){
     var rt=K2.retention||{}, mt=K2.meeting||{};
@@ -376,7 +380,7 @@ function channelView(){
 
   var gap = missing.length? '<div class="gap" style="margin-top:12px"><b>Not tracked yet:</b> '
       + missing.map(function(r){return r[0]}).join(', ')
-      + '. ' + (ST.chan==='email'?'GetResponse has an API, nothing is wired to it.'
+      + '. ' + (ST.chan==='email'?'Per-message stats need a separate pull; the account totals above are live.'
               : ST.chan==='outreach'?'Log them on the Ops Board under Outreach and they count themselves.'
               : ST.chan==='yt'?'Needs channel-owner authorization; manager access will not return it.'
               : ST.chan==='email'||ST.chan==='outreach'?'Waiting on the GetResponse and Zoom API keys.'
