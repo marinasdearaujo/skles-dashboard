@@ -16,6 +16,28 @@ window.SKLES_SALES = {
   revenue_by_month: {
     "2026-08": { sales: 3, revenue: 2016.98, protege: 1, apprentice: 2 }
   },
+
+  // ATTRIBUTION, traced contact by contact in GetResponse on Sep 9.
+  // Neither August buyer came through the ebook. Both were existing leads
+  // re-engaged through the webinar arm:
+  //   Philip Hinton  May 21 no-show -> Jul 15 webinar -> Protege' Aug 15
+  //   Chay Simpson   in list Dec 25 -> Jul 7 webinar  -> Apprentice Aug 18
+  // So the sales cycle is roughly three months from first touch, and the
+  // ebook cohort (Aug onwards) is not due to convert until Oct/Nov.
+  attribution: {
+    august_sales_from_ebook: 0,
+    august_sales_from_webinar_reengagement: 3,
+    typical_days_first_touch_to_sale: 90,
+    ebook_leads_converted_so_far: 0,
+    ebook_funnel_age_weeks: 7
+  },
+
+  // Live from the GetResponse MCP, Aug 1 to Sep 9.
+  email_performance: {
+    sent: 814, delivered: 814, opened: 310, clicked: 25,
+    open_rate: 38.08, click_rate: 3.07, ctor: 8.06,
+    bounced: 0, unsubscribed: 0, complaints: 0
+  },
   apprentice_total: 2,       // paying, August
   protege_total: 1,          // paying, August
 
@@ -77,10 +99,11 @@ window.SKLES_SALES = {
       ebook_ctr: null              // live from Meta, left null so the API wins
     },
     nurture: {
-      guide_delivery_open: null,   // %, GetResponse. Was 17.7% in August
+      guide_delivery_open: null,   // %, per-message stat, still to pull
       broadcast_open: 38.1,        // live from GetResponse, Aug 1 to Sep 9
       broadcast_click: 3.07,       // live from GetResponse, Aug 1 to Sep 9
-      webinar_invite_click: null   // %, was ~1.0%
+      webinar_invite_click: null   // %, was ~1.0%. The button was dead until Sep 8,
+                                   // so every figure before then measured a broken link.
     },
     webinar: {
       live_attendees: 0,           // Zoom export. 0 of 3 at the last session
