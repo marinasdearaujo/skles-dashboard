@@ -148,9 +148,11 @@
 <script src="skles-organic-data.js"></script>
 <script src="skles-youtube-data.js"></script>
 <script src="skles-sales-data.js"></script>
+<script src="skles-zoom-data.js"></script>
 <script>
 (function(){
 var D=window.SKLES_DATA||{},O=window.SKLES_ORGANIC||{},Y=window.SKLES_YOUTUBE||{},S=window.SKLES_SALES||{};
+var Z=window.SKLES_ZOOM||{};
 var C=D.campaigns||{}, K=S.kpis||{};
 var n=function(v){return +(v||0)}, g=function(i){return document.getElementById(i)};
 var f=function(v){return Math.round(n(v)).toLocaleString('en-US')};
@@ -260,7 +262,11 @@ function stages(){
     {id:'webinar',name:'Recorded webinar',sub:'The scalable closer for cold traffic',
      actual:p.regs, goal:stageGoal('webinar'), gkey:'webinar',
      chans:{paid:p.regs},
-     kpis:[['Registered',p.regs,''],['Live attendees',wb.live_attendees,''],
+     kpis:[['Registered',p.regs,''],
+           ['Sessions run',(Z.totals||{}).sessions,''],
+           ['Real attendees',(Z.totals||{}).real_attendees,''],
+           ['Stayed 10 min or more',(Z.totals||{}).engaged_attendees,''],
+           ['Sessions nobody attended',(Z.totals||{}).sessions_with_nobody,''],
            ['Apprentice sales from here',wb.apprentice_from_webinar,'']]},
     {id:'meeting',name:'Live relational meeting',sub:'2nd and 4th Wednesday · the warm-lead room',
      actual:(mt.registered===null||mt.registered===undefined)?null:n(mt.registered),
@@ -353,6 +359,8 @@ function channelView(){
     var rt=K2.retention||{}, mt=K2.meeting||{};
     rows=[['Contacts made',rt.outreach_contacts,40,''],['Registered from outreach',rt.outreach_registered,12,''],['Converted',rt.outreach_converted,4,''],
           ['Meeting registered',mt.registered,12,''],['Meeting participants',mt.participants,8,''],
+          ['Webinar real attendees',(Z.totals||{}).real_attendees,12,''],
+          ['Sessions nobody attended',(Z.totals||{}).sessions_with_nobody,0,'',true],
           ['Meeting sales',mt.sales,2,'']];
   }
 
@@ -430,7 +438,7 @@ function render(){
   channelView(); economics(); okrs();
   var o=organic();
   g('foot-note').textContent='Paid answers the date filter exactly. Organic snaps to Meta’s nearest window ('
-    +o.window+'d). Goals are monthly, pro-rated to the period shown. Sales, email and meeting figures are entered by hand, last updated '
+    +o.window+'d). Zoom attendance is live and excludes hosts. Goals are monthly, pro-rated to the period shown. Sales, email and meeting figures are entered by hand, last updated '
     +(S._submitted_at? (S._submitted_at.slice(0,10)+' by '+(S._submitted_by||'someone')) : (S.last_updated||'—'))+'.';
 }
 
