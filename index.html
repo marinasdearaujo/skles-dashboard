@@ -56,6 +56,28 @@ h1,h2,h3,.st,.kpi-label,.tab{font-family:'Montserrat',sans-serif}
 @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 
 /* Section labels */
+.fnl-wrap{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.fnl-row{display:grid;grid-template-columns:minmax(0,1fr) 210px;gap:16px;align-items:center}
+.fnl-bar{position:relative;background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);
+  border:1px solid var(--navy-line);border-left:4px solid var(--gold);border-radius:10px;padding:14px 18px;
+  transition:transform .15s ease}
+.fnl-bar:hover{transform:translateX(3px)}
+.fnl-bar.broken{border-left-color:var(--down);background:linear-gradient(135deg,#2A1520 0%,#3A1D2A 100%)}
+.fnl-bar.warn{border-left-color:var(--warn)}
+.fnl-bar.good{border-left-color:var(--up)}
+.fnl-stage{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--dim);font-weight:600}
+.fnl-num{font-family:'Montserrat';font-size:30px;font-weight:800;line-height:1.05;margin-top:3px}
+.fnl-unit{font-size:11px;color:var(--very-dim);font-weight:500;margin-left:7px}
+.fnl-note{font-size:11px;color:var(--dim);margin-top:5px;line-height:1.45}
+.fnl-side{font-size:11px;color:var(--dim);line-height:1.6}
+.fnl-side b{color:var(--text);font-weight:700}
+.fnl-conv{display:flex;align-items:center;gap:8px;padding-left:20px;font-size:11px;color:var(--very-dim)}
+.fnl-conv .pct{color:var(--gold);font-weight:700;font-family:'Montserrat'}
+.fnl-tgt{display:inline-block;font-size:10px;padding:2px 8px;border-radius:99px;font-weight:700;margin-left:8px}
+.fnl-tgt.on{background:rgba(34,197,94,.16);color:var(--up)}
+.fnl-tgt.off{background:rgba(245,158,11,.16);color:var(--warn)}
+.fnl-tgt.bad{background:rgba(239,68,68,.16);color:var(--down)}
+@media(max-width:760px){.fnl-row{grid-template-columns:1fr}.fnl-side{padding-left:20px}}
 .section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--gold);margin:24px 0 12px;display:flex;align-items:center;gap:10px}
 .section-title:first-child{margin-top:0}
 .section-title::before{content:'';width:4px;height:14px;background:var(--gold);border-radius:2px}
@@ -244,6 +266,7 @@ h1,h2,h3,.st,.kpi-label,.tab{font-family:'Montserrat',sans-serif}
   <!-- TABS -->
   <div class="tabs">
     <div class="tab active" onclick="switchTab('overview',this)">Overview</div>
+    <div class="tab" onclick="switchTab('funnel',this)">Funnel</div>
     <div class="tab" onclick="switchTab('instagram',this)">Instagram</div>
     <div class="tab" onclick="switchTab('fb-skles',this)">FB Skills Up</div>
     <div class="tab" onclick="switchTab('tiktok',this)">TikTok</div>
@@ -271,6 +294,28 @@ h1,h2,h3,.st,.kpi-label,.tab{font-family:'Montserrat',sans-serif}
     <div class="section-sub">Auto-flagged from the live data \u2014 the shortlist of what to fix.</div>
     <div id="ov-attention"></div>
 
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- FUNNEL TAB -->
+  <!-- ==================================================================== -->
+  <div class="tc" id="tab-funnel">
+    <div class="channel-header" style="border-left-color:var(--gold)">
+      <div>
+        <h2>The funnel, top to bottom</h2>
+        <div class="job">Job: turn awareness into Prot&eacute;g&eacute; sales &middot; every stage against the Sept&ndash;Nov plan</div>
+        <div class="source"><span class="dot"></span><span id="fnl-src"></span></div>
+      </div>
+      <div class="nstar">&#9733; North-Star: Prot&eacute;g&eacute; sales</div>
+    </div>
+
+    <div class="section-title">Stage by stage <span class="live-badge"><span class="pulse"></span> Live</span></div>
+    <div class="section-sub">Each stage shows what we have, what the plan wants this month, and how much of the stage above survives into it.</div>
+    <div class="fnl-wrap" id="fnl-stages"></div>
+
+    <div class="section-title" style="margin-top:26px">What the funnel is worth</div>
+    <div class="section-sub">Revenue booked so far against what has been spent to get it.</div>
+    <div class="kpi-grid" id="fnl-econ"></div>
   </div>
 
   <!-- ==================================================================== -->
@@ -837,6 +882,7 @@ h1,h2,h3,.st,.kpi-label,.tab{font-family:'Montserrat',sans-serif}
 <script src="skles-dashboard-data.js"></script>
 <script src="skles-organic-data.js"></script>
 <script src="skles-youtube-data.js"></script>
+<script src="skles-sales-data.js"></script>
 <script>
 function switchTab(target, el){
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -844,6 +890,106 @@ function switchTab(target, el){
   el.classList.add('active');
   document.getElementById('tab-' + target).classList.add('active');
   window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+
+/* ===== Funnel: awareness -> leads -> qualified -> Apprentice -> Protege ===== */
+function renderFunnel(){
+  var D = window.SKLES_DATA || {}, O = window.SKLES_ORGANIC || {},
+      Y = window.SKLES_YOUTUBE || {}, S = window.SKLES_SALES || {};
+  var host = document.getElementById('fnl-stages'); if(!host) return;
+
+  var camps = D.campaigns || {}, ebook = camps.ebook || {}, web = camps.webinar || {};
+  var n = function(v){ return +(v||0); };
+  var fmt = function(v){ return n(v).toLocaleString('en-US'); };
+
+  // Awareness: everyone we put a message in front of, paid plus organic.
+  var paidReach = n(ebook.reach) + n(web.reach);
+  var igReach   = ((((O.windows||{})['30']||{}).ig)||{}).reach || 0;
+  var ytViews   = ((Y.channel||{}).views_recent) || 0;
+  var awareness = paidReach + n(igReach) + n(ytViews);
+
+  var leads     = n(ebook.leads);
+  var qualified = n(ebook.registrations) + n(web.registrations);
+  var appr      = n(S.apprentice_total);
+  var prot      = n(S.protege_total);
+
+  // This month's plan row, so targets move with the calendar.
+  var now = new Date(), key = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
+  var plan = (S.plan || {})[key] || {};
+
+  function badge(actual, target){
+    if(!target) return '';
+    var pct = actual / target;
+    var cls = pct >= 1 ? 'on' : pct >= 0.6 ? 'off' : 'bad';
+    return '<span class="fnl-tgt '+cls+'">'+fmt(actual)+' / '+fmt(target)+' target</span>';
+  }
+
+  var stages = [
+    { key:'awareness', label:'1 · Awareness', value:awareness, unit:'people reached',
+      note:'Paid reach '+fmt(paidReach)+' &middot; Instagram '+fmt(igReach)+(ytViews?' &middot; YouTube '+fmt(ytViews):''),
+      side:'Cold audience meeting SKLES for the first time, through ads and organic.' },
+    { key:'leads', label:'2 · Leads', value:leads, unit:'guide downloads', target:plan.leads,
+      note:'Cost per lead $'+ (leads ? (n(ebook.spend)/leads).toFixed(2) : '0.00') +' &middot; spend $'+ n(ebook.spend).toFixed(2),
+      side:'Downloaded the Fast Track guide and gave us an email address.' },
+    { key:'qualified', label:'3 · Qualified leads', value:qualified, unit:'webinar registrations',
+      note:'Registered for the recorded Fast Track training.',
+      side:'Took the next step on their own. This is the group that actually buys.' },
+    { key:'apprentice', label:'4 · Apprentice sales', value:appr, unit:'members &middot; $8.99/mo',
+      target:plan.active_members,
+      note:'Recurring revenue $'+ (appr * n((S.prices||{}).apprentice)).toFixed(2) +' per month.',
+      side:'The entry product. Low ticket, its real job is to qualify people for Prot&eacute;g&eacute;.' },
+    { key:'protege', label:'5 · Prot&eacute;g&eacute; sales', value:prot, unit:'sales &middot; $2,499 each',
+      target:plan.protege,
+      note: S.protege_path_built === false
+        ? '&#9888; No acquisition path built yet. Nothing in the funnel links to or mentions Prot&eacute;g&eacute;.'
+        : 'Revenue $'+ (prot * n((S.prices||{}).protege)).toLocaleString('en-US'),
+      side:'Where the money is. One sale covers roughly two months of the entire ad budget.',
+      broken: S.protege_path_built === false }
+  ];
+
+  var html = '', prev = null;
+  stages.forEach(function(st, i){
+    if(prev !== null){
+      var pct = prev > 0 ? (st.value / prev * 100) : 0;
+      var shown = pct >= 10 ? pct.toFixed(0) : pct.toFixed(1);
+      html += '<div class="fnl-conv">&#8595; <span class="pct">'+shown+'%</span> of the stage above</div>';
+    }
+    var cls = st.broken ? 'broken' : (st.target && st.value >= st.target ? 'good'
+             : st.target && st.value < st.target*0.6 ? 'warn' : '');
+    html += '<div class="fnl-row">'
+          +   '<div class="fnl-bar '+cls+'">'
+          +     '<div class="fnl-stage">'+st.label+'</div>'
+          +     '<div class="fnl-num">'+fmt(st.value)+'<span class="fnl-unit">'+st.unit+'</span>'+badge(st.value, st.target)+'</div>'
+          +     '<div class="fnl-note">'+st.note+'</div>'
+          +   '</div>'
+          +   '<div class="fnl-side">'+st.side+'</div>'
+          + '</div>';
+    prev = st.value;
+  });
+  host.innerHTML = html;
+
+  // Economics strip
+  var spend = n(ebook.spend) + n(web.spend);
+  var revenue = appr * n((S.prices||{}).apprentice) + prot * n((S.prices||{}).protege);
+  var cac = appr + prot > 0 ? spend / (appr + prot) : 0;
+  var breakeven = leads > 0 ? Math.round(n((S.prices||{}).protege) / (n(ebook.spend)/leads)) : 0;
+  var econ = [
+    ['Ad spend, all campaigns', '$'+spend.toFixed(2), 'Ebook plus webinar campaigns'],
+    ['Revenue booked', '$'+revenue.toFixed(2), appr+' Apprentice, '+prot+' Prot&eacute;g&eacute;'],
+    ['Cost per customer', cac ? '$'+cac.toFixed(2) : '—', 'Total spend / all sales'],
+    ['One Prot&eacute;g&eacute; pays for', fmt(breakeven)+' leads', 'At the current cost per lead']
+  ];
+  var eh = document.getElementById('fnl-econ');
+  if(eh) eh.innerHTML = econ.map(function(e){
+    return '<div class="kpi-card"><div class="kpi-label">'+e[0]+'</div>'
+         + '<div class="kpi-value">'+e[1]+'</div>'
+         + '<div class="fnl-note">'+e[2]+'</div></div>';
+  }).join('');
+
+  var src = document.getElementById('fnl-src');
+  if(src) src.textContent = 'Live from Meta for stages 1 to 3 · sales entered by hand, last updated '
+                          + (S.last_updated || 'unknown');
 }
 
 /* ===== Live (Meta API) render — date-range aware ===== */
@@ -1100,6 +1246,9 @@ window.applyOrganic = function(from, to){
     }
   }
 })();
+
+/* draw the funnel once the data files are in */
+try { renderFunnel(); } catch(e) { console.error('funnel render failed:', e); }
 </script>
 
 </body>
