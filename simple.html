@@ -175,7 +175,7 @@
 
     // per-channel contribution to each stage; null = channel can't be attributed there
     var byChan={
-      aware:{paid:p.reach, ig:n(o.ig.reach), fb:n(o.fb.page_views), yt:n(yt.views)},
+      aware:{paid:p.reach, ig:n(o.ig.reach), fb:n(o.fb.page_views), yt:'alltime:'+n(yt.views)},
       leads:{paid:p.leads, ig:null, fb:null, yt:null},
       qual: {paid:p.regs,  ig:null, fb:null, yt:null},
       appr: {paid:null,    ig:null, fb:null, yt:null},
@@ -233,10 +233,12 @@
           + '</div>'
           + '<div class="drill'+(ST.open===s.id?' on':'')+'" data-d="'+s.id+'">'
           +   CHANS.filter(function(c){return c.k!=='all'}).map(function(c){
-                var v=s.chan[c.k];
-                return '<div class="dch'+(v===null?' dim':'')+'"><div>'+c.l+'</div>'
+                var v=s.chan[c.k], alltime=false;
+                if(typeof v==='string' && v.indexOf('alltime:')===0){ alltime=true; v=+v.split(':')[1]; }
+                return '<div class="dch'+(v===null||alltime?' dim':'')+'"><div>'+c.l+'</div>'
                      + '<div class="v">'+(v===null?'—':f(v))+'</div>'
-                     + '<div class="note">'+(v===null?'not attributed at this stage':'')+'</div></div>';
+                     + '<div class="note">'+(v===null?'not attributed at this stage'
+                        : alltime?'all-time total, not in the sum, needs owner access to filter':'')+'</div></div>';
               }).join('')
           + '</div>';
       prev=s;
@@ -268,7 +270,10 @@
     g('a-asc').oninput=function(){ST.ascension=Math.max(0,+this.value||0);render();};
 
     // OKRs
-    var all=paidAll(), cpl=all.leads?all.spend/all.leads:0;
+    var all=paidAll();
+    var ebookSpend=((C.ebook||{}).daily||[]).reduce(function(a,r){return a+n(r.spend)},0);
+    var ebookLeads=((C.ebook||{}).daily||[]).reduce(function(a,r){return a+n(r.leads)},0);
+    var cpl=ebookLeads?ebookSpend/ebookLeads:0;
     var regToAppr = all.regs? appr/all.regs*100 : 0;
     var okrs=[
       ['O1','Make the funnel a predictable engine',[
@@ -279,7 +284,7 @@
         ['Webinar registrations per cycle', all.regs, 40],
         ['Registration → Apprentice ≥10%', regToAppr, 10, regToAppr.toFixed(1)+'%']]],
       ['O3','Rebuild reach, lead with what works',[
-        ['YouTube monthly views', n((Y.channel||{}).views), 3500],
+        ['YouTube monthly views', null, 3500],
         ['TikTok followers per month', null, 200],
         ['Shorts + renovation videos', null, 12]]],
       ['O4','Prove the unit economics',[
