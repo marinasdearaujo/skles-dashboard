@@ -85,6 +85,15 @@ window.SKLES_SALES = {
     }
   },
 
+  // Tactical monthly goals per channel, the numbers the channel view scores
+  // itself against. Same shape as the SE dashboard's "% to goal" tables.
+  channel_targets: {
+    paid:   { spend: 760, impressions: 12000, clicks: 1200, ctr: 12, cpl: 25, leads: 45, regs: 30 },
+    ig:     { reach: 3000, profile_views: 1200, new_followers: 400, engagement_rate: 12, website_clicks: 60 },
+    fb:     { page_views: 500, page_engagements: 1800, fans: 260 },
+    yt:     { subs: 450, views_month: 3500, uploads_month: 12 }
+  },
+
   // Nothing in the funnel links to or mentions Protégé yet.
   protege_path_built: false
 };
