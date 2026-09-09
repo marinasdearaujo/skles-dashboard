@@ -90,22 +90,7 @@
   .srclinks{display:flex;flex-wrap:wrap;gap:8px;margin-top:7px}
   .srclinks a{font-size:11.5px;font-weight:600;text-decoration:none;padding:4px 10px;border-radius:999px;background:rgba(224,197,143,.18);color:inherit;border:1px solid rgba(224,197,143,.45)}
   .srclinks a:hover{background:rgba(224,197,143,.34)}
-.crmstats{display:grid;grid-template-columns:repeat(auto-fit,minmax(88px,1fr));gap:8px;margin-bottom:14px}
-  .crmstats .s{background:var(--soft);border:1px solid var(--line);border-radius:9px;padding:10px 12px}
-  .crmstats .s .n{font-family:'Merriweather',Georgia,serif;font-weight:900;font-size:20px}
-  .crmstats .s .k{font-size:9px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);font-weight:700;margin-top:2px}
-  .crmrow{display:grid;grid-template-columns:76px 1fr 132px 22px;gap:9px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px}
-  .crmrow:last-child{border-bottom:none}
-  .crmrow .who{font-weight:600}
-  .crmrow .who small{display:block;font-weight:400;font-size:11px;color:var(--muted)}
-  .crmrow .tag{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:99px;text-align:center;white-space:nowrap}
-  .tag.contacted{background:rgba(122,138,160,.16);color:var(--muted)}
-  .tag.spoke{background:rgba(224,197,143,.30);color:#8a6a24}
-  .tag.registered{background:rgba(72,160,199,.18);color:#2f7fa5}
-  .tag.joined,.tag.protege{background:rgba(34,197,94,.16);color:#1E8E5A}
-  .tag.no{background:rgba(200,62,62,.14);color:#c83e3e}
-  .crmrow .x{cursor:pointer;color:var(--muted);text-align:right}
-  .rw{padding:1px 6px;border-radius:999px;font-weight:600;cursor:help}
+.rw{padding:1px 6px;border-radius:999px;font-weight:600;cursor:help}
   .rw-ok{background:rgba(122,138,160,.14);color:var(--muted)}
   .rw-soon{background:rgba(224,197,143,.30);color:#8a6a24}
   .rw-late{background:rgba(200,62,62,.16);color:#c83e3e}
@@ -217,7 +202,7 @@
   <div class="bar">
     <div class="seg channels" id="channelSeg"></div>
     <div class="seg views" id="viewSeg"></div>
-    <div class="seg right"><button id="crmTab">📞 Outreach</button><button id="fbTab">💬 Feedback</button></div>
+    <div class="seg right"><button id="fbTab">💬 Feedback</button></div>
     <div class="spacer"></div>
     <span class="saved" id="saved"></span>
     <button class="btn" id="addCard">+ Add</button>
@@ -227,34 +212,6 @@
   <div id="mixMeter" class="mixmeter"></div>
 
   <div id="work"></div>
-
-  <div id="crm-view" style="display:none">
-    <div class="fbwrap">
-      <div>
-        <h3 style="font-family:'Merriweather',Georgia,serif;font-size:18px;margin-bottom:4px">Warm-lead outreach</h3>
-        <p style="font-size:13px;color:var(--muted);margin-bottom:14px">One line per person contacted. The dashboard counts these on its own, so there is no total to keep up to date.</p>
-        <div class="fld"><label>Who</label><input id="crm-name" placeholder="Name, or how you'd recognise them"></div>
-        <div class="fld"><label>How you reached them</label>
-          <select id="crm-how"><option>Call</option><option>Text</option><option>Email</option><option>DM</option><option>In person</option></select></div>
-        <div class="fld"><label>Where it got to</label>
-          <select id="crm-out">
-            <option value="contacted">Contacted, no reply yet</option>
-            <option value="spoke">Spoke to them</option>
-            <option value="registered">Registered for the training</option>
-            <option value="joined">Joined Apprentice</option>
-            <option value="protege">Bought Prot&eacute;g&eacute;</option>
-            <option value="no">Not interested</option>
-          </select></div>
-        <div class="fld"><label>Date</label><input id="crm-date" type="date"></div>
-        <div class="fld"><label>Note <span style="font-weight:400;opacity:.65">optional</span></label><textarea id="crm-note" placeholder="What they said, what to do next"></textarea></div>
-        <button class="btn" id="crm-add" style="width:100%">Add to the log</button>
-      </div>
-      <div>
-        <div id="crm-stats" class="crmstats"></div>
-        <div id="crm-list"></div>
-      </div>
-    </div>
-  </div>
 
   <div id="feedback-view" style="display:none">
     <div class="fbwrap">
@@ -464,7 +421,7 @@ function runway(c){
   return {level:'ok', label:`${days}d runway`, title:`Produce by ${fdate(by)} to publish on ${fdate(c.date)}.`};
 }
 let cards=[], feedback=[], currentUser=null, lastHash='';
-let channel='all', view='calendar', filter=null, editing=null, showFb=false, showCrm=false, calIdx=0, mixFilter=null;
+let channel='all', view='calendar', filter=null, editing=null, showFb=false, calIdx=0, mixFilter=null;
 let fPlatform='', fFormat='', fOwner='', fStatus='', fDate='';
 
 async function dbGet(p){try{const r=await fetch(`${DB}/${p}.json`);return r.ok?await r.json():null;}catch(e){return null;}}
@@ -697,15 +654,14 @@ document.getElementById('resetBtn').onclick=()=>{if(confirm('Reset the SHARED bo
 function renderChannels(){
   const b=document.getElementById('channelSeg');
   b.innerHTML=BOARDS.map(bd=>`<button data-b="${bd.id}" class="${bd.id===channel&&!showFb?'on':''}">${bd.id!=='all'?`<span class="dot" style="background:${bcolor(bd.id)}"></span>`:''}${bd.name}</button>`).join('');
-  b.querySelectorAll('button').forEach(btn=>btn.onclick=()=>{channel=btn.dataset.b;filter=null;mixFilter=null;fPlatform=fFormat=fOwner=fStatus=fDate='';showFb=false;showCrm=false;render();});
+  b.querySelectorAll('button').forEach(btn=>btn.onclick=()=>{channel=btn.dataset.b;filter=null;mixFilter=null;fPlatform=fFormat=fOwner=fStatus=fDate='';showFb=false;render();});
 }
 function renderViews(){
   const b=document.getElementById('viewSeg');
   b.innerHTML=VIEWS.map(v=>`<button data-v="${v.id}" class="${v.id===view&&!showFb?'on':''}">${v.name}</button>`).join('');
-  b.querySelectorAll('button').forEach(btn=>btn.onclick=()=>{view=btn.dataset.v;showFb=false;showCrm=false;render();});
+  b.querySelectorAll('button').forEach(btn=>btn.onclick=()=>{view=btn.dataset.v;showFb=false;render();});
 }
-document.getElementById('fbTab').onclick=()=>{showFb=!showFb;showCrm=false;render();};
-document.getElementById('crmTab').onclick=()=>{showCrm=!showCrm;showFb=false;render();};
+document.getElementById('fbTab').onclick=()=>{showFb=!showFb;render();};
 
 function renderColFilters(){
   const box=document.getElementById('colFilters');
@@ -751,12 +707,6 @@ function render(){
   const w=document.getElementById('work'), f=document.getElementById('feedback-view'), mm=document.getElementById('mixMeter');
   const showAdd=!showFb; document.getElementById('addCard').style.display=showAdd?'':'none'; document.getElementById('resetBtn').style.display=showAdd?'':'none';
   const cf=document.getElementById('colFilters');
-  const cv=document.getElementById('crm-view');
-  document.getElementById('crmTab').classList.toggle('on',showCrm);
-  cv.style.display='none';
-  if(showCrm){w.style.display='none';f.style.display='none';cv.style.display='';mm.style.display='none';cf.style.display='none';
-    document.getElementById('addCard').style.display='none';document.getElementById('resetBtn').style.display='none';
-    renderCrm();return;}
   if(showFb){w.style.display='none';f.style.display='';mm.style.display='none';cf.style.display='none';renderFb();return;}
   cf.style.display='';renderColFilters();
   mm.style.display='';renderMix();
@@ -775,54 +725,6 @@ document.getElementById('themeBtn').onclick=()=>{
 document.getElementById('logoutBtn').onclick=()=>{localStorage.removeItem('skles_ops_sess');location.reload();};
 
 
-/* ---- Warm-lead outreach log ----
-   Rodney adds a line per person; nobody types a total, so the dashboard's
-   counts can't drift out of step with the log. */
-let crm=[];
-const CRM_LABEL={contacted:'Contacted',spoke:'Spoke',registered:'Registered',joined:'Joined',protege:'Protégé',no:'Not interested'};
-async function loadCrm(){
-  const d = await dbGet('metrics/outreach') || {};
-  crm = Object.keys(d).map(k=>Object.assign({_k:k}, d[k]))
-        .sort((a,b)=>(b.date||'').localeCompare(a.date||''));
-}
-async function renderCrm(){
-  if(!crm.length) await loadCrm();
-  const dt=g('crm-date'); if(dt && !dt.value) dt.value=new Date().toISOString().slice(0,10);
-  const c=n=>crm.filter(x=>x.outcome===n).length;
-  g('crm-stats').innerHTML=[
-    ['Contacted',crm.length],['Spoke',c('spoke')],['Registered',c('registered')],
-    ['Joined',c('joined')+c('protege')]
-  ].map(s=>`<div class="s"><div class="n">${s[1]}</div><div class="k">${s[0]}</div></div>`).join('');
-  g('crm-list').innerHTML = crm.length? crm.map(o=>`
-    <div class="crmrow">
-      <div style="font-size:11.5px;color:var(--muted)">${o.date||''}</div>
-      <div class="who">${esc(o.name||'')}${o.note?`<small>${esc(o.note)}</small>`:''}${o.how?`<small>${esc(o.how)} · ${esc(o.by||'')}</small>`:''}</div>
-      <div class="tag ${o.outcome||'contacted'}">${CRM_LABEL[o.outcome]||o.outcome||''}</div>
-      <div class="x" data-k="${o._k}">✕</div>
-    </div>`).join('') : '<p style="font-size:13px;color:var(--muted)">Nothing logged yet. Add the first one on the left.</p>';
-  g('crm-list').onclick=async e=>{
-    const k=e.target.dataset.k; if(!k) return;
-    await dbDel('metrics/outreach/'+k);
-    crm=crm.filter(x=>x._k!==k); renderCrm();
-  };
-}
-g('crm-add').onclick=async()=>{
-  const name=g('crm-name').value.trim(); if(!name) return;
-  const entry={name, how:g('crm-how').value, outcome:g('crm-out').value,
-               date:g('crm-date').value||new Date().toISOString().slice(0,10),
-               note:g('crm-note').value.trim(), by:currentUser||'', at:Date.now()};
-  const key = await dbPush('metrics/outreach', entry);
-  if(key){ crm.unshift(Object.assign({_k:key}, entry)); }
-  g('crm-name').value=''; g('crm-note').value='';
-  renderCrm();
-};
-async function dbPush(p,v){
-  try{ const r=await fetch(`${DB}/${p}.json`,{method:'POST',body:JSON.stringify(v)});
-       return r.ok? (await r.json()).name : null; }catch(e){ return null; }
-}
-async function dbDel(p){
-  try{ await fetch(`${DB}/${p}.json`,{method:'DELETE'}); }catch(e){}
-}
 
 /* ---- Login + live sync ---- */
 let _users={};
