@@ -282,7 +282,7 @@
     </div>
 
     <div class="modact">
-      <button class="link" id="f-del">Delete card</button>
+      <div><button class="link" id="f-del">Delete card</button> <button class="link" id="f-dup">Duplicate</button></div>
       <div><button class="btn ghost" id="f-cancel">Cancel</button> <button class="btn" id="f-save">Save</button></div>
     </div>
   </div>
@@ -591,6 +591,7 @@ function openModal(id){
   g('f-source').oninput=renderSourceLinks;
   g('f-mix').innerHTML=Object.keys(MIX).map(k=>`<option value="${k}"${(editing.mix||'proven')===k?' selected':''}>${MIX[k].label} (${MIX[k].target}%)</option>`).join('');
   g('f-del').style.visibility=id?'visible':'hidden';
+  g('f-dup').style.visibility=id?'visible':'hidden';
   g('att-note').textContent='Files up to 900KB are shared with the whole team through the board. For anything larger, add a Drive or Canva link instead.';
   g('cmt-by').value=currentUser||'';
   renderAtt();renderCmt();
@@ -644,6 +645,18 @@ g('f-save').onclick=()=>{
   saveCard(editing);render();closeModal();
 };
 g('f-del').onclick=()=>{if(editing){deleteCard(editing.id);render();closeModal();}};
+g('f-dup').onclick=()=>{
+  if(!editing||editing.isNew)return;
+  const c=JSON.parse(JSON.stringify(editing));
+  c.id=Math.max(0,...cards.map(x=>x.id))+1;
+  c.hook=(c.hook||'Untitled')+' (copy)';
+  c.status='Ideas'; c.date=''; c.produceBy='';
+  c.comments=[]; c.attachments=[];
+  delete c.isNew; delete c.updatedBy; delete c.updatedAt;
+  saveCard(c); render(); closeModal(); openModal(c.id);
+  g('modTitle').textContent='Duplicated card';
+  g('modSub').textContent=BOARDS.find(b=>b.id===c.board).name+' board · copy. Comments and files did not carry over.';
+};
 g('f-cancel').onclick=closeModal;
 function closeModal(){document.getElementById('ov').classList.remove('on');editing=null;}
 document.getElementById('ov').onclick=e=>{if(e.target.id==='ov')closeModal();};
