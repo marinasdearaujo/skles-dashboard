@@ -430,7 +430,7 @@ const TEAM=['Marina','Valerie','Marissa','Sean','Rodney','Demond'];
    must be finished) and the board warns while there's still time to react.
    Lead times are per format — a long-form walkthrough needs a fortnight, a Short
    cut from existing footage needs a few days, a caption needs a day. */
-const LEAD_DAYS={'Long-form':14,'Short':4,'Repost':1,'Reel':3,'Carousel':3,'Video':10};
+const LEAD_DAYS={'Long-form':14,'Short':4,'Repost':1,'Reel':3,'Carousel':3,'Video':10,'Static':2};
 function leadDaysFor(c){
   if(c.board==='youtube'&&/long/i.test(c.fmt||'')) return LEAD_DAYS['Long-form'];
   return LEAD_DAYS[c.fmt]||(c.board==='youtube'?7:2);
