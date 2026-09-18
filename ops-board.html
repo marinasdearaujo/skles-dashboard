@@ -181,6 +181,7 @@
 #briefview .btext{white-space:pre-wrap;background:rgba(127,127,127,.07);border-radius:9px;padding:14px 16px}
 #briefview .bwarn{border-left:3px solid #c9803f;background:rgba(201,128,63,.11);border-radius:0 8px 8px 0;
   padding:10px 14px;margin:8px 0;white-space:pre-wrap;font-size:13.4px}
+#briefview a{color:inherit;text-decoration:underline;text-underline-offset:2px;word-break:break-all}
 #briefview .bempty{opacity:.5;font-style:italic}
 </style>
 
@@ -683,7 +684,9 @@ function briefBlock(txt){
   var WARN=/^(MUST|ONLY|CLEAR WITH|USE HIS REAL|DEPENDS ON|NEEDS SEAN|BOOST RULE|BLOCKED)/i;
   return txt.split(/\n\s*\n/).map(function(p){
     var w=p.split('\n').some(l=>WARN.test(l.trim()));
-    return '<div class="'+(w?'bwarn':'btext')+'">'+esc(p.trim())+'</div>';
+    var body=esc(p.trim()).replace(/https?:\/\/[^\s<)]+/g,function(u){
+      return '<a href="'+u+'" target="_blank" rel="noopener">'+u+'</a>';});
+    return '<div class="'+(w?'bwarn':'btext')+'">'+body+'</div>';
   }).join('');
 }
 function renderBrief(){
