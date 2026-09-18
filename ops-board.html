@@ -183,6 +183,32 @@
   padding:10px 14px;margin:8px 0;white-space:pre-wrap;font-size:13.4px}
 #briefview a{color:inherit;text-decoration:underline;text-underline-offset:2px;word-break:break-all}
 #briefview .bempty{opacity:.5;font-style:italic}
+
+.mine{max-width:920px}
+.mine-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.mine-head h2{margin:0;font-size:22px}
+.mine-head span{font-size:13px;opacity:.6}
+.mine-empty{padding:26px;border:1px dashed rgba(127,127,127,.4);border-radius:12px;opacity:.7;font-size:14px}
+.mine-sec{margin-bottom:26px}
+.mine-t{display:flex;align-items:center;gap:9px;font-size:12px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;opacity:.65;margin-bottom:9px}
+.mine-n{background:rgba(127,127,127,.18);border-radius:20px;padding:1px 9px;font-size:11px;letter-spacing:0}
+.mine-late .mine-t{color:#c0554a;opacity:1}
+.mine-m{font-size:12.5px;opacity:.6;margin:-4px 0 10px}
+.mine-row{display:grid;grid-template-columns:78px 1fr auto auto 92px;gap:12px;align-items:center;
+  padding:11px 14px;border:1px solid rgba(127,127,127,.22);border-radius:10px;margin-bottom:7px;
+  cursor:pointer;transition:border-color .12s,transform .12s}
+.mine-row:hover{border-color:rgba(127,127,127,.5);transform:translateX(2px)}
+.mine-late .mine-row{border-left:3px solid #c0554a}
+.mine-board{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  text-align:center;padding:3px 0;border-radius:5px;background:rgba(127,127,127,.15)}
+.mine-hook{font-size:14px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mine-meta{font-size:12px;opacity:.6;white-space:nowrap}
+.mine-st{font-size:11.5px;opacity:.6;text-align:right;white-space:nowrap}
+@media(max-width:700px){
+  .mine-row{grid-template-columns:70px 1fr auto}
+  .mine-meta,.mine-st{display:none}
+}
 </style>
 
 <header>
@@ -309,7 +335,7 @@
 <script>
 const BOARDS=[{id:'all',name:'All'},{id:'youtube',name:'YouTube'},{id:'social',name:'Social'},{id:'funnel',name:'Funnel'}];
 const BCOLOR={youtube:'--yt',social:'--social',funnel:'--funnel'};
-const VIEWS=[{id:'list',name:'List'},{id:'calendar',name:'Calendar'},{id:'kanban',name:'Kanban'}];
+const VIEWS=[{id:'mine',name:'My work'},{id:'list',name:'List'},{id:'calendar',name:'Calendar'},{id:'kanban',name:'Kanban'}];
 const STATUS=['Ideas','To Produce','Scheduled','Published'];
 const PILLARS={'Founder Story':'--p-founder','Problem → Solution':'--p-problem','Proof / Math':'--p-proof','6-Step Blueprint':'--p-blueprint','Recognition':'--p-recog','Funnel Push':'--p-funnel','Video':'--p-video','Email':'--p-email','Landing page':'--p-lp'};
 const MONTHS=[{y:2026,m:9,daysN:30,label:'September 2026'},{y:2026,m:10,daysN:31,label:'October 2026'}];
@@ -439,7 +465,7 @@ function runway(c){
   return {level:'ok', label:`${days}d runway`, title:`Produce by ${fdate(by)} to publish on ${fdate(c.date)}.`};
 }
 let cards=[], feedback=[], currentUser=null, lastHash='';
-let channel='all', view='calendar', filter=null, editing=null, showFb=false, calIdx=0, mixFilter=null;
+let channel='all', view='mine', filter=null, editing=null, showFb=false, calIdx=0, mixFilter=null;
 let fPlatform='', fFormat='', fOwner='', fStatus='', fDate='';
 
 async function dbGet(p){try{const r=await fetch(`${DB}/${p}.json`);return r.ok?await r.json():null;}catch(e){return null;}}
@@ -771,6 +797,48 @@ function renderMix(){
   el.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{mixFilter=(mixFilter===b.dataset.m?null:b.dataset.m);render();});
 }
 
+
+function renderMine(el){
+  const me=(currentUser||'').toLowerCase();
+  const mine=cards.filter(c=>c.status!=='Published' && String(c.owner||'').toLowerCase().includes(me));
+  const today=new Date(); today.setHours(0,0,0,0);
+  const when=c=>{const d=c.produceBy||c.date; if(!d) return 9e9;
+    return Math.round((new Date(d+'T00:00:00')-today)/86400000);};
+  const buckets=[
+    {k:'late',  t:'Late',            m:'Production date has passed. The publish date is at risk.', f:c=>when(c)<0},
+    {k:'now',   t:'This week',       m:'', f:c=>when(c)>=0&&when(c)<=7},
+    {k:'soon',  t:'Coming up',       m:'', f:c=>when(c)>7&&when(c)<9e9},
+    {k:'nodate',t:'No date yet',     m:'', f:c=>when(c)===9e9},
+  ];
+  let html='<div class="mine">';
+  html+='<div class="mine-head"><h2>'+esc(currentUser||'')+'’s work</h2><span>'+mine.length+
+        ' open '+(mine.length===1?'card':'cards')+' across every board</span></div>';
+  if(!mine.length){
+    html+='<div class="mine-empty">Nothing assigned to you right now. '+
+          'Cards show up here when your name is in the Owner field.</div>';
+  }
+  buckets.forEach(function(b){
+    const set=mine.filter(b.f).sort((x,y)=>when(x)-when(y));
+    if(!set.length) return;
+    html+='<div class="mine-sec mine-'+b.k+'"><div class="mine-t">'+b.t+
+          '<span class="mine-n">'+set.length+'</span></div>';
+    if(b.m) html+='<div class="mine-m">'+b.m+'</div>';
+    set.forEach(function(c){
+      const bd=BOARDS.find(x=>x.id===c.board), rw=runway(c);
+      html+='<div class="mine-row" data-id="'+c.id+'">'+
+        '<span class="mine-board b-'+c.board+'">'+esc(bd?bd.name:c.board)+'</span>'+
+        '<span class="mine-hook">'+esc(c.hook||'Untitled')+'</span>'+
+        '<span class="mine-meta">'+esc(c.fmt||'')+(c.date?' · '+fdate(c.date):'')+'</span>'+
+        (rw?'<span class="rw rw-'+rw.level+'" title="'+esc(rw.title)+'">'+esc(rw.label)+'</span>':'<span></span>')+
+        '<span class="mine-st">'+esc(c.status||'')+'</span></div>';
+    });
+    html+='</div>';
+  });
+  html+='</div>';
+  el.innerHTML=html;
+  el.querySelectorAll('.mine-row').forEach(r=>r.addEventListener('click',()=>openModal(+r.dataset.id)));
+}
+
 function render(){
   renderChannels();renderViews();
   document.getElementById('fbTab').classList.toggle('on',showFb);
@@ -781,7 +849,8 @@ function render(){
   cf.style.display='';renderColFilters();
   mm.style.display='';renderMix();
   f.style.display='none';w.style.display='';w.innerHTML='';
-  if(view==='kanban')renderKanban(w);
+  if(view==='mine')renderMine(w);
+  else if(view==='kanban')renderKanban(w);
   else if(view==='list')renderList(w);
   else renderCal(w);
 }
