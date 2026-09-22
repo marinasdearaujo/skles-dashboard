@@ -535,7 +535,7 @@ function renderKanban(el){
 }
 function kpiStrip(c){
   const on=scoredOn(c);
-  if(on&&BASE[on]===null) return `<div class="kpimini"><span title="No baseline yet — set from Valerie's first export">${on} · baseline pending</span></div>`;
+  if(isPending(c)) return `<div class="kpimini"><span title="Measurable, but we have no numbers for it yet">${(PENDING_FMT[c.board]||[]).includes(c.fmt)?c.fmt:on} · baseline pending</span></div>`;
   const gl=goalFor(c); if(!gl) return '';
   const k=primaryOf(c); if(gl[k]==null) return '';
   const m=KPI.find(x=>x.k===k), u=m?m.unit:'';
@@ -937,17 +937,21 @@ function renderMine(el){
 const BASE={
   IG:{
     Carousel:{reach:168,visits:5}, Post:{reach:142,visits:3}, Static:{reach:142,visits:3},
-    Photo:{reach:142,visits:3}, Reel:{reach:106}, Video:{reach:106}
+    Photo:{reach:142,visits:3}, Reel:{reach:106}, Video:{reach:106},
+    Repost:{reach:127}
   },
   YouTube:{
     Short:{retention:49,views:52}, Shorts:{retention:49,views:52},
-    'Long-form':{retention:10,views:52}, Long:{retention:10,views:52}, Video:{retention:10,views:52}
+    'Long-form':{retention:10,views:52}, Long:{retention:10,views:52}, Video:{retention:10,views:52},
+    Reel:{retention:49,views:52}, Repost:{retention:49,views:52}
   },
   FB:{'*':{engagement:2}},
   LinkedIn:null,
   TikTok:null
 };
 const CH_ORDER=['IG','LinkedIn','FB','TikTok'];
+/* measurable, but no baseline captured yet — a story is read once, inside its 24h life */
+const PENDING_FMT={social:['Story']};
 const SAVES_GOAL=3, TEST_LIFT=1.25;
 
 function scoredOn(c){
@@ -957,8 +961,14 @@ function scoredOn(c){
   const ch=c.chans||[];
   return CH_ORDER.find(x=>ch.includes(x))||null;
 }
+function isPending(c){
+  if(!c) return false;
+  const on=scoredOn(c);
+  if(on&&BASE[on]===null) return true;
+  return (PENDING_FMT[c.board]||[]).includes(c.fmt);
+}
 function goalFor(c){
-  const on=scoredOn(c); if(!on) return null;
+  const on=scoredOn(c); if(!on||isPending(c)) return null;
   const table=BASE[on]; if(!table) return null;
   const b=table[c.fmt]||table['*']; if(!b) return null;
   const test=c.mix==='experiment', lift=x=>Math.round(x*(test?TEST_LIFT:1));
@@ -1015,7 +1025,8 @@ function renderGoalView(){
   if(!gl){
     const on=scoredOn(probe);
     el.innerHTML='<span class="muted">'+(
-      (on&&BASE[on]===null) ? on+' has no API, so its baseline comes from the first export Valerie uploads. This card gets its target the moment that lands.'
+      (PENDING_FMT[probe.board]||[]).includes(probe.fmt) ? 'Stories are measurable, but only inside the 24 hours they are live, and we have not captured any yet. A target follows once a few are in.'
+      : (on&&BASE[on]===null) ? on+' has no API, so its baseline comes from the first export Valerie uploads. This card gets its target the moment that lands.'
       : probe.board==='funnel' ? 'Funnel cards are reviewed by hand at the end of the block, not scored automatically.'
       : (probe.board==='social'&&!(probe.chans||[]).length) ? 'No channels on this card, so there is nothing to measure.'
       : 'Not scored. Stories and reposts carry no target.'
