@@ -301,6 +301,11 @@
       <div class="fld" style="flex:1"><label>Visual / asset note</label><textarea id="f-visual" rows="3"></textarea></div>
     </div>
     <div class="modrow">
+      <div class="fld" style="flex:1"><label>Target reach <span style="font-weight:400;opacity:.65">— leave blank to use the running median</span></label><input id="f-goal-reach" type="number" min="0" placeholder="e.g. 150"></div>
+      <div class="fld" style="flex:1"><label>Target saves + shares</label><input id="f-goal-saves" type="number" min="0" placeholder="e.g. 5"></div>
+      <div class="fld" style="flex:1"><label>Target profile visits</label><input id="f-goal-visits" type="number" min="0" placeholder="e.g. 10"></div>
+    </div>
+    <div class="modrow">
       <div class="fld"><label>🎬 Source footage <span style="font-weight:400;opacity:.65">— which recording to cut this from</span></label><textarea id="f-source" placeholder="e.g. re-cut the Jul 30 Reel, or the raw file in Rodney's video sheet"></textarea><div id="f-source-links" class="srclinks"></div></div>
     </div>
 
@@ -335,7 +340,7 @@
 <script>
 const BOARDS=[{id:'all',name:'All'},{id:'youtube',name:'YouTube'},{id:'social',name:'Social'},{id:'funnel',name:'Funnel'}];
 const BCOLOR={youtube:'--yt',social:'--social',funnel:'--funnel'};
-const VIEWS=[{id:'mine',name:'My work'},{id:'list',name:'List'},{id:'calendar',name:'Calendar'},{id:'kanban',name:'Kanban'}];
+const VIEWS=[{id:'mine',name:'My work'},{id:'list',name:'List'},{id:'calendar',name:'Calendar'},{id:'kanban',name:'Kanban'},{id:'learn',name:'What we learned'}];
 const STATUS=['Ideas','To Produce','Scheduled','Published'];
 const PILLARS={'Founder Story':'--p-founder','Problem → Solution':'--p-problem','Proof / Math':'--p-proof','6-Step Blueprint':'--p-blueprint','Recognition':'--p-recog','Funnel Push':'--p-funnel','Video':'--p-video','Email':'--p-email','Landing page':'--p-lp'};
 const MONTHS=[{y:2026,m:9,daysN:30,label:'September 2026'},{y:2026,m:10,daysN:31,label:'October 2026'}];
@@ -474,7 +479,7 @@ async function dbPatch(p,v){try{const r=await fetch(`${DB}/${p}.json`,{method:'P
 async function dbDel(p){try{const r=await fetch(`${DB}/${p}.json`,{method:'DELETE'});return r.ok;}catch(e){return false;}}
 function arr2obj(a){const o={};a.forEach(c=>o['c'+c.id]=c);return o;}
 function slug(n){return n.toLowerCase().replace(/[^a-z0-9]/g,'');}
-async function saveCard(card){card.updatedBy=currentUser;card.updatedAt=Date.now();const i=cards.findIndex(c=>c.id===card.id);if(i<0)cards.push(card);else cards[i]=card;flash('Saving…');flash(await dbPut('cards/c'+card.id,card)?'Saved ✓':'(offline)');lastHash=JSON.stringify([cards,feedback]);}
+async function saveCard(card){card.updatedBy=currentUser;card.updatedAt=Date.now();if(card.status==='Published'&&!card.publishedAt)card.publishedAt=Date.now();if(card.status!=='Published'&&card.publishedAt&&!card.res)delete card.publishedAt;const i=cards.findIndex(c=>c.id===card.id);if(i<0)cards.push(card);else cards[i]=card;flash('Saving…');flash(await dbPut('cards/c'+card.id,card)?'Saved ✓':'(offline)');lastHash=JSON.stringify([cards,feedback]);}
 async function deleteCard(id){cards=cards.filter(c=>c.id!==id);await dbDel('cards/c'+id);flash('Deleted');lastHash=JSON.stringify([cards,feedback]);}
 async function saveFb(){await dbPut('feedback',feedback);lastHash=JSON.stringify([cards,feedback]);}
 async function bulkSaveCards(){flash('Saving…');flash(await dbPut('cards',arr2obj(cards))?'Saved ✓':'(offline)');lastHash=JSON.stringify([cards,feedback]);}
@@ -634,6 +639,8 @@ function openModal(id){
   renderSourceLinks();
   g('f-source').oninput=renderSourceLinks;
   g('f-mix').innerHTML=Object.keys(MIX).map(k=>`<option value="${k}"${(editing.mix||'proven')===k?' selected':''}>${MIX[k].label} (${MIX[k].target}%)</option>`).join('');
+  const gl=editing.goal||{};
+  g('f-goal-reach').value=gl.reach!=null?gl.reach:''; g('f-goal-saves').value=gl.saves!=null?gl.saves:''; g('f-goal-visits').value=gl.visits!=null?gl.visits:'';
   g('f-del').style.visibility=id?'visible':'hidden';
   g('f-dup').style.visibility=id?'visible':'hidden';
   g('att-note').textContent='Files up to 900KB are shared with the whole team through the board. For anything larger, add a Drive or Canva link instead.';
@@ -686,6 +693,10 @@ g('f-save').onclick=()=>{
   editing.produceBy=g('f-produceby').value;
   editing.chans=g('f-chans').value.split(',').map(s=>s.trim()).filter(Boolean);
   editing.visual=g('f-visual').value; editing.mix=g('f-mix').value;
+  const gv=k=>{const v=g('f-goal-'+k).value; return v===''?null:Number(v);};
+  const gr=gv('reach'),gs=gv('saves'),gvi=gv('visits');
+  if(gr==null&&gs==null&&gvi==null) delete editing.goal;
+  else editing.goal=Object.assign({},gr!=null?{reach:gr}:{},gs!=null?{saves:gs}:{},gvi!=null?{visits:gvi}:{});
   editing.source=g('f-source').value;
   delete editing.isNew;
   saveCard(editing);render();closeModal();
@@ -839,6 +850,117 @@ function renderMine(el){
   el.querySelectorAll('.mine-row').forEach(r=>r.addEventListener('click',()=>openModal(+r.dataset.id)));
 }
 
+
+/* ---------- What we learned: goal vs result, read at 24/48/72h ---------- */
+const KPI=[
+  {k:'reach',  label:'Reach',          q:'Did it travel'},
+  {k:'saves',  label:'Saves + shares', q:'Worth keeping or passing on'},
+  {k:'visits', label:'Profile visits', q:'Did they want more of him'}
+];
+const READS=[{k:'h24',l:'24h'},{k:'h48',l:'48h'},{k:'h72',l:'72h'}];
+
+function kpiOf(r,k){
+  if(!r) return null;
+  if(k==='saves') return (r.saves==null&&r.shares==null)?null:(Number(r.saves||0)+Number(r.shares||0));
+  return r[k]==null?null:Number(r[k]);
+}
+function finalRead(c){
+  const r=c.res||{};
+  for(const b of ['h72','h48','h24']) if(r[b]) return {read:r[b],at:b};
+  return Object.keys(r).length?{read:r,at:null}:null;
+}
+function median(a){
+  const s=a.filter(x=>x!=null&&!isNaN(x)).sort((x,y)=>x-y);
+  if(!s.length) return null; const m=Math.floor(s.length/2);
+  return s.length%2?s[m]:Math.round((s[m-1]+s[m])/2);
+}
+function hoursSince(ms){return ms?Math.floor((Date.now()-ms)/3600000):null;}
+
+/* a card is proven when its final reading meets or beats every goal that was set */
+function cardVerdict(c){
+  const fr=finalRead(c); if(!fr) return {state:'waiting'};
+  const goal=c.goal||{}; const keys=Object.keys(goal);
+  if(!keys.length) return {state:'nogoal', read:fr};
+  const hits=keys.filter(k=>{const v=kpiOf(fr.read,k); return v!=null&&v>=goal[k];});
+  return {state:hits.length===keys.length?'proven':'missed', hit:hits.length, of:keys.length, read:fr};
+}
+
+function renderLearn(el){
+  const social=cards.filter(c=>c.board==='social'&&c.status==='Published');
+  const done=social.filter(c=>finalRead(c));
+  const pending=social.filter(c=>!finalRead(c));
+  const exp=done.filter(c=>c.mix==='experiment');
+  const proven=done.filter(c=>(c.mix||'proven')!=='experiment');
+  const base={}; KPI.forEach(m=>base[m.k]=median(proven.map(c=>kpiOf((finalRead(c)||{}).read,m.k))));
+
+  const groups={};
+  exp.forEach(c=>{const k=`${c.pillar||'—'} · ${c.fmt||'—'}`;(groups[k]=groups[k]||[]).push(c);});
+
+  const rows=Object.entries(groups).map(([name,cs])=>{
+    const v=cs.map(cardVerdict);
+    const won=v.filter(x=>x.state==='proven').length;
+    const scored=v.filter(x=>x.state==='proven'||x.state==='missed').length;
+    const med={}; KPI.forEach(m=>med[m.k]=median(cs.map(c=>kpiOf((finalRead(c)||{}).read,m.k))));
+    let verdict,tone;
+    if(!scored){verdict='No goals set on these yet';tone='muted';}
+    else if(won===scored){verdict='Proven. Build it into the pattern.';tone='good';}
+    else if(won===0){verdict='Missed every time. Drop it.';tone='bad';}
+    else {verdict=`Hit ${won} of ${scored}. Run it again.`;tone='muted';}
+    return {name,n:cs.length,won,scored,med,verdict,tone};
+  }).sort((a,b)=>(b.won/(b.scored||1))-(a.won/(a.scored||1)));
+
+  const waiting=pending.map(c=>{
+    const h=hoursSince(c.publishedAt);
+    const due=READS.find(r=>h!=null&&h>=({h24:24,h48:48,h72:72}[r.k])&&!((c.res||{})[r.k]));
+    return {c,h,due};
+  });
+
+  el.innerHTML=`
+  <div class="card" style="padding:20px 22px;margin-bottom:16px">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--tan-deep);margin-bottom:10px">
+      Where the bar sits · median of ${proven.length} proven post${proven.length===1?'':'s'}
+    </div>
+    <div style="display:flex;gap:28px;flex-wrap:wrap">
+      ${KPI.map(m=>`<div><div style="font-size:23px;font-weight:700">${base[m.k]??'—'}</div>
+        <div class="muted" style="font-size:12px">${m.label}<br><span style="opacity:.7">${m.q}</span></div></div>`).join('')}
+    </div>
+    <p class="muted" style="font-size:12px;margin:12px 0 0">Leave a card's targets blank and it inherits these.</p>
+  </div>
+
+  ${rows.length?`
+  <div class="card" style="padding:0;overflow-x:auto;margin-bottom:16px">
+    <table style="width:100%;border-collapse:collapse;font-size:13px;min-width:620px">
+      <tr style="text-align:left">
+        <th style="padding:12px 16px">Hypothesis</th><th style="padding:12px 8px">Met goal</th>
+        ${KPI.map(m=>`<th style="padding:12px 8px">${m.label}</th>`).join('')}
+        <th style="padding:12px 16px">Verdict</th>
+      </tr>
+      ${rows.map(r=>`<tr style="border-top:1px solid var(--line)">
+        <td style="padding:12px 16px"><b>${esc(r.name)}</b></td>
+        <td style="padding:12px 8px">${r.scored?`${r.won}/${r.scored}`:'—'}</td>
+        ${KPI.map(m=>`<td style="padding:12px 8px">${r.med[m.k]??'—'}</td>`).join('')}
+        <td style="padding:12px 16px;color:${r.tone==='good'?'var(--good,#2fa37a)':r.tone==='bad'?'var(--bad,#c2553f)':'var(--muted)'}">${r.verdict}</td>
+      </tr>`).join('')}
+    </table>
+  </div>`:`<div class="card" style="padding:26px;margin-bottom:16px"><b>No tests scored yet.</b><br>
+    <span class="muted">Set a card's content mix to Experiment, give it targets, and it lands here once the readings come in.</span></div>`}
+
+  ${waiting.length?`
+  <div class="card" style="padding:18px 22px">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--tan-deep);margin-bottom:10px">Waiting on readings</div>
+    ${waiting.map(w=>`<div style="display:flex;justify-content:space-between;gap:14px;padding:7px 0;border-top:1px solid var(--line)">
+      <span>${esc(w.c.hook||'(untitled)')}</span>
+      <span class="muted" style="white-space:nowrap">${w.h==null?'no publish time yet':w.due?`${w.due.l} reading due`:`${w.h}h old`}</span>
+    </div>`).join('')}
+  </div>`:''}
+
+  <p class="muted" style="font-size:12.5px;margin-top:14px;max-width:70ch">
+    Readings are taken automatically at 24, 48 and 72 hours from the moment a card is moved to Published,
+    and the verdict uses the last one in. A post is proven when it meets or beats every target set on it.
+    Instagram and YouTube report themselves; LinkedIn and Facebook come from the export Valerie uploads.
+  </p>`;
+}
+
 function render(){
   renderChannels();renderViews();
   document.getElementById('fbTab').classList.toggle('on',showFb);
@@ -849,7 +971,8 @@ function render(){
   cf.style.display='';renderColFilters();
   mm.style.display='';renderMix();
   f.style.display='none';w.style.display='';w.innerHTML='';
-  if(view==='mine')renderMine(w);
+  if(view==='learn')renderLearn(w);
+  else if(view==='mine')renderMine(w);
   else if(view==='kanban')renderKanban(w);
   else if(view==='list')renderList(w);
   else renderCal(w);
