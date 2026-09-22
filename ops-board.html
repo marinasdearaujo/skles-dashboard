@@ -50,6 +50,30 @@
   .filters{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
   .chip{border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600}
   .chip.on{background:var(--tan);border-color:var(--tan);color:var(--navy)}
+.weekbox{background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:18px 20px;margin-bottom:22px}
+  .weekhead{display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+  .weekhead h2{margin:0;font-size:17px}
+  .weekhead span{font-size:12.5px;color:var(--muted)}
+  .weekrow{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding:10px 0;border-top:1px solid var(--line);cursor:pointer}
+  .weekrow:hover{background:var(--surface2)}
+  .wk-l{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+  .wk-d{font-size:11px;font-weight:700;color:var(--tan-deep);letter-spacing:.4px;text-transform:uppercase}
+  .wk-h{font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .wk-m{font-size:11.5px;color:var(--muted)}
+  .wk-r{display:flex;gap:7px;flex-wrap:wrap}
+  .wk-kpi{display:flex;flex-direction:column;align-items:flex-end;border:1px solid var(--line);border-radius:6px;padding:5px 9px;min-width:76px}
+  .wk-kpi i{font-style:normal;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+  .wk-kpi b{font-size:13px;font-variant-numeric:tabular-nums}
+  .wk-kpi.hit{border-color:#2fa37a} .wk-kpi.hit b{color:#2fa37a}
+  .wk-kpi.miss{border-color:#c2553f} .wk-kpi.miss b{color:#c2553f}
+  .goalview{display:flex;gap:8px;flex-wrap:wrap;padding:6px 0}
+  .goalchip{font-size:12px;font-weight:600;color:var(--muted);background:var(--surface2);border:1px solid var(--line);border-radius:6px;padding:5px 9px}
+  .goalchip b{color:var(--text)}
+  .goalchip.hit{border-color:#2fa37a;color:#2fa37a} .goalchip.hit b{color:#2fa37a}
+  .goalchip.miss{border-color:#c2553f;color:#c2553f} .goalchip.miss b{color:#c2553f}
+  .kpimini{display:flex;gap:6px;margin-top:7px;font-size:11px;font-weight:600}
+  .kpimini span{background:var(--surface2);border:1px solid var(--line);border-radius:5px;padding:3px 7px;color:var(--muted)}
+  .kpimini span.hit{border-color:#2fa37a;color:#2fa37a} .kpimini span.miss{border-color:#c2553f;color:#c2553f}
   .mixmeter{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:11px 16px;box-shadow:var(--shadow);display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:16px}
   .mixtitle{font-size:11px;font-weight:700;color:var(--tan-deep);letter-spacing:.6px;text-transform:uppercase;white-space:nowrap}
   .mixbar{flex:1;min-width:180px;height:13px;border-radius:8px;overflow:hidden;display:flex;border:1px solid var(--line)}
@@ -301,9 +325,7 @@
       <div class="fld" style="flex:1"><label>Visual / asset note</label><textarea id="f-visual" rows="3"></textarea></div>
     </div>
     <div class="modrow">
-      <div class="fld" style="flex:1"><label>Target reach <span style="font-weight:400;opacity:.65">— leave blank to use the running median</span></label><input id="f-goal-reach" type="number" min="0" placeholder="e.g. 150"></div>
-      <div class="fld" style="flex:1"><label>Target saves + shares</label><input id="f-goal-saves" type="number" min="0" placeholder="e.g. 5"></div>
-      <div class="fld" style="flex:1"><label>Target profile visits</label><input id="f-goal-visits" type="number" min="0" placeholder="e.g. 10"></div>
+      <div class="fld" style="flex:1"><label>What this post has to hit <span style="font-weight:400;opacity:.65">— set from the format and whether it's a test</span></label><div id="f-goalview" class="goalview"></div></div>
     </div>
     <div class="modrow">
       <div class="fld"><label>🎬 Source footage <span style="font-weight:400;opacity:.65">— which recording to cut this from</span></label><textarea id="f-source" placeholder="e.g. re-cut the Jul 30 Reel, or the raw file in Rodney's video sheet"></textarea><div id="f-source-links" class="srclinks"></div></div>
@@ -511,6 +533,14 @@ function renderKanban(el){
   el.appendChild(b);
   wireDnD();bindCards();
 }
+function kpiStrip(c){
+  const gl=goalFor(c); if(!gl) return '';
+  const fr=finalRead(c);
+  const got=fr?kpiOf(fr.read,'reach'):null;
+  if(got==null) return `<div class="kpimini"><span>reach goal ${gl.reach}</span></div>`;
+  const hit=got>=gl.reach;
+  return `<div class="kpimini"><span class="${hit?'hit':'miss'}">reach ${got} / ${gl.reach}</span></div>`;
+}
 function cardHTML(c){
   const chans=(c.chans||[]).map(x=>`<span class="ch">${x}</span>`).join('')||`<span class="ch">${esc(c.fmt)}</span>`;
   const nc=(c.comments||[]).length, na=(c.attachments||[]).length;
@@ -525,6 +555,7 @@ function cardHTML(c){
     <div class="hook">${esc(c.hook||c.copy)}</div>
     <div class="foot"><div class="chans">${chans}</div><span class="owner">${esc(c.owner)}</span></div>
     ${badges?`<div class="badges">${badges}</div>`:''}
+    ${kpiStrip(c)}
   </div>`;
 }
 function wireDnD(){
@@ -639,8 +670,8 @@ function openModal(id){
   renderSourceLinks();
   g('f-source').oninput=renderSourceLinks;
   g('f-mix').innerHTML=Object.keys(MIX).map(k=>`<option value="${k}"${(editing.mix||'proven')===k?' selected':''}>${MIX[k].label} (${MIX[k].target}%)</option>`).join('');
-  const gl=editing.goal||{};
-  g('f-goal-reach').value=gl.reach!=null?gl.reach:''; g('f-goal-saves').value=gl.saves!=null?gl.saves:''; g('f-goal-visits').value=gl.visits!=null?gl.visits:'';
+  renderGoalView();
+  ['f-fmt','f-mix','f-board'].forEach(id=>{const e=g(id); if(e) e.oninput=renderGoalView;});
   g('f-del').style.visibility=id?'visible':'hidden';
   g('f-dup').style.visibility=id?'visible':'hidden';
   g('att-note').textContent='Files up to 900KB are shared with the whole team through the board. For anything larger, add a Drive or Canva link instead.';
@@ -693,10 +724,7 @@ g('f-save').onclick=()=>{
   editing.produceBy=g('f-produceby').value;
   editing.chans=g('f-chans').value.split(',').map(s=>s.trim()).filter(Boolean);
   editing.visual=g('f-visual').value; editing.mix=g('f-mix').value;
-  const gv=k=>{const v=g('f-goal-'+k).value; return v===''?null:Number(v);};
-  const gr=gv('reach'),gs=gv('saves'),gvi=gv('visits');
-  if(gr==null&&gs==null&&gvi==null) delete editing.goal;
-  else editing.goal=Object.assign({},gr!=null?{reach:gr}:{},gs!=null?{saves:gs}:{},gvi!=null?{visits:gvi}:{});
+
   editing.source=g('f-source').value;
   delete editing.isNew;
   saveCard(editing);render();closeModal();
@@ -809,6 +837,46 @@ function renderMix(){
 }
 
 
+/* ---------- this week's scoreboard, top of the start page ---------- */
+function weekRange(){
+  const d=new Date(); d.setHours(0,0,0,0);
+  const mon=new Date(d); mon.setDate(d.getDate()-((d.getDay()+6)%7));
+  const sun=new Date(mon); sun.setDate(mon.getDate()+6);
+  const iso=x=>x.toISOString().slice(0,10);
+  return {from:iso(mon),to:iso(sun)};
+}
+function weekPanel(){
+  const {from,to}=weekRange();
+  const wk=cards.filter(c=>c.board==='social'&&c.date>=from&&c.date<=to&&goalFor(c))
+                .sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+  if(!wk.length) return '';
+  const scored=wk.map(c=>({c,g:goalFor(c),fr:finalRead(c)}));
+  const done=scored.filter(x=>x.fr);
+  const hits=done.filter(x=>{const v=kpiOf(x.fr.read,'reach');return v!=null&&v>=x.g.reach;}).length;
+  return `<div class="weekbox">
+    <div class="weekhead">
+      <h2>How this week is going</h2>
+      <span>${done.length?`${hits} of ${done.length} hit their reach goal`:'nothing read back yet'} · ${wk.length} post${wk.length===1?'':'s'} scheduled</span>
+    </div>
+    <div class="weekrows">
+      ${scored.map(({c,g,fr})=>{
+        const cells=KPI.filter(m=>g[m.k]!=null).map(m=>{
+          const got=fr?kpiOf(fr.read,m.k):null;
+          const hit=got!=null&&got>=g[m.k];
+          return `<span class="wk-kpi ${got==null?'':hit?'hit':'miss'}"><i>${m.label}</i><b>${got==null?'—':got} / ${g[m.k]}</b></span>`;
+        }).join('');
+        return `<div class="weekrow" data-id="${c.id}">
+          <div class="wk-l">
+            <span class="wk-d">${c.date?fdate(c.date):'—'}</span>
+            <span class="wk-h">${esc(c.hook||c.copy||'')}</span>
+            <span class="wk-m">${esc(c.fmt||'')}${c.mix==='experiment'?' · test':''}</span>
+          </div>
+          <div class="wk-r">${cells}</div>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>`;
+}
 function renderMine(el){
   const me=(currentUser||'').toLowerCase();
   const mine=cards.filter(c=>c.status!=='Published' && String(c.owner||'').toLowerCase().includes(me));
@@ -821,7 +889,7 @@ function renderMine(el){
     {k:'soon',  t:'Coming up',       m:'', f:c=>when(c)>7&&when(c)<9e9},
     {k:'nodate',t:'No date yet',     m:'', f:c=>when(c)===9e9},
   ];
-  let html='<div class="mine">';
+  let html='<div class="mine">'+weekPanel();
   html+='<div class="mine-head"><h2>'+esc(currentUser||'')+'’s work</h2><span>'+mine.length+
         ' open '+(mine.length===1?'card':'cards')+' across every board</span></div>';
   if(!mine.length){
@@ -852,6 +920,23 @@ function renderMine(el){
 
 
 /* ---------- What we learned: goal vs result, read at 24/48/72h ---------- */
+/* Goals are derived, never typed. Medians from 16 Instagram posts, 30 days to 22 Sep 2026.
+   Proven holds the current line; an experiment has to beat it by 25% to count.
+   Saves+shares is absolute because the median is 0 on every format, and Instagram
+   does not report profile visits on Reels. */
+const BASE={
+  Carousel:{reach:168,visits:5}, Post:{reach:142,visits:3}, Static:{reach:142,visits:3},
+  Photo:{reach:142,visits:3}, Reel:{reach:106}, Video:{reach:106}
+};
+const SAVES_GOAL=3, TEST_LIFT=1.25;
+function goalFor(c){
+  if(!c||c.board!=='social') return null;
+  const b=BASE[c.fmt]; if(!b) return null;           // Story and Repost are not scored
+  const test=c.mix==='experiment';
+  const g={reach:Math.round(b.reach*(test?TEST_LIFT:1)), saves:SAVES_GOAL};
+  if(b.visits!=null) g.visits=Math.round(b.visits*(test?TEST_LIFT:1));
+  return g;
+}
 const KPI=[
   {k:'reach',  label:'Reach',          q:'Did it travel'},
   {k:'saves',  label:'Saves + shares', q:'Worth keeping or passing on'},
@@ -879,12 +964,25 @@ function hoursSince(ms){return ms?Math.floor((Date.now()-ms)/3600000):null;}
 /* a card is proven when its final reading meets or beats every goal that was set */
 function cardVerdict(c){
   const fr=finalRead(c); if(!fr) return {state:'waiting'};
-  const goal=c.goal||{}; const keys=Object.keys(goal);
+  const goal=goalFor(c)||{}; const keys=Object.keys(goal);
   if(!keys.length) return {state:'nogoal', read:fr};
   const hits=keys.filter(k=>{const v=kpiOf(fr.read,k); return v!=null&&v>=goal[k];});
   return {state:hits.length===keys.length?'proven':'missed', hit:hits.length, of:keys.length, read:fr};
 }
 
+function renderGoalView(){
+  const el=g('f-goalview'); if(!el||!editing) return;
+  const probe=Object.assign({},editing,{fmt:g('f-fmt').value,mix:g('f-mix').value,board:g('f-board').value});
+  const gl=goalFor(probe);
+  if(!gl){el.innerHTML='<span class="muted">Not scored. Stories and reposts have no target, and only social cards are measured.</span>';return;}
+  const fr=finalRead(editing);
+  el.innerHTML=KPI.filter(m=>gl[m.k]!=null).map(m=>{
+    const got=fr?kpiOf(fr.read,m.k):null;
+    const hit=got!=null&&got>=gl[m.k];
+    return `<span class="goalchip${got==null?'':hit?' hit':' miss'}">${m.label}
+      <b>${gl[m.k]}</b>${got==null?'':` → <b>${got}</b>`}</span>`;
+  }).join('');
+}
 function renderLearn(el){
   const social=cards.filter(c=>c.board==='social'&&c.status==='Published');
   const done=social.filter(c=>finalRead(c));
@@ -972,7 +1070,7 @@ function render(){
   mm.style.display='';renderMix();
   f.style.display='none';w.style.display='';w.innerHTML='';
   if(view==='learn')renderLearn(w);
-  else if(view==='mine')renderMine(w);
+  else if(view==='mine'){renderMine(w);w.querySelectorAll('.weekrow').forEach(r=>r.onclick=()=>{const c=cards.find(x=>x.id===+r.dataset.id);if(c)openModal(c);});}
   else if(view==='kanban')renderKanban(w);
   else if(view==='list')renderList(w);
   else renderCal(w);
