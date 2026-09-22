@@ -535,11 +535,11 @@ function renderKanban(el){
 }
 function kpiStrip(c){
   const gl=goalFor(c); if(!gl) return '';
-  const fr=finalRead(c);
-  const got=fr?kpiOf(fr.read,'reach'):null;
-  if(got==null) return `<div class="kpimini"><span>reach goal ${gl.reach}</span></div>`;
-  const hit=got>=gl.reach;
-  return `<div class="kpimini"><span class="${hit?'hit':'miss'}">reach ${got} / ${gl.reach}</span></div>`;
+  const k=primaryOf(c); if(gl[k]==null) return '';
+  const m=KPI.find(x=>x.k===k), u=m?m.unit:'';
+  const fr=finalRead(c), got=fr?kpiOf(fr.read,k):null;
+  if(got==null) return `<div class="kpimini"><span>${m.label.toLowerCase()} goal ${gl[k]}${u}</span></div>`;
+  return `<div class="kpimini"><span class="${got>=gl[k]?'hit':'miss'}">${m.label.toLowerCase()} ${got}${u} / ${gl[k]}${u}</span></div>`;
 }
 function cardHTML(c){
   const chans=(c.chans||[]).map(x=>`<span class="ch">${x}</span>`).join('')||`<span class="ch">${esc(c.fmt)}</span>`;
@@ -847,16 +847,16 @@ function weekRange(){
 }
 function weekPanel(){
   const {from,to}=weekRange();
-  const wk=cards.filter(c=>c.board==='social'&&c.date>=from&&c.date<=to&&goalFor(c))
+  const wk=cards.filter(c=>c.date>=from&&c.date<=to&&goalFor(c))
                 .sort((a,b)=>(a.date||'').localeCompare(b.date||''));
   if(!wk.length) return '';
   const scored=wk.map(c=>({c,g:goalFor(c),fr:finalRead(c)}));
   const done=scored.filter(x=>x.fr);
-  const hits=done.filter(x=>{const v=kpiOf(x.fr.read,'reach');return v!=null&&v>=x.g.reach;}).length;
+  const hits=done.filter(x=>{const k=primaryOf(x.c);const v=kpiOf(x.fr.read,k);return v!=null&&x.g[k]!=null&&v>=x.g[k];}).length;
   return `<div class="weekbox">
     <div class="weekhead">
       <h2>How this week is going</h2>
-      <span>${done.length?`${hits} of ${done.length} hit their reach goal`:'nothing read back yet'} · ${wk.length} post${wk.length===1?'':'s'} scheduled</span>
+      <span>${done.length?`${hits} of ${done.length} hit their main goal`:'nothing read back yet'} · ${wk.length} post${wk.length===1?'':'s'} scheduled</span>
     </div>
     <div class="weekrows">
       ${scored.map(({c,g,fr})=>{
@@ -920,27 +920,50 @@ function renderMine(el){
 
 
 /* ---------- What we learned: goal vs result, read at 24/48/72h ---------- */
-/* Goals are derived, never typed. Medians from 16 Instagram posts, 30 days to 22 Sep 2026.
-   Proven holds the current line; an experiment has to beat it by 25% to count.
-   Saves+shares is absolute because the median is 0 on every format, and Instagram
-   does not report profile visits on Reels. */
+/* Goals are derived, never typed. Each board is judged on what that channel is
+   actually short of, so the primary KPI differs by board.
+
+   SOCIAL  — reach. At 46-160 per post against 11,930 followers it is the binding
+             constraint, and the only metric with enough range (46-306) to tell
+             three formats apart at five posts a week.
+   YOUTUBE — retention. Shorts already hold 49% of a view; long-form loses people
+             at 10%. Views follow retention on YouTube, not the other way round.
+   FUNNEL  — neither. Those cards are builds, not content, and are reviewed by
+             hand at the end of each block.
+
+   Medians: Instagram, 16 posts to 22 Sep 2026. YouTube, 25 videos over the same
+   30 days. Core holds the current line, a Test has to beat it by 25%. */
 const BASE={
-  Carousel:{reach:168,visits:5}, Post:{reach:142,visits:3}, Static:{reach:142,visits:3},
-  Photo:{reach:142,visits:3}, Reel:{reach:106}, Video:{reach:106}
+  social:{
+    Carousel:{reach:168,visits:5}, Post:{reach:142,visits:3}, Static:{reach:142,visits:3},
+    Photo:{reach:142,visits:3}, Reel:{reach:106}, Video:{reach:106}
+  },
+  youtube:{
+    Short:{retention:49,views:52}, Shorts:{retention:49,views:52},
+    'Long-form':{retention:10,views:52}, Long:{retention:10,views:52}, Video:{retention:10,views:52}
+  }
 };
 const SAVES_GOAL=3, TEST_LIFT=1.25;
 function goalFor(c){
-  if(!c||c.board!=='social') return null;
-  const b=BASE[c.fmt]; if(!b) return null;           // Story and Repost are not scored
-  const test=c.mix==='experiment';
-  const g={reach:Math.round(b.reach*(test?TEST_LIFT:1)), saves:SAVES_GOAL};
-  if(b.visits!=null) g.visits=Math.round(b.visits*(test?TEST_LIFT:1));
-  return g;
+  if(!c) return null;
+  const table=BASE[c.board]; if(!table) return null;     // funnel cards are not auto-scored
+  const b=table[c.fmt]; if(!b) return null;              // stories and reposts are not scored
+  const test=c.mix==='experiment', lift=x=>Math.round(x*(test?TEST_LIFT:1));
+  const g={};
+  if(b.reach!=null){ g.reach=lift(b.reach); g.saves=SAVES_GOAL; }
+  if(b.retention!=null) g.retention=lift(b.retention);
+  if(b.views!=null) g.views=lift(b.views);
+  if(b.visits!=null) g.visits=lift(b.visits);
+  return Object.keys(g).length?g:null;
 }
+/* the headline number for a card, by board */
+function primaryOf(c){return c&&c.board==='youtube'?'retention':'reach';}
 const KPI=[
-  {k:'reach',  label:'Reach',          q:'Did it travel'},
-  {k:'saves',  label:'Saves + shares', q:'Worth keeping or passing on'},
-  {k:'visits', label:'Profile visits', q:'Did they want more of him'}
+  {k:'reach',     label:'Reach',          q:'Did it travel',                     unit:''},
+  {k:'saves',     label:'Saves + shares', q:'Worth keeping or passing on',       unit:''},
+  {k:'visits',    label:'Profile visits', q:'Did they want more of him',         unit:''},
+  {k:'retention', label:'Retention',      q:'Did anyone stay',                   unit:'%'},
+  {k:'views',     label:'Views',          q:'How many pressed play',             unit:''}
 ];
 const READS=[{k:'h24',l:'24h'},{k:'h48',l:'48h'},{k:'h72',l:'72h'}];
 
