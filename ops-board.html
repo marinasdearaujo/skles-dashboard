@@ -535,12 +535,12 @@ function renderKanban(el){
 }
 function kpiStrip(c){
   const on=scoredOn(c);
-  if(on==='LinkedIn') return `<div class="kpimini"><span title="No LinkedIn baseline yet — set once Valerie's first export is in">LinkedIn · no baseline yet</span></div>`;
+  if(on&&BASE[on]===null) return `<div class="kpimini"><span title="No baseline yet — set from Valerie's first export">${on} · baseline pending</span></div>`;
   const gl=goalFor(c); if(!gl) return '';
   const k=primaryOf(c); if(gl[k]==null) return '';
   const m=KPI.find(x=>x.k===k), u=m?m.unit:'';
   const fr=finalRead(c), got=fr?kpiOf(fr.read,k):null;
-  const tag=on==='IG'?'IG ':'';
+  const tag=on&&on!=='YouTube'?on+' ':'';
   if(got==null) return `<div class="kpimini"><span>${tag}${m.label.toLowerCase()} goal ${gl[k]}${u}</span></div>`;
   return `<div class="kpimini"><span class="${got>=gl[k]?'hit':'miss'}">${tag}${m.label.toLowerCase()} ${got}${u} / ${gl[k]}${u}</span></div>`;
 }
@@ -923,63 +923,58 @@ function renderMine(el){
 
 
 /* ---------- What we learned: goal vs result, read at 24/48/72h ---------- */
-/* Goals are derived, never typed. Each board is judged on what that channel is
-   actually short of, so the primary KPI differs by board.
+/* Goals are derived, never typed. Every card is scored on the one channel it
+   carries that actually reports numbers, and the card says which.
 
-   SOCIAL  — reach. At 46-160 per post against 11,930 followers it is the binding
-             constraint, and the only metric with enough range (46-306) to tell
-             three formats apart at five posts a week.
-   YOUTUBE — retention. Shorts already hold 49% of a view; long-form loses people
-             at 10%. Views follow retention on YouTube, not the other way round.
-   FUNNEL  — neither. Those cards are builds, not content, and are reviewed by
-             hand at the end of each block.
+   IG        reach       API, automatic. 16 posts, 30 days to 22 Sep 2026.
+   YouTube   retention   API, automatic. 25 videos, same window.
+   FB        engagement  API, automatic. 23 posts: median 0 clicks, 2 engagements.
+                         Real, but 219 fans will never decide anything.
+   LinkedIn  pending     No API. Baseline comes from Valerie's first export.
+   TikTok    pending     No API. Same.
 
-   Medians: Instagram, 16 posts to 22 Sep 2026. YouTube, 25 videos over the same
-   30 days. Core holds the current line, a Test has to beat it by 25%. */
+   Core holds the current line. A Test has to beat it by 25%. */
 const BASE={
-  social:{
+  IG:{
     Carousel:{reach:168,visits:5}, Post:{reach:142,visits:3}, Static:{reach:142,visits:3},
     Photo:{reach:142,visits:3}, Reel:{reach:106}, Video:{reach:106}
   },
-  youtube:{
+  YouTube:{
     Short:{retention:49,views:52}, Shorts:{retention:49,views:52},
     'Long-form':{retention:10,views:52}, Long:{retention:10,views:52}, Video:{retention:10,views:52}
-  }
+  },
+  FB:{'*':{engagement:2}},
+  LinkedIn:null,
+  TikTok:null
 };
+const CH_ORDER=['IG','LinkedIn','FB','TikTok'];
 const SAVES_GOAL=3, TEST_LIFT=1.25;
 
-/* A social card usually goes to several channels, but only one of them reports
-   numbers. Instagram does. Facebook cannot (Meta retired the page metrics) and
-   TikTok is not connected, so those ride along unscored. LinkedIn arrives later
-   from Valerie's export and has no baseline yet, so LinkedIn-only cards are
-   marked pending rather than given an Instagram target they can never meet. */
 function scoredOn(c){
   if(!c) return null;
   if(c.board==='youtube') return 'YouTube';
   if(c.board!=='social') return null;
   const ch=c.chans||[];
-  if(ch.includes('IG')) return 'IG';
-  if(ch.includes('LinkedIn')) return 'LinkedIn';
-  return null;
+  return CH_ORDER.find(x=>ch.includes(x))||null;
 }
 function goalFor(c){
-  if(!c) return null;
-  if(scoredOn(c)==='LinkedIn') return null;              // awaiting the first export
-  const table=BASE[c.board]; if(!table) return null;     // funnel cards are not auto-scored
-  if(c.board==='social'&&!(c.chans||[]).includes('IG')) return null;
-  const b=table[c.fmt]; if(!b) return null;              // stories and reposts are not scored
+  const on=scoredOn(c); if(!on) return null;
+  const table=BASE[on]; if(!table) return null;
+  const b=table[c.fmt]||table['*']; if(!b) return null;
   const test=c.mix==='experiment', lift=x=>Math.round(x*(test?TEST_LIFT:1));
   const g={};
   if(b.reach!=null){ g.reach=lift(b.reach); g.saves=SAVES_GOAL; }
   if(b.retention!=null) g.retention=lift(b.retention);
   if(b.views!=null) g.views=lift(b.views);
   if(b.visits!=null) g.visits=lift(b.visits);
+  if(b.engagement!=null) g.engagement=lift(b.engagement);
   return Object.keys(g).length?g:null;
 }
-/* the headline number for a card, by board */
-function primaryOf(c){return c&&c.board==='youtube'?'retention':'reach';}
+const PRIMARY={IG:'reach',YouTube:'retention',FB:'engagement',LinkedIn:'reach',TikTok:'views'};
+function primaryOf(c){return PRIMARY[scoredOn(c)]||'reach';}
 const KPI=[
   {k:'reach',     label:'Reach',          q:'Did it travel',                     unit:''},
+  {k:'engagement',label:'Engagement',     q:'Did anyone react at all',           unit:''},
   {k:'saves',     label:'Saves + shares', q:'Worth keeping or passing on',       unit:''},
   {k:'visits',    label:'Profile visits', q:'Did they want more of him',         unit:''},
   {k:'retention', label:'Retention',      q:'Did anyone stay',                   unit:'%'},
@@ -1020,13 +1015,13 @@ function renderGoalView(){
   if(!gl){
     const on=scoredOn(probe);
     el.innerHTML='<span class="muted">'+(
-      on==='LinkedIn' ? 'LinkedIn only, and we have no LinkedIn baseline yet. It gets a target once the first export is in.'
+      (on&&BASE[on]===null) ? on+' has no API, so its baseline comes from the first export Valerie uploads. This card gets its target the moment that lands.'
       : probe.board==='funnel' ? 'Funnel cards are reviewed by hand at the end of the block, not scored automatically.'
-      : (probe.board==='social'&&!(probe.chans||[]).includes('IG')) ? 'Nothing on this card reports numbers. Facebook and TikTok cannot be measured.'
+      : (probe.board==='social'&&!(probe.chans||[]).length) ? 'No channels on this card, so there is nothing to measure.'
       : 'Not scored. Stories and reposts carry no target.'
     )+'</span>';return;}
   const fr=finalRead(editing);
-  el.innerHTML=KPI.filter(m=>gl[m.k]!=null).map(m=>{
+  el.innerHTML='<span class="goalchip" style="background:none;border:none;padding-left:0;font-weight:400">measured on '+scoredOn(probe)+'</span>'+KPI.filter(m=>gl[m.k]!=null).map(m=>{
     const got=fr?kpiOf(fr.read,m.k):null;
     const hit=got!=null&&got>=gl[m.k];
     return `<span class="goalchip${got==null?'':hit?' hit':' miss'}">${m.label}
