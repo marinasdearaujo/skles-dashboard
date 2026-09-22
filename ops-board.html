@@ -50,28 +50,6 @@
   .filters{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
   .chip{border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600}
   .chip.on{background:var(--tan);border-color:var(--tan);color:var(--navy)}
-.emobox{background:var(--surface);border:1px solid var(--line);border-radius:12px;
-    box-shadow:var(--shadow);padding:18px 20px;margin-bottom:22px}
-  .emohead{display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:14px}
-  .emohead h2{margin:0;font-size:17px}
-  .emohead span{font-size:12.5px;color:var(--muted)}
-  .emogrid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-  @media(max-width:700px){.emogrid{grid-template-columns:1fr}}
-  .emot{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#2fa37a;margin-bottom:8px}
-  .emot.no{color:#c2553f}
-  .emo{display:flex;align-items:flex-start;gap:12px;padding:8px 0;border-top:1px solid var(--line)}
-  .emo-l{flex:1;min-width:0}
-  .emo-l b{display:block;font-size:13.5px}
-  .emo-l span{font-size:12px;color:var(--muted)}
-  .emo.approved .emo-l b{color:#2fa37a}
-  .emo.rejected{opacity:.5}
-  .emo.rejected .emo-l b{text-decoration:line-through}
-  .emo-b{display:flex;gap:5px;flex-shrink:0}
-  .emo-b button{width:26px;height:26px;border-radius:6px;border:1px solid var(--line);
-    background:var(--surface2);color:var(--muted);cursor:pointer;font-size:12px;line-height:1}
-  .emo-b button:hover{border-color:var(--tan)}
-  .emo-b button.on{background:#2fa37a;border-color:#2fa37a;color:#fff}
-  .emo-b button.on.no{background:#c2553f;border-color:#c2553f}
 .weekbox{background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:18px 20px;margin-bottom:22px}
   .weekhead{display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:12px}
   .weekhead h2{margin:0;font-size:17px}
@@ -862,50 +840,6 @@ function renderMix(){
 }
 
 
-/* ---------- brand emotions: what every piece should make someone feel ----------
-   From the positioning Sean and Rodney signed off in May: thought leader not guru,
-   mentor not hype, earned authority not certainty theatre, live well by doing good.
-   Approve or drop each one here, then the briefs follow from it. */
-const EMO_SEED=[
-  {id:'trust',   want:1, label:'Trust',          note:'Steady when the market is not. He has seen this before.'},
-  {id:'dignity', want:1, label:'Dignity',        note:'Housing done properly, and respect for the people living in it.'},
-  {id:'convict', want:1, label:'Conviction',     note:'He believes this. He is not selling it to you.'},
-  {id:'belong',  want:1, label:'Belonging',      note:'A mission with other people already in it.'},
-  {id:'hope',    want:1, label:'Grounded hope',  note:'Achievable in five years by working. Not a fantasy.'},
-  {id:'respect', want:1, label:'Respect',        note:'Talks to you as a peer, never as a follower.'},
-  {id:'hype',    want:0, label:'Hype and FOMO',  note:'Countdowns, scarcity, do-not-miss-out. The opposite of earned authority.'},
-  {id:'flex',    want:0, label:'Wealth flexing', note:'Cars, watches, rented lifestyle. Not what he sells.'},
-  {id:'scrappy', want:0, label:'Sloppy',         note:'Unedited is not the same as honest. He is a professional and it should look like it.'},
-  {id:'guru',    want:0, label:'Guru certainty', note:'Having every answer. He is a mentor, not an oracle.'}
-];
-let emotions=null;
-async function loadEmotions(){
-  const saved=await dbGet('brand/emotions');
-  emotions=EMO_SEED.map(e=>Object.assign({status:'proposed'},e,(saved&&saved[e.id])||{}));
-}
-async function setEmotion(id,status){
-  const e=emotions.find(x=>x.id===id); if(!e) return;
-  e.status=(e.status===status)?'proposed':status;
-  await dbPatch('brand/emotions/'+id,{status:e.status,by:currentUser,at:Date.now()});
-  render();
-}
-function emoPanel(){
-  if(!emotions) return '';
-  const pending=emotions.filter(e=>e.status==='proposed').length;
-  const row=e=>`<div class="emo ${e.status}">
-      <div class="emo-l"><b>${esc(e.label)}</b><span>${esc(e.note)}</span></div>
-      <div class="emo-b">
-        <button data-emo="${e.id}" data-st="approved" class="${e.status==='approved'?'on':''}" title="Approve">&#10003;</button>
-        <button data-emo="${e.id}" data-st="rejected" class="${e.status==='rejected'?'on no':''}" title="Not this">&#10007;</button>
-      </div></div>`;
-  return `<div class="emobox">
-    <div class="emohead"><h2>What our content should make someone feel</h2>
-      <span>${pending?pending+' still to approve':'all approved'} · the briefs follow from this</span></div>
-    <div class="emogrid">
-      <div><div class="emot">We want</div>${emotions.filter(e=>e.want).map(row).join('')}</div>
-      <div><div class="emot no">Never</div>${emotions.filter(e=>!e.want).map(row).join('')}</div>
-    </div></div>`;
-}
 /* ---------- this week's scoreboard, top of the start page ---------- */
 function weekRange(){
   const d=new Date(); d.setHours(0,0,0,0);
@@ -958,7 +892,7 @@ function renderMine(el){
     {k:'soon',  t:'Coming up',       m:'', f:c=>when(c)>7&&when(c)<9e9},
     {k:'nodate',t:'No date yet',     m:'', f:c=>when(c)===9e9},
   ];
-  let html='<div class="mine">'+emoPanel()+weekPanel();
+  let html='<div class="mine">'+weekPanel();
   html+='<div class="mine-head"><h2>'+esc(currentUser||'')+'’s work</h2><span>'+mine.length+
         ' open '+(mine.length===1?'card':'cards')+' across every board</span></div>';
   if(!mine.length){
@@ -1192,7 +1126,7 @@ function render(){
   mm.style.display='';renderMix();
   f.style.display='none';w.style.display='';w.innerHTML='';
   if(view==='learn')renderLearn(w);
-  else if(view==='mine'){renderMine(w);w.querySelectorAll('[data-emo]').forEach(b=>b.onclick=e=>{e.stopPropagation();setEmotion(b.dataset.emo,b.dataset.st);});w.querySelectorAll('.weekrow').forEach(r=>r.onclick=()=>{const c=cards.find(x=>x.id===+r.dataset.id);if(c)openModal(c);});}
+  else if(view==='mine'){renderMine(w);w.querySelectorAll('.weekrow').forEach(r=>r.onclick=()=>{const c=cards.find(x=>x.id===+r.dataset.id);if(c)openModal(c);});}
   else if(view==='kanban')renderKanban(w);
   else if(view==='list')renderList(w);
   else renderCal(w);
@@ -1244,7 +1178,7 @@ async function doLogin(){
 g('login-go').onclick=doLogin;
 g('login-pin').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 
-async function loadData(){await loadEmotions();
+async function loadData(){
   const co=await dbGet('cards');
   if(!co||!Object.keys(co).length){cards=seedCards();await bulkSaveCards();}
   else cards=Object.values(co);
