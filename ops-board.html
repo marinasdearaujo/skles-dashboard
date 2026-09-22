@@ -321,7 +321,7 @@
       <div class="fld" style="flex:1"><label>Channels (comma)</label><input id="f-chans" placeholder="IG, TikTok"></div>
     </div>
     <div class="modrow">
-      <div class="fld" style="flex:1"><label>Content mix (70·20·10)</label><select id="f-mix"></select></div>
+      <div class="fld" style="flex:1"><label>Content mix (70·20·10) <span style="font-weight:400;opacity:.65">— core is the default pattern, not a claim it works</span></label><select id="f-mix"></select></div>
       <div class="fld" style="flex:1"><label>Visual / asset note</label><textarea id="f-visual" rows="3"></textarea></div>
     </div>
     <div class="modrow">
@@ -366,7 +366,7 @@ const VIEWS=[{id:'mine',name:'My work'},{id:'list',name:'List'},{id:'calendar',n
 const STATUS=['Ideas','To Produce','Scheduled','Published'];
 const PILLARS={'Founder Story':'--p-founder','Problem → Solution':'--p-problem','Proof / Math':'--p-proof','6-Step Blueprint':'--p-blueprint','Recognition':'--p-recog','Funnel Push':'--p-funnel','Video':'--p-video','Email':'--p-email','Landing page':'--p-lp'};
 const MONTHS=[{y:2026,m:9,daysN:30,label:'September 2026'},{y:2026,m:10,daysN:31,label:'October 2026'}];
-const MIX={proven:{label:'Proven',color:'#2fa37a',target:70},repurpose:{label:'Repurpose',color:'#3f78c9',target:20},experiment:{label:'Experiment',color:'#c99a3f',target:10}};
+const MIX={proven:{label:'Core',color:'#2fa37a',target:70},repurpose:{label:'Repurpose',color:'#3f78c9',target:20},experiment:{label:'Test',color:'#c99a3f',target:10}};
 function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
 function iso(y,m,d){return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;}
 
@@ -1001,7 +1001,7 @@ function renderLearn(el){
     const med={}; KPI.forEach(m=>med[m.k]=median(cs.map(c=>kpiOf((finalRead(c)||{}).read,m.k))));
     let verdict,tone;
     if(!scored){verdict='No goals set on these yet';tone='muted';}
-    else if(won===scored){verdict='Proven. Build it into the pattern.';tone='good';}
+    else if(won===scored){verdict='Proven. Move it into core.';tone='good';}
     else if(won===0){verdict='Missed every time. Drop it.';tone='bad';}
     else {verdict=`Hit ${won} of ${scored}. Run it again.`;tone='muted';}
     return {name,n:cs.length,won,scored,med,verdict,tone};
@@ -1016,7 +1016,7 @@ function renderLearn(el){
   el.innerHTML=`
   <div class="card" style="padding:20px 22px;margin-bottom:16px">
     <div style="font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--tan-deep);margin-bottom:10px">
-      Where the bar sits · median of ${proven.length} proven post${proven.length===1?'':'s'}
+      Where the bar sits · median of ${proven.length} core post${proven.length===1?'':'s'} · measured, not assumed
     </div>
     <div style="display:flex;gap:28px;flex-wrap:wrap">
       ${KPI.map(m=>`<div><div style="font-size:23px;font-weight:700">${base[m.k]??'—'}</div>
@@ -1041,7 +1041,7 @@ function renderLearn(el){
       </tr>`).join('')}
     </table>
   </div>`:`<div class="card" style="padding:26px;margin-bottom:16px"><b>No tests scored yet.</b><br>
-    <span class="muted">Set a card's content mix to Experiment, give it targets, and it lands here once the readings come in.</span></div>`}
+    <span class="muted">Set a card's content mix to Test and it lands here once the readings come in.</span></div>`}
 
   ${waiting.length?`
   <div class="card" style="padding:18px 22px">
