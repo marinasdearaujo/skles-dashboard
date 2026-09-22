@@ -534,12 +534,15 @@ function renderKanban(el){
   wireDnD();bindCards();
 }
 function kpiStrip(c){
+  const on=scoredOn(c);
+  if(on==='LinkedIn') return `<div class="kpimini"><span title="No LinkedIn baseline yet — set once Valerie's first export is in">LinkedIn · no baseline yet</span></div>`;
   const gl=goalFor(c); if(!gl) return '';
   const k=primaryOf(c); if(gl[k]==null) return '';
   const m=KPI.find(x=>x.k===k), u=m?m.unit:'';
   const fr=finalRead(c), got=fr?kpiOf(fr.read,k):null;
-  if(got==null) return `<div class="kpimini"><span>${m.label.toLowerCase()} goal ${gl[k]}${u}</span></div>`;
-  return `<div class="kpimini"><span class="${got>=gl[k]?'hit':'miss'}">${m.label.toLowerCase()} ${got}${u} / ${gl[k]}${u}</span></div>`;
+  const tag=on==='IG'?'IG ':'';
+  if(got==null) return `<div class="kpimini"><span>${tag}${m.label.toLowerCase()} goal ${gl[k]}${u}</span></div>`;
+  return `<div class="kpimini"><span class="${got>=gl[k]?'hit':'miss'}">${tag}${m.label.toLowerCase()} ${got}${u} / ${gl[k]}${u}</span></div>`;
 }
 function cardHTML(c){
   const chans=(c.chans||[]).map(x=>`<span class="ch">${x}</span>`).join('')||`<span class="ch">${esc(c.fmt)}</span>`;
@@ -944,9 +947,26 @@ const BASE={
   }
 };
 const SAVES_GOAL=3, TEST_LIFT=1.25;
+
+/* A social card usually goes to several channels, but only one of them reports
+   numbers. Instagram does. Facebook cannot (Meta retired the page metrics) and
+   TikTok is not connected, so those ride along unscored. LinkedIn arrives later
+   from Valerie's export and has no baseline yet, so LinkedIn-only cards are
+   marked pending rather than given an Instagram target they can never meet. */
+function scoredOn(c){
+  if(!c) return null;
+  if(c.board==='youtube') return 'YouTube';
+  if(c.board!=='social') return null;
+  const ch=c.chans||[];
+  if(ch.includes('IG')) return 'IG';
+  if(ch.includes('LinkedIn')) return 'LinkedIn';
+  return null;
+}
 function goalFor(c){
   if(!c) return null;
+  if(scoredOn(c)==='LinkedIn') return null;              // awaiting the first export
   const table=BASE[c.board]; if(!table) return null;     // funnel cards are not auto-scored
+  if(c.board==='social'&&!(c.chans||[]).includes('IG')) return null;
   const b=table[c.fmt]; if(!b) return null;              // stories and reposts are not scored
   const test=c.mix==='experiment', lift=x=>Math.round(x*(test?TEST_LIFT:1));
   const g={};
@@ -997,7 +1017,14 @@ function renderGoalView(){
   const el=g('f-goalview'); if(!el||!editing) return;
   const probe=Object.assign({},editing,{fmt:g('f-fmt').value,mix:g('f-mix').value,board:g('f-board').value});
   const gl=goalFor(probe);
-  if(!gl){el.innerHTML='<span class="muted">Not scored. Stories and reposts have no target, and only social cards are measured.</span>';return;}
+  if(!gl){
+    const on=scoredOn(probe);
+    el.innerHTML='<span class="muted">'+(
+      on==='LinkedIn' ? 'LinkedIn only, and we have no LinkedIn baseline yet. It gets a target once the first export is in.'
+      : probe.board==='funnel' ? 'Funnel cards are reviewed by hand at the end of the block, not scored automatically.'
+      : (probe.board==='social'&&!(probe.chans||[]).includes('IG')) ? 'Nothing on this card reports numbers. Facebook and TikTok cannot be measured.'
+      : 'Not scored. Stories and reposts carry no target.'
+    )+'</span>';return;}
   const fr=finalRead(editing);
   el.innerHTML=KPI.filter(m=>gl[m.k]!=null).map(m=>{
     const got=fr?kpiOf(fr.read,m.k):null;
