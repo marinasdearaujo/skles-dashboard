@@ -946,7 +946,11 @@ const BASE={
     Reel:{retention:49,views:52}, Repost:{retention:49,views:52}
   },
   FB:{'*':{engagement:2}},
-  LinkedIn:null,
+  /* LinkedIn: 50 posts over 90 days to 22 Sep 2026, from Valerie's export.
+     Median 43 impressions, 3 engagements. 7,381 followers, so reach is ~0.6%. */
+  LinkedIn:{'*':{reach:43,engagement:3}},
+  /* TikTok: the export is daily totals, not per post, so no per-post baseline yet.
+     26,106 video views over 90 days, median 237/day. Needs a post-level export. */
   TikTok:null
 };
 const CH_ORDER=['IG','LinkedIn','FB','TikTok'];
@@ -981,6 +985,7 @@ function goalFor(c){
   return Object.keys(g).length?g:null;
 }
 const PRIMARY={IG:'reach',YouTube:'retention',FB:'engagement',LinkedIn:'reach',TikTok:'views'};
+/* LinkedIn calls it impressions; it is the same job as reach here. */
 function primaryOf(c){return PRIMARY[scoredOn(c)]||'reach';}
 const KPI=[
   {k:'reach',     label:'Reach',          q:'Did it travel',                     unit:''},
