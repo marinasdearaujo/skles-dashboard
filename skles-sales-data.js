@@ -132,9 +132,17 @@ window.SKLES_SALES = {
     yt:     { subs: 450, views_month: 3500, uploads_month: 12 }
   },
 
-  // The funnel emails still never mention Protégé, but people are buying it
-  // anyway through Sean directly and the course platform. So the gap is that
+  // Checked against the GetResponse autoresponder exports (Jul + Aug), not just
+  // broadcasts. Apprentice Members DO get a sequence, 25 messages, but it is a
+  // step-by-step "do your first deal" curriculum (#13 Be Consistent ... #25
+  // Resell, Reap Profits & Reinvest). Nothing in it asks them to move up.
+  // The only ladder emails, #9 "3 Levels of Courses" and #15 "Courses,
+  // Community & Coaching", sit in the GENERAL PROSPECTS track, so they reach
+  // people who have not bought, never the Apprentices who have.
+  // People still buy Protégé, just through Sean directly, so the gap is that
   // the funnel doesn't ASSIST the sale, not that the sale never happens.
   protege_path_built: false,
-  protege_sells_outside_funnel: true
+  protege_sells_outside_funnel: true,
+  apprentice_sequence_messages: 25,
+  apprentice_sequence_pitches_protege: false
 };
