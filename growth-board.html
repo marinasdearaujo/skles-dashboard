@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SKLES Growth Board</title>
+<style>
+/* Light only, by choice: this page is opened on phones and shared by link, and a
+   half-inverted dark mode reads worse than a committed light one.
+   Layout: a compact funnel at the top orients you, panels below carry the detail,
+   and one control decides how much of that detail sits on the surface.
+   Colour is reserved: ink and navy carry structure, and green/amber/red mean
+   state and nothing else. */
+:root{
+  --paper:#F7F6F3; --card:#FFFFFF; --sunk:#F0EEE9; --rail:#E4E0D8;
+  --ink:#15192A; --ink-2:#565B6E; --ink-3:#8C8F9D;
+  --navy:#112250; --navy-2:#2A3F6F; --tan:#E0C58F; --tan-deep:#8A672C;
+  --line:#E6E3DC;
+  --good:#1C7A58; --good-bg:#E6F3EE;
+  --warn:#92650C; --warn-bg:#FBF1DA;
+  --bad:#A4311A;  --bad-bg:#FBE9E4;
+  --f-display:'Merriweather',Georgia,serif;
+  --f-body:'Poppins',system-ui,-apple-system,'Segoe UI',sans-serif;
+  color-scheme:light;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f-body);
+  font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:880px;margin:0 auto;padding-block:32px 72px;padding-left:18px;padding-right:18px}
+h1,h2,h3{font-family:var(--f-display);margin:0;letter-spacing:-.012em;text-wrap:balance}
+h1{font-size:clamp(25px,4.4vw,33px);font-weight:900;line-height:1.14}
+p{margin:0}
+.num{font-variant-numeric:tabular-nums}
+.eyebrow{font-size:10px;font-weight:600;letter-spacing:.19em;text-transform:uppercase;color:var(--tan-deep)}
+
+header{border-bottom:2px solid var(--navy);padding-bottom:18px}
+.hgrid{display:flex;flex-wrap:wrap;gap:10px 24px;align-items:baseline;margin-top:11px}
+.stat{display:flex;gap:7px;align-items:baseline;font-size:13px;color:var(--ink-2)}
+.stat b{font-family:var(--f-display);font-weight:900;font-size:19px;color:var(--ink)}
+.asof{font-size:12px;color:var(--ink-3);margin-top:8px}
+
+/* the orientation funnel */
+.over{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-top:20px;padding:18px 20px 16px}
+.over h2{font-size:15px;font-weight:700;margin-bottom:3px}
+.over .sub{font-size:12px;color:var(--ink-3);margin-bottom:14px}
+.frow{display:grid;grid-template-columns:132px 1fr 76px;gap:12px;align-items:center;padding:4px 0}
+.frow .fl{font-size:12.5px;color:var(--ink-2);min-width:0}
+.ftrack{height:22px;min-width:0;display:flex;align-items:center}
+.fbar{height:100%;background:var(--navy);border-radius:3px;min-width:3px}
+.fbar.gap{background:repeating-linear-gradient(135deg,var(--rail),var(--rail) 5px,var(--card) 5px,var(--card) 10px);
+  border:1px solid var(--rail)}
+.fbar.zero{background:var(--bad)}
+.fv{text-align:right;font-family:var(--f-display);font-weight:900;font-size:15px}
+.fv small{display:block;font-family:var(--f-body);font-weight:600;font-size:10.5px;margin-top:1px}
+.fv.drop small{color:var(--bad)}
+.fv.gapv{font-size:12px;font-weight:600;color:var(--ink-3);font-family:var(--f-body)}
+.worst{margin-top:13px;padding:11px 13px;border-radius:9px;background:var(--bad-bg);
+  font-size:12.5px;color:var(--bad);line-height:1.45}
+.worst b{font-weight:700}
+.nextup{margin-top:8px;padding:11px 13px;border-radius:9px;background:var(--sunk);
+  font-size:12.5px;color:var(--ink-2);line-height:1.45}
+.nextup b{color:var(--ink);font-weight:600}
+
+/* density control */
+.dens{display:flex;align-items:center;gap:10px;margin-top:26px;flex-wrap:wrap}
+.dens .dl{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.seg{display:inline-flex;background:var(--sunk);border:1px solid var(--line);border-radius:9px;padding:3px}
+.seg button{appearance:none;border:0;background:transparent;font:inherit;font-size:12.5px;font-weight:600;
+  color:var(--ink-3);padding:6px 14px;border-radius:7px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(17,34,80,.1)}
+.seg button:focus-visible{outline:2px solid var(--tan-deep);outline-offset:1px}
+.denshint{font-size:12px;color:var(--ink-3)}
+
+/* funnel piece */
+.comp{background:var(--card);border:1px solid var(--line);border-radius:13px;margin-top:13px;overflow:hidden}
+.chead{display:flex;align-items:flex-start;gap:12px;padding:14px 17px}
+.chead.good{background:var(--good-bg)} .chead.warn{background:var(--warn-bg)} .chead.bad{background:var(--bad-bg)}
+.cnum{flex:none;width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;
+  font-family:var(--f-display);font-weight:900;font-size:12.5px;display:grid;place-items:center}
+.chead.good .cnum{background:var(--good)} .chead.warn .cnum{background:var(--warn)} .chead.bad .cnum{background:var(--bad)}
+.ctitle{flex:1;min-width:0}
+.ctitle .t{font-family:var(--f-display);font-weight:700;font-size:16px;line-height:1.2}
+.ctitle .r{font-size:12px;color:var(--ink-3);margin-top:2px;line-height:1.4}
+.chip{display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  padding:3px 9px;border-radius:20px;flex:none;background:var(--card);color:var(--ink-3)}
+.chip.good{color:var(--good)} .chip.warn{color:var(--warn)} .chip.bad{color:var(--bad)}
+
+/* the one number that matters, always on the surface */
+.lead-k{display:flex;align-items:baseline;gap:11px;flex-wrap:wrap;padding:14px 17px;border-top:1px solid var(--line)}
+.lead-k .v{font-family:var(--f-display);font-weight:900;font-size:30px;line-height:1}
+.lead-k.off .v{color:var(--bad)} .lead-k.soft .v{color:var(--warn)} .lead-k.ok .v{color:var(--good)}
+.lead-k .k{font-size:12.5px;color:var(--ink-2)}
+.lead-k .b{font-size:11.5px;color:var(--ink-3);width:100%;margin-top:2px}
+
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(102px,1fr));gap:1px;background:var(--line);
+  border-top:1px solid var(--line)}
+.kpi{background:var(--card);padding:11px 13px;min-width:0}
+.kpi .v{font-family:var(--f-display);font-weight:900;font-size:18px;line-height:1.05}
+.kpi .k{font-size:10.5px;color:var(--ink-3);margin-top:4px;line-height:1.3}
+.kpi .flag{font-size:10.5px;color:var(--warn);margin-top:4px;line-height:1.35}
+.kpi .bench{font-size:10.5px;margin-top:5px;line-height:1.35;color:var(--ink-3)}
+.kpi.off .v{color:var(--bad)} .kpi.soft .v{color:var(--warn)} .kpi.ok .v{color:var(--good)}
+.kpi.off .bench{color:var(--bad)} .kpi.soft .bench{color:var(--warn)} .kpi.ok .bench{color:var(--good)}
+body[data-density="compact"] .kpis{display:none}
+body[data-density="compact"] .blind{display:none}
+
+.hand{padding:11px 17px;background:var(--sunk);border-top:1px solid var(--line);
+  font-size:12.5px;color:var(--ink-2);display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.hand b{font-family:var(--f-display);font-weight:900;font-size:17px;color:var(--ink)}
+.hand .arrow{color:var(--tan-deep);font-weight:700}
+.blind{padding:10px 17px;font-size:11.5px;color:var(--ink-3);line-height:1.45;border-top:1px solid var(--line)}
+
+/* drawer */
+details.work{border-top:1px solid var(--line)}
+details.work > summary{list-style:none;cursor:pointer;padding:13px 17px;display:flex;align-items:center;
+  gap:11px;font-size:13.5px;color:var(--ink);user-select:none;font-weight:600}
+details.work > summary:hover{background:var(--sunk)}
+details.work[open] > summary{background:var(--sunk);border-bottom:1px solid var(--line)}
+details.work > summary::-webkit-details-marker{display:none}
+details.work > summary:focus-visible{outline:2px solid var(--tan-deep);outline-offset:-2px}
+.caret{flex:none;width:9px;height:9px;border-right:2px solid var(--tan-deep);border-bottom:2px solid var(--tan-deep);
+  transform:rotate(-45deg);transition:transform .2s ease}
+details.work[open] .caret{transform:rotate(45deg)}
+.wpills{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap}
+.wpill{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  padding:3px 9px;border-radius:20px;background:var(--sunk);color:var(--ink-3)}
+details.work[open] .wpill{background:var(--card)}
+.wpill.on{background:var(--warn-bg);color:var(--warn)}
+.wpill.ask{background:transparent;color:var(--tan-deep);border:1px dashed var(--tan-deep)}
+.work-in{padding:14px 17px 18px;display:flex;flex-direction:column;gap:12px;background:var(--sunk)}
+
+.hyp{border:1px solid var(--line);border-radius:11px;padding:15px 16px;background:var(--card)}
+.hyp.idle{background:transparent;border-style:dashed;opacity:.74}
+.hyp.idle:hover{opacity:1}
+.hyp.ask{border-color:var(--tan-deep);opacity:1}
+.hyp.live{border-color:var(--navy)}
+.htop{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.hyp h3{font-size:14.5px;font-weight:700;line-height:1.3;flex:1;min-width:0}
+.tag{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;
+  border-radius:5px;flex:none;background:var(--sunk);color:var(--ink-3)}
+.tag.running{background:var(--warn);color:#fff}
+.tag.queued{background:var(--navy);color:#fff}
+.tag.won{background:var(--good);color:#fff}
+.tag.lost{background:var(--bad);color:#fff}
+.tag.instrument{background:var(--navy);color:#fff}
+.tag.ask{background:transparent;color:var(--tan-deep);border:1px dashed var(--tan-deep)}
+.hyp .body{font-size:13px;color:var(--ink-2);margin-top:7px;line-height:1.5}
+.scores{display:flex;gap:5px;margin-top:11px;flex-wrap:wrap}
+.sp{font-size:10.5px;color:var(--ink-3);background:var(--sunk);border-radius:5px;padding:3px 8px}
+.sp b{color:var(--ink-2);font-weight:600}
+.sp.avg{background:var(--navy);color:#C3CCE2} .sp.avg b{color:#fff}
+
+.test{margin-top:13px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.thead{padding:10px 13px;background:var(--navy);color:#C3CCE2;font-size:11.5px;line-height:1.45}
+.thead .tk{font-size:9.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--tan);
+  display:block;margin-bottom:3px}
+.thead b{color:#fff;font-weight:600}
+.tnums{display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:1px;background:var(--line)}
+.tn{background:var(--card);padding:12px 8px;text-align:center}
+.tn .v{font-family:var(--f-display);font-weight:900;font-size:17px;line-height:1;color:var(--ink-3)}
+.tn .k{font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin-top:5px}
+.tn.now .v{font-size:27px;color:var(--navy)}
+.tn.now.win .v{color:var(--good)}
+.tn.goal .v{color:var(--tan-deep)}
+.ptrack{height:10px;background:var(--rail)}
+.pfill{height:100%;background:var(--navy);transition:width .5s ease}
+.pfill.win{background:var(--good)}
+.reads{padding:11px 13px;background:var(--card);border-top:1px solid var(--line);font-size:12px;color:var(--ink-2)}
+.reads .rl{font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
+.reads ol{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px}
+.reads li{font-variant-numeric:tabular-nums}
+.reads li span{color:var(--ink-3)}
+.verdict{padding:10px 13px;background:var(--card);border-top:1px solid var(--line);
+  font-size:12px;line-height:1.45;color:var(--ink-2)}
+.verdict b{color:var(--ink)}
+
+.empty{background:var(--card);border:1px dashed var(--rail);border-radius:12px;
+  padding:22px;margin-top:16px;font-size:13.5px;color:var(--ink-3);line-height:1.55}
+.empty b{color:var(--ink-2);font-weight:600;display:block;margin-bottom:4px}
+footer{margin-top:38px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--ink-3);line-height:1.5}
+footer b{color:var(--ink-2)}
+
+@media (max-width:620px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .frow{grid-template-columns:104px 1fr 62px;gap:8px}
+}
+@media (prefers-reduced-motion:reduce){.pfill,.caret{transition:none}}
+</style>
+</head>
+<body>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Poppins:wght@400;500;600;700&display=swap">
+
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Skills Up &middot; Fast Track VSL &middot; Leads (FIN)</div>
+  <h1>Growth board</h1>
+  <div class="hgrid" id="hstats"><span class="stat" style="color:var(--ink-3)">Reading the campaign&hellip;</span></div>
+  <p class="asof" id="asof"></p>
+</header>
+
+<div id="over"></div>
+
+<div class="dens">
+  <span class="dl">Detail</span>
+  <span class="seg" role="group" aria-label="How much detail to show">
+    <button type="button" id="dCompact" aria-pressed="false">Compact</button>
+    <button type="button" id="dFull" aria-pressed="true">Full</button>
+  </span>
+  <span class="denshint" id="dHint"></span>
+</div>
+
+<div id="funnel">
+  <div class="empty"><b>No reading stored yet</b>
+    Every piece of the funnel gets a panel, and opens to the hypotheses attached to it.
+    A number we cannot measure says so instead of showing a zero.</div>
+</div>
+
+<footer id="foot">Numbers come from Meta, the Meta pixel, GetResponse and HubSpot.
+  Benchmarks marked <b>SKLES</b> are this account's own past results; the rest are
+  stated as ranges, because we have no prior run of our own to compare against.
+  Nothing here is estimated.</footer>
+</div>
+
+<script src="skles-growth-data.js"></script>
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const numOf = (v) => { const m = String(v ?? "").replace(/[^0-9.]/g, ""); return m === "" ? null : Number(m); };
+const STATE = { snap: null, hyps: [], exps: [] };
+
+/* ---------- density ---------- */
+function setDensity(d) {
+  document.body.dataset.density = d;
+  $("dCompact").setAttribute("aria-pressed", String(d === "compact"));
+  $("dFull").setAttribute("aria-pressed", String(d === "full"));
+  $("dHint").textContent = d === "compact"
+    ? "One number per piece. Everything else is one click away."
+    : "Every KPI on the surface, benchmarks included.";
+  try { localStorage.setItem("skles-density", d); } catch (e) {}
+}
+$("dCompact").addEventListener("click", () => setDensity("compact"));
+$("dFull").addEventListener("click", () => setDensity("full"));
+let d0 = "full";
+try { d0 = localStorage.getItem("skles-density") || "full"; } catch (e) {}
+setDensity(d0 === "compact" ? "compact" : "full");
+
+/* ---------- the orientation funnel ---------- */
+function overview(snap) {
+  const flow = Array.isArray(snap.flow) ? snap.flow : [];
+  if (!flow.length) return "";
+  const top = Math.max(...flow.map(f => numOf(f.value) ?? 0), 1);
+  let worstTxt = "", worstDrop = 0;
+  const rows = flow.map((f, i) => {
+    const v = numOf(f.value);
+    const prev = i ? flow.slice(0, i).reverse().find(x => numOf(x.value) != null) : null;
+    const pv = prev ? numOf(prev.value) : null;
+    const drop = (v != null && pv) ? (1 - v / pv) * 100 : null;
+    if (drop != null && drop > worstDrop && pv - v >= 5) {
+      worstDrop = drop;
+      worstTxt = `<b>${Math.round(pv - v)} of ${pv}</b> are lost between ${esc(prev.label)} and ${esc(f.label)}. That is the widest gap in the funnel.`;
+    }
+    if (f.unknown) {
+      return `<div class="frow"><div class="fl">${esc(f.label)}</div>
+        <div class="ftrack"><div class="fbar gap" style="width:100%"></div></div>
+        <div class="fv gapv">not yet</div></div>`;
+    }
+    const w = Math.max(2.5, Math.pow((v ?? 0) / top, 0.45) * 100);
+    return `<div class="frow"><div class="fl">${esc(f.label)}</div>
+      <div class="ftrack"><div class="fbar${v === 0 ? " zero" : ""}" style="width:${w}%"></div></div>
+      <div class="fv num${drop != null && drop >= 50 ? " drop" : ""}">${esc(f.value)}
+        ${drop != null ? `<small>&minus;${Math.round(drop)}%</small>` : ""}</div></div>`;
+  }).join("");
+
+  const best = STATE.hyps.slice().sort((a, b) => (b.avg ?? 0) - (a.avg ?? 0))[0];
+  const next = best ? `<div class="nextup"><b>Next, by score.</b> ${esc(best.title)}
+      &middot; ${Number(best.avg).toFixed(1)} out of 10${best.status ? " &middot; " + esc(best.status) : ""}</div>` : "";
+
+  return `<div class="over">
+    <h2>Where the people go</h2>
+    <p class="sub">Everyone who tapped the ad, and what is left at each step.</p>
+    ${rows}
+    ${worstTxt ? `<div class="worst">${worstTxt}</div>` : ""}
+    ${next}</div>`;
+}
+
+/* ---------- a test ---------- */
+function testBlock(e) {
+  const reads = Array.isArray(e.readings) ? e.readings : [];
+  const last = reads.length ? reads[reads.length - 1] : null;
+  const base = Number(e.baseline_value), targ = Number(e.success_value);
+  const cur = last && numOf(last.value) != null ? numOf(last.value) : base;
+  let w = 0, win = false;
+  if (isFinite(base) && isFinite(targ) && targ !== base) {
+    w = Math.max(0, Math.min(100, (cur - base) / (targ - base) * 100));
+    win = w >= 100;
+  }
+  const nums = (isFinite(base) && isFinite(targ)) ? `<div class="tnums">
+      <div class="tn"><div class="v num">${esc(e.baseline ?? base)}</div><div class="k">Baseline</div></div>
+      <div class="tn now${win ? " win" : ""}"><div class="v num">${last ? esc(last.value) : "&mdash;"}</div><div class="k">Now</div></div>
+      <div class="tn goal"><div class="v num">${esc(e.success ?? targ)}</div><div class="k">Wins at</div></div>
+    </div><div class="ptrack"><div class="pfill${win ? " win" : ""}" style="width:${w}%"></div></div>` : "";
+  const list = reads.length ? `<div class="reads"><div class="rl">Readings</div><ol>${
+      reads.map(r => `<li><span>${esc(r.date)}</span> &middot; ${esc(r.value)}${
+        r.note ? ' <span>' + esc(r.note) + '</span>' : ""}</li>`).join("")}</ol></div>` : "";
+  return `<div class="test">
+      <div class="thead"><span class="tk">${esc(e.kind === "instrument" ? "Instrument" : "Test")}</span>
+        <b>${esc(e.title)}</b>${e.started ? " &middot; " + esc(e.started) : ""}
+        ${e.metric ? "<br>Measuring " + esc(e.metric) : ""}</div>
+      ${nums}${list}
+      ${e.verdict ? `<div class="verdict">${esc(e.verdict)}</div>` : ""}
+      ${e.learned ? `<div class="verdict"><b>Learned.</b> ${esc(e.learned)}</div>` : ""}
+    </div>`;
+}
+
+function hypItem(h, test) {
+  const live = !!test, ask = !live && h.owner === "them";
+  const tag = live ? (test.kind === "instrument" ? "instrument" : (test.state || "queued"))
+                   : (ask ? "needs their go-ahead" : (h.status || "not started"));
+  const cls = live ? (test.kind === "instrument" ? "instrument" : (test.state || "queued")) : (ask ? "ask" : "");
+  const score = (h.avg != null) ? `<div class="scores">
+      <span class="sp">Cheap <b>${esc(h.cheap ?? "&mdash;")}</b></span>
+      <span class="sp">Odds <b>${esc(h.odds ?? "&mdash;")}</b></span>
+      <span class="sp">Impact <b>${esc(h.impact ?? "&mdash;")}</b></span>
+      <span class="sp avg">Avg <b>${Number(h.avg).toFixed(1)}</b></span></div>` : "";
+  return `<div class="hyp${live ? " live" : (ask ? " ask" : " idle")}">
+      <div class="htop"><h3>${esc(h.title)}</h3><span class="tag ${esc(cls)}">${esc(tag)}</span></div>
+      <p class="body">${esc(h.body || "")}</p>${score}${live ? testBlock(test) : ""}</div>`;
+}
+
+function drawer(key) {
+  const hyps = STATE.hyps.filter(h => h.comp === key);
+  const exps = STATE.exps.filter(e => e.comp === key);
+  const byHyp = {}; exps.forEach(e => { if (e.hyp) byHyp[e.hyp] = e; });
+  const loose = exps.filter(e => !e.hyp);
+  const items = hyps.map(h => ({ h, test: byHyp[h.id] || null }));
+  items.sort((a, b) => (b.test ? 1 : 0) - (a.test ? 1 : 0) || (b.h.avg ?? 0) - (a.h.avg ?? 0));
+  const live = items.filter(i => i.test).length + loose.length;
+  const asking = items.filter(i => !i.test && i.h.owner === "them").length;
+  const total = items.length + loose.length;
+  if (!total) {
+    return `<details class="work"><summary><span class="caret"></span>
+      <span style="color:var(--ink-3);font-weight:500">Nothing written for this piece yet</span></summary>
+      <div class="work-in"><div class="hyp idle"><p class="body">No hypothesis has been written here.
+        On a piece that is losing people, that is the gap, not the answer.</p></div></div></details>`;
+  }
+  const pills = [
+    live ? `<span class="wpill on">${live} under test</span>` : "",
+    asking ? `<span class="wpill ask">${asking} needs a yes</span>` : "",
+    (total - live - asking) ? `<span class="wpill">${total - live - asking} waiting</span>` : ""
+  ].filter(Boolean).join("");
+  const body = loose.map(e => `<div class="hyp live">
+      <div class="htop"><h3>${esc(e.title)}</h3><span class="tag instrument">instrument</span></div>
+      <p class="body">${esc(e.hypothesis || "")}</p>${testBlock(e)}</div>`)
+    .concat(items.map(i => hypItem(i.h, i.test))).join("");
+  return `<details class="work"><summary><span class="caret"></span>
+      <span>${total} ${total === 1 ? "hypothesis" : "hypotheses"}</span>
+      <span class="wpills">${pills}</span></summary>
+      <div class="work-in">${body}</div></details>`;
+}
+
+function render() {
+  const snap = STATE.snap;
+  if (!snap || !Array.isArray(snap.components)) return;
+  $("asof").textContent = "Read " + (snap.as_of || "") + (snap.since ? " · since " + snap.since : "");
+  $("over").innerHTML = overview(snap);
+
+  $("funnel").innerHTML = snap.components.map((c, i) => {
+    const tone = (k) => k.bench ? ({ good: " ok", warn: " soft", bad: " off" }[k.bench.state] || "") : "";
+    const lead = c.kpis && c.kpis.find(k => k.lead) || (c.kpis || [])[0];
+    const leadHtml = lead ? `<div class="lead-k${tone(lead)}">
+        <span class="v num">${lead.value == null ? "&mdash;" : esc(lead.value)}</span>
+        <span class="k">${esc(lead.label)}</span>
+        ${lead.bench ? `<span class="b">${esc(lead.bench.text)}</span>` : ""}</div>` : "";
+    const kpis = (c.kpis || []).filter(k => k !== lead).map(k => `<div class="kpi${tone(k)}">
+        <div class="v num">${k.value == null ? "&mdash;" : esc(k.value)}</div>
+        <div class="k">${esc(k.label)}</div>
+        ${k.flag ? `<div class="flag">${esc(k.flag)}</div>` : ""}
+        ${k.bench ? `<div class="bench">${esc(k.bench.text)}</div>` : ""}</div>`).join("");
+    const hand = c.hands_on ? `<div class="hand"><b class="num">${esc(c.hands_on.value)}</b>
+        <span class="arrow">&rarr;</span><span>${esc(c.hands_on.label)}</span></div>` : "";
+    const blind = c.blind ? `<div class="blind">${esc(c.blind)}</div>` : "";
+    return `<div class="comp">
+      <div class="chead ${esc(c.state || "")}">
+        <div class="cnum num">${i + 1}</div>
+        <div class="ctitle"><div class="t">${esc(c.name)}</div><div class="r">${esc(c.role || "")}</div></div>
+        <span class="chip ${esc(c.state || "")}">${esc(c.stateLabel || c.state || "")}</span>
+      </div>
+      ${leadHtml}<div class="kpis">${kpis}</div>${hand}${blind}${drawer(c.key)}</div>`;
+  }).join("");
+
+  const h = [];
+  if (snap.spend != null) h.push(["Spent", "$" + Number(snap.spend).toFixed(2)]);
+  if (snap.cost_per_lead != null) h.push(["Per lead", "$" + Number(snap.cost_per_lead).toFixed(2)]);
+  if (snap.cost_per_call_ready != null) h.push(["Per call-ready lead", "$" + Number(snap.cost_per_call_ready).toFixed(2)]);
+  if (snap.sales != null) h.push(["Sales", String(snap.sales)]);
+  if (h.length) $("hstats").innerHTML = h.map(([k, v]) =>
+    `<span class="stat"><b class="num">${esc(v)}</b> ${esc(k)}</span>`).join("");
+}
+
+/* The readings arrive as a data file published beside this page, so the board
+   opens for anyone with the link rather than only for a signed-in account. */
+(function () {
+  const g = window.SKLES_GROWTH;
+  if (!g) { $("foot").textContent = "The readings file did not load. Try a refresh."; return; }
+  STATE.snap = g.snap || null;
+  STATE.hyps = g.hyps || [];
+  STATE.exps = g.exps || [];
+  render();
+  if (g.exported) $("foot").textContent = "Readings as of " + g.exported + ".";
+})();
+</script>
+</body>
+</html>
