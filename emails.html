@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fast Track Email Sequence</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;0,900;1,400&family=Poppins:wght@400;500;600;700&display=swap">
+<style>
+/* A timeline rail down the left, each email rendered as it arrives in the inbox. */
+:root{
+  --paper:#F7F6F3; --card:#FFFFFF; --ink:#141829; --ink-2:#55596E; --ink-3:#8A8EA0;
+  --navy:#112250; --navy-2:#1D3573; --tan:#E0C58F; --tan-deep:#9A7638; --tan-soft:#F3E7CE;
+  --line:rgba(17,34,80,.13); --rail:#DDD9D1; --accent-strong:#1D3573;
+  --f-display:'Merriweather',Georgia,'Times New Roman',serif;
+  --f-body:'Poppins',system-ui,-apple-system,'Segoe UI',sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0C1326; --card:#141E38; --ink:#EDEFF5; --ink-2:#AFB6CC; --ink-3:#7B84A0;
+  --navy:#08112A; --navy-2:#1D3573; --tan:#E0C58F; --tan-deep:#E0C58F; --tan-soft:#1B2949;
+  --line:rgba(224,197,143,.18); --rail:#24304F; --accent-strong:#E0C58F; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --paper:#0C1326; --card:#141E38; --ink:#EDEFF5; --ink-2:#AFB6CC; --ink-3:#7B84A0;
+  --navy:#08112A; --navy-2:#1D3573; --tan:#E0C58F; --tan-deep:#E0C58F; --tan-soft:#1B2949;
+  --line:rgba(224,197,143,.18); --rail:#24304F; --accent-strong:#E0C58F; color-scheme:dark;}
+
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f-body);
+  font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:780px;margin:0 auto;padding-block:40px 72px;padding-left:20px;padding-right:20px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(27px,4.2vw,38px);font-weight:900;line-height:1.15}
+p{margin:0}
+.eyebrow{font-size:10.5px;font-weight:600;letter-spacing:.17em;text-transform:uppercase;color:var(--tan-deep)}
+
+header{border-bottom:2px solid var(--navy);padding-bottom:24px;margin-bottom:14px}
+.lede{margin-top:13px;font-size:16.5px;color:var(--ink-2);max-width:60ch}
+.facts{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.fact{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:10px 14px;
+  font-size:12.5px;color:var(--ink-2)}
+.fact b{color:var(--ink);font-weight:600;display:block;font-size:13.5px;margin-bottom:1px}
+
+/* timeline */
+.rail{position:relative;margin-top:34px;padding-left:66px}
+.rail::before{content:"";position:absolute;left:25px;top:8px;bottom:60px;width:2px;background:var(--rail)}
+.stop{position:relative;margin-bottom:26px}
+.when{position:absolute;left:-66px;top:16px;width:52px;text-align:center}
+.daynum{font-family:var(--f-display);font-weight:900;font-size:21px;color:var(--navy);
+  background:var(--paper);display:block;line-height:1;padding:4px 0;font-variant-numeric:tabular-nums}
+:root[data-theme="dark"] .daynum,:root:not([data-theme="light"]) .daynum{color:var(--tan)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .daynum{color:var(--navy)}}
+.daylbl{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+  background:var(--paper);display:block;padding-bottom:4px}
+
+/* the email card */
+.mail{background:var(--card);border:1px solid var(--line);border-radius:13px;overflow:hidden;
+  box-shadow:0 4px 18px rgba(17,34,80,.06)}
+.subject{padding:15px 20px 13px;border-bottom:1px solid var(--line)}
+.subject .k{font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);
+  display:block;margin-bottom:4px}
+.subject .s{font-weight:600;font-size:15.5px;line-height:1.35}
+.subject .pre{font-size:12.5px;color:var(--ink-3);margin-top:6px;line-height:1.45}
+.render{background:var(--navy);padding:30px 26px 32px;text-align:center}
+.brand{font-size:10px;letter-spacing:.3em;color:var(--tan);font-weight:600;margin-bottom:18px}
+.render h2{font-family:var(--f-display);font-weight:900;color:#fff;font-size:clamp(21px,3.6vw,27px);
+  line-height:1.2;margin-bottom:16px}
+.render p{color:#CBD3E6;font-size:14.5px;line-height:1.62;margin-bottom:13px;text-align:left;
+  max-width:52ch;margin-left:auto;margin-right:auto}
+.cta{display:inline-block;background:var(--tan);color:#112250;font-weight:600;font-size:14.5px;
+  padding:13px 30px;border-radius:6px;margin-top:9px;text-decoration:none}
+.sig{color:#8E98B6;font-size:13px;margin-top:17px;font-style:italic}
+
+.note{margin-top:40px;background:var(--tan-soft);border-left:4px solid var(--tan);
+  border-radius:0 11px 11px 0;padding:20px 22px}
+.note h3{font-size:16px;margin-bottom:9px}
+.note p{font-size:14px;color:var(--ink-2);margin-bottom:9px}
+.note p:last-child{margin-bottom:0}
+footer{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);
+  font-size:12px;color:var(--ink-3)}
+@media (max-width:560px){
+  .rail{padding-left:0}
+  .rail::before{display:none}
+  .when{position:static;width:auto;text-align:left;display:flex;gap:8px;align-items:baseline;margin-bottom:8px}
+  .daynum{font-size:17px;padding:0}
+  .daylbl{padding:0}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Sean K. Langston &middot; Skills Up</div>
+  <h1>What a new lead hears from us</h1>
+  <p class="lede">Five emails over twelve days, sent automatically the moment somebody fills in the
+    form on a Facebook ad. Nobody has to start them. This is every word, in the order it arrives.</p>
+  <div class="facts">
+    <div class="fact"><b>Automatic</b>fires on signup</div>
+    <div class="fact"><b>12 days</b>day 0 to day 12</div>
+    <div class="fact"><b>One link</b>every button opens the training</div>
+    <div class="fact"><b>One ask</b>the price appears once, at the end</div>
+  </div>
+</header>
+
+<div class="rail">
+
+  <div class="stop">
+    <div class="when"><span class="daynum">0</span><span class="daylbl">same day</span></div>
+    <div class="mail">
+      <div class="subject">
+        <span class="k">Subject</span>
+        <div class="s">You asked how to start. Here is the honest answer.</div>
+        <div class="pre">Most people buy a house and hope. That is not investing. That is gambling with a mortgage attached.</div>
+      </div>
+      <div class="render">
+        <div class="brand">SKLES</div>
+        <h2>You asked how to start</h2>
+        <p>Most people buy a house and hope. That is not investing. That is gambling with a mortgage attached.</p>
+        <p>There are six steps to doing this properly, and they only work in the order they happen. Skip one and the whole thing stops compounding.</p>
+        <p>I walk through all six in the training below. It takes a few minutes and it will tell you whether this is for you.</p>
+        <span class="cta">Watch the training</span>
+        <div class="sig">&mdash; Sean</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stop">
+    <div class="when"><span class="daynum">2</span><span class="daylbl">two days</span></div>
+    <div class="mail">
+      <div class="subject">
+        <span class="k">Subject</span>
+        <div class="s">You do not need a lot of money</div>
+        <div class="pre">This is the reason most people never start. They assume you need savings they do not have.</div>
+      </div>
+      <div class="render">
+        <div class="brand">SKLES</div>
+        <h2>You do not need a lot of money</h2>
+        <p>This is the reason most people never start. They assume you need savings they do not have.</p>
+        <p>I did not start with a pile of cash. I started with a line of credit and a system for knowing which property was worth buying.</p>
+        <p>The money matters far less than knowing what a deal actually is before you fall in love with a house.</p>
+        <span class="cta">Watch the training</span>
+        <div class="sig">&mdash; Sean</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stop">
+    <div class="when"><span class="daynum">5</span><span class="daylbl">five days</span></div>
+    <div class="mail">
+      <div class="subject">
+        <span class="k">Subject</span>
+        <div class="s">The six steps, in the order they happen</div>
+        <div class="pre">Purchase. Rehab. Rent. Maintain. Appreciation. Build wealth.</div>
+      </div>
+      <div class="render">
+        <div class="brand">SKLES</div>
+        <h2>The six steps in order</h2>
+        <p>Purchase. Rehab. Rent. Maintain. Appreciation. Build wealth.</p>
+        <p>The order is the entire thing. Most people do the first one, jump to the fifth, and then wonder why nothing is compounding.</p>
+        <p>Step four is the one nobody talks about, and it decides whether you still own the property in five years.</p>
+        <span class="cta">Watch the training</span>
+        <div class="sig">&mdash; Sean</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stop">
+    <div class="when"><span class="daynum">8</span><span class="daylbl">eight days</span></div>
+    <div class="mail">
+      <div class="subject">
+        <span class="k">Subject</span>
+        <div class="s">Who is actually teaching you this</div>
+        <div class="pre">I am Sean K. Langston. Broker, Realtor, ABR, CDPE, SFR. Investor and coach.</div>
+      </div>
+      <div class="render">
+        <div class="brand">SKLES</div>
+        <h2>Who is teaching you this</h2>
+        <p>I am Sean K. Langston. Broker, Realtor, ABR, CDPE, SFR. Investor and coach.</p>
+        <p>I am not someone who read a book about this. I own the properties, I have made the mistakes, and I teach the system I actually used.</p>
+        <p>That is worth knowing before you take advice from anyone on the internet, including me.</p>
+        <span class="cta">Watch the training</span>
+        <div class="sig">&mdash; Sean</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stop">
+    <div class="when"><span class="daynum">12</span><span class="daylbl">twelve days</span></div>
+    <div class="mail">
+      <div class="subject">
+        <span class="k">Subject</span>
+        <div class="s">It costs $8.99 to start</div>
+        <div class="pre">Less than two coffees, and you can cancel whenever you like.</div>
+      </div>
+      <div class="render">
+        <div class="brand">SKLES</div>
+        <h2>It costs 8.99 dollars</h2>
+        <p>Less than two coffees, and you can cancel whenever you like.</p>
+        <p>You get the modules, a quiz on every step, the full glossary, and the members-only community. The archive grows as I record new trainings.</p>
+        <p>If it is not for you, you will know in the first module and you will have lost the price of a coffee.</p>
+        <span class="cta">Start for $8.99</span>
+        <div class="sig">&mdash; Sean</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="note">
+  <h3>How it behaves</h3>
+  <p>The sequence starts by itself when somebody fills in the form on one of the ads. Each person
+    moves on their own clock, so a lead who arrives today gets email one today and email five
+    twelve days from today, regardless of anyone else.</p>
+  <p>Every button goes to the same place, the training page with the five minute video and the
+    offer underneath it. The first four earn the click, the fifth names the price.</p>
+  <p>Anyone who buys stops receiving the rest, so nobody is sold something they already own.</p>
+</div>
+
+<footer>
+  Live since 6 October 2026. Everyone who has come in from the October campaign is in it.
+</footer>
+
+</div>
+</body>
+</html>
