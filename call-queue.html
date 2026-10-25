@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Your Call Queue</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Poppins:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#FFFFFF; --ink:#141829; --ink-2:#55596E; --ink-3:#8A8EA0;
+  --navy:#112250; --tan:#E0C58F; --tan-deep:#9A7638; --tan-soft:#F5EAD3;
+  --line:rgba(17,34,80,.13); --rail:#E2DED6;
+  --f-display:'Merriweather',Georgia,serif; --f-body:'Poppins',system-ui,-apple-system,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0C1326; --card:#141E38; --ink:#EDEFF5; --ink-2:#AFB6CC; --ink-3:#7B84A0;
+  --navy:#08112A; --tan:#E0C58F; --tan-deep:#E0C58F; --tan-soft:#1B2949;
+  --line:rgba(224,197,143,.18); --rail:#24304F; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --paper:#0C1326; --card:#141E38; --ink:#EDEFF5; --ink-2:#AFB6CC; --ink-3:#7B84A0;
+  --navy:#08112A; --tan:#E0C58F; --tan-deep:#E0C58F; --tan-soft:#1B2949;
+  --line:rgba(224,197,143,.18); --rail:#24304F; color-scheme:dark;}
+
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f-body);
+  font-size:15.5px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:720px;margin:0 auto;padding:40px 20px 70px}
+h1,h2{font-family:var(--f-display);margin:0;letter-spacing:-.01em;text-wrap:balance}
+h1{font-size:clamp(28px,5vw,40px);font-weight:900;line-height:1.14}
+p{margin:0}
+.eyebrow{font-size:10.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--tan-deep)}
+header{border-bottom:2px solid var(--navy);padding-bottom:26px}
+.lede{margin-top:14px;font-size:17px;color:var(--ink-2);max-width:56ch}
+
+ol.steps{list-style:none;counter-reset:s;margin:34px 0 0;padding:0;position:relative}
+ol.steps::before{content:"";position:absolute;left:19px;top:14px;bottom:30px;width:2px;background:var(--rail)}
+ol.steps>li{counter-increment:s;position:relative;padding:0 0 26px 58px}
+ol.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:40px;height:40px;
+  border-radius:50%;background:var(--navy);color:var(--tan);font-family:var(--f-display);
+  font-weight:900;font-size:17px;display:grid;place-items:center}
+ol.steps h2{font-size:18px;font-weight:700;line-height:1.3;margin-bottom:6px}
+ol.steps p{font-size:14.5px;color:var(--ink-2);line-height:1.58}
+ol.steps p+p{margin-top:8px}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;
+  background:var(--tan-soft);color:var(--tan-deep);padding:2px 7px;border-radius:5px;word-break:break-all}
+
+.opts{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
+.opt{font-size:12.5px;background:var(--card);border:1px solid var(--line);
+  border-radius:9px;padding:8px 13px;color:var(--ink-2);line-height:1.35}
+.opt b{display:block;color:var(--ink);font-weight:600;font-size:13.5px;margin-bottom:1px}
+
+.flow{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:18px 21px;margin-top:12px}
+.flow .row{display:flex;gap:11px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.flow .row:last-child{border-bottom:none}
+.flow .nm{font-weight:600;min-width:120px;color:var(--ink)}
+.flow .ds{color:var(--ink-2);font-size:13.5px}
+
+.note{margin-top:30px;background:var(--tan-soft);border-left:4px solid var(--tan);
+  border-radius:0 11px 11px 0;padding:19px 22px}
+.note h2{font-size:16.5px;margin-bottom:8px}
+.note p{font-size:14.5px;color:var(--ink-2)}
+.note p+p{margin-top:9px}
+footer{margin-top:34px;padding-top:17px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-3)}
+@media (max-width:520px){
+  ol.steps::before{left:15px}
+  ol.steps>li{padding-left:48px}
+  ol.steps>li::before{width:32px;height:32px;font-size:15px}
+  .flow .row{flex-direction:column;gap:2px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Skills Up &middot; Sean K. Langston</div>
+  <h1>Your call queue, start to finish</h1>
+  <p class="lede">Every lead the ads bring in now lands in HubSpot with a phone number and a note on how soon they want to start. This is the whole routine, seven steps.</p>
+</header>
+
+<ol class="steps">
+
+<li>
+  <h2>Get in</h2>
+  <p>Go to <code>app.hubspot.com</code> and sign in as <code>info@seanklangstonenterprises.com</code>. That is the Skills Up account, not a personal one.</p>
+  <p>On a new device HubSpot emails a one-time code to that same inbox, so you need to be able to open it. If you cannot, tell me before you try, and we will sort the access first rather than lock the account.</p>
+</li>
+
+<li>
+  <h2>Open your list</h2>
+  <p>Top menu, <b>CRM &rarr; Lists</b>, then open <b>Rodney &middot; Call queue</b>. That list is the only place you need to look, and it updates itself.</p>
+  <p>Sort by <b>First touch date</b>, oldest at the top. The person who has been waiting longest is the one to call first.</p>
+</li>
+
+<li>
+  <h2>Read the card before you dial</h2>
+  <p>Click a name. Four things are worth a glance: the phone number, <b>Timing</b> (what they said about when they want to start), <b>Source ad</b> (which ad they answered), and <b>First touch date</b>.</p>
+  <p>Everyone in this list chose "in the next 3 months" themselves. Nobody here is browsing.</p>
+</li>
+
+<li>
+  <h2>Call, and open with a question</h2>
+  <p>What they signed up for was a free five minute training, not an offer. The call should end at the Apprentice, just not open there.</p>
+  <p>What we need from these first ones is the thing the numbers cannot tell us: they said they want to start within three months, it costs $8.99, and they still have not taken it. Something is in the way and we do not know what. So ask what made them look now, then what they expected to find, then what is holding them back from starting.</p>
+  <p>Once we have heard that five or six times we will know whether it is price, trust, format or timing, and that becomes the script.</p>
+</li>
+
+<li>
+  <h2>Set the lead status</h2>
+  <p>On the contact, set <b>Lead status</b>. This is the one field that has to be filled in, because it is what moves people out of your list.</p>
+  <div class="opts">
+    <span class="opt"><b>Attempted to Contact</b>no answer, stays in the queue</span>
+    <span class="opt"><b>Connected</b>you spoke, leaves</span>
+    <span class="opt"><b>Bad Timing</b>interested, not now, leaves</span>
+    <span class="opt"><b>Unqualified</b>not a fit, leaves</span>
+  </div>
+  <p>So a no-answer keeps coming back to you until you reach them, which is what you want.</p>
+</li>
+
+<li>
+  <h2>If they are interested, create a deal</h2>
+  <p>On the contact record, right side, <b>Deals &rarr; Add</b>. Name it after the person, put the amount in, and pick the stage. That is what makes them show up in the numbers Sean sees.</p>
+  <div class="flow">
+    <div class="row"><span class="nm">Lead</span><span class="ds">spoken to, interested, nothing bought yet</span></div>
+    <div class="row"><span class="nm">Apprentice</span><span class="ds">they joined at $8.99</span></div>
+    <div class="row"><span class="nm">Identified</span><span class="ds">worth a Prot&eacute;g&eacute; conversation</span></div>
+    <div class="row"><span class="nm">Invited to trial</span><span class="ds">invited into a live training</span></div>
+    <div class="row"><span class="nm">Call with Sean</span><span class="ds">booked or happened</span></div>
+    <div class="row"><span class="nm">Offer made</span><span class="ds">price given, deciding</span></div>
+    <div class="row"><span class="nm">Closed won / lost</span><span class="ds">the answer</span></div>
+  </div>
+</li>
+
+<li>
+  <h2>Log the call</h2>
+  <p>On the contact, <b>Log activity &rarr; Call</b>, and write two lines on what they said. Not for admin. It is so the next conversation starts where the last one ended, by you or by Sean.</p>
+  <p>Write down what they tell you about why they have not started. That is the part we are actually collecting.</p>
+</li>
+
+</ol>
+
+<div class="note">
+  <h2>Two things to know</h2>
+  <p>You are signing in to the shared Skills Up account, because the plan allows two logins and both are in use. Work the contacts and the deals freely, just leave the account settings alone so nobody gets logged out.</p>
+  <p>Anyone who said "just learning for now" never enters the queue, so you are not calling browsers.</p>
+</div>
+
+<footer>
+  Questions, or something not where this says it is, send me a note and I will fix it. Marina.
+</footer>
+
+</div>
+</body>
+</html>
