@@ -68,6 +68,26 @@ footer{margin-top:34px;padding-top:17px;border-top:1px solid var(--line);font-si
   ol.steps>li::before{width:32px;height:32px;font-size:15px}
   .flow .row{flex-direction:column;gap:2px}
 }
+
+/* live queue */
+.liveq{margin:30px 0 6px;border:1px solid var(--line);border-radius:14px;background:var(--card);overflow:hidden}
+.liveq .lqhd{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+  padding:16px 18px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.liveq .lqhd b{font-family:var(--f-display);font-size:18px}
+.liveq .stamp{font-size:11.5px;color:var(--ink-3)}
+.lqscroll{overflow-x:auto}
+table.lq{border-collapse:collapse;width:100%;font-size:14.5px;min-width:520px}
+table.lq th{text-align:left;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--tan-deep);font-weight:600;padding:11px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+table.lq td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+table.lq tr:last-child td{border-bottom:none}
+table.lq .nm{font-weight:600}
+table.lq a{color:var(--navy);text-decoration:none;white-space:nowrap}
+table.lq a:hover{text-decoration:underline}
+.wait{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:20px;
+  background:var(--tan-soft);color:var(--tan-deep);white-space:nowrap}
+.wait.old{background:rgba(190,60,60,.12);color:#A33}
+.lqempty{padding:22px 18px;color:var(--ink-2)}
 </style>
 </head>
 <body>
@@ -78,6 +98,20 @@ footer{margin-top:34px;padding-top:17px;border-top:1px solid var(--line);font-si
   <h1>Your call queue, start to finish</h1>
   <p class="lede">Every lead the ads bring in now lands in HubSpot with a phone number and a note on how soon they want to start. This is the whole routine, seven steps.</p>
 </header>
+
+
+<section class="liveq">
+  <div class="lqhd">
+    <b>Who to call, right now</b>
+    <span class="stamp" id="lqStamp">loading&hellip;</span>
+  </div>
+  <div class="lqscroll"><table class="lq" id="lqTable">
+    <thead><tr><th>Waiting</th><th>Name</th><th>Phone</th><th>Email</th><th>Came in</th></tr></thead>
+    <tbody id="lqBody"></tbody>
+  </table></div>
+  <div class="lqempty" id="lqEmpty" hidden>Queue is empty. Nothing to call.</div>
+</section>
+<p style="margin-top:12px;color:var(--ink-2);font-size:14.5px">Oldest first, so start at the top. This refreshes on its own every few hours, so it is always the current list. You do not need to sign in to anything to use it.</p>
 
 <ol class="steps">
 
@@ -151,5 +185,31 @@ footer{margin-top:34px;padding-top:17px;border-top:1px solid var(--line);font-si
 </footer>
 
 </div>
+
+<script src="skles-hubspot-data.js"></script>
+<script>
+(function(){
+  var d = (window.SKLES_HS || {}), q = d.queue || [];
+  var body = document.getElementById('lqBody');
+  document.getElementById('lqStamp').textContent = d.last_updated ? ('Updated ' + d.last_updated) : 'No data yet';
+  if (!q.length){ document.getElementById('lqTable').hidden = true; document.getElementById('lqEmpty').hidden = false; return; }
+  q.forEach(function(r){
+    var tr = document.createElement('tr');
+    var w = (r.waiting == null) ? '' : r.waiting + 'd';
+    var cls = (r.waiting != null && r.waiting >= 21) ? 'wait old' : 'wait';
+    var tel = (r.phone||'').replace(/[^+0-9]/g,'');
+    tr.innerHTML =
+      '<td>' + (w ? '<span class="'+cls+'">'+w+'</span>' : '') + '</td>' +
+      '<td class="nm"></td>' +
+      '<td>' + (tel ? '<a href="tel:'+tel+'"></a>' : '') + '</td>' +
+      '<td>' + (r.email ? '<a href="mailto:'+r.email+'"></a>' : '') + '</td>' +
+      '<td>' + (r.since || '') + '</td>';
+    tr.children[1].textContent = r.name || '(no name)';
+    if (tel) tr.children[2].firstChild.textContent = r.phone;
+    if (r.email) tr.children[3].firstChild.textContent = r.email;
+    body.appendChild(tr);
+  });
+})();
+</script>
 </body>
 </html>
