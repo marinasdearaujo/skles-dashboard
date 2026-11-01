@@ -1,0 +1,286 @@
+<!DOCTYPE html><html><head><meta charset="utf-8">
+<title>October Report</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+@page{ size:1280px 720px; margin:0; }
+table.dt{width:100%;border-collapse:collapse;margin-top:22px;}
+table.dt th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--gold);font-weight:800;padding:9px 12px;border-bottom:2px solid var(--gold);}
+table.dt td{padding:11px 12px;font-size:13.5px;border-bottom:1px solid #eee;color:#33465e;}
+table.dt td.n{font-weight:800;color:var(--navy);text-align:right;font-variant-numeric:tabular-nums;}
+table.dt td.g{color:#1f9d6a;font-weight:800;text-align:right;}
+table.dt td.r{color:#b4451f;font-weight:800;text-align:right;}
+table.dt tr.tot td{border-top:2px solid var(--gold);border-bottom:none;font-weight:800;color:var(--navy);}
+.flag{background:#fdf4ee;border-left:5px solid #d98043;border-radius:10px;padding:16px 20px;font-size:13.5px;color:#6b513f;line-height:1.55;margin-top:22px;}
+.flag b{color:#9c4a1a;}
+.gap{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 26px;margin-top:22px;}
+.gap div{font-size:13.5px;color:#5d6b7e;line-height:1.5;padding-left:20px;position:relative;}
+.gap div:before{content:'';position:absolute;left:0;top:7px;width:9px;height:9px;border-radius:50%;background:#d6dde6;}
+.gap div b{color:var(--navy);}
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{--navy:#0B1E3B;--navy2:#12294d;--gold:#C9A24B;--gold2:#D9BE85;--cream:#F5F0E6;--dim:#8fa0bb;--line:#213a5e;--up:#3ecf8e;}
+body{font-family:'Open Sans',Arial,sans-serif;color:#0B1E3B;}
+.slide{width:1280px;height:720px;padding:64px 76px;position:relative;overflow:hidden;page-break-after:always;background:#fff;display:flex;flex-direction:column;}
+.slide.dark{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;}
+.kicker{font-family:'Open Sans';font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:18px;}
+h1{font-family:'Playfair Display',Georgia,serif;font-weight:800;font-size:58px;line-height:1.08;}
+h2{font-family:'Playfair Display',Georgia,serif;font-weight:800;font-size:38px;line-height:1.12;margin-bottom:8px;}
+h1 span,h2 span{color:var(--gold);}
+.sub{font-size:17px;color:#5d6b7e;line-height:1.6;max-width:920px;}
+.slide.dark .sub{color:#c7d2e0;}
+.logo{font-family:'Playfair Display',serif;font-weight:800;font-size:26px;}
+.logo span{color:var(--gold);}
+.foot{position:absolute;bottom:30px;left:76px;right:76px;display:flex;justify-content:space-between;font-size:11px;color:#9fb0c7;letter-spacing:1px;text-transform:uppercase;}
+.slide.dark .foot{color:#5d7a9e;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:26px;}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:24px;}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:24px;}
+.card{background:#fff;border:1px solid #e7e0cf;border-left:5px solid var(--gold);border-radius:12px;padding:22px 24px;}
+.card h3{font-size:15px;font-weight:800;margin-bottom:6px;color:var(--navy);}
+.card p{font-size:14px;color:#5d6b7e;line-height:1.55;}
+.metric{background:linear-gradient(135deg,#fff,#faf6ec);border:1px solid #ece3cd;border-radius:12px;padding:22px;text-align:center;}
+.metric .n{font-family:'Playfair Display',serif;font-weight:800;font-size:40px;color:var(--navy);line-height:1;}
+.metric .n small{font-size:20px;color:var(--gold);}
+.metric .l{font-size:12px;color:#7c8aa0;margin-top:8px;text-transform:uppercase;letter-spacing:1px;font-weight:600;}
+.metric .ch{font-size:12px;color:var(--gold);font-weight:700;margin-top:4px;}
+.chan-row{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:26px;}
+.chan{background:linear-gradient(135deg,#fff,#faf6ec);border:1px solid #ece3cd;border-top:4px solid var(--gold);border-radius:12px;padding:18px 15px;text-align:center;}
+.chan .cn{font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--gold);}
+.chan .cv{font-family:'Playfair Display',serif;font-weight:800;font-size:33px;color:var(--navy);line-height:1;margin:8px 0 4px;}
+.chan .cl{font-size:12px;color:#33465e;font-weight:700;line-height:1.3;}
+.chan .cx{font-size:11px;color:#8090a5;margin-top:6px;line-height:1.35;}
+.status-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px;}
+.st{background:#fff;border:1px solid #e7e0cf;border-radius:12px;padding:16px;border-top:4px solid var(--gold);}
+.st .sbadge{display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;padding:3px 9px;border-radius:20px;margin-bottom:9px;}
+.sbadge.done{background:rgba(62,207,142,.16);color:#1f9d6a;}
+.sbadge.prog{background:rgba(201,162,75,.2);color:#a9822f;}
+.sbadge.next{background:#eef1f5;color:#7c8aa0;}
+.st .sh{font-size:13.5px;font-weight:800;color:var(--navy);line-height:1.2;margin-bottom:6px;}
+.st .sp{font-size:11.5px;color:#5d6b7e;line-height:1.42;}
+.cal{width:100%;border-collapse:collapse;margin-top:24px;}
+.cal th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--gold);font-weight:800;padding:10px 14px;border-bottom:2px solid var(--gold);}
+.cal td{padding:14px;font-size:14px;border-bottom:1px solid #eee;color:#33465e;vertical-align:middle;}
+.cal td.wk{font-family:'Playfair Display',serif;font-weight:800;font-size:20px;color:var(--gold);width:60px;}
+.cal td.dt{color:#8090a5;font-size:12.5px;width:150px;font-weight:700;}
+.cal td.th b{color:var(--navy);font-weight:800;}
+.cal td.pr{width:280px;font-size:12.5px;color:#7c8aa0;}
+.cal tr:last-child td{border-bottom:none;}
+.cal tr.hl td{background:rgba(201,162,75,.08);}
+.note{margin-top:auto;background:var(--cream);border-radius:10px;padding:16px 20px;font-size:13.5px;color:#5d6b7e;line-height:1.55;}
+.note b{color:var(--navy);}
+ul.clean{list-style:none;margin-top:20px;}
+ul.clean li{font-size:15.5px;color:#33465e;line-height:1.5;padding:11px 0 11px 30px;position:relative;border-bottom:1px solid #eee;}
+ul.clean li:before{content:'';position:absolute;left:0;top:17px;width:11px;height:11px;border-radius:3px;background:var(--gold);}
+ul.clean li b{color:var(--navy);}
+.funnel{display:flex;align-items:stretch;gap:0;margin-top:30px;}
+.fstep{flex:1;background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:22px 18px;border-right:2px solid var(--gold);position:relative;}
+.fstep:first-child{border-radius:12px 0 0 12px;}
+.fstep:last-child{border-right:none;border-radius:0 12px 12px 0;background:linear-gradient(135deg,var(--gold),#b8923f);color:var(--navy);}
+.fstep .s{font-size:11px;letter-spacing:1px;text-transform:uppercase;opacity:.7;font-weight:700;}
+.fstep .t{font-size:16px;font-weight:800;margin-top:8px;line-height:1.25;}
+.pill{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:rgba(201,162,75,.15);color:var(--gold);border:1px solid var(--gold);border-radius:20px;padding:4px 12px;margin-bottom:16px;}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:24px;}
+.two h3{font-size:16px;font-weight:800;color:var(--navy);margin-bottom:10px;border-bottom:2px solid var(--gold);padding-bottom:6px;display:inline-block;}
+.two p, .two li{font-size:14.5px;color:#4a5a72;line-height:1.6;}
+.two ul{list-style:none;}
+.two ul li{padding:7px 0 7px 22px;position:relative;}
+.two ul li:before{content:'→';position:absolute;left:0;color:var(--gold);font-weight:700;}
+.big-quote{font-family:'Playfair Display',serif;font-weight:800;font-size:36px;line-height:1.25;color:#fff;max-width:1000px;}
+.big-quote span{color:var(--gold);}
+/* deck is authored at a fixed 1280x720 so it prints cleanly to PDF.
+   on anything narrower, scale the whole slide down rather than let it scroll sideways. */
+body{background:#e9ecf1;display:flex;flex-direction:column;align-items:center;gap:18px;padding:18px 0;}
+.slide{box-shadow:0 6px 28px rgba(11,30,59,.13);flex:none;}
+@media print{body{background:#fff;gap:0;padding:0;}.slide{box-shadow:none;}}
+@media (max-width:1320px){
+  body{gap:0;padding:0;}
+  .slide{transform-origin:top left;transform:scale(calc(100vw / 1280));margin-bottom:calc((720px * (100vw / 1280)) - 720px + 14px);}
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:light;}}
+</style></head><body>
+
+<!-- 01 cover -->
+<div class="slide dark" style="justify-content:center;">
+  <div class="logo">SKLES<span>.</span></div>
+  <div class="kicker" style="margin-top:46px;">Marketing Report &amp; Strategy</div>
+  <h1>October in review.<br>November, <span>in motion.</span></h1>
+  <p class="sub" style="margin-top:26px;">A full month of spend, a steady cost per lead, and forty people who raised their hand. Then almost nothing happened to them. This report is mostly about that gap, because closing it is worth more than anything else on the list.</p>
+  <div class="foot"><span>Skills Up With Sean K. Langston</span><span>Prepared by StealthEnomics &middot; November 2026</span></div>
+</div>
+
+<!-- 02 where we are -->
+<div class="slide" style="justify-content:center;">
+  <div class="kicker">Where we are</div>
+  <h1>The ads worked. <span>The step after the form did not.</span></h1>
+  <p class="sub" style="margin-top:22px;">October spent almost exactly what September spent, ran for thirty one days instead of eleven, and delivered forty four leads at a stable seven dollars each. Thirty nine of them left a phone number. Twenty one said they want to start inside three months.</p>
+  <p class="sub" style="margin-top:16px;"><b>Three of those forty four ever opened the training video.</b> No lead status was set, no note was written and no call was logged all month. There were no sales. The traffic is not the problem any more.</p>
+  <div class="foot"><span>SKLES &middot; October Report &amp; November Strategy</span><span>02</span></div>
+</div>
+
+<!-- 03 paid headline -->
+<div class="slide">
+  <div class="kicker">October &middot; Paid</div>
+  <h2>Same money, three times the days, <span>a cost per lead that held.</span></h2>
+  <div class="grid4">
+    <div class="metric"><div class="n"><small>$</small>309</div><div class="l">Total spend</div><div class="ch">$302 in September</div></div>
+    <div class="metric"><div class="n">44</div><div class="l">Leads</div><div class="ch">47 in September</div></div>
+    <div class="metric"><div class="n"><small>$</small>7.02</div><div class="l">Cost per lead</div><div class="ch">$6.42 in September</div></div>
+    <div class="metric"><div class="n">31</div><div class="l">Days the campaign ran</div><div class="ch">11 days in September</div></div>
+  </div>
+  <div class="gap">
+    <div><b>Click-through rate went from 7.66% to 11.77%.</b> The creative is working considerably harder than it was. People who see these ads click them.</div>
+    <div><b>But reach halved, 5,506 to 2,815,</b> and the thousand-impression price nearly doubled, $36.31 to $67.19. We paid more for a smaller audience.</div>
+    <div><b>Those two cancelled out.</b> A better advert on more expensive inventory lands within sixty cents of last month's cost per lead. That is the whole paid story.</div>
+    <div><b>Weekly cost per lead stayed inside a narrow band:</b> $6.15, $9.46, $5.97, $7.22. There is no decline here, just normal week to week noise.</div>
+  </div>
+  <div class="foot"><span>SKLES &middot; October Report &amp; November Strategy</span><span>03</span></div>
+</div>
+
+<!-- 04 paid in full -->
+<div class="slide">
+  <div class="kicker">October &middot; Paid, in full</div>
+  <h2>Every dollar, <span>and which advert earned it.</span></h2>
+  <table class="dt">
+    <tr><th>Advert</th><th style="text-align:right">Spend</th><th style="text-align:right">Impr.</th><th style="text-align:right">CTR</th><th style="text-align:right">Link clicks</th><th style="text-align:right">Leads</th><th style="text-align:right">Cost/lead</th><th style="text-align:right">Click&rarr;lead</th></tr>
+    <tr><td>04 &middot; The migraine &middot; Why I started</td><td class="n">$144.97</td><td class="n">2,162</td><td class="n">13.83%</td><td class="n">114</td><td class="n">19</td><td class="n">$7.63</td><td class="r">16.7%</td></tr>
+    <tr><td>02 &middot; The objection &middot; You don't need a lot</td><td class="n">$86.02</td><td class="n">1,304</td><td class="n">7.29%</td><td class="n">37</td><td class="n">14</td><td class="g">$6.14</td><td class="g">37.8%</td></tr>
+    <tr><td>04c &middot; The migraine &middot; form v5</td><td class="n">$77.54</td><td class="n">1,125</td><td class="n">13.07%</td><td class="n">47</td><td class="n">11</td><td class="n">$7.05</td><td class="n">23.4%</td></tr>
+    <tr><td>01 &middot; The numbers &nbsp;&middot;&nbsp; 03 &middot; The W-2 <span style="color:#9fb0c7">never got delivery</span></td><td class="n">$0.43</td><td class="n">6</td><td class="n">0%</td><td class="n">0</td><td class="n">0</td><td class="n">n/a</td><td class="n">n/a</td></tr>
+    <tr class="tot"><td>Total</td><td class="n">$308.96</td><td class="n">4,598</td><td class="n">11.77%</td><td class="n">198</td><td class="n">44</td><td class="n">$7.02</td><td class="n">22.2%</td></tr>
+  </table>
+  <div class="flag"><b>The finding inside this table.</b> "The migraine" is the better hook and "The objection" is the better qualifier. The migraine advert gets three times the click-through rate, but only one click in six becomes a lead. The objection advert is clicked by far fewer people, and more than a third of them fill in the form, at the cheapest cost per lead of the month. Those are two different jobs and we should stop asking one advert to do both.</div>
+  <div class="foot"><span>SKLES &middot; October Report &amp; November Strategy</span><span>04</span></div>
+</div>
+
+<!-- 05 the broken step -->
+<div class="slide">
+  <div class="kicker">October &middot; The finding</div>
+  <h2>Forty four leads. <span>Three opened the training.</span></h2>
+  <div class="funnel">
+    <div class="fstep"><div class="s">Saw the advert</div><div class="t">2,815 people</div></div>
+    <div class="fstep"><div class="s">Clicked</div><div class="t">198 link clicks</div></div>
+    <div class="fstep"><div class="s">Gave name and phone</div><div class="t">44 leads</div></div>
+    <div class="fstep"><div class="s">Opened the training page</div><div class="t">3</div></div>
+    <div class="fstep"><div class="s">Bought</div><div class="t">0</div></div>
+  </div>
+  <div class="gap">
+    <div><b>This is not a tracking fault.</b> We checked. The SKLES pixel is installed on the blueprint page, it fires a page view, and Meta recorded it firing as recently as 31 October. The number is real.</div>
+    <div><b>The form's thank-you screen is the leak.</b> Someone finishes the form, sees a panel saying "Watch the training", and closes it. The video they came for sits one unnecessary click away.</div>
+    <div><b>248 people did watch a full advert</b> to the end inside Facebook. The appetite for the content is there. It just never survives the handover to our own page.</div>
+    <div><b>Everything we built downstream is waiting on this.</b> The video, the landing page, the $8.99 offer, the email sequence. None of it gets a fair test while three people a month arrive.</div>
+  </div>
+  <div class="note"><b>What this costs us.</b> At $7.02 a lead we are paying roughly $103 for each person who actually reaches the training video. Fixing the handover does not need more budget, a new advert or a new video. It needs the thank-you panel to stop being a door.</div>
+  <div class="foot"><span>SKLES &middot; October Report &amp; November Strategy</span><span>05</span></div>
+</div>
+
+<!-- 06 the leads -->
+<div class="slide">
+  <div class="kicker">October &middot; The leads we have</div>
+  <h2>Forty real people, <span>and none of them were called.</span></h2>
+  <div class="grid4">
+    <div class="metric"><div class="n">40</div><div class="l">Leads in the CRM</div><div class="ch">39 with a phone number</div></div>
+    <div class="metric"><div class="n">21</div><div class="l">Want to start</div><div class="ch">within three months</div></div>
+    <div class="metric"><div class="n">0</div><div class="l">Calls or notes logged</div><div class="ch">in the whole month</div></div>
+    <div class="metric"><div class="n">0</div><div class="l">Sales</div><div class="ch">last one was 6 September</div></div>
+  </div>
+  <table class="dt" style="margin-top:20px">
+    <tr><th>What they told us about timing</th><th style="text-align:right">People</th><th>What it means for the call</th></tr>
+    <tr><td>In the next three months</td><td class="n">21</td><td>Call these first, oldest at the top</td></tr>
+    <tr><td>Just learning for now</td><td class="n">12</td><td>Leave in the email sequence</td></tr>
+    <tr><td>Sometime this year</td><td class="n">6</td><td>One call, then back to nurture</td></tr>
+  </table>
+  <div class="flag"><b>The queue exists and has never been opened.</b> A password-protected call queue went live in October at callqueue.moovecreating.com, with every lead in it, ordered oldest first, and a one-click way to mark what happened. Across the month, not one lead status was changed, no note was written and no call was logged. The oldest person on that list has now been waiting more than three weeks since telling us they want to start inside three months.</div>
+  <div class="foot"><span>SKLES &middot; October Report &amp; November Strategy</span><span>06</span></div>
+</div>
+
+<!-- 07 email -->
+<div class="slide">
+  <div class="kicker">October &middot; Email</div>
+  <h2>The sequence is being opened. <span>It is not being clicked.</span></h2>
+  <div class="two">
+    <div>
+      <h3>The Fast Track sequence</h3>
+      <ul>
+        <li><b>108 emails sent</b> to the 38 leads who reached GetResponse. 28 finished the sequence, 10 are still inside it.</li>
+        <li><b>19 opens, by 10 different people.</b> Roughly one lead in four opens something. That is a workable open rate for a cold list.</li>
+        <li><b>One click. All month.</b> From 108 sends. This is the number that matters and it is the same story as the landing page.</li>
+        <li><b>The September worry is settled.</b> We reported that only two leads had ever opened a message. With a full month of data that reads as ten of thirty eight, and both sending domains are properly authenticated.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>The broadcasts</h3>
+      <ul>
+        <li><b>12 broadcasts went out,</b> 91 emails in total, to a median of seven people per send. September sent 502.</li>
+        <li><b>Every single one promoted a live session.</b> Debt payoff on four dates, contractor questions on three.</li>
+        <li><b>No webinar ran on the Zoom account in October.</b> The last one was 29 September. If these sessions happened somewhere else, we need to know where, because we cannot see attendance.</li>
+        <li><b>54 opens across the 12 sends.</b> The rates look strong, but they are the arithmetic of a list of seven.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span>SKLES &middot; October Report &amp; November Strategy</span><span>07</span></div>
+</div>
+
+<!-- 08 organic -->
+<div class="slide">
+  <div class="kicker">October &middot; Organic</div>
+  <h2>Less reach, <span>same quality, same publishing rhythm.</span></h2>
+  <table class="dt">
+    <tr><th>Instagram</th><th style="text-align:right">October</th><th style="text-align:right">September</th><th style="text-align:right">Change</th></tr>
+    <tr><td>Posts published</td><td class="n">19</td><td class="n">18</td><td class="g">+1</td></tr>
+    <tr><td>Reach</td><td class="n">1,430</td><td class="n">2,234</td><td class="r">&minus;36%</td></tr>
+    <tr><td>Interactions</td><td class="n">262</td><td class="n">411</td><td class="r">&minus;36%</td></tr>
+    <tr><td>Engagement rate</td><td class="n">18.3%</td><td class="n">18.4%</td><td class="n">flat</td></tr>
+    <tr><td>Profile views</td><td class="n">857</td><td class="n">767</td><td class="g">+12%</td></tr>
+    <tr><td>New followers</td><td class="n">+225</td><td class="n">+299</td><td class="r">&minus;25%</td></tr>
+    <tr><td>Clicks on the bio link</td><td class="n">2</td><td class="n">2</td><td class="n">flat</td></tr>
+  </table>
+  <div class="gap">
+    <div><b>Reach and interactions fell by exactly the same share,</b> so nothing got worse about the content. Fewer people were shown it.</div>
+    <div><b>Profile views rose on smaller reach.</b> A higher share of the people who saw a post went to look at the account. That is a quality signal.</div>
+    <div><b>YouTube held its rhythm:</b> 29 uploads, 1,582 views on those uploads, 1,794 channel views and five new subscribers. September was 30 uploads and 1,803 views.</div>
+    <div><b>Facebook is still small and still flat:</b> 227 page fans, up ten, 445 page engagements and 123 page views.</div>
+  </div>
+  <div class="foot"><span>SKLES &middot; October Report &amp; November Strategy</span><span>08</span></div>
+</div>
+
+<!-- 09 what we built -->
+<div class="slide">
+  <div class="kicker">October &middot; What we built</div>
+  <h2>The month the operating layer <span>got finished.</span></h2>
+  <div class="status-grid">
+    <div class="st"><span class="sbadge done">Done</span><div class="sh">A real call queue</div><div class="sp">Live at callqueue.moovecreating.com. Kanban and list views, six stages, every lead ordered oldest first, writing straight back to HubSpot. Password protected, no HubSpot seat needed.</div></div>
+    <div class="st"><span class="sbadge done">Done</span><div class="sh">Client pages off claude.ai</div><div class="sp">The dashboard, today view, growth board, call queue and email previews now live on skles.moovecreating.com and update on a schedule.</div></div>
+    <div class="st"><span class="sbadge done">Done</span><div class="sh">Growth board</div><div class="sp">The funnel broken out by layer, with scored hypotheses and tracked tests, so a decision has somewhere to be recorded.</div></div>
+    <div class="st"><span class="sbadge done">Done</span><div class="sh">Form v5</div><div class="sp">Timing question moved last and the $8.99 price stated on the thank-you panel. It did not cost us leads: $7.05 each against $7.63 on the form it replaced.</div></div>
+    <div class="st"><span class="sbadge done">Done</span><div class="sh">Lead data in one place</div><div class="sp">Every lead now carries which advert produced it and what they said about timing, pulled automatically every three hours.</div></div>
+    <div class="st"><span class="sbadge prog">In progress</span><div class="sh">Fast Track VSL v3</div><div class="sp">The seven corrections are cut and the offer section is rebuilt. Needs one more pass on the close before it replaces the current video.</div></div>
+    <div class="st"><span class="sbadge done">Done</span><div class="sh">Webinar retired</div><div class="sp">No live session was scheduled on Zoom in October, as agreed in September. The recorded VSL is the funnel now.</div></div>
+    <div class="st"><span class="sbadge next">Open</span><div class="sh">The handover to the video</div><div class="sp">Named in October, not yet fixed. It is the first item in November.</div></div>
+  </div>
+  <div class="foot"><span>SKLES &middot; October Report &amp; November Strategy</span><span>09</span></div>
+</div>
+
+<!-- 10 the plan -->
+<div class="slide">
+  <div class="kicker">November &middot; The plan</div>
+  <h2>Five things, <span>in order of what they are worth.</span></h2>
+  <ul class="clean">
+    <li><b>Send the form straight into the video.</b> Three of forty four opened the training. Remove the thank-you panel as a stop: either auto-redirect on submit, or put the video on the panel itself. This is a day of work and it is worth more than every other item on this page combined.</li>
+    <li><b>Call the twenty one.</b> They have phone numbers, they said three months, and the queue is already built and already sorted. Rodney needs to open it and work down the list. A single conversation will teach us more than another month of adverts.</li>
+    <li><b>Put the budget behind "The objection".</b> It turns more than a third of its clicks into leads, at $6.14, against 16.7% and $7.63 for the migraine advert. Keep the migraine creative for reach and let the objection creative do the converting.</li>
+    <li><b>Stop emailing about live sessions.</b> Twelve of twelve broadcasts promoted a session that does not appear on the Zoom account. Point those sends at the training video instead, so the one email a week this list gets has somewhere real to go.</li>
+    <li><b>Then raise the spend.</b> At a cost per lead that has not moved in two months, more money buys more leads. We just should not buy more of them until the forty we already have are phoned.</li>
+  </ul>
+  <div class="foot"><span>SKLES &middot; October Report &amp; November Strategy</span><span>10</span></div>
+</div>
+
+<!-- 11 one line -->
+<div class="slide dark" style="justify-content:center;">
+  <div class="logo">SKLES<span>.</span></div>
+  <div class="kicker" style="margin-top:40px;">In one line</div>
+  <p class="big-quote">October proved the adverts can bring us forty qualified people a month for three hundred dollars. It also proved that <span>nothing downstream of the form is switched on yet.</span> November is one redirect and twenty one phone calls.</p>
+  <p class="sub" style="margin-top:30px;">Thank you, Sean. Questions and input always welcome.</p>
+  <div class="foot"><span>Prepared by StealthEnomics</span><span>Skills Up With Sean K. Langston &middot; November 2026</span></div>
+</div>
+
+</body></html>
