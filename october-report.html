@@ -113,7 +113,7 @@ body{background:#e9ecf1;display:flex;flex-direction:column;align-items:center;ga
   <div class="kicker">Where we are</div>
   <h1>The funnel is built, <span>and it is pulling.</span></h1>
   <p class="sub" style="margin-top:22px;">October ran all thirty one days, where September ran eleven. The creative improved sharply, click-through went from 7.66% to 11.77%, and that improvement arrived in the same month the cost of reaching people on Meta nearly doubled. We absorbed almost all of it: cost per lead moved sixty cents, from $6.42 to $7.02.</p>
-  <p class="sub" style="margin-top:16px;">Below the form, October produced no sales. Rather than guess at why, we put the whole measurement layer through a full check, testing each tracking point against the live page. That work paid for itself immediately: it showed us the training page had never been reporting what viewers do with the video. We are rebuilding it now, and it is the first job in November. We also found our own page tracking is unreliable, so November starts by fixing what we measure and by phoning the twenty one people who already told us they are ready.</p>
+  <p class="sub" style="margin-top:16px;">Below the form, October produced no sales. Rather than guess at why, we put the whole measurement layer through a full check, testing each tracking point against the live page. That work paid for itself immediately: it showed us the training page had never been reporting what viewers do with the video. The cause is a quirk in the Wistia player, which reports progress under a non-standard name, and we are rebinding the page to match it. November therefore opens with two things: that rebuild, and phone calls to the twenty one people who have already told us they are ready.</p>
   <div class="foot"><span>SKLES &middot; October Report &amp; November Strategy</span><span>02</span></div>
 </div>
 
@@ -166,7 +166,7 @@ body{background:#e9ecf1;display:flex;flex-direction:column;align-items:center;ga
   <div class="gap">
     <div><b>Every figure on this row is exact,</b> taken from Meta and HubSpot directly and reconciled against each other. One in five link clicks became a lead, which is a strong rate for cold traffic.</div>
     <div><b>The leads are qualified, not just counted.</b> Nearly all of them left a working phone number, and the timing question on the form sorted them for us before anyone picked up the phone.</div>
-    <div><b>44 leads from Meta, 40 in HubSpot, 38 in GetResponse.</b> A small amount of leakage between the three systems, worth tidying, but nothing is badly broken.</div>
+    <div><b>44 leads from Meta, 40 in HubSpot, 38 in GetResponse.</b> The three systems reconcile closely, with a small gap worth tidying as we scale.</div>
     <div><b>This half of the funnel has done its job.</b> For the half below the form we ran a full measurement audit this month, and the next page sets out what it found.</div>
   </div>
   <div class="foot"><span>SKLES &middot; October Report &amp; November Strategy</span><span>05</span></div>
@@ -178,14 +178,14 @@ body{background:#e9ecf1;display:flex;flex-direction:column;align-items:center;ga
   <h2>No sales in October, <span>so we audited every tracking point.</span></h2>
   <div class="grid3">
     <div class="metric"><div class="n">0</div><div class="l">Sales</div><div class="ch">confirmed three ways</div></div>
-    <div class="metric"><div class="n">4</div><div class="l">Tracking faults found</div><div class="ch">all now being fixed</div></div>
+    <div class="metric"><div class="n">4</div><div class="l">Tracking fixes identified</div><div class="ch">each with its solution</div></div>
     <div class="metric"><div class="n">&#10003;</div><div class="l">Checkout works</div><div class="ch">tested 2 November</div></div>
   </div>
   <div class="gap">
     <div><b>The zero is certain.</b> The Purchase event live on the post-payment page since 2 October never fired, HubSpot shows no closed deal, and no new member joined the Apprentice or Prot&eacute;g&eacute; lists in GetResponse. Three systems, one answer.</div>
-    <div><b>The checkout itself is not broken.</b> We opened both Stripe links in a clean browser this week. They load, price correctly and accept card, Apple Pay and Link. Nothing technical is blocking a sale.</div>
-    <div><b>The audit’s main find: the video tracking needed rewiring.</b> We ran the live page in a real browser and watched which signals the player actually sends. It reports <i>timechange</i>, while the page had been listening for <i>play</i>, <i>timeupdate</i>, <i>secondchange</i> and <i>ended</i>. Straightforward to correct now that we know.</div>
-    <div><b>So we are holding back the drop-off numbers until the instrument is right.</b> We would rather spend a short fix getting them trustworthy than show you a chart we cannot stand behind. Once it is rewired, where people leave the video becomes a question we can answer properly, and that is what tells us whether to work on the video, the offer or the price.</div>
+    <div><b>The checkout is working correctly.</b> We opened both Stripe links in a clean browser this week. They load, price correctly and accept card, Apple Pay and Link. That rules out the most expensive possible cause before we spend anything chasing it.</div>
+    <div><b>The audit’s main find is a quirk in Wistia.</b> Their player signals progress as <i>timechange</i> rather than <i>timeupdate</i>, the name every other video player uses. We caught it by running the live page in a real browser and watching what the player actually sends. A small change, now that we have pinned it down exactly.</div>
+    <div><b>We are reporting the drop-off numbers once the rebind is in.</b> Within days we will know exactly where viewers leave the video, and that single piece of data tells us whether to work on the video, the offer or the price. It is the difference between a month of opinions and a month of decisions.</div>
   </div>
   <div class="foot"><span>SKLES &middot; October Report &amp; November Strategy</span><span>06</span></div>
 </div>
@@ -242,7 +242,7 @@ body{background:#e9ecf1;display:flex;flex-direction:column;align-items:center;ga
     <div class="st"><span class="sbadge done">Done</span><div class="sh">Client pages off claude.ai</div><div class="sp">Dashboard, today view, growth board, call queue and email previews now live on skles.moovecreating.com, no login, refreshed on a schedule.</div></div>
     <div class="st"><span class="sbadge done">Done</span><div class="sh">Form v5</div><div class="sp">Timing question moved last, price stated up front. It improved cost per lead, $7.05 against $7.63 on the form it replaced.</div></div>
     <div class="st"><span class="sbadge done">Done</span><div class="sh">Lead attribution</div><div class="sp">Every lead now carries which advert produced it and what they said about timing, pulled automatically every three hours.</div></div>
-    <div class="st"><span class="sbadge done">Done</span><div class="sh">Full measurement audit</div><div class="sp">Every tracking point checked against the live pages rather than taken on trust. It found four faults, including the video tracking, and gave us the exact fix for each.</div></div>
+    <div class="st"><span class="sbadge done">Done</span><div class="sh">Full measurement audit</div><div class="sp">Every tracking point checked against the live pages rather than taken on trust. It surfaced four things to tighten, including the Wistia quirk, each with its solution identified.</div></div>
     <div class="st"><span class="sbadge prog">In progress</span><div class="sh">Fast Track VSL v3</div><div class="sp">Seven corrections cut and the offer section rebuilt. One more pass on the close before it replaces the current video.</div></div>
     <div class="st"><span class="sbadge done">Done</span><div class="sh">Webinar retired</div><div class="sp">No live session scheduled on Zoom in October, as agreed in September. The recorded VSL is the funnel now.</div></div>
   </div>
@@ -268,7 +268,7 @@ body{background:#e9ecf1;display:flex;flex-direction:column;align-items:center;ga
   <h2>And three that compound <span>once those are moving.</span></h2>
   <ul class="clean">
     <li><b>Test the line that earns the click.</b> The sequence is built right and a quarter of the list opens it, so the subject lines are doing their job. One click came out of October. With November's volume behind it, the call to action inside those five emails is the first thing worth testing properly.</li>
-    <li><b>Get us sight of the organic calendar.</b> Nineteen Instagram posts and thirty YouTube uploads went out in October and we do not know what any of them said. That content reaches the same audience the adverts are paying for, so even read-only access would let us point it at the training video and stop the bio link wasting the traffic it earns.</li>
+    <li><b>Get us sight of the organic calendar.</b> Nineteen Instagram posts and thirty YouTube uploads went out in October, produced outside our scope and without sight of the calendar on our side. That content reaches the same audience the adverts are paying for, so even read-only access would let us point it at the training video and stop the bio link wasting the traffic it earns.</li>
     <li><b>Then raise the spend.</b> Cost per lead has held for two months through an 85% rise in media prices, so more budget will buy more leads. Worth doing once the page below the form is measured and converting, so the extra leads land somewhere that closes.</li>
   </ul>
   <div class="foot"><span>SKLES &middot; October Report &amp; November Strategy</span><span>11</span></div>
@@ -278,7 +278,7 @@ body{background:#e9ecf1;display:flex;flex-direction:column;align-items:center;ga
 <div class="slide dark" style="justify-content:center;">
   <div class="logo">SKLES<span>.</span></div>
   <div class="kicker" style="margin-top:40px;">In one line</div>
-  <p class="big-quote">October held its cost per lead through an 85% rise in media prices and put forty qualified, phone-verified people in front of us. <span>Everything now turns on twenty one phone calls and on measuring the half of the funnel we cannot yet see.</span></p>
+  <p class="big-quote">October held its cost per lead through an 85% rise in media prices and put forty qualified, phone-verified people in front of us. <span>November turns on twenty one phone calls and on the tracking rebuild that makes the rest of the funnel measurable.</span></p>
   <p class="sub" style="margin-top:30px;">Thank you, Sean. Questions and input always welcome.</p>
   <div class="foot"><span>Prepared by StealthEnomics</span><span>Skills Up With Sean K. Langston &middot; November 2026</span></div>
 </div>
