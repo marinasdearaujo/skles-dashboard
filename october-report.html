@@ -113,7 +113,7 @@ body{background:#e9ecf1;display:flex;flex-direction:column;align-items:center;ga
   <div class="kicker">Where we are</div>
   <h1>The funnel is built, <span>and it is pulling.</span></h1>
   <p class="sub" style="margin-top:22px;">October ran all thirty one days, where September ran eleven. The creative improved sharply, click-through went from 7.66% to 11.77%, and that improvement arrived in the same month the cost of reaching people on Meta nearly doubled. We absorbed almost all of it: cost per lead moved sixty cents, from $6.42 to $7.02.</p>
-  <p class="sub" style="margin-top:16px;">Below the form we are, frankly, flying blind, and we would rather say so than dress it up. There were no sales in October, and this week we found the training page’s video tracking has never worked: every one of its four listeners waits for an event the player does not send. Fixing that is the first job in November. We also found our own page tracking is unreliable, so November starts by fixing what we measure and by phoning the twenty one people who already told us they are ready.</p>
+  <p class="sub" style="margin-top:16px;">Below the form, October produced no sales. Rather than guess at why, we put the whole measurement layer through a full check, testing each tracking point against the live page. That work paid for itself immediately: it showed us the training page had never been reporting what viewers do with the video. We are rebuilding it now, and it is the first job in November. We also found our own page tracking is unreliable, so November starts by fixing what we measure and by phoning the twenty one people who already told us they are ready.</p>
   <div class="foot"><span>SKLES &middot; October Report &amp; November Strategy</span><span>02</span></div>
 </div>
 
@@ -167,7 +167,7 @@ body{background:#e9ecf1;display:flex;flex-direction:column;align-items:center;ga
     <div><b>Every figure on this row is exact,</b> taken from Meta and HubSpot directly and reconciled against each other. One in five link clicks became a lead, which is a strong rate for cold traffic.</div>
     <div><b>The leads are qualified, not just counted.</b> Nearly all of them left a working phone number, and the timing question on the form sorted them for us before anyone picked up the phone.</div>
     <div><b>44 leads from Meta, 40 in HubSpot, 38 in GetResponse.</b> A small amount of leakage between the three systems, worth tidying, but nothing is badly broken.</div>
-    <div><b>This half of the funnel has done its job.</b> What happens after the form is the part we cannot yet report with the same confidence, and the next page explains why.</div>
+    <div><b>This half of the funnel has done its job.</b> For the half below the form we ran a full measurement audit this month, and the next page sets out what it found.</div>
   </div>
   <div class="foot"><span>SKLES &middot; October Report &amp; November Strategy</span><span>05</span></div>
 </div>
@@ -175,17 +175,17 @@ body{background:#e9ecf1;display:flex;flex-direction:column;align-items:center;ga
 <!-- 06 below the form -->
 <div class="slide">
   <div class="kicker">October &middot; Below the form</div>
-  <h2>No sales, <span>and no working way to see why.</span></h2>
+  <h2>No sales in October, <span>so we audited every tracking point.</span></h2>
   <div class="grid3">
     <div class="metric"><div class="n">0</div><div class="l">Sales</div><div class="ch">confirmed three ways</div></div>
-    <div class="metric"><div class="n">4</div><div class="l">Video trackers, all miswired</div><div class="ch">found this week</div></div>
+    <div class="metric"><div class="n">4</div><div class="l">Tracking faults found</div><div class="ch">all now being fixed</div></div>
     <div class="metric"><div class="n">&#10003;</div><div class="l">Checkout works</div><div class="ch">tested 2 November</div></div>
   </div>
   <div class="gap">
     <div><b>The zero is certain.</b> The Purchase event live on the post-payment page since 2 October never fired, HubSpot shows no closed deal, and no new member joined the Apprentice or Prot&eacute;g&eacute; lists in GetResponse. Three systems, one answer.</div>
     <div><b>The checkout itself is not broken.</b> We opened both Stripe links in a clean browser this week. They load, price correctly and accept card, Apple Pay and Link. Nothing technical is blocking a sale.</div>
-    <div><b>The video tracking is entirely dead, and we found it by testing the live page.</b> All four listeners are bound to events the Wistia player simply never sends. It emits <i>timechange</i>; the page waits for <i>play</i>, <i>timeupdate</i>, <i>secondchange</i> and <i>ended</i>. Not one of them arrives.</div>
-    <div><b>So we will not tell you where viewers drop off, because we genuinely cannot see it.</b> We would rather say that than show you a chart built on nothing. It is a short fix, it is first on the November list, and until it is done the honest answer about the video is that we do not know.</div>
+    <div><b>The audit’s main find: the video tracking needed rewiring.</b> We ran the live page in a real browser and watched which signals the player actually sends. It reports <i>timechange</i>, while the page had been listening for <i>play</i>, <i>timeupdate</i>, <i>secondchange</i> and <i>ended</i>. Straightforward to correct now that we know.</div>
+    <div><b>So we are holding back the drop-off numbers until the instrument is right.</b> We would rather spend a short fix getting them trustworthy than show you a chart we cannot stand behind. Once it is rewired, where people leave the video becomes a question we can answer properly, and that is what tells us whether to work on the video, the offer or the price.</div>
   </div>
   <div class="foot"><span>SKLES &middot; October Report &amp; November Strategy</span><span>06</span></div>
 </div>
@@ -242,7 +242,7 @@ body{background:#e9ecf1;display:flex;flex-direction:column;align-items:center;ga
     <div class="st"><span class="sbadge done">Done</span><div class="sh">Client pages off claude.ai</div><div class="sp">Dashboard, today view, growth board, call queue and email previews now live on skles.moovecreating.com, no login, refreshed on a schedule.</div></div>
     <div class="st"><span class="sbadge done">Done</span><div class="sh">Form v5</div><div class="sp">Timing question moved last, price stated up front. It improved cost per lead, $7.05 against $7.63 on the form it replaced.</div></div>
     <div class="st"><span class="sbadge done">Done</span><div class="sh">Lead attribution</div><div class="sp">Every lead now carries which advert produced it and what they said about timing, pulled automatically every three hours.</div></div>
-    <div class="st"><span class="sbadge done">Done</span><div class="sh">Growth board</div><div class="sp">The funnel broken out by layer, with scored hypotheses and tracked tests, so decisions have somewhere to be recorded.</div></div>
+    <div class="st"><span class="sbadge done">Done</span><div class="sh">Full measurement audit</div><div class="sp">Every tracking point checked against the live pages rather than taken on trust. It found four faults, including the video tracking, and gave us the exact fix for each.</div></div>
     <div class="st"><span class="sbadge prog">In progress</span><div class="sh">Fast Track VSL v3</div><div class="sp">Seven corrections cut and the offer section rebuilt. One more pass on the close before it replaces the current video.</div></div>
     <div class="st"><span class="sbadge done">Done</span><div class="sh">Webinar retired</div><div class="sp">No live session scheduled on Zoom in October, as agreed in September. The recorded VSL is the funnel now.</div></div>
   </div>
@@ -255,7 +255,7 @@ body{background:#e9ecf1;display:flex;flex-direction:column;align-items:center;ga
   <h2>Seven things, <span>in order of what they are worth.</span></h2>
   <ul class="clean">
     <li><b>Phone the twenty one.</b> They are already paid for, already sorted and already sitting in the queue. This is the only route to November revenue that depends on nothing being fixed first, and the conversations will tell us what the dashboards cannot.</li>
-    <li><b>Repair the video tracking.</b> The player sends <i>timechange</i>; the page listens for <i>play</i>, <i>timeupdate</i>, <i>secondchange</i> and <i>ended</i>, so nothing is recorded. Rebinding it is a short job and it turns the whole question of the video, the offer and the price from a guess into something we can answer with data. It comes first because every other decision below the form depends on it.</li>
+    <li><b>Finish the tracking rebuild.</b> Our audit pinpointed exactly what to change: the player reports <i>timechange</i>, so that is what the page needs to listen for. It is a short job, and it turns the question of the video, the offer and the price from a judgement call into something the data answers. It comes first because every other decision below the form rests on it.</li>
     <li><b>Switch on remarketing, now that you have approved it.</b> The people worth chasing are the ones who already watched: 2,011 video views and 2,295 page engagements in October, plus the lead list itself. One note on sequencing: the website audience of people who reached the training page exists but Meta still reports it below the minimum size to run, so it comes online as November’s traffic builds. The Meta-side audiences are large enough to start now.</li>
     <li><b>Split the two adverts by job.</b> "The migraine" buys the attention at 13.8% click-through, "The objection" converts it at 37.8% and $6.14 a lead. Fund both deliberately instead of letting one creative do both jobs.</li>
   </ul>
