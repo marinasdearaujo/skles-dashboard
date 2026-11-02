@@ -113,7 +113,7 @@ body{background:#e9ecf1;display:flex;flex-direction:column;align-items:center;ga
   <div class="kicker">Where we are</div>
   <h1>The funnel is built, <span>and it is pulling.</span></h1>
   <p class="sub" style="margin-top:22px;">October ran all thirty one days, where September ran eleven. The creative improved sharply, click-through went from 7.66% to 11.77%, and that improvement arrived in the same month the cost of reaching people on Meta nearly doubled. We absorbed almost all of it: cost per lead moved sixty cents, from $6.42 to $7.02.</p>
-  <p class="sub" style="margin-top:16px;">Below the form the picture is thinner. The training page drew modest traffic, almost nobody reached the end of the video, and there were no sales. We also found our own page tracking is unreliable, so November starts by fixing what we measure and by phoning the twenty one people who already told us they are ready.</p>
+  <p class="sub" style="margin-top:16px;">Below the form we are, frankly, flying blind, and we would rather say so than dress it up. There were no sales in October, and this week we found the training page’s video tracking has never worked: every one of its four listeners waits for an event the player does not send. Fixing that is the first job in November. We also found our own page tracking is unreliable, so November starts by fixing what we measure and by phoning the twenty one people who already told us they are ready.</p>
   <div class="foot"><span>SKLES &middot; October Report &amp; November Strategy</span><span>02</span></div>
 </div>
 
@@ -175,17 +175,17 @@ body{background:#e9ecf1;display:flex;flex-direction:column;align-items:center;ga
 <!-- 06 below the form -->
 <div class="slide">
   <div class="kicker">October &middot; Below the form</div>
-  <h2>No sales in October, <span>and we are fixing how we see why.</span></h2>
+  <h2>No sales, <span>and no working way to see why.</span></h2>
   <div class="grid3">
-    <div class="metric"><div class="n">~50</div><div class="l">Started the video</div><div class="ch">across the month</div></div>
-    <div class="metric"><div class="n">2</div><div class="l">Clicked buy</div><div class="ch">both on 31 October</div></div>
     <div class="metric"><div class="n">0</div><div class="l">Sales</div><div class="ch">confirmed three ways</div></div>
+    <div class="metric"><div class="n">4</div><div class="l">Video trackers, all miswired</div><div class="ch">found this week</div></div>
+    <div class="metric"><div class="n">&#10003;</div><div class="l">Checkout works</div><div class="ch">tested 2 November</div></div>
   </div>
   <div class="gap">
     <div><b>The zero is certain.</b> The Purchase event live on the post-payment page since 2 October never fired, HubSpot shows no closed deal, and no new member joined the Apprentice or Prot&eacute;g&eacute; lists in GetResponse. Three systems, one answer.</div>
     <div><b>The checkout itself is not broken.</b> We opened both Stripe links in a clean browser this week. They load, price correctly and accept card, Apple Pay and Link. Nothing technical is blocking a sale.</div>
-    <div><b>The on-site counts are approximate, and we will not dress that up.</b> The page events double-fire in places and a build session on 21 October left twenty one false checkout clicks in the data. We have stripped those out here.</div>
-    <div><b>So the honest read is narrow:</b> the training page is getting modest traffic, almost nobody reaches the end of the video, and buy clicks are in low single figures. Fixing the measurement is the first job, because the next decision depends on trusting it.</div>
+    <div><b>The video tracking is entirely dead, and we found it by testing the live page.</b> All four listeners are bound to events the Wistia player simply never sends. It emits <i>timechange</i>; the page waits for <i>play</i>, <i>timeupdate</i>, <i>secondchange</i> and <i>ended</i>. Not one of them arrives.</div>
+    <div><b>So we will not tell you where viewers drop off, because we genuinely cannot see it.</b> We would rather say that than show you a chart built on nothing. It is a short fix, it is first on the November list, and until it is done the honest answer about the video is that we do not know.</div>
   </div>
   <div class="foot"><span>SKLES &middot; October Report &amp; November Strategy</span><span>06</span></div>
 </div>
@@ -255,7 +255,7 @@ body{background:#e9ecf1;display:flex;flex-direction:column;align-items:center;ga
   <h2>Seven things, <span>in order of what they are worth.</span></h2>
   <ul class="clean">
     <li><b>Phone the twenty one.</b> They are already paid for, already sorted and already sitting in the queue. This is the only route to November revenue that depends on nothing being fixed first, and the conversations will tell us what the dashboards cannot.</li>
-    <li><b>Make the page tracking trustworthy.</b> The events on the training page fire twice in places, and a build session on 21 October left twenty one false checkout clicks in the record. Until that is clean we cannot tell a real drop-off from a counting error, and every decision below the form is a guess. This is half a day of work.</li>
+    <li><b>Repair the video tracking.</b> The player sends <i>timechange</i>; the page listens for <i>play</i>, <i>timeupdate</i>, <i>secondchange</i> and <i>ended</i>, so nothing is recorded. Rebinding it is a short job and it turns the whole question of the video, the offer and the price from a guess into something we can answer with data. It comes first because every other decision below the form depends on it.</li>
     <li><b>Switch on remarketing, now that you have approved it.</b> The people worth chasing are the ones who already watched: 2,011 video views and 2,295 page engagements in October, plus the lead list itself. One note on sequencing: the website audience of people who reached the training page exists but Meta still reports it below the minimum size to run, so it comes online as November’s traffic builds. The Meta-side audiences are large enough to start now.</li>
     <li><b>Split the two adverts by job.</b> "The migraine" buys the attention at 13.8% click-through, "The objection" converts it at 37.8% and $6.14 a lead. Fund both deliberately instead of letting one creative do both jobs.</li>
   </ul>
