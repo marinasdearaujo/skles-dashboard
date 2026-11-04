@@ -8,59 +8,65 @@
 <style>
 :root{
   --navy:#112250; --gold:#E0C58F; --ink:#16181d; --muted:#5d6472;
-  --bg:#faf9f7; --card:#fff; --line:#e4e2dd; --wash:#f2f0ec;
+  --bg:#faf9f7; --sheet:#ffffff; --grid:#d9d6d0; --head:#eceae5; --zebra:#faf9f7;
   --open:#8c3a52; --prog:#8a6a1f; --done:#1d6b4f;
   --sans:'Poppins',system-ui,-apple-system,Segoe UI,sans-serif;
   --serif:'Merriweather',Georgia,serif;
   color-scheme:light;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;
   padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
-.wrap{max-width:900px;margin:0 auto}
-header{padding-block:40px 26px;border-bottom:3px solid var(--navy)}
+.wrap{max-width:1080px;margin:0 auto}
+header{padding-block:38px 22px}
 .eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--gold)}
-h1{font-size:clamp(27px,5vw,40px);font-weight:700;letter-spacing:-.02em;color:var(--navy);margin:10px 0 12px}
-.lede{font-family:var(--serif);font-size:16.5px;line-height:1.7;color:var(--muted);max-width:62ch;margin:0}
+h1{font-size:clamp(25px,4.6vw,37px);font-weight:700;letter-spacing:-.02em;color:var(--navy);margin:9px 0 11px}
+.lede{font-family:var(--serif);font-size:15.5px;line-height:1.65;color:var(--muted);max-width:66ch;margin:0}
 
-.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);
-  border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:24px}
-.s{background:var(--card);padding:16px 15px}
-.s .n{font-family:var(--serif);font-weight:700;font-size:27px;line-height:1;color:var(--navy);font-variant-numeric:tabular-nums}
-.s .l{font-size:11.5px;color:var(--muted);margin-top:6px}
+.tally{display:flex;flex-wrap:wrap;gap:0;margin-top:22px;border:1px solid var(--grid);border-radius:4px;
+  overflow:hidden;background:var(--sheet)}
+.t{padding:12px 16px;border-right:1px solid var(--grid);flex:1;min-width:132px}
+.t:last-child{border-right:0}
+.t .n{font-family:var(--serif);font-weight:700;font-size:23px;line-height:1;color:var(--navy);font-variant-numeric:tabular-nums}
+.t .l{font-size:11px;color:var(--muted);margin-top:5px}
 
-h2{font-size:19px;font-weight:600;color:var(--navy);margin:34px 0 4px}
-.sub{font-size:13.5px;color:var(--muted);margin:0 0 14px}
+h2{font-size:12px;letter-spacing:.11em;text-transform:uppercase;font-weight:700;color:var(--muted);
+  margin:34px 0 9px}
 
-.item{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--c);border-radius:11px;
-  padding:16px 18px;margin-bottom:11px}
-.item[data-s="open"]{--c:var(--open)}
-.item[data-s="prog"]{--c:var(--prog)}
-.item[data-s="done"]{--c:var(--done)}
-.top{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;justify-content:space-between}
-.what{font-family:var(--serif);font-size:16px;font-weight:700;color:var(--navy);flex:1;min-width:200px}
-.by{font-size:12px;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
-.by.late{color:var(--open)}
-.why{font-size:14px;color:var(--muted);margin:8px 0 0}
-.unlocks{font-size:12.5px;color:var(--muted);margin-top:9px;padding-top:9px;border-top:1px dashed var(--line)}
-.unlocks b{color:var(--navy);font-weight:600}
-.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
-.who{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;padding:3px 9px;
-  border-radius:999px;background:var(--wash);border:1px solid var(--line);color:var(--muted)}
-button.st{font:inherit;font-size:12px;font-weight:600;padding:6px 13px;border-radius:999px;cursor:pointer;
-  border:1.5px solid var(--line);background:var(--card);color:var(--muted)}
-button.st[aria-pressed="true"]{color:#fff;border-color:transparent}
-button.st.open[aria-pressed="true"]{background:var(--open)}
-button.st.prog[aria-pressed="true"]{background:var(--prog)}
-button.st.done[aria-pressed="true"]{background:var(--done)}
-button.st:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
-.saved{font-size:11.5px;color:var(--done);font-weight:600;opacity:0;transition:opacity .2s}
+.sheet{overflow-x:auto;border:1px solid var(--grid);border-radius:4px;background:var(--sheet)}
+table{border-collapse:collapse;width:100%;min-width:780px;font-size:13.5px}
+thead th{background:var(--head);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+  font-weight:700;color:var(--muted);text-align:left;padding:9px 12px;
+  border-right:1px solid var(--grid);border-bottom:1px solid var(--grid);white-space:nowrap}
+thead th:last-child{border-right:0}
+tbody td{padding:11px 12px;border-right:1px solid var(--grid);border-bottom:1px solid var(--grid);
+  vertical-align:top}
+tbody td:last-child{border-right:0}
+tbody tr:nth-child(even) td{background:var(--zebra)}
+tbody tr:last-child td{border-bottom:0}
+td.rn{width:34px;color:var(--muted);font-variant-numeric:tabular-nums;text-align:right;font-size:12px}
+td.what b{display:block;color:var(--navy);font-weight:600;font-size:14px;margin-bottom:3px}
+td.what span{color:var(--muted);font-size:12.5px;line-height:1.5;display:block;max-width:46ch}
+td.who{white-space:nowrap;font-weight:600;color:var(--navy)}
+td.by{white-space:nowrap;font-variant-numeric:tabular-nums}
+td.by.late{color:var(--open);font-weight:600}
+td.unl{color:var(--muted);font-variant-numeric:tabular-nums;max-width:17ch}
+td.stc{white-space:nowrap}
+
+select.st{font:inherit;font-size:12.5px;font-weight:600;padding:5px 9px;border-radius:3px;
+  border:1px solid var(--grid);background:#fff;cursor:pointer;color:var(--muted)}
+select.st[data-v="open"]{color:var(--open);border-color:var(--open)}
+select.st[data-v="prog"]{color:var(--prog);border-color:var(--prog)}
+select.st[data-v="done"]{color:var(--done);border-color:var(--done)}
+select.st:focus-visible{outline:2px solid var(--navy);outline-offset:1px}
+.saved{font-size:11px;color:var(--done);font-weight:600;opacity:0;transition:opacity .2s;margin-left:6px}
 .saved.on{opacity:1}
 
-footer{padding-block:30px 60px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--line);margin-top:34px}
+.note{font-size:12.5px;color:var(--muted);margin:9px 0 0}
+footer{padding-block:26px 56px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--grid);margin-top:32px}
 footer a{color:var(--navy)}
 #err{display:none;background:#fdeef1;border:1px solid var(--open);color:var(--open);
-  border-radius:9px;padding:11px 14px;font-size:13px;margin-top:16px}
+  border-radius:4px;padding:10px 13px;font-size:13px;margin-top:14px}
 </style>
 </head>
 <body>
@@ -68,25 +74,35 @@ footer a{color:var(--navy)}
 <header>
   <div class="eyebrow">Skills Up &middot; November 2026</div>
   <h1>What November needs, and when</h1>
-  <p class="lede">Twenty-three pieces are booked and most of the material already exists. This page
-  lists only the things that do not, who they sit with, and the date each one starts holding
-  something up. Tap a status to update it. Everyone sees the same page.</p>
-  <div class="summary" id="summary"></div>
-  <div id="err">Could not reach the tracker just now. The list below is still accurate; status
+  <p class="lede">Twenty three pieces are booked and most of the material already exists. This
+  sheet lists only what does not, who it sits with, and the date each one starts holding work up.
+  Change a status and everyone sees it.</p>
+  <div class="tally" id="tally"></div>
+  <div id="err">Could not reach the sheet just now. The rows below are still accurate, but status
   changes will not save until the connection is back.</div>
 </header>
 
-<h2>From Sean</h2>
-<p class="sub">Four items. The first one is the only thing that cannot be worked around.</p>
-<div id="sean"></div>
-
-<h2>From Rodney</h2>
-<p class="sub">One recurring item, every Monday.</p>
-<div id="rodney"></div>
+<h2>Outstanding</h2>
+<div class="sheet">
+  <table>
+    <thead><tr>
+      <th></th><th>What we need</th><th>Who</th><th>Needed by</th><th>Unblocks</th><th>Status</th>
+    </tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+</div>
+<p class="note">Dates are the day the item starts holding something up, not a deadline for its own
+sake. A date in red has already passed.</p>
 
 <h2>Already covered</h2>
-<p class="sub">Listed so nobody goes looking for something we already hold.</p>
-<div id="have"></div>
+<div class="sheet">
+  <table>
+    <thead><tr>
+      <th></th><th>Material</th><th>Where it is</th><th>Status</th>
+    </tr></thead>
+    <tbody id="have"></tbody>
+  </table>
+</div>
 
 <footer>
   The full November plan sits on the ops board at
@@ -101,85 +117,81 @@ const DB = 'https://rifa-mae-default-rtdb.firebaseio.com/skles-ops/needs';
 const TODAY = new Date('2026-11-04T12:00:00');
 
 const ITEMS = [
-  { id:'walk', who:'Sean', group:'sean', by:'2026-11-07',
+  { id:'walk', who:'Sean', by:'2026-11-07',
     what:'Four short Reels, filmed on one walk',
-    why:'Walk the Talk is the only format that cannot be made without him, which is why it never ran in October. All four lines are already written in his own words, so it is one walk with the phone, roughly twenty minutes. Nothing needs to be scripted or learned.',
-    unlocks:'9, 16, 23 and 30 November' },
-  { id:'flip40', who:'Sean', group:'sean', by:'2026-11-09',
+    why:'The only format that cannot be made without him. All four lines are already his own words from September, so there is nothing to script. One walk with the phone, about twenty minutes.',
+    unlocks:'9, 16, 23 and 30 Nov' },
+  { id:'flip40', who:'Sean', by:'2026-11-09',
     what:'The two properties behind the $40,000 figure',
-    why:'He gave us the number in September. Without the two deals underneath it the carousel shows a round figure with nothing holding it up, which is exactly the kind of claim the brief says to avoid.',
-    unlocks:'11 November, and 18 November if the older figures are stale' },
-  { id:'property', who:'Sean', group:'sean', by:'2026-11-12',
+    why:'He gave us the number in September. Without the deals underneath it the carousel shows a round figure with nothing holding it up.',
+    unlocks:'11 Nov, and 18 Nov if the older figures are stale' },
+  { id:'property', who:'Sean', by:'2026-11-12',
     what:'Property photos, before and after',
-    why:'Doing Good is the format that is already working, and three of its November slots are before-and-afters. The photo folder has portraits and personal shots but not one property. Asked for on 6 October.',
-    unlocks:'14, 21 and 28 November' },
-  { id:'family', who:'Sean', group:'sean', by:'2026-11-17',
+    why:'Doing Good is the format already working, and three November slots are before-and-afters. The photo folder has portraits and personal shots but not one property.',
+    unlocks:'14, 21 and 28 Nov' },
+  { id:'family', who:'Sean', by:'2026-11-17',
     what:'A family photo',
-    why:'Live Well only works when the picture is personal. A studio portrait with a family caption reads as a stock image, which undoes the point of the format.',
-    unlocks:'19 November' },
-  { id:'win', who:'Rodney', group:'rodney', by:'weekly',
+    why:'Live Well only works when the picture is personal. A studio portrait under a family caption reads as stock, which undoes the format.',
+    unlocks:'19 Nov' },
+  { id:'win', who:'Rodney', by:'weekly',
     what:'That week’s member win, every Monday',
-    why:'One line and a first name is enough: what they did and what changed. Member wins were the top performing organic content in October, and the format is built and waiting.',
-    unlocks:'10, 14, 17, 21, 24 and 28 November' }
+    why:'One line and a first name is enough: what they did and what changed. Member wins were the best performing organic content in October.',
+    unlocks:'10, 14, 17, 21, 24 and 28 Nov' }
 ];
 
 const HAVE = [
-  ['The Fast Track recording', 'All 36 minutes, plus the 5 November clip cut with handles. In SKLES Source Recordings.'],
-  ['Sean’s photo folder', '29 studio shots from the September session with Marissa, plus personal photos from 2023 onward.'],
-  ['The four advert exports', '01, 02, 03 and 04 in Reel and 4:5, in Funnel Resources. Two of them have barely been seen and are being reused.'],
-  ['The email sequence', 'All five Fast Track emails, published and readable, so the carousels and the emails say the same thing.'],
-  ['Every line for LinkedIn', 'The Case is copy only. Nothing needed from anyone.']
+  ['The Fast Track recording','All 36 minutes, plus the 5 Nov clip cut with handles, in SKLES Source Recordings'],
+  ['Sean’s photo folder','29 studio shots from the September session with Marissa, plus personal photos from 2023 on'],
+  ['The four advert exports','01, 02, 03 and 04 in Reel and 4:5, in Funnel Resources'],
+  ['The email sequence','All five Fast Track emails, published and readable'],
+  ['Every line for LinkedIn','The Case is copy only. Nothing needed from anyone']
 ];
 
+const LABEL = { open:'Not started', prog:'In progress', done:'Done' };
 let state = {};
 
 function dnum(s){ return s === 'weekly' ? null : new Date(s + 'T12:00:00'); }
 function fmt(s){
   if (s === 'weekly') return 'Every Monday';
-  const d = dnum(s);
-  return 'By ' + d.toLocaleDateString('en-GB', { weekday:'short', day:'numeric', month:'long' });
+  return dnum(s).toLocaleDateString('en-GB', { weekday:'short', day:'numeric', month:'short' });
 }
 function isLate(s){ const d = dnum(s); return d ? d < TODAY : false; }
+function esc(t){ return t.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 
 function render(){
-  for (const g of ['sean','rodney']) {
-    document.getElementById(g).innerHTML = ITEMS.filter(i => i.group === g).map(i => {
-      const st = state[i.id] || 'open';
-      return `<div class="item" data-s="${st}">
-        <div class="top">
-          <div class="what">${i.what}</div>
-          <div class="by${isLate(i.by) ? ' late' : ''}">${fmt(i.by)}</div>
-        </div>
-        <p class="why">${i.why}</p>
-        <div class="unlocks">Unblocks <b>${i.unlocks}</b></div>
-        <div class="row">
-          <span class="who">${i.who}</span>
-          <button type="button" class="st open" data-i="${i.id}" data-v="open"  aria-pressed="${st==='open'}">Not started</button>
-          <button type="button" class="st prog" data-i="${i.id}" data-v="prog"  aria-pressed="${st==='prog'}">In progress</button>
-          <button type="button" class="st done" data-i="${i.id}" data-v="done"  aria-pressed="${st==='done'}">Done</button>
-          <span class="saved" id="sv-${i.id}">saved</span>
-        </div>
-      </div>`;
-    }).join('');
-  }
-  document.getElementById('have').innerHTML = HAVE.map(([t, d]) =>
-    `<div class="item" data-s="done"><div class="top"><div class="what">${t}</div></div>
-     <p class="why">${d}</p></div>`).join('');
+  document.getElementById('rows').innerHTML = ITEMS.map((i, n) => {
+    const st = state[i.id] || 'open';
+    const opts = Object.keys(LABEL).map(k =>
+      `<option value="${k}"${k === st ? ' selected' : ''}>${LABEL[k]}</option>`).join('');
+    return `<tr>
+      <td class="rn">${n + 1}</td>
+      <td class="what"><b>${esc(i.what)}</b><span>${esc(i.why)}</span></td>
+      <td class="who">${i.who}</td>
+      <td class="by${isLate(i.by) && st !== 'done' ? ' late' : ''}">${fmt(i.by)}</td>
+      <td class="unl">${i.unlocks}</td>
+      <td class="stc"><select class="st" data-i="${i.id}" data-v="${st}"
+        aria-label="Status for ${esc(i.what)}">${opts}</select><span class="saved" id="sv-${i.id}">saved</span></td>
+    </tr>`;
+  }).join('');
 
-  const open = ITEMS.filter(i => (state[i.id]||'open') === 'open').length;
+  document.getElementById('have').innerHTML = HAVE.map(([t, w], n) =>
+    `<tr><td class="rn">${n + 1}</td><td class="what"><b>${esc(t)}</b></td>
+     <td class="unl" style="max-width:none">${esc(w)}</td>
+     <td class="who" style="color:var(--done)">Have it</td></tr>`).join('');
+
   const done = ITEMS.filter(i => state[i.id] === 'done').length;
-  const late = ITEMS.filter(i => isLate(i.by) && (state[i.id]||'open') !== 'done').length;
-  document.getElementById('summary').innerHTML = `
-    <div class="s"><div class="n">23</div><div class="l">Pieces booked for November</div></div>
-    <div class="s"><div class="n">${ITEMS.length - done}</div><div class="l">Still outstanding</div></div>
-    <div class="s"><div class="n">${late}</div><div class="l">Past the date they were needed</div></div>
-    <div class="s"><div class="n">9</div><div class="l">Cards already fully sourced</div></div>`;
+  const late = ITEMS.filter(i => isLate(i.by) && state[i.id] !== 'done').length;
+  document.getElementById('tally').innerHTML = `
+    <div class="t"><div class="n">23</div><div class="l">Pieces booked for November</div></div>
+    <div class="t"><div class="n">${ITEMS.length - done}</div><div class="l">Still outstanding</div></div>
+    <div class="t"><div class="n">${late}</div><div class="l">Past the date needed</div></div>
+    <div class="t"><div class="n">9</div><div class="l">Cards already fully sourced</div></div>`;
 
-  document.querySelectorAll('button.st').forEach(b => b.addEventListener('click', onSet));
+  document.querySelectorAll('select.st').forEach(s => s.addEventListener('change', onSet));
 }
 
 async function onSet(e){
-  const id = e.currentTarget.dataset.i, v = e.currentTarget.dataset.v;
+  const id = e.currentTarget.dataset.i, v = e.currentTarget.value;
   state[id] = v;
   render();
   try {
