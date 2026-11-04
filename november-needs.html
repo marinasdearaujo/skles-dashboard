@@ -125,21 +125,22 @@ const ITEMS = [
     what:'The two properties behind the $40,000 figure',
     why:'He gave us the number in September. Without the deals underneath it the carousel shows a round figure with nothing holding it up.',
     unlocks:'11 Nov, and 18 Nov if the older figures are stale' },
-  { id:'property', who:'Sean', by:'2026-11-12',
-    what:'Property photos, before and after',
-    why:'Doing Good is the format already working, and three November slots are before-and-afters. The photo folder has portraits and personal shots but not one property.',
-    unlocks:'14, 21 and 28 Nov' },
   { id:'family', who:'Sean', by:'2026-11-17',
     what:'A family photo',
-    why:'Live Well only works when the picture is personal. A studio portrait under a family caption reads as stock, which undoes the format.',
+    why:'Live Well only works when the picture is personal. A studio portrait under a family caption reads as stock, which undoes the format. This is the only thing in November with nothing to fall back on.',
     unlocks:'19 Nov' },
+  { id:'property', who:'Sean', by:'2026-11-12',
+    what:'Property photos, before and after',
+    why:'Not blocking any more. The testimonial bank covers the Doing Good slots, but a real before-and-after beats a three year old video, so this would raise the ceiling rather than unblock the floor.',
+    unlocks:'Improves 14, 21 and 28 Nov' },
   { id:'win', who:'Rodney', by:'weekly',
-    what:'That week’s member win, every Monday',
-    why:'One line and a first name is enough: what they did and what changed. Member wins were the best performing organic content in October.',
-    unlocks:'10, 14, 17, 21, 24 and 28 Nov' }
+    what:'That week’s member win, when there is one',
+    why:'No longer a dependency: the nine video testimonials in Sean’s folder cover these slots. A fresh win still beats a 2023 recording, so send one whenever you have it.',
+    unlocks:'Improves 10, 17 and 24 Nov' }
 ];
 
 const HAVE = [
+  ['Eleven member testimonials','Nine on video, two written. In Sean’s testimonial folder since 2023 and never used. They cover all six Doing Good slots'],
   ['The Fast Track recording','All 36 minutes, plus the 5 Nov clip cut with handles, in SKLES Source Recordings'],
   ['Sean’s photo folder','29 studio shots from the September session with Marissa, plus personal photos from 2023 on'],
   ['The four advert exports','01, 02, 03 and 04 in Reel and 4:5, in Funnel Resources'],
@@ -185,7 +186,7 @@ function render(){
     <div class="t"><div class="n">23</div><div class="l">Pieces booked for November</div></div>
     <div class="t"><div class="n">${ITEMS.length - done}</div><div class="l">Still outstanding</div></div>
     <div class="t"><div class="n">${late}</div><div class="l">Past the date needed</div></div>
-    <div class="t"><div class="n">9</div><div class="l">Cards already fully sourced</div></div>`;
+    <div class="t"><div class="n">15</div><div class="l">Cards already fully sourced</div></div>`;
 
   document.querySelectorAll('select.st').forEach(s => s.addEventListener('change', onSet));
 }
