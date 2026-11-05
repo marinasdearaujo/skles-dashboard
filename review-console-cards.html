@@ -216,6 +216,57 @@ td .est{font-size:10px;color:var(--muted)}
 .plan a{font-size:16px;font-weight:700}
 .url{width:100%;max-width:430px;margin-top:11px}
 
+
+/* contact sheet: the ranked table whose first column is the picture */
+.who{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:14px;
+  box-shadow:var(--lift-sm);padding:11px 15px;margin-bottom:13px;flex-wrap:wrap}
+.who span{font-size:12.5px;color:var(--muted)}
+.who b{font-size:12.5px;color:var(--navy)}
+.sheet{background:var(--card);border-radius:18px;box-shadow:var(--lift);overflow-x:auto;
+  padding:4px 8px 8px}
+table.cs{border-collapse:collapse;width:100%;min-width:900px;font-size:13px}
+table.cs th{text-align:left;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted);font-weight:700;padding:14px 10px 10px;white-space:nowrap;cursor:pointer;
+  border-bottom:1px solid var(--grid);user-select:none}
+table.cs th:hover{color:var(--navy)}
+table.cs th.on{color:var(--navy)}
+table.cs th .ar{font-size:8px;margin-left:3px}
+table.cs th.r,table.cs td.r{text-align:right}
+table.cs td{padding:9px 10px;border-bottom:1px solid rgba(23,35,70,.06);vertical-align:middle}
+table.cs tr:last-child td{border-bottom:0}
+table.cs tr:hover td{background:var(--wash)}
+table.cs td.n{font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
+table.cs td.rank{font-size:11px;color:var(--muted);font-weight:700;width:26px}
+.csimg{width:52px;height:65px;border-radius:7px;object-fit:cover;background:var(--wash);
+  display:block}
+.csimg.none{display:flex;align-items:center;justify-content:center;font-size:8px;
+  color:var(--muted);text-align:center}
+.cscap{min-width:190px;max-width:300px}
+.cscap a{font-size:12.5px;line-height:1.4;color:var(--ink);text-decoration:none;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cscap a:hover{color:var(--navy)}
+.cscap small{display:block;font-size:10.5px;color:var(--muted);margin-top:3px}
+.ch{font-size:9px;letter-spacing:.05em;text-transform:uppercase;font-weight:700;
+  background:var(--wash);color:var(--muted);border-radius:20px;padding:3px 8px;
+  white-space:nowrap;display:inline-block}
+.ch.p{background:#eef2fd;color:#2c4484}
+.ch.f{background:#eefaf4;color:#17805a}
+.ch.u{background:#fdf6e7;color:#8a6a1e}
+.nb{font-family:inherit;font-size:10px;letter-spacing:.05em;text-transform:uppercase;
+  font-weight:700;border:0;border-radius:20px;padding:5px 11px;cursor:pointer;
+  background:var(--wash);color:var(--muted);white-space:nowrap}
+.nb:hover{background:var(--navy);color:#fff}
+.nb.has{background:#e3f4ec;color:var(--good)}
+.nrow td{background:var(--wash)}
+.nbox{display:flex;gap:9px;align-items:flex-start;padding:4px 0}
+.nbox textarea{min-height:58px;font-size:13px}
+.nbox .nsave{font-family:inherit;font-size:11.5px;font-weight:600;border:0;border-radius:11px;
+  padding:9px 16px;cursor:pointer;background:var(--deep);color:#fff;white-space:nowrap}
+.note{font-size:12px;line-height:1.5;color:var(--ink);background:#e9f3ee;border-radius:10px;
+  padding:9px 12px;margin-top:5px}
+.note b{color:var(--good)}
+.csfoot{font-size:11.5px;color:var(--muted);margin-top:13px;line-height:1.55}
+
 /* The per-channel tint. These sit LAST on purpose: .it and .card set their own background,
    and at equal specificity the later rule is the one that paints. */
 .t-paid{background:linear-gradient(180deg,#eefaf4,#fff 46%)}
@@ -420,6 +471,121 @@ function vidCard(v){
     +'<p class="t">'+esc(v.title)+'</p></a>';
 }
 
+
+/* ---- contact sheet: ranked, sortable, and every row can carry a note ---- */
+let SORT={k:'reach',d:-1},WHO=kept('who')||'',OPENNOTE=null;
+const TEAM=['Marissa','Valerie','Marina','Rodney'];
+const COLS=[['img','',''],['first','Post','t'],['pillar','Pillar','t'],['kind','Format','t'],
+  ['cta','CTA','t'],['when','Date','t'],['reach','Reach','n'],['views','Views','n'],
+  ['saved','Saves','n'],['shares','Shares','n'],['note','Note','']];
+
+function sortPosts(ps){
+  const k=SORT.k,d=SORT.d,num=COLS.filter(c=>c[0]===k)[0];
+  const isN=num&&num[2]==='n';
+  return ps.slice().sort((a,b)=>{
+    let x=a[k],y=b[k];
+    if(isN){x=x==null?-1:+x;y=y==null?-1:+y;return (x-y)*d;}
+    x=String(x==null?'':x).toLowerCase();y=String(y==null?'':y).toLowerCase();
+    return x<y?-1*d:x>y?1*d:0;
+  });
+}
+
+async function saveNote(id,text){
+  try{
+    const r=await fetch(FB+'/'+CUR+'/notes/'+id+'.json',{method:'PUT',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(text?{who:WHO||'Someone',text:text,
+        at:new Date().toISOString()}:null)});
+    if(!r.ok) throw new Error('bad status');
+    const cur=ALL[CUR]||{};
+    cur.notes=Object.assign({},cur.notes||{});
+    if(text) cur.notes[id]={who:WHO||'Someone',text:text,at:new Date().toISOString()};
+    else delete cur.notes[id];
+    ALL[CUR]=cur;
+  }catch(e){fail();}
+}
+
+function paneSheet(M){
+  const notes=(ALL[CUR]||{}).notes||{};
+  const ps=sortPosts(M.posts);
+  const tagged=M.posts.filter(p=>p.card).length;
+  let h=hd('What ran in '+nice(CUR), M.posts.length
+    ? 'Every post, with the thumbnail, the caption and the fields off its card. <b>Click any '
+      +'column to rank by it</b>, and add a note on the row it belongs to, so it reaches the '
+      +'presentation attached to the thing it is about.'
+    : 'Nothing published to Instagram in this month.');
+
+  h+='<div class="who"><span>Notes are signed, so</span><select id="whoami">'
+    +'<option value="">who are you?</option>'
+    +TEAM.map(t=>'<option value="'+t+'"'+(t===WHO?' selected':'')+'>'+t+'</option>').join('')
+    +'</select><b>'+Object.keys(notes).length+' note'
+    +(Object.keys(notes).length===1?'':'s')+' on this month</b>'
+    +'<span style="margin-left:auto">'+tagged+' of '+M.posts.length
+    +' posts carry a card, so the Pillar and CTA columns are only as full as the board is.</span>'
+    +'</div>';
+
+  if(!M.posts.length) return h;
+
+  h+='<div class="figs" style="margin-bottom:13px">'
+    +M.kpis.map(k=>fig(k[1],k[0],'',k[2])).join('')+'</div>';
+
+  h+='<div class="sheet"><table class="cs"><thead><tr><th></th>'
+    +COLS.map(c=>c[1]?'<th class="'+(c[2]==='n'?'r ':'')+(SORT.k===c[0]?'on':'')
+      +'" data-sort="'+c[0]+'">'+c[1]
+      +(SORT.k===c[0]?'<span class="ar">'+(SORT.d<0?'▼':'▲')+'</span>':'')
+      +'</th>':'<th></th>').join('')+'</tr></thead><tbody>';
+
+  ps.forEach((p,i)=>{
+    const n=notes[p.id];
+    h+='<tr><td class="rank">'+(i+1)+'</td>'
+      +'<td>'+(p.img?'<img class="csimg" src="'+esc(p.img)+'" alt="" loading="lazy">'
+        :'<div class="csimg none">no thumb</div>')+'</td>'
+      +'<td class="cscap"><a href="'+esc(p.url)+'" target="_blank" rel="noopener">'
+      +esc(p.first||'(no caption)')+'</a><small>'+(p.words||0)+' words'
+      +(p.card?' · card '+p.card:'')+'</small></td>'
+      +'<td>'+(p.pillar?'<span class="ch p">'+esc(p.pillar)+'</span>'
+        :'<span class="ch u">untagged</span>')+'</td>'
+      +'<td><span class="ch f">'+esc(p.kind||'')+'</span></td>'
+      +'<td>'+(p.cta&&p.cta!=='—'?'<span class="ch">'+esc(p.cta)+'</span>':'')+'</td>'
+      +'<td><span class="ch">'+wd(p.when)+' '+p.when.slice(8)+'</span></td>'
+      +'<td class="n r">'+num(p.reach)+'</td><td class="n r">'+num(p.views)+'</td>'
+      +'<td class="n r">'+num(p.saved)+'</td><td class="n r">'+num(p.shares)+'</td>'
+      +'<td><button class="nb'+(n?' has':'')+'" data-note="'+p.id+'">'
+      +(n?'note ✓':'+ note')+'</button></td></tr>';
+    if(n&&OPENNOTE!==p.id) h+='<tr class="nrow"><td></td><td colspan="10">'
+      +'<div class="note"><b>'+esc(n.who)+'</b> · '+esc(n.text)+'</div></td></tr>';
+    if(OPENNOTE===p.id) h+='<tr class="nrow"><td></td><td colspan="10"><div class="nbox">'
+      +'<textarea id="nt-'+p.id+'" placeholder="What you know about this post that the figures '
+      +'do not. It goes on the slide with your name on it.">'+esc(n?n.text:'')+'</textarea>'
+      +'<button class="nsave" data-save="'+p.id+'">Save</button></div></td></tr>';
+  });
+
+  h+='</tbody></table></div>'
+    +'<p class="csfoot">Ranked by '+esc((COLS.filter(c=>c[0]===SORT.k)[0]||['','reach'])[1])
+    +', '+(SORT.d<0?'highest first':'lowest first')+'. Reach is accounts reached, which is the '
+    +'figure the direction is built on. Notes left here are carried into the month’s '
+    +'presentation, under the post they are about.</p>';
+  return h;
+}
+
+function wireSheet(){
+  document.querySelectorAll('[data-sort]').forEach(t=>t.onclick=()=>{
+    const k=t.dataset.sort;
+    SORT=(SORT.k===k)?{k:k,d:-SORT.d}:{k:k,d:(COLS.filter(c=>c[0]===k)[0][2]==='n')?-1:1};
+    render();wire();});
+  document.querySelectorAll('[data-note]').forEach(b=>b.onclick=()=>{
+    OPENNOTE=(OPENNOTE===b.dataset.note)?null:b.dataset.note;render();wire();
+    const t=document.getElementById('nt-'+OPENNOTE);if(t)t.focus();});
+  document.querySelectorAll('[data-save]').forEach(b=>b.onclick=async()=>{
+    const id=b.dataset.save,t=document.getElementById('nt-'+id);
+    if(!t)return;
+    b.textContent='Saving';
+    await saveNote(id,t.value.trim());
+    OPENNOTE=null;render();wire();});
+  const w=document.getElementById('whoami');
+  if(w) w.onchange=()=>{WHO=w.value;keep('who',WHO);};
+}
+
 /* ---------------------------------------------------------------- panes */
 function paneMonth(M){
   const ms=M.months.slice().reverse();
@@ -568,7 +734,7 @@ function items(M){
     fig:M.me.avg||'—',tone:'',pic:null}];
   M.fronts.forEach(f=>L.push({id:f.key,name:f.label,sub:f.note,fig:f.head,tone:f.tone,
     pic:f.pic,front:f}));
-  L.push({id:'ran',name:'What ran',sub:'every post, ranked, with its thumbnail',
+  L.push({id:'ran',name:'What ran',sub:'ranked contact sheet, notes per post',
     fig:M.posts.length,tone:M.posts.length?'good':'bad',pic:(M.posts[0]||{}).img});
   const ds=((M.content.readout||{}).dims)||[];
   L.push({id:'why',name:'What it says',sub:'best and worst per dimension',
@@ -599,7 +765,7 @@ function pane(M,L){
   const it=L.filter(x=>x.id===SEL)[0]||L[0];
   if(it.front) return paneFront(it.front);
   if(SEL==='month') return paneMonth(M);
-  if(SEL==='ran') return paneRan(M);
+  if(SEL==='ran') return paneSheet(M);
   if(SEL==='why') return paneWhy(M);
   if(SEL==='next') return paneNext(M);
   if(SEL==='says') return paneSays();
@@ -621,6 +787,7 @@ function render(){
   document.querySelectorAll('.it').forEach(b=>b.onclick=()=>pick(b.dataset.id));
   document.querySelectorAll('[data-go]').forEach(a=>a.onclick=e=>{
     e.preventDefault();show(a.dataset.go);});
+  wireSheet();
 }
 
 function pick(id){SEL=id;keep('sel',id);render();wire();
