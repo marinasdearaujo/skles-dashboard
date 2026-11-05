@@ -9,44 +9,41 @@
 :root{
   --navy:#112250; --gold:#E0C58F; --ink:#16181d; --muted:#5d6472;
   --bg:#faf9f7; --card:#ffffff; --line:#e4e2dd; --wash:#f2f0ec; --grid:#d9d6d0; --head:#eceae5;
-  --yes:#1d6b4f; --ask:#8c3a52;
   --sans:'Poppins',system-ui,-apple-system,Segoe UI,sans-serif;
   --serif:'Merriweather',Georgia,serif;
   color-scheme:light;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;
   padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
-.wrap{max-width:1000px;margin:0 auto}
+.wrap{max-width:880px;margin:0 auto}
 h1,h2,h3{text-wrap:balance;margin:0}
 p{margin:0}
 
-header{padding-block:40px 26px;border-bottom:3px solid var(--navy)}
+header{padding-block:40px 24px;border-bottom:3px solid var(--navy)}
 .eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--gold)}
-h1{font-size:clamp(27px,4.8vw,40px);font-weight:700;letter-spacing:-.02em;color:var(--navy);margin-block:10px 13px}
-.lede{font-family:var(--serif);font-size:16.5px;line-height:1.7;color:var(--muted);max-width:64ch}
+h1{font-size:clamp(27px,4.8vw,38px);font-weight:700;letter-spacing:-.02em;color:var(--navy);margin-block:10px 12px}
+.lede{font-family:var(--serif);font-size:16px;line-height:1.65;color:var(--muted);max-width:58ch}
 
-section{padding-block:32px;border-bottom:1px solid var(--line)}
-h2{font-size:clamp(19px,2.9vw,25px);font-weight:600;letter-spacing:-.01em;color:var(--navy);margin-bottom:10px}
+.rule{background:var(--navy);color:#fff;border-radius:12px;padding:20px 22px;margin-top:22px}
+.rule h3{font-size:18px;font-weight:600;color:#fff;margin-bottom:6px}
+.rule p{font-size:14.5px;color:#dde2ef;max-width:62ch}
 
-.rule{background:var(--navy);color:#fff;border-radius:12px;padding:22px 24px;margin-top:20px}
-.rule .eyebrow{color:var(--gold)}
-.rule h3{font-size:19px;font-weight:600;margin-block:8px 7px;color:#fff}
-.rule p{font-size:14.5px;color:#dde2ef;max-width:68ch}
+section{padding-block:30px;border-bottom:1px solid var(--line)}
+h2{font-size:12px;letter-spacing:.11em;text-transform:uppercase;font-weight:700;color:var(--muted);
+  margin-bottom:14px}
 
-.steps{display:grid;gap:10px;margin-top:20px;counter-reset:s}
-.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:15px 17px;
-  display:grid;grid-template-columns:30px 1fr;gap:14px;align-items:start}
-.step .n{font-family:var(--serif);font-weight:700;font-size:19px;color:var(--gold);line-height:1.1;
-  font-variant-numeric:tabular-nums}
-.step h3{font-size:15.5px;font-weight:600;color:var(--navy);margin-bottom:4px}
-.step p{font-size:13.5px;color:var(--muted);max-width:68ch}
-.step .who{display:inline-block;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
-  font-weight:700;color:var(--navy);background:var(--wash);border:1px solid var(--line);
-  border-radius:999px;padding:3px 9px;margin-top:7px}
+.cycle{display:grid;gap:9px}
+.c{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;
+  display:grid;grid-template-columns:92px 1fr;gap:16px;align-items:baseline}
+.c .when{font-family:var(--serif);font-weight:700;font-size:14.5px;color:var(--gold);
+  font-variant-numeric:tabular-nums;line-height:1.3}
+.c .what{font-size:14.5px;color:var(--ink)}
+.c .what b{color:var(--navy);font-weight:600}
+.c .who{display:block;font-size:11.5px;color:var(--muted);margin-top:3px}
 
-.sheet{overflow-x:auto;border:1px solid var(--grid);border-radius:4px;background:var(--card);margin-top:18px}
-table{border-collapse:collapse;width:100%;min-width:660px;font-size:13.5px}
+.sheet{overflow-x:auto;border:1px solid var(--grid);border-radius:4px;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:13.5px}
 thead th{background:var(--head);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
   font-weight:700;color:var(--muted);text-align:left;padding:9px 12px;
   border-right:1px solid var(--grid);border-bottom:1px solid var(--grid);white-space:nowrap}
@@ -56,173 +53,75 @@ tbody td{padding:11px 12px;border-right:1px solid var(--grid);border-bottom:1px 
 tbody td:last-child{border-right:0}
 tbody tr:nth-child(even) td{background:var(--bg)}
 tbody tr:last-child td{border-bottom:0}
-td b{display:block;color:var(--navy);font-weight:600;font-size:14px;margin-bottom:2px}
-td span{color:var(--muted);font-size:12.5px;display:block;max-width:44ch}
-td.d{white-space:nowrap;font-variant-numeric:tabular-nums;font-weight:600;color:var(--navy)}
-.tag{font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;font-weight:700;
-  padding:3px 8px;border-radius:999px;white-space:nowrap}
-.tag.have{background:var(--yes);color:#fff}
-.tag.ask{background:transparent;border:1px solid var(--ask);color:var(--ask)}
+td.w{white-space:nowrap;font-weight:600;color:var(--navy)}
+td.a{white-space:nowrap;color:var(--muted)}
 
-.note{font-size:13px;color:var(--muted);margin-top:14px;max-width:68ch}
-footer{padding-block:28px 56px;color:var(--muted);font-size:13px}
+footer{padding-block:24px 56px;color:var(--muted);font-size:13px}
 footer a{color:var(--navy)}
-@media (max-width:520px){ .step{grid-template-columns:1fr;gap:5px} }
+@media (max-width:520px){ .c{grid-template-columns:1fr;gap:3px} }
 </style>
 </head>
 <body>
 <div class="wrap">
 
 <header>
-  <div class="eyebrow">Skills Up &middot; Sean K. Langston &middot; How content gets made</div>
+  <div class="eyebrow">Skills Up &middot; Sean K. Langston</div>
   <h1>One recording feeds every channel</h1>
-  <p class="lede">Sean records long-form for Marissa, on topics she sends him. Everything on
-  Facebook, Instagram, TikTok and LinkedIn is cut from those same recordings. He is asked for
-  video by one person, once, and the rest of the calendar derives from it.</p>
+  <p class="lede">Sean records long-form for Marissa. Everything on Facebook, Instagram, TikTok
+  and LinkedIn is cut from those recordings.</p>
+
+  <div class="rule">
+    <h3>Only Marissa asks Sean to record</h3>
+    <p>Anyone who needs him on video asks her for a cut of something he has already recorded. If
+    it does not exist yet, it goes on her topic list. Personal photos are the one exception,
+    because a family photo cannot come out of a long-form video.</p>
+  </div>
 </header>
 
 <section>
-  <h2>The principle</h2>
-  <p class="lede">The constraint on this account has never been ideas or editing capacity. It is
-  Sean's time in front of a camera. So the process is built to spend that time once.</p>
+  <h2>Every month</h2>
+  <div class="cycle">
+    <div class="c"><span class="when">26th&ndash;28th</span><span class="what">
+      <b>Numbers in.</b> Marissa and Valerie each send their month's figures and what is already
+      recorded and waiting.
+      <span class="who">Marissa &middot; Valerie</span></span></div>
 
-  <div class="rule">
-    <div class="eyebrow">The rule</div>
-    <h3>Only Marissa asks Sean to record</h3>
-    <p>Anyone who needs Sean on video asks Marissa for a cut of something he has already
-    recorded. If the thing genuinely does not exist yet, it goes on her topic list for the next
-    session rather than becoming a separate request to him. The one standing exception is
-    personal photography, which cannot be cut from a long-form video.</p>
-  </div>
-</section>
+    <div class="c"><span class="when">28th&ndash;30th</span><span class="what">
+      <b>Align, then plan.</b> Marina goes through both with them and builds the next month's
+      cards from what already exists.
+      <span class="who">Marina, with Marissa and Valerie</span></span></div>
 
-<section>
-  <h2>The pipeline</h2>
-  <div class="steps">
+    <div class="c"><span class="when">1st</span><span class="what">
+      <b>One email to Sean.</b> The results, the plan, and the one or two things we need from him.
+      Nobody writes to him separately.
+      <span class="who">Marina</span></span></div>
 
-    <div class="step"><div class="n">1</div><div>
-      <h3>Topics go to Sean</h3>
-      <p>Marissa sends the topic list, which she already does. Marina adds the funnel angle, so
-      each topic also answers an objection the adverts and emails are already raising. The same
-      recording then serves YouTube search and the paid funnel instead of only one of them.</p>
-      <span class="who">Marissa, with Marina</span>
-    </div></div>
-
-    <div class="step"><div class="n">2</div><div>
-      <h3>Sean records long-form</h3>
-      <p>Target is six to eight a month, which is Marissa's number and already agreed. Nothing
-      changes about how he records or who he sends it to.</p>
-      <span class="who">Sean</span>
-    </div></div>
-
-    <div class="step"><div class="n">3</div><div>
-      <h3>The master lands in one folder</h3>
-      <p>Marissa drops the full raw recording alongside her edited long-form, named by date and
-      topic. That folder is the single source for every other channel. Nobody cuts social content
-      from a social post, and nothing gets rebuilt from a compressed re-upload.</p>
-      <span class="who">Marissa</span>
-    </div></div>
-
-    <div class="step"><div class="n">4</div><div>
-      <h3>Valerie cuts the month from the masters</h3>
-      <p>Reels, carousels, stories and the still frames all come out of the masters, against the
-      dated cards already on the ops board. Marina says which cut comes from which recording and
-      what each one has to prove. Valerie does not need anything from Sean to work.</p>
-      <span class="who">Valerie, under Marina's direction</span>
-    </div></div>
-
-    <div class="step"><div class="n">5</div><div>
-      <h3>Every card names its source and its reach</h3>
-      <p>The card records which master it was cut from, and its reach at 72 hours. That is what
-      tells us whether a long-form topic travels as a Reel, which decides the next topic list.
-      The loop closes back into step one.</p>
-      <span class="who">Valerie, read by Marina</span>
-    </div></div>
-
+    <div class="c"><span class="when">All month</span><span class="what">
+      <b>Cut and publish.</b> Valerie works from Marissa's master files to the dated cards, and
+      writes each card's reach on it at 72 hours.
+      <span class="who">Valerie</span></span></div>
   </div>
 </section>
 
 <section>
   <h2>Who owns what</h2>
-  <p class="lede">The short version of the division, so no two people ask Sean for the same thing
-  on the same day.</p>
   <div class="sheet">
     <table>
-      <thead><tr><th>Who</th><th>Owns</th><th>Asks Sean for</th></tr></thead>
+      <thead><tr><th>Who</th><th>Owns</th><th>Needs from Sean</th></tr></thead>
       <tbody>
-        <tr>
-          <td class="d">Marissa</td>
-          <td><b>YouTube, end to end</b><span>Topic list, long-form production, the Real Talk on Real Estate Shorts series, channel reporting. Holds the master files.</span></td>
-          <td><span class="tag ask">Recording time</span></td>
-        </tr>
-        <tr>
-          <td class="d">Valerie</td>
-          <td><b>Facebook, Instagram, TikTok, LinkedIn</b><span>Produces every post from the masters, to the cards and direction she is given. Writes the reach back onto each card.</span></td>
-          <td><span class="tag have">Nothing</span></td>
-        </tr>
-        <tr>
-          <td class="d">Marina</td>
-          <td><b>Direction and the plan</b><span>What gets cut from which master, what each piece is testing, the funnel angle on the topics, and the reporting across all of it.</span></td>
-          <td><span class="tag have">Nothing</span></td>
-        </tr>
-        <tr>
-          <td class="d">Rodney</td>
-          <td><b>The call queue</b><span>Member wins come from his calls and feed the proof posts.</span></td>
-          <td><span class="tag have">Nothing</span></td>
-        </tr>
-        <tr>
-          <td class="d">Sean</td>
-          <td><b>Being on camera</b><span>Records long-form for Marissa, on her topics, at his own pace.</span></td>
-          <td><span class="tag ask">Personal photos only</span></td>
-        </tr>
+        <tr><td class="w">Marissa</td><td>YouTube, end to end. Topics, long-form, Shorts. Holds the master files.</td><td class="a">Recording time</td></tr>
+        <tr><td class="w">Valerie</td><td>Facebook, Instagram, TikTok, LinkedIn. Cuts every post from the masters.</td><td class="a">Nothing</td></tr>
+        <tr><td class="w">Marina</td><td>Direction, the plan, the funnel angle on topics, reporting.</td><td class="a">Nothing</td></tr>
+        <tr><td class="w">Rodney</td><td>The call queue. Member wins feed the proof posts.</td><td class="a">Nothing</td></tr>
+        <tr><td class="w">Sean</td><td>Being on camera, at his own pace.</td><td class="a">Personal photos</td></tr>
       </tbody>
     </table>
   </div>
-  <p class="note">Personal photography is the only thing left that cannot be derived. A family
-  photograph under a family caption has to be a real family photograph, so that one stays a direct
-  ask.</p>
-</section>
-
-<section>
-  <h2>November, from what already exists</h2>
-  <p class="lede">Five long-form videos went up in October and two more are already recorded and
-  waiting. Run against the November cards, almost the whole month is sitting in that footage.</p>
-  <div class="sheet">
-    <table>
-      <thead><tr><th>Card</th><th>Cut it from</th><th>Status</th></tr></thead>
-      <tbody>
-        <tr>
-          <td class="d">9, 16, 23, 30 Nov<br><span style="font-weight:400">Walk the Talk</span></td>
-          <td><b>The 70% Rule: no or go?</b><span>Plus "Stop guessing, think like an appraiser" and the flea story. Each is already one opinion said out loud, which is the whole format.</span></td>
-          <td><span class="tag have">Have it</span></td>
-        </tr>
-        <tr>
-          <td class="d">11 Nov<br><span style="font-weight:400">The Blueprint</span></td>
-          <td><b>How to analyze deals like a pro</b><span>The equity argument, in his own words and already on camera.</span></td>
-          <td><span class="tag have">Have it</span></td>
-        </tr>
-        <tr>
-          <td class="d">18, 25 Nov<br><span style="font-weight:400">The Blueprint</span></td>
-          <td><b>Made $25K flipping this house, but one mistake cost me $5,000</b><span>One real deal with real numbers, including what went wrong. Stronger than the figure on its own.</span></td>
-          <td><span class="tag have">Have it</span></td>
-        </tr>
-        <tr>
-          <td class="d">19 Nov<br><span style="font-weight:400">Live Well</span></td>
-          <td><b>A family photograph</b><span>The only piece of the month that cannot come out of the footage.</span></td>
-          <td><span class="tag ask">Ask Sean</span></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <p class="note">Valerie and Marina watch the two vault recordings first and confirm the cuts
-  before any card changes, so the mapping above is the proposal rather than the instruction.</p>
 </section>
 
 <footer>
-  The dated cards live on the ops board at
-  <a href="https://skles.moovecreating.com/ops-board.html">skles.moovecreating.com/ops-board.html</a>.
-  What the month is still waiting on is at
-  <a href="https://skles.moovecreating.com/november-needs.html">november-needs.html</a>.<br>
+  Dated cards: <a href="https://skles.moovecreating.com/ops-board.html">ops-board.html</a>.
+  What this month is waiting on: <a href="https://skles.moovecreating.com/november-needs.html">november-needs.html</a>.<br>
   Questions to Marina.
 </footer>
 
