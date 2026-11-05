@@ -9,32 +9,46 @@
 :root{
   --navy:#112250; --gold:#E0C58F; --ink:#16181d; --muted:#5d6472;
   --bg:#faf9f7; --card:#ffffff; --line:#e4e2dd; --wash:#f2f0ec; --grid:#d9d6d0;
-  --good:#1d6b4f; --bad:#8c3a52; --warn:#8a6a1f;
+  --good:#1d6b4f; --bad:#8c3a52;
   --sans:'Poppins',system-ui,-apple-system,Segoe UI,sans-serif;
   --serif:'Merriweather',Georgia,serif;
   color-scheme:light;
 }
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;
   padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
 .wrap{max-width:940px;margin:0 auto}
 h1,h2,h3{text-wrap:balance;margin:0}
 p{margin:0}
 
-header{padding-block:36px 20px;border-bottom:3px solid var(--navy)}
+header{padding-block:34px 0}
+.top{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.tl{flex:1;min-width:0}
 .eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--gold)}
-h1{font-size:clamp(26px,4.6vw,36px);font-weight:700;letter-spacing:-.02em;color:var(--navy);margin-block:9px 10px}
-.sub{font-size:13px;color:var(--muted)}
-.picker{margin-top:14px}
+h1{font-size:clamp(24px,4.2vw,33px);font-weight:700;letter-spacing:-.02em;color:var(--navy);margin-block:8px 7px}
+.sub{font-size:12.5px;color:var(--muted)}
 select{font:inherit;font-size:13.5px;font-weight:600;color:var(--navy);background:#fff;
-  border:1px solid var(--grid);border-radius:6px;padding:6px 10px;cursor:pointer}
+  border:1px solid var(--grid);border-radius:6px;padding:7px 11px;cursor:pointer}
+select:focus-visible{outline:2px solid var(--navy);outline-offset:1px}
 
-section{padding-block:28px;border-bottom:1px solid var(--line)}
+/* tabs */
+.tabs{display:flex;gap:2px;margin-top:20px;overflow-x:auto;border-bottom:2px solid var(--navy);
+  scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;font:inherit;font-size:13px;font-weight:600;color:var(--muted);background:transparent;
+  border:0;border-radius:7px 7px 0 0;padding:10px 15px;cursor:pointer;white-space:nowrap;
+  border-bottom:3px solid transparent;margin-bottom:-2px}
+.tab:hover{color:var(--navy);background:var(--wash)}
+.tab[aria-selected="true"]{color:#fff;background:var(--navy);border-bottom-color:var(--gold)}
+.tab:focus-visible{outline:2px solid var(--navy);outline-offset:-2px}
+
+.panel{padding-block:26px}
+.panel + .panel{border-top:1px solid var(--line)}
 h2{font-size:12px;letter-spacing:.11em;text-transform:uppercase;font-weight:700;color:var(--muted);
   margin-bottom:6px}
-.h2sub{font-size:13px;color:var(--muted);margin-bottom:14px;max-width:66ch}
+.h2sub{font-size:13px;color:var(--muted);margin-bottom:15px;max-width:68ch}
 
-/* 1. fronts */
 .fronts{display:grid;grid-template-columns:repeat(auto-fit,minmax(224px,1fr));gap:11px}
 .fr{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:16px 17px;
   border-top:4px solid var(--c);min-width:0}
@@ -50,7 +64,6 @@ h2{font-size:12px;letter-spacing:.11em;text-transform:uppercase;font-weight:700;
 .fr .verdict{font-family:var(--serif);font-size:13px;line-height:1.55;color:var(--ink);
   margin-top:11px;padding-top:11px;border-top:1px solid var(--line)}
 
-/* 2. the read */
 .read{display:grid;gap:8px}
 .rl{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:12px 14px}
 .rl .rule{font-size:10px;letter-spacing:.07em;text-transform:uppercase;font-weight:700;
@@ -61,7 +74,6 @@ h2{font-size:12px;letter-spacing:.11em;text-transform:uppercase;font-weight:700;
 .d h3{font-size:14px;font-weight:600;color:var(--gold);margin-bottom:7px}
 .d p{font-size:13.5px;color:#dde2ef;line-height:1.55}
 
-/* 3. considerations */
 .box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:15px 16px;margin-bottom:10px}
 .bh{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;margin-bottom:8px}
 .bh h3{font-size:15px;font-weight:600;color:var(--navy)}
@@ -70,12 +82,11 @@ h2{font-size:12px;letter-spacing:.11em;text-transform:uppercase;font-weight:700;
 .bh .state.in{color:var(--good)}
 textarea{width:100%;min-height:92px;font:inherit;font-size:14px;line-height:1.55;color:var(--ink);
   background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:11px 12px;resize:vertical}
-textarea:focus-visible{outline:2px solid var(--navy);outline-offset:1px}
+textarea:focus-visible,input.url:focus-visible{outline:2px solid var(--navy);outline-offset:1px}
 input.url{width:100%;font:inherit;font-size:14px;color:var(--ink);background:var(--bg);
-  border:1px solid var(--line);border-radius:7px;padding:10px 12px}
-.hint{font-size:12px;color:var(--muted);margin-top:6px}
+  border:1px solid var(--line);border-radius:7px;padding:10px 12px;margin-top:9px}
+.hint{font-size:12px;color:var(--muted);margin-top:7px}
 
-/* 4+5. plan and archive */
 .plan{background:var(--wash);border:1px solid var(--line);border-left:4px solid var(--gold);
   border-radius:10px;padding:16px 18px}
 .plan a{font-family:var(--serif);font-size:16px;font-weight:700;color:var(--navy)}
@@ -93,7 +104,7 @@ td.m{white-space:nowrap;font-weight:600;color:var(--navy)}
 td.n{font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--muted)}
 td a{color:var(--navy)}
 
-footer{padding-block:24px 56px;color:var(--muted);font-size:13px}
+footer{padding-block:24px 56px;color:var(--muted);font-size:13px;border-top:1px solid var(--line)}
 footer a{color:var(--navy)}
 #err{display:none;background:#fdeef1;border:1px solid var(--bad);color:var(--bad);
   border-radius:6px;padding:10px 13px;font-size:13px;margin-top:13px}
@@ -103,67 +114,76 @@ footer a{color:var(--navy)}
 <div class="wrap">
 
 <header>
-  <div class="eyebrow">Skills Up &middot; Sean K. Langston</div>
-  <h1 id="title">Monthly review</h1>
-  <p class="sub" id="built"></p>
-  <div class="picker"><select id="pick" aria-label="Which month"></select></div>
+  <div class="top">
+    <div class="tl">
+      <div class="eyebrow">Skills Up &middot; Sean K. Langston</div>
+      <h1 id="title">Monthly review</h1>
+      <p class="sub" id="built"></p>
+    </div>
+    <select id="pick" aria-label="Which month"></select>
+  </div>
+
+  <div class="tabs" role="tablist" id="tabs">
+    <button class="tab" role="tab" data-t="fronts">Each front</button>
+    <button class="tab" role="tab" data-t="read">The read</button>
+    <button class="tab" role="tab" data-t="says">What you think</button>
+    <button class="tab" role="tab" data-t="plan">The plan</button>
+    <button class="tab" role="tab" data-t="hist">Every month</button>
+    <button class="tab" role="tab" data-t="all">Everything</button>
+  </div>
   <div id="err">Cannot reach the sheet just now. Nothing typed below will save until the
   connection is back.</div>
 </header>
 
-<section>
-  <h2>1 &middot; Each front</h2>
+<div class="panel" data-p="fronts">
+  <h2>Each front</h2>
   <p class="h2sub">Pulled from Meta, GetResponse, YouTube, HubSpot and Zoom. Nobody writes these
-  up. If a figure looks wrong, say so in section three, because then it is wrong for all of us.</p>
+  up. If a figure looks wrong, say so under What you think, because then it is wrong for all of us.</p>
   <div class="fronts" id="fronts"></div>
-</section>
+</div>
 
-<section>
-  <h2>2 &middot; The read, and the direction</h2>
-  <p class="h2sub">Worked out from the numbers above, not from anyone's impression of the month.
-  Each line names the rule behind it, so a direction can be argued with on its merits.</p>
+<div class="panel" data-p="read">
+  <h2>The read, and the direction</h2>
+  <p class="h2sub">Worked out from the numbers, not from anyone's impression of the month. Each
+  line names the rule behind it, so a direction can be argued with on its merits.</p>
   <div class="read" id="read"></div>
   <div class="dirs" id="dirs"></div>
-</section>
+</div>
 
-<section>
-  <h2>3 &middot; What you two think</h2>
-  <p class="h2sub">Where the direction above is wrong, or where it is missing something only you
-  can see.</p>
-
+<div class="panel" data-p="says">
+  <h2>What you think</h2>
+  <p class="h2sub">Where the direction is wrong, or where it is missing something only you can see.</p>
   <div class="box">
     <div class="bh"><h3>Marissa</h3><span class="role">YouTube, and what is already recorded</span>
       <span class="state" id="s-marissa">empty</span></div>
     <textarea data-k="marissa"
       placeholder="What you would change, what is worth repeating, and what is recorded and waiting."></textarea>
   </div>
-
   <div class="box">
     <div class="bh"><h3>Valerie</h3><span class="role">social, and what travelled</span>
       <span class="state" id="s-valerie">empty</span></div>
     <textarea data-k="valerie"
       placeholder="Which posts worked, which did not, and anything the cards got wrong."></textarea>
   </div>
-
   <div class="box">
     <div class="bh"><h3>Marina</h3><span class="role">anything the rules missed</span>
       <span class="state" id="s-marina">empty</span></div>
     <textarea data-k="marina" placeholder="Notes that belong with this month's record."></textarea>
   </div>
   <p class="hint">Saves on its own a second after you stop typing. Everyone sees the same page.</p>
-</section>
+</div>
 
-<section>
-  <h2>4 &middot; The plan it produced</h2>
+<div class="panel" data-p="plan">
+  <h2>The plan it produced</h2>
   <p class="h2sub">Built on the 29th to 30th from all three reads, then sent to Sean on the 1st as
   one email.</p>
   <div class="plan" id="plan"></div>
-  <p class="hint">Paste the plan's link here once it is built, and it joins the record below.</p>
   <input class="url" id="planurl" placeholder="https://..." aria-label="Plan link">
-</section>
+  <p class="hint">Paste the plan's link here once it is built and it joins the record.</p>
+</div>
 
-<section>
-  <h2>5 &middot; Every month we have run</h2>
+<div class="panel" data-p="hist">
+  <h2>Every month we have run</h2>
   <p class="h2sub">What we concluded, and what we then planned. A direction that turned out wrong
   is only useful if it is still readable later.</p>
   <div class="sheet">
@@ -172,7 +192,7 @@ footer a{color:var(--navy)}
       <tbody id="hist"></tbody>
     </table>
   </div>
-</section>
+</div>
 
 <footer>
   How content gets made: <a href="https://skles.moovecreating.com/content-pipeline.html">the pipeline</a>.
@@ -186,16 +206,30 @@ footer a{color:var(--navy)}
 const FB = 'https://rifa-mae-default-rtdb.firebaseio.com/skles-ops/review';
 const MONTHS = ['January','February','March','April','May','June','July','August',
                 'September','October','November','December'];
-let ALL = {}, CUR = null;
+let ALL = {}, CUR = null, TAB = 'fronts';
 
 const fail = () => document.getElementById('err').style.display = 'block';
 const esc = t => String(t == null ? '' : t)
   .replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const nice = m => { const [y, n] = m.split('-'); return MONTHS[+n - 1] + ' ' + y; };
 const num = v => (v == null ? '—' : Number(v).toLocaleString('en-GB'));
+const kv = (l, v, c) =>
+  `<div class="kv"><span>${l}</span><b${c ? ' class="' + c + '"' : ''}>${v}</b></div>`;
 
-function kv(label, value, cls){
-  return `<div class="kv"><span>${label}</span><b${cls ? ' class="' + cls + '"' : ''}>${value}</b></div>`;
+/* localStorage is a per-viewer convenience only: it can throw in a private window or
+   with site data blocked, and the page has to render the same either way. */
+function remember(t){ try { localStorage.setItem('skles-review-tab', t); } catch (e) {} }
+function recall(){ try { return localStorage.getItem('skles-review-tab'); } catch (e) { return null; } }
+
+function tabs(){
+  document.querySelectorAll('.tab').forEach(b => {
+    const on = b.dataset.t === TAB;
+    b.setAttribute('aria-selected', on ? 'true' : 'false');
+    b.onclick = () => { TAB = b.dataset.t; remember(TAB); tabs(); };
+  });
+  document.querySelectorAll('.panel').forEach(p => {
+    p.hidden = !(TAB === 'all' || p.dataset.p === TAB);
+  });
 }
 
 function fronts(d){
@@ -224,7 +258,7 @@ function fronts(d){
           + kv('New followers', ig.new_followers == null ? '—' : num(ig.new_followers))
           + kv('Engagement', ig.engagement_rate + '%')
           + kv('Facebook engagements', num(fb && fb.page_engagements))
-        : `<div class="kv"><span>Only held for the current month</span><b>—</b></div>`)
+        : kv('Only held for the current month', '—'))
     + kv('Cards dated', num(bd.cards))
     + kv('With a reading', num(bd.with_reading), bd.cards && !bd.with_reading ? 'bad' : 'good')
     + `<p class="verdict">${bd.cards && !bd.with_reading
@@ -237,7 +271,8 @@ function fronts(d){
     + kv('Subscribers', num(yt.subs))
     + kv('Recordings in hand', num(rec.length))
     + kv('Best watched', top ? num(top.views) + ' views' : '—')
-    + `<p class="verdict">${top ? 'Most watched: “' + esc(top.title) + '”. The source for every social cut.'
+    + `<p class="verdict">${top
+        ? 'Most watched: “' + esc(top.title) + '”. The source for every social cut.'
         : 'No recordings read this month.'}</p></div>`);
 
   const lc = fn.lifecycle || {};
@@ -259,7 +294,7 @@ function read(d){
   document.getElementById('read').innerHTML = (r.lines || []).map(l =>
     `<div class="rl"><div class="rule">${esc(l.front)} &middot; ${esc(l.rule)}</div>
      <p>${esc(l.text)}</p></div>`).join('')
-    || '<div class="rl"><p>No read built for this month.</p></div>';
+    || '<div class="rl"><p>No read was built for this month.</p></div>';
 
   const dz = r.directions || {};
   document.getElementById('dirs').innerHTML = [
@@ -279,7 +314,7 @@ function plan(d){
 }
 
 function hist(){
-  const rows = Object.keys(ALL).sort().reverse().map(m => {
+  document.getElementById('hist').innerHTML = Object.keys(ALL).sort().reverse().map(m => {
     const d = ALL[m] || {};
     const paid = ((d.fronts || {}).paid || {}).data || {};
     const bd = (((d.fronts || {}).social || {}).data || {}).board || {};
@@ -293,8 +328,7 @@ function hist(){
       <td class="n">${lines ? lines + ' lines' : '—'}</td>
       <td>${p.url ? `<a href="${esc(p.url)}">${esc(p.title || 'Plan')}</a>` : '—'}</td>
     </tr>`;
-  });
-  document.getElementById('hist').innerHTML = rows.join('');
+  }).join('');
   document.querySelectorAll('[data-go]').forEach(a => a.addEventListener('click', e => {
     e.preventDefault(); show(a.dataset.go);
   }));
@@ -340,7 +374,7 @@ function wire(){
     timers.plan = setTimeout(async () => {
       const v = pu.value.trim();
       if (!v) return;
-      await save('plan', {url: v, title: (ALL[CUR].plan || {}).title || nice(CUR) + ' plan'});
+      await save('plan', {url: v, title: ((ALL[CUR] || {}).plan || {}).title || nice(CUR) + ' plan'});
       plan(ALL[CUR]); hist();
     }, 1200);
   };
@@ -352,7 +386,7 @@ function show(m){
   document.getElementById('title').textContent = nice(m) + ' review';
   document.getElementById('built').textContent = d.built ? 'Numbers as at ' + d.built : '';
   document.getElementById('pick').value = m;
-  fronts(d); read(d); plan(d); wire(); hist();
+  fronts(d); read(d); plan(d); wire(); hist(); tabs();
 }
 
 (async function init(){
@@ -361,7 +395,9 @@ function show(m){
     if (r.ok) ALL = (await r.json()) || {};
   } catch (e) { fail(); }
   const months = Object.keys(ALL).sort().reverse();
-  if (!months.length) { fail(); return; }
+  if (!months.length) { fail(); tabs(); return; }
+  const saved = recall();
+  if (saved && document.querySelector(`.tab[data-t="${saved}"]`)) TAB = saved;
   document.getElementById('pick').innerHTML =
     months.map(m => `<option value="${m}">${nice(m)}</option>`).join('');
   document.getElementById('pick').onchange = e => show(e.target.value);
