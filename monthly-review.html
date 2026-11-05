@@ -9,7 +9,7 @@
 :root{
   --navy:#112250; --gold:#E0C58F; --ink:#16181d; --muted:#5d6472;
   --bg:#faf9f7; --card:#ffffff; --line:#e4e2dd; --wash:#f2f0ec; --grid:#d9d6d0;
-  --good:#1d6b4f; --bad:#8c3a52;
+  --good:#1d6b4f; --bad:#8c3a52; --warn:#8a6a1f;
   --sans:'Poppins',system-ui,-apple-system,Segoe UI,sans-serif;
   --serif:'Merriweather',Georgia,serif;
   color-scheme:light;
@@ -17,41 +17,82 @@
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;
   padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
-.wrap{max-width:900px;margin:0 auto}
+.wrap{max-width:940px;margin:0 auto}
 h1,h2,h3{text-wrap:balance;margin:0}
 p{margin:0}
 
-header{padding-block:38px 22px;border-bottom:3px solid var(--navy)}
+header{padding-block:36px 20px;border-bottom:3px solid var(--navy)}
 .eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--gold)}
-h1{font-size:clamp(26px,4.6vw,36px);font-weight:700;letter-spacing:-.02em;color:var(--navy);margin-block:9px 11px}
-.lede{font-family:var(--serif);font-size:15.5px;line-height:1.65;color:var(--muted);max-width:60ch}
+h1{font-size:clamp(26px,4.6vw,36px);font-weight:700;letter-spacing:-.02em;color:var(--navy);margin-block:9px 10px}
+.sub{font-size:13px;color:var(--muted)}
+.picker{margin-top:14px}
+select{font:inherit;font-size:13.5px;font-weight:600;color:var(--navy);background:#fff;
+  border:1px solid var(--grid);border-radius:6px;padding:6px 10px;cursor:pointer}
 
 section{padding-block:28px;border-bottom:1px solid var(--line)}
 h2{font-size:12px;letter-spacing:.11em;text-transform:uppercase;font-weight:700;color:var(--muted);
-  margin-bottom:13px}
+  margin-bottom:6px}
+.h2sub{font-size:13px;color:var(--muted);margin-bottom:14px;max-width:66ch}
 
-.nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(142px,1fr));gap:1px;
-  background:var(--grid);border:1px solid var(--grid);border-radius:6px;overflow:hidden}
-.t{background:var(--card);padding:13px 15px}
-.t .n{font-family:var(--serif);font-weight:700;font-size:21px;line-height:1.05;color:var(--navy);
-  font-variant-numeric:tabular-nums}
-.t .n.bad{color:var(--bad)} .t .n.good{color:var(--good)}
-.t .l{font-size:11.5px;color:var(--muted);margin-top:5px;line-height:1.4}
+/* 1. fronts */
+.fronts{display:grid;grid-template-columns:repeat(auto-fit,minmax(224px,1fr));gap:11px}
+.fr{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:16px 17px;
+  border-top:4px solid var(--c);min-width:0}
+.fr.paid{--c:#1d6b4f} .fr.social{--c:#8a6a1f} .fr.youtube{--c:#8c3a52} .fr.funnel{--c:#112250}
+.fr h3{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--muted);
+  margin-bottom:11px}
+.kv{display:flex;justify-content:space-between;gap:10px;font-size:13.5px;padding-block:4px;
+  border-bottom:1px dashed var(--line)}
+.kv:last-of-type{border-bottom:0}
+.kv span{color:var(--muted);min-width:0}
+.kv b{font-variant-numeric:tabular-nums;color:var(--navy);white-space:nowrap}
+.kv b.bad{color:var(--bad)} .kv b.good{color:var(--good)}
+.fr .verdict{font-family:var(--serif);font-size:13px;line-height:1.55;color:var(--ink);
+  margin-top:11px;padding-top:11px;border-top:1px solid var(--line)}
 
-.box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 17px;margin-bottom:11px}
-.box.lead{border-left:4px solid var(--gold)}
-.bh{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;margin-bottom:9px}
-.bh h3{font-size:15.5px;font-weight:600;color:var(--navy)}
-.bh .role{font-size:11px;color:var(--muted)}
+/* 2. the read */
+.read{display:grid;gap:8px}
+.rl{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:12px 14px}
+.rl .rule{font-size:10px;letter-spacing:.07em;text-transform:uppercase;font-weight:700;
+  color:var(--gold);margin-bottom:4px}
+.rl p{font-size:14px;color:var(--ink);max-width:76ch}
+.dirs{display:grid;grid-template-columns:repeat(auto-fit,minmax(246px,1fr));gap:11px;margin-top:18px}
+.d{background:var(--navy);color:#fff;border-radius:11px;padding:16px 17px}
+.d h3{font-size:14px;font-weight:600;color:var(--gold);margin-bottom:7px}
+.d p{font-size:13.5px;color:#dde2ef;line-height:1.55}
+
+/* 3. considerations */
+.box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:15px 16px;margin-bottom:10px}
+.bh{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;margin-bottom:8px}
+.bh h3{font-size:15px;font-weight:600;color:var(--navy)}
+.bh .role{font-size:11.5px;color:var(--muted)}
 .bh .state{margin-left:auto;font-size:11px;font-weight:600;color:var(--muted)}
 .bh .state.in{color:var(--good)}
-textarea{width:100%;min-height:104px;font:inherit;font-size:14px;line-height:1.55;color:var(--ink);
+textarea{width:100%;min-height:92px;font:inherit;font-size:14px;line-height:1.55;color:var(--ink);
   background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:11px 12px;resize:vertical}
 textarea:focus-visible{outline:2px solid var(--navy);outline-offset:1px}
-.hint{font-size:12px;color:var(--muted);margin-top:7px}
+input.url{width:100%;font:inherit;font-size:14px;color:var(--ink);background:var(--bg);
+  border:1px solid var(--line);border-radius:7px;padding:10px 12px}
+.hint{font-size:12px;color:var(--muted);margin-top:6px}
 
-.note{font-size:12.5px;color:var(--muted);max-width:70ch;line-height:1.55}
-.note a{color:var(--navy)}
+/* 4+5. plan and archive */
+.plan{background:var(--wash);border:1px solid var(--line);border-left:4px solid var(--gold);
+  border-radius:10px;padding:16px 18px}
+.plan a{font-family:var(--serif);font-size:16px;font-weight:700;color:var(--navy)}
+.sheet{overflow-x:auto;border:1px solid var(--grid);border-radius:4px;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:600px;font-size:13.5px}
+thead th{background:var(--wash);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+  font-weight:700;color:var(--muted);text-align:left;padding:9px 12px;
+  border-right:1px solid var(--grid);border-bottom:1px solid var(--grid);white-space:nowrap}
+thead th:last-child{border-right:0}
+tbody td{padding:10px 12px;border-right:1px solid var(--grid);border-bottom:1px solid var(--grid);
+  vertical-align:top}
+tbody td:last-child{border-right:0}
+tbody tr:last-child td{border-bottom:0}
+td.m{white-space:nowrap;font-weight:600;color:var(--navy)}
+td.n{font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--muted)}
+td a{color:var(--navy)}
+
 footer{padding-block:24px 56px;color:var(--muted);font-size:13px}
 footer a{color:var(--navy)}
 #err{display:none;background:#fdeef1;border:1px solid var(--bad);color:var(--bad);
@@ -64,145 +105,267 @@ footer a{color:var(--navy)}
 <header>
   <div class="eyebrow">Skills Up &middot; Sean K. Langston</div>
   <h1 id="title">Monthly review</h1>
-  <p class="lede">The numbers, then three reads on them, then the plan. Whatever is written here on
-  the 26th is what next month gets built from.</p>
-  <div id="err">Cannot reach the sheet just now. Anything typed below will not save until the
+  <p class="sub" id="built"></p>
+  <div class="picker"><select id="pick" aria-label="Which month"></select></div>
+  <div id="err">Cannot reach the sheet just now. Nothing typed below will save until the
   connection is back.</div>
 </header>
 
 <section>
-  <h2>The month, as the systems have it</h2>
-  <div class="nums" id="nums"></div>
-  <p class="note" style="margin-top:12px">Pulled from Meta, GetResponse, YouTube, HubSpot and Zoom,
-  not typed up by anyone. Fuller detail on
-  <a href="https://skles.moovecreating.com/index.html">the channel dashboard</a> and per post on
-  <a href="https://skles.moovecreating.com/ops-board.html">the ops board</a>. If a figure looks
-  wrong, say so here rather than working around it.</p>
+  <h2>1 &middot; Each front</h2>
+  <p class="h2sub">Pulled from Meta, GetResponse, YouTube, HubSpot and Zoom. Nobody writes these
+  up. If a figure looks wrong, say so in section three, because then it is wrong for all of us.</p>
+  <div class="fronts" id="fronts"></div>
 </section>
 
 <section>
-  <h2>The reads</h2>
+  <h2>2 &middot; The read, and the direction</h2>
+  <p class="h2sub">Worked out from the numbers above, not from anyone's impression of the month.
+  Each line names the rule behind it, so a direction can be argued with on its merits.</p>
+  <div class="read" id="read"></div>
+  <div class="dirs" id="dirs"></div>
+</section>
 
-  <div class="box lead">
-    <div class="bh"><h3>Marina</h3><span class="role">direction for next month</span>
-      <span class="state" id="s-marina">empty</span></div>
-    <textarea id="t-marina" data-k="marina"
-      placeholder="What the numbers say, and where next month should go."></textarea>
-  </div>
+<section>
+  <h2>3 &middot; What you two think</h2>
+  <p class="h2sub">Where the direction above is wrong, or where it is missing something only you
+  can see.</p>
 
   <div class="box">
-    <div class="bh"><h3>Marissa</h3><span class="role">YouTube, and what is recorded</span>
+    <div class="bh"><h3>Marissa</h3><span class="role">YouTube, and what is already recorded</span>
       <span class="state" id="s-marissa">empty</span></div>
-    <textarea id="t-marissa" data-k="marissa"
-      placeholder="What you would change, what is worth repeating, and what is already recorded and waiting."></textarea>
+    <textarea data-k="marissa"
+      placeholder="What you would change, what is worth repeating, and what is recorded and waiting."></textarea>
   </div>
 
   <div class="box">
     <div class="bh"><h3>Valerie</h3><span class="role">social, and what travelled</span>
       <span class="state" id="s-valerie">empty</span></div>
-    <textarea id="t-valerie" data-k="valerie"
+    <textarea data-k="valerie"
       placeholder="Which posts worked, which did not, and anything the cards got wrong."></textarea>
   </div>
 
-  <p class="hint">Saves on its own a second after you stop typing. Everyone sees the same page, so
-  there is nothing to send back.</p>
+  <div class="box">
+    <div class="bh"><h3>Marina</h3><span class="role">anything the rules missed</span>
+      <span class="state" id="s-marina">empty</span></div>
+    <textarea data-k="marina" placeholder="Notes that belong with this month's record."></textarea>
+  </div>
+  <p class="hint">Saves on its own a second after you stop typing. Everyone sees the same page.</p>
+</section>
+
+<section>
+  <h2>4 &middot; The plan it produced</h2>
+  <p class="h2sub">Built on the 29th to 30th from all three reads, then sent to Sean on the 1st as
+  one email.</p>
+  <div class="plan" id="plan"></div>
+  <p class="hint">Paste the plan's link here once it is built, and it joins the record below.</p>
+  <input class="url" id="planurl" placeholder="https://..." aria-label="Plan link">
+</section>
+
+<section>
+  <h2>5 &middot; Every month we have run</h2>
+  <p class="h2sub">What we concluded, and what we then planned. A direction that turned out wrong
+  is only useful if it is still readable later.</p>
+  <div class="sheet">
+    <table>
+      <thead><tr><th>Month</th><th>Leads</th><th>Per lead</th><th>Cards</th><th>Read</th><th>Plan</th></tr></thead>
+      <tbody id="hist"></tbody>
+    </table>
+  </div>
 </section>
 
 <footer>
-  The cycle: <a href="https://skles.moovecreating.com/content-pipeline.html">how content gets made</a>.
+  How content gets made: <a href="https://skles.moovecreating.com/content-pipeline.html">the pipeline</a>.
   This month's cards: <a href="https://skles.moovecreating.com/ops-board.html">ops board</a>.<br>
   Questions to Marina.
 </footer>
 
 </div>
 
-<script src="skles-monthly-data.js"></script>
 <script>
-const D  = window.SKLES_MONTHLY || {};
-const DB = 'https://rifa-mae-default-rtdb.firebaseio.com/skles-ops/review/' + (D.month || 'unknown');
+const FB = 'https://rifa-mae-default-rtdb.firebaseio.com/skles-ops/review';
 const MONTHS = ['January','February','March','April','May','June','July','August',
                 'September','October','November','December'];
+let ALL = {}, CUR = null;
 
-function fail(){ document.getElementById('err').style.display = 'block'; }
+const fail = () => document.getElementById('err').style.display = 'block';
+const esc = t => String(t == null ? '' : t)
+  .replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const nice = m => { const [y, n] = m.split('-'); return MONTHS[+n - 1] + ' ' + y; };
+const num = v => (v == null ? '—' : Number(v).toLocaleString('en-GB'));
 
-function nums(){
-  const a = D.ads, ig = D.ig, fb = D.fb, b = D.board || {}, yt = D.youtube || {};
-  const t = [];
-  const add = (n, l, cls) => t.push(
-    `<div class="t"><div class="n${cls ? ' ' + cls : ''}">${n}</div><div class="l">${l}</div></div>`);
-
-  if (a) {
-    add('$' + a.spend.toFixed(2), 'Ad spend');
-    add(a.leads, 'Leads from the form');
-    add(a.cpl ? '$' + a.cpl.toFixed(2) : '—', 'Cost per lead', a.cpl && a.cpl < 10 ? 'good' : null);
-  } else {
-    add('—', 'Ad figures unavailable. Check the token before reading anything into this', 'bad');
-  }
-
-  if (ig) {
-    add(ig.reach, 'Instagram reach');
-    add(ig.new_followers === null ? '—' : ig.new_followers, 'New followers');
-    add(ig.engagement_rate + '%', 'Engagement rate');
-  } else if (D.organic_is_live === false) {
-    add('—', 'Organic figures are only held for the current month');
-  }
-  if (fb) add(fb.page_engagements, 'Facebook engagements');
-  if (yt.subs) add(yt.subs, 'YouTube subscribers');
-
-  add(b.cards || 0, 'Cards dated this month');
-  add(b.with_reading || 0, 'Carrying a 72-hour reach reading',
-      (b.cards && !b.with_reading) ? 'bad' : (b.with_reading ? 'good' : null));
-
-  document.getElementById('nums').innerHTML = t.join('');
+function kv(label, value, cls){
+  return `<div class="kv"><span>${label}</span><b${cls ? ' class="' + cls + '"' : ''}>${value}</b></div>`;
 }
 
-function heading(){
-  if (!D.month) return;
-  const [y, m] = D.month.split('-');
-  document.getElementById('title').textContent = MONTHS[+m - 1] + ' ' + y + ' review';
+function fronts(d){
+  const f = (d && d.fronts) || {};
+  const paid = (f.paid && f.paid.data) || null;
+  const soc = (f.social && f.social.data) || {};
+  const ig = soc.ig || null, fb = soc.fb || null, bd = soc.board || {};
+  const yt = (f.youtube && f.youtube.data) || {};
+  const fn = (f.funnel && f.funnel.data) || {};
+  const out = [];
+
+  out.push(`<div class="fr paid"><h3>Paid</h3>` + (paid
+    ? kv('Spend', '$' + Number(paid.spend).toFixed(2))
+      + kv('Leads', num(paid.leads))
+      + kv('Per lead', paid.cpl ? '$' + Number(paid.cpl).toFixed(2) : '—',
+           paid.cpl && paid.cpl < 18.5 ? 'good' : 'bad')
+      + kv('Reach', num(paid.reach))
+      + `<p class="verdict">${paid.cpl && paid.cpl < 18.5
+          ? 'Cheaper than every past campaign. This front is working.'
+          : 'Above the benchmark. Creative is the lever.'}</p>`
+    : `<p class="verdict">No figures came back. Check the Meta token before concluding anything.</p>`)
+    + `</div>`);
+
+  out.push(`<div class="fr social"><h3>Organic social</h3>`
+    + (ig ? kv('Instagram reach', num(ig.reach))
+          + kv('New followers', ig.new_followers == null ? '—' : num(ig.new_followers))
+          + kv('Engagement', ig.engagement_rate + '%')
+          + kv('Facebook engagements', num(fb && fb.page_engagements))
+        : `<div class="kv"><span>Only held for the current month</span><b>—</b></div>`)
+    + kv('Cards dated', num(bd.cards))
+    + kv('With a reading', num(bd.with_reading), bd.cards && !bd.with_reading ? 'bad' : 'good')
+    + `<p class="verdict">${bd.cards && !bd.with_reading
+        ? 'Nothing was read at 72 hours, so no format can be scored.'
+        : 'Formats can be ranked this month.'}</p></div>`);
+
+  const rec = yt.recent || [];
+  const top = rec.reduce((a, v) => (v.views || 0) > ((a && a.views) || 0) ? v : a, null);
+  out.push(`<div class="fr youtube"><h3>YouTube</h3>`
+    + kv('Subscribers', num(yt.subs))
+    + kv('Recordings in hand', num(rec.length))
+    + kv('Best watched', top ? num(top.views) + ' views' : '—')
+    + `<p class="verdict">${top ? 'Most watched: “' + esc(top.title) + '”. The source for every social cut.'
+        : 'No recordings read this month.'}</p></div>`);
+
+  const lc = fn.lifecycle || {};
+  out.push(`<div class="fr funnel"><h3>Funnel and sales</h3>`
+    + kv('Leads on the list', num(lc.lead))
+    + kv('Customers', num(lc.customer))
+    + kv('Won this month', '$' + Number(fn.won_this_month || 0).toFixed(2),
+         fn.won_this_month ? 'good' : 'bad')
+    + kv('Webinar attendees', num(fn.webinar_attendees))
+    + `<p class="verdict">${fn.won_this_month
+        ? 'Money came through this month.'
+        : 'Nothing closed. The gap is after the form.'}</p></div>`);
+
+  document.getElementById('fronts').innerHTML = out.join('');
+}
+
+function read(d){
+  const r = (d && d.read) || {};
+  document.getElementById('read').innerHTML = (r.lines || []).map(l =>
+    `<div class="rl"><div class="rule">${esc(l.front)} &middot; ${esc(l.rule)}</div>
+     <p>${esc(l.text)}</p></div>`).join('')
+    || '<div class="rl"><p>No read built for this month.</p></div>';
+
+  const dz = r.directions || {};
+  document.getElementById('dirs').innerHTML = [
+    ['Marissa', 'what to produce', dz.marissa],
+    ['Valerie', 'what changes', dz.valerie],
+    ['Marina', 'paid and the funnel', dz.marina],
+  ].filter(x => x[2]).map(([who, what, text]) =>
+    `<div class="d"><h3>${who} &middot; ${what}</h3><p>${esc(text)}</p></div>`).join('');
+}
+
+function plan(d){
+  const p = (d && d.plan) || null;
+  document.getElementById('plan').innerHTML = p && p.url
+    ? `<a href="${esc(p.url)}">${esc(p.title || 'The plan')}</a>`
+    : '<span style="color:var(--muted);font-size:14px">Not built yet.</span>';
+  document.getElementById('planurl').value = (p && p.url) || '';
+}
+
+function hist(){
+  const rows = Object.keys(ALL).sort().reverse().map(m => {
+    const d = ALL[m] || {};
+    const paid = ((d.fronts || {}).paid || {}).data || {};
+    const bd = (((d.fronts || {}).social || {}).data || {}).board || {};
+    const lines = ((d.read || {}).lines || []).length;
+    const p = d.plan || {};
+    return `<tr>
+      <td class="m"><a href="#" data-go="${m}">${nice(m)}</a></td>
+      <td class="n">${num(paid.leads)}</td>
+      <td class="n">${paid.cpl ? '$' + Number(paid.cpl).toFixed(2) : '—'}</td>
+      <td class="n">${num(bd.cards)}${bd.cards ? ' &middot; ' + num(bd.with_reading) + ' read' : ''}</td>
+      <td class="n">${lines ? lines + ' lines' : '—'}</td>
+      <td>${p.url ? `<a href="${esc(p.url)}">${esc(p.title || 'Plan')}</a>` : '—'}</td>
+    </tr>`;
+  });
+  document.getElementById('hist').innerHTML = rows.join('');
+  document.querySelectorAll('[data-go]').forEach(a => a.addEventListener('click', e => {
+    e.preventDefault(); show(a.dataset.go);
+  }));
 }
 
 const timers = {};
-function wire(state){
-  document.querySelectorAll('textarea').forEach(el => {
-    const k = el.dataset.k;
-    el.value = (state[k] && state[k].text) || '';
-    mark(k, el.value);
-    el.addEventListener('input', () => {
-      clearTimeout(timers[k]);
-      document.getElementById('s-' + k).textContent = 'typing';
-      document.getElementById('s-' + k).classList.remove('in');
-      timers[k] = setTimeout(() => save(k, el.value), 1000);
-    });
-  });
-}
-
 function mark(k, text){
   const s = document.getElementById('s-' + k);
-  s.textContent = text.trim() ? 'in' : 'empty';
-  s.classList.toggle('in', !!text.trim());
+  if (!s) return;
+  s.textContent = text && text.trim() ? 'in' : 'empty';
+  s.classList.toggle('in', !!(text && text.trim()));
 }
 
-async function save(k, text){
+async function save(path, value){
   try {
-    const r = await fetch(DB + '.json', {
+    const r = await fetch(FB + '/' + CUR + '.json', {
       method: 'PATCH', headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({[k]: {text: text, saved: new Date().toISOString()}})
+      body: JSON.stringify({[path]: value})
     });
     if (!r.ok) throw new Error('bad status');
-    mark(k, text);
+    ALL[CUR] = Object.assign({}, ALL[CUR], {[path]: value});
   } catch (e) { fail(); }
+}
+
+function wire(){
+  document.querySelectorAll('textarea').forEach(el => {
+    const k = el.dataset.k, cur = ALL[CUR] || {};
+    el.value = (cur[k] && cur[k].text) || '';
+    mark(k, el.value);
+    el.oninput = () => {
+      clearTimeout(timers[k]);
+      const s = document.getElementById('s-' + k);
+      if (s) { s.textContent = 'typing'; s.classList.remove('in'); }
+      timers[k] = setTimeout(async () => {
+        await save(k, {text: el.value, saved: new Date().toISOString()});
+        mark(k, el.value);
+      }, 1000);
+    };
+  });
+  const pu = document.getElementById('planurl');
+  pu.oninput = () => {
+    clearTimeout(timers.plan);
+    timers.plan = setTimeout(async () => {
+      const v = pu.value.trim();
+      if (!v) return;
+      await save('plan', {url: v, title: (ALL[CUR].plan || {}).title || nice(CUR) + ' plan'});
+      plan(ALL[CUR]); hist();
+    }, 1200);
+  };
+}
+
+function show(m){
+  CUR = m;
+  const d = ALL[m] || {};
+  document.getElementById('title').textContent = nice(m) + ' review';
+  document.getElementById('built').textContent = d.built ? 'Numbers as at ' + d.built : '';
+  document.getElementById('pick').value = m;
+  fronts(d); read(d); plan(d); wire(); hist();
 }
 
 (async function init(){
-  heading();
-  nums();
-  let state = {};
   try {
-    const r = await fetch(DB + '.json');
-    if (r.ok) state = (await r.json()) || {};
+    const r = await fetch(FB + '.json');
+    if (r.ok) ALL = (await r.json()) || {};
   } catch (e) { fail(); }
-  wire(state);
+  const months = Object.keys(ALL).sort().reverse();
+  if (!months.length) { fail(); return; }
+  document.getElementById('pick').innerHTML =
+    months.map(m => `<option value="${m}">${nice(m)}</option>`).join('');
+  document.getElementById('pick').onchange = e => show(e.target.value);
+  show(months[0]);
 })();
 </script>
 </body>
