@@ -19,64 +19,77 @@
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5}
-.wrap{max-width:1120px;margin:0 auto;padding:0 20px 90px}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px 100px}
 h1,h2,h3,h4{text-wrap:balance;margin:0}
 p{margin:0}
 a{color:var(--navy)}
-img{max-width:100%;display:block}
-.eyebrow{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--gold)}
-select,input,textarea{font-family:inherit;font-size:14px;color:var(--ink);background:var(--card);
+img{display:block;max-width:100%}
+.eyebrow{font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;font-weight:700;color:var(--gold)}
+select,textarea{font-family:inherit;font-size:14px;color:var(--ink);background:var(--card);
   border:0;border-radius:11px;padding:9px 13px;box-shadow:var(--lift-sm)}
-textarea{width:100%;min-height:86px;resize:vertical;line-height:1.55}
-.num{font-variant-numeric:tabular-nums}
+textarea{width:100%;min-height:88px;resize:vertical;line-height:1.55}
 #err{display:none;background:#fdeef1;color:var(--bad);border-radius:12px;padding:10px 13px;
-  font-size:12.5px;box-shadow:var(--lift-sm);margin-top:14px}
+  font-size:12.5px;box-shadow:var(--lift-sm);margin-top:16px}
 
 /* cover */
-.cover{padding-block:40px 8px}
-.ctop{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap}
-.ctop h1{font-size:clamp(32px,6vw,54px);font-weight:700;letter-spacing:-.035em;color:var(--navy);
-  line-height:1;flex:1}
-.ctop .built{font-size:11.5px;color:var(--muted)}
-.stand{font-family:var(--serif);font-size:clamp(16px,2.3vw,20px);line-height:1.6;color:var(--ink);
-  max-width:60ch;margin-top:20px}
-.stand b{color:var(--navy)}
-.stand .up{color:var(--good);font-weight:700} .stand .dn{color:var(--bad);font-weight:700}
-.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(134px,1fr));gap:11px;margin-top:26px}
-.fig{background:var(--card);border-radius:16px;box-shadow:var(--lift-sm);padding:15px 17px}
-.fig b{display:block;font-size:27px;font-weight:700;color:var(--navy);letter-spacing:-.03em;
-  font-variant-numeric:tabular-nums;line-height:1.05}
-.fig b.good{color:var(--good)} .fig b.bad{color:var(--bad)}
-.fig span{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
-  font-weight:700;display:block;margin-top:6px}
-.fig em{font-style:normal;display:block;font-size:11px;color:var(--muted);margin-top:4px}
+.cover{padding-block:46px 10px}
+.ctop{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.ctop .who{font-size:11.5px;color:var(--muted);flex:1}
+.cover h1{font-size:clamp(30px,5.6vw,50px);font-weight:700;letter-spacing:-.04em;color:var(--navy);
+  line-height:1.02;margin-top:16px;max-width:22ch}
+.verdict{font-family:var(--serif);font-size:clamp(16px,2.2vw,20px);line-height:1.62;
+  color:var(--ink);max-width:58ch;margin-top:20px}
+.verdict b{color:var(--navy)}
+.verdict .up{color:var(--good);font-weight:700}
+.verdict .dn{color:var(--bad);font-weight:700}
+.lead{display:flex;align-items:flex-end;gap:16px;margin-top:28px;flex-wrap:wrap}
+.lead .big{font-size:clamp(44px,8vw,74px);font-weight:700;color:var(--navy);line-height:.9;
+  letter-spacing:-.045em;font-variant-numeric:tabular-nums}
+.lead .big.dn{color:var(--bad)} .lead .big.up{color:var(--good)}
+.lead .cap{font-size:12.5px;color:var(--muted);max-width:28ch;padding-bottom:6px}
+.lead .cap b{color:var(--navy);display:block;font-size:11px;letter-spacing:.09em;
+  text-transform:uppercase}
 
 /* sections */
-section{padding-block:46px 0}
-.sh{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
-.sn{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--gold)}
-section h2{font-size:clamp(22px,3.6vw,30px);font-weight:700;letter-spacing:-.028em;color:var(--navy)}
-.lede{font-family:var(--serif);font-size:15px;line-height:1.65;color:var(--muted);max-width:66ch;
-  margin-top:9px;margin-bottom:22px}
+section{padding-block:52px 0}
+.sh{display:flex;align-items:baseline;gap:13px;flex-wrap:wrap}
+.sn{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--gold)}
+section h2{font-size:clamp(23px,3.8vw,32px);font-weight:700;letter-spacing:-.032em;color:var(--navy)}
+.lede{font-family:var(--serif);font-size:15px;line-height:1.65;color:var(--muted);max-width:64ch;
+  margin-top:10px;margin-bottom:26px}
 .lede b{color:var(--navy)}
 
-/* trend */
-.trend{background:var(--card);border-radius:18px;box-shadow:var(--lift);padding:24px 26px}
-.bars{display:grid;gap:15px;margin-top:4px}
-.brow{display:grid;grid-template-columns:96px minmax(0,1fr) auto;gap:14px;align-items:center}
-.brow .bm{font-size:13px;font-weight:600;color:var(--navy)}
-.brow .bt{height:26px;background:var(--wash);border-radius:7px;overflow:hidden;position:relative}
-.brow .bt i{display:block;height:100%;border-radius:7px;background:var(--deep)}
-.brow .bt i.now{background:linear-gradient(90deg,#c79a3f,#e0c58f)}
-.brow .bv{font-size:14.5px;font-weight:700;color:var(--navy);font-variant-numeric:tabular-nums;
-  white-space:nowrap}
-.brow .bv small{display:block;font-size:10.5px;font-weight:400;color:var(--muted)}
-.axis{font-size:11px;color:var(--muted);margin-top:16px;padding-top:13px;
-  border-top:1px solid var(--line)}
+/* funnel line */
+.flow{display:flex;align-items:stretch;gap:0;background:var(--card);border-radius:18px;
+  box-shadow:var(--lift);overflow:hidden;flex-wrap:wrap}
+.fstep{flex:1;min-width:132px;padding:19px 20px;position:relative}
+.fstep+.fstep{border-left:1px solid var(--line)}
+.fstep b{display:block;font-size:30px;font-weight:700;color:var(--navy);line-height:1;
+  letter-spacing:-.035em;font-variant-numeric:tabular-nums}
+.fstep b.dead{color:var(--bad)} .fstep b.unk{color:var(--muted);font-size:22px}
+.fstep span{display:block;font-size:11px;color:var(--muted);margin-top:7px;line-height:1.35}
+.fstep .drop{position:absolute;top:14px;right:16px;font-size:10px;font-weight:700;
+  color:var(--bad);background:#fdeef1;border-radius:20px;padding:2px 7px}
+
+/* decisions */
+.dec{background:var(--deep);color:#fff;border-radius:20px;padding:24px 26px;box-shadow:var(--lift)}
+.dec+.dec{margin-top:13px}
+.dec .tag{display:inline-block;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+  font-weight:700;color:#16224a;background:var(--gold);border-radius:20px;padding:4px 11px}
+.dec h3{font-size:clamp(18px,2.6vw,23px);font-weight:700;color:#fff;letter-spacing:-.025em;
+  margin-top:13px;max-width:34ch}
+.dec .ev{display:flex;gap:16px;flex-wrap:wrap;margin-top:17px;padding-top:15px;
+  border-top:1px solid rgba(255,255,255,.14)}
+.dec .ev div{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:#9fabca;
+  font-weight:700}
+.dec .ev b{display:block;font-size:19px;color:#fff;letter-spacing:-.02em;margin-top:3px;
+  font-variant-numeric:tabular-nums;text-transform:none}
+.dec .because{font-size:13px;color:#cdd5e9;margin-top:15px;max-width:62ch;line-height:1.6}
+.dec .because em{font-style:normal;color:var(--gold)}
 
 /* gallery */
-.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(216px,1fr));gap:14px}
-.post{background:var(--card);border-radius:18px;box-shadow:var(--lift);overflow:hidden;
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(186px,1fr));gap:13px}
+.post{background:var(--card);border-radius:17px;box-shadow:var(--lift);overflow:hidden;
   text-decoration:none;color:inherit;display:flex;flex-direction:column;transition:.16s}
 .post:hover{box-shadow:0 3px 6px rgba(23,35,70,.08),0 16px 34px rgba(23,35,70,.14);
   transform:translateY(-2px)}
@@ -84,178 +97,216 @@ section h2{font-size:clamp(22px,3.6vw,30px);font-weight:700;letter-spacing:-.028
 .post .shot img{width:100%;height:100%;object-fit:cover}
 .post .shot .none{display:flex;align-items:center;justify-content:center;height:100%;
   font-size:11px;color:var(--muted);text-align:center;padding:14px}
-.post .rk{position:absolute;top:10px;left:10px;background:rgba(27,43,88,.9);color:#fff;
-  font-size:10.5px;font-weight:700;letter-spacing:.05em;padding:4px 9px;border-radius:30px;
-  backdrop-filter:blur(3px)}
-.post .rk.top{background:linear-gradient(135deg,#c79a3f,#e0c58f);color:#1b2b58}
-.post .re{position:absolute;bottom:10px;right:10px;background:rgba(255,255,255,.94);
-  border-radius:11px;padding:5px 10px;text-align:right;backdrop-filter:blur(3px)}
+.post .re{position:absolute;bottom:9px;right:9px;background:rgba(255,255,255,.95);
+  border-radius:11px;padding:5px 10px;text-align:right}
 .post .re b{display:block;font-size:17px;font-weight:700;color:var(--navy);line-height:1;
   font-variant-numeric:tabular-nums}
-.post .re span{font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
+.post .re span{font-size:8px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
   font-weight:700}
-.post .meta{padding:13px 15px 15px;display:flex;flex-direction:column;gap:9px;flex:1}
-.post .first{font-size:12.5px;line-height:1.45;color:var(--ink);display:-webkit-box;
-  -webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.tags{display:flex;gap:5px;flex-wrap:wrap}
-.tg{font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;font-weight:700;
+.post .rk{position:absolute;top:9px;left:9px;background:linear-gradient(135deg,#c79a3f,#e0c58f);
+  color:#1b2b58;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  padding:4px 9px;border-radius:20px}
+.post .rk.cold{background:rgba(193,59,82,.92);color:#fff}
+.post .meta{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.post .why{font-size:11.5px;line-height:1.45;color:var(--muted)}
+.post .why b{color:var(--navy)}
+.tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:auto}
+.tg{font-size:9px;letter-spacing:.05em;text-transform:uppercase;font-weight:700;
   background:var(--wash);color:var(--muted);border-radius:20px;padding:3px 8px;white-space:nowrap}
 .tg.p{background:#eef2fd;color:#2c4484}
 .tg.f{background:#eefaf4;color:#17805a}
-.tg.u{background:#fdf6e7;color:#8a6a1e}
-.post .nums{display:flex;gap:13px;margin-top:auto;padding-top:9px;
-  border-top:1px solid var(--line)}
-.post .nums div{font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);
+.tg.w{background:#fdeef1;color:#9e3146}
+
+/* experiments */
+.exp{background:var(--card);border-radius:18px;box-shadow:var(--lift-sm);padding:20px 22px}
+.exp+.exp{margin-top:11px}
+.eh{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.eh h3{font-size:16.5px;font-weight:700;color:var(--navy);letter-spacing:-.02em;flex:1}
+.pillx{font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;
+  border-radius:20px;padding:3px 10px;white-space:nowrap}
+.pillx.running{background:#eef2fd;color:#2c4484}
+.pillx.lost{background:#fdeef1;color:#9e3146}
+.pillx.queued{background:var(--wash);color:var(--muted)}
+.pillx.won{background:#e3f4ec;color:var(--good)}
+.exp .hyp{font-size:13.5px;line-height:1.6;color:var(--ink);margin-top:11px;max-width:70ch}
+.crit{display:flex;gap:22px;flex-wrap:wrap;margin-top:15px;padding:13px 15px;
+  background:var(--wash);border-radius:12px}
+.crit div{font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
   font-weight:700}
-.post .nums b{display:block;font-size:13px;color:var(--ink);font-variant-numeric:tabular-nums;
-  letter-spacing:0;text-transform:none}
+.crit b{display:block;font-size:16px;color:var(--navy);margin-top:3px;text-transform:none;
+  letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.learn{font-size:13px;line-height:1.6;margin-top:14px;padding-left:15px;
+  border-left:3px solid var(--gold);color:var(--ink);max-width:70ch}
+.learn b{color:var(--navy)}
 
-/* readout */
-.dims{display:grid;gap:12px}
-.dim{background:var(--card);border-radius:18px;box-shadow:var(--lift-sm);padding:19px 21px}
-.dh{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:14px}
-.dh h3{font-size:16px;font-weight:700;color:var(--navy)}
-.dh .sp{font-size:12px;font-weight:700;color:var(--gold);font-variant-numeric:tabular-nums}
-.dh .src{font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;font-weight:700;
-  background:var(--wash);color:var(--muted);border-radius:20px;padding:3px 9px;margin-left:auto}
-.dh .src.board{background:#fdf6e7;color:#8a6a1e}
-.drow{display:grid;grid-template-columns:132px minmax(0,1fr) auto;gap:12px;align-items:center;
-  padding:5px 0}
-.drow .dv{font-size:12.5px;color:var(--ink);font-weight:500}
-.drow .dv small{color:var(--muted);font-weight:400}
-.drow .dt{height:17px;background:var(--wash);border-radius:6px;overflow:hidden}
-.drow .dt i{display:block;height:100%;border-radius:6px;background:#9fb0d8}
-.drow.best .dt i{background:var(--deep)}
-.drow.worst .dt i{background:#e4b9c2}
-.drow .da{font-size:13px;font-weight:700;color:var(--navy);font-variant-numeric:tabular-nums}
-.verdict{font-size:13px;line-height:1.6;background:var(--wash);border-radius:12px;
-  padding:12px 14px;margin-top:14px;color:var(--ink)}
-.verdict:before{content:'';display:block;width:26px;height:3px;border-radius:3px;
-  background:var(--gold);margin-bottom:9px}
-
-/* youtube */
-.yt{display:grid;grid-template-columns:repeat(auto-fill,minmax(246px,1fr));gap:13px}
-.vid{background:var(--card);border-radius:16px;box-shadow:var(--lift-sm);overflow:hidden;
-  text-decoration:none;color:inherit;transition:.16s}
-.vid:hover{box-shadow:var(--lift);transform:translateY(-2px)}
-.vid .shot{aspect-ratio:16/9;background:var(--wash);position:relative}
-.vid .shot img{width:100%;height:100%;object-fit:cover}
-.vid .v{position:absolute;bottom:8px;right:8px;background:rgba(27,43,88,.92);color:#fff;
-  font-size:11px;font-weight:700;padding:3px 8px;border-radius:7px}
-.vid .t{padding:12px 14px;font-size:12.5px;font-weight:500;line-height:1.4;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-
-/* next month */
-.proj{background:var(--card);border-radius:18px;box-shadow:var(--lift);padding:22px 24px}
-table{border-collapse:collapse;width:100%;font-size:13.5px}
-th{text-align:left;font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
-  padding:0 12px 9px 0;border-bottom:1px solid var(--grid)}
-th.r,td.r{text-align:right}
-td{padding:10px 12px 10px 0;border-bottom:1px solid rgba(23,35,70,.06);
+/* queue */
+.q{background:var(--card);border-radius:16px;box-shadow:var(--lift-sm);padding:16px 18px;
+  display:grid;grid-template-columns:minmax(0,1fr) 164px;gap:16px;align-items:center}
+.q+.q{margin-top:9px}
+.q h3{font-size:14.5px;font-weight:600;color:var(--navy);line-height:1.35}
+.q .st{font-size:11.5px;color:var(--muted);margin-top:5px}
+.q .st b{color:var(--bad);font-weight:600}
+.score{display:grid;gap:4px}
+.srow{display:grid;grid-template-columns:50px minmax(0,1fr) 20px;gap:7px;align-items:center;
+  font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.srow .st2{height:7px;border-radius:4px;background:var(--wash);overflow:hidden}
+.srow .st2 i{display:block;height:100%;border-radius:4px;background:var(--deep)}
+.srow .v{text-align:right;font-size:11px;color:var(--ink);font-variant-numeric:tabular-nums}
+.qavg{font-size:22px;font-weight:700;color:var(--navy);letter-spacing:-.03em;text-align:right;
   font-variant-numeric:tabular-nums}
-tr:last-child td{border-bottom:0}
-tfoot td{font-weight:700;color:var(--navy);border-top:2px solid var(--navy);border-bottom:0}
-td .est{font-size:10.5px;color:var(--muted)}
-.d{background:var(--deep);color:#fff;border-radius:16px;padding:17px 19px;margin-top:10px;
-  box-shadow:var(--lift)}
-.d h3{font-size:14.5px;color:#fff}
-.d h3 em{font-style:normal;color:var(--gold);font-weight:400;font-size:11.5px}
-.d p{font-size:13.5px;color:#d6dcee;margin-top:5px;max-width:68ch}
-.box{background:var(--card);border-radius:16px;box-shadow:var(--lift-sm);padding:16px 18px;
-  margin-bottom:10px}
+.qavg small{display:block;font-size:9px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--muted);font-weight:700}
+
+/* projection */
+.proj{background:var(--card);border-radius:18px;box-shadow:var(--lift);padding:23px 25px}
+.bars{display:grid;gap:14px}
+.brow{display:grid;grid-template-columns:104px minmax(0,1fr) auto;gap:14px;align-items:center}
+.brow .bm{font-size:12.5px;font-weight:600;color:var(--navy)}
+.brow .bm small{display:block;font-size:10px;color:var(--muted);font-weight:400}
+.brow .bt{height:26px;background:var(--wash);border-radius:7px;overflow:hidden}
+.brow .bt i{display:block;height:100%;border-radius:7px;background:var(--deep)}
+.brow .bt i.proj{background:repeating-linear-gradient(135deg,#c79a3f,#c79a3f 7px,#e0c58f 7px,#e0c58f 14px)}
+.brow .bv{font-size:14px;font-weight:700;color:var(--navy);font-variant-numeric:tabular-nums;
+  text-align:right;white-space:nowrap}
+.axis{font-size:11.5px;color:var(--muted);margin-top:16px;padding-top:13px;
+  border-top:1px solid var(--line);line-height:1.55}
+
+/* boxes + out */
+.box{background:var(--card);border-radius:16px;box-shadow:var(--lift-sm);padding:16px 18px}
+.box+.box{margin-top:10px}
 .bh{display:flex;align-items:center;gap:9px;margin-bottom:9px}
 .bh h3{font-size:14.5px;color:var(--navy)}
 .bh .role{font-size:11.5px;color:var(--muted);flex:1}
 .state{font-size:10px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;
   color:var(--muted);background:var(--wash);border-radius:20px;padding:2px 9px}
 .state.in{background:#e3f4ec;color:var(--good)}
-.hint{font-size:11.5px;color:var(--muted);margin-top:10px}
-footer{margin-top:50px;padding-top:22px;border-top:1px solid var(--line);font-size:12.5px;
-  color:var(--muted)}
-@media(max-width:560px){.gal{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
-  .brow{grid-template-columns:72px minmax(0,1fr) auto;gap:9px}
-  .drow{grid-template-columns:96px minmax(0,1fr) auto;gap:9px}}
+.hint{font-size:11.5px;color:var(--muted);margin-top:11px}
+.out{display:grid;grid-template-columns:repeat(auto-fit,minmax(214px,1fr));gap:11px}
+.out a{background:var(--card);border-radius:14px;box-shadow:var(--lift-sm);padding:15px 17px;
+  text-decoration:none;display:block;transition:.14s}
+.out a:hover{box-shadow:var(--lift);transform:translateY(-1px)}
+.out b{display:block;font-size:13.5px;color:var(--navy);font-weight:600}
+.out span{display:block;font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+footer{margin-top:56px;padding-top:24px;border-top:1px solid var(--line);font-size:12.5px;
+  color:var(--muted);line-height:1.6}
+@media(max-width:620px){
+  .gal{grid-template-columns:repeat(auto-fill,minmax(146px,1fr));gap:10px}
+  .q{grid-template-columns:1fr;gap:12px}.qavg{text-align:left}
+  .brow{grid-template-columns:78px minmax(0,1fr) auto;gap:10px}
+  .fstep{min-width:110px}
+}
 </style>
 </head>
 <body>
 <div class="wrap">
 
 <div class="cover">
-  <div class="eyebrow">Skills&nbsp;Up &middot; Sean K. Langston</div>
   <div class="ctop">
-    <h1 id="title">Monthly results</h1>
+    <div class="eyebrow">Skills&nbsp;Up &middot; monthly results</div>
+    <span class="who" id="built"></span>
     <select id="pick" aria-label="Which month"></select>
-    <span class="built" id="built"></span>
   </div>
-  <p class="stand" id="stand"></p>
-  <div class="figs" id="figs"></div>
+  <h1 id="title">Monthly results</h1>
+  <p class="verdict" id="verdict"></p>
+  <div class="lead" id="lead"></div>
   <div id="err">Cannot reach the sheet just now. Nothing typed below will save until the
     connection is back.</div>
 </div>
 
 <section>
-  <div class="sh"><span class="sn">01</span><h2>Reach per post, month by month</h2></div>
-  <p class="lede">The only social number that cannot be gamed by posting more. Total reach rises
-  with volume; <b>reach per post</b> tells you whether the content is getting better.</p>
-  <div class="trend" id="trend"></div>
+  <div class="sh"><span class="sn">01</span><h2>Where the month actually stopped</h2></div>
+  <p class="lede">Everything we decide comes from this line. Work on the step that loses people,
+  not the one that is easiest to improve.</p>
+  <div class="flow" id="flow"></div>
+  <p class="axis" id="flowsay"></p>
 </section>
 
 <section>
-  <div class="sh"><span class="sn">02</span><h2 id="galh">What ran this month</h2></div>
-  <p class="lede" id="gall"></p>
-  <div class="gal" id="gal"></div>
+  <div class="sh"><span class="sn">02</span><h2 id="dech">What changes next month</h2></div>
+  <p class="lede">Each of these is a decision, not a suggestion, and each one shows the figure it
+  came from. If you disagree with the figure, say so at the bottom and the decision changes.</p>
+  <div id="dec"></div>
 </section>
 
 <section>
-  <div class="sh"><span class="sn">03</span><h2>What the month says</h2></div>
-  <p class="lede">Every post on record, grouped by one dimension at a time, ranked on average
-  reach. A group needs <b>at least two posts</b> to appear at all, and the count sits next to
-  every figure, because one lucky post is not a finding.</p>
-  <div class="dims" id="dims"></div>
+  <div class="sh"><span class="sn">03</span><h2 id="wh">What worked</h2></div>
+  <p class="lede" id="wl"></p>
+  <div class="gal" id="won"></div>
+  <h3 style="font-size:12px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);
+    font-weight:700;margin:30px 0 14px">And what did not</h3>
+  <div class="gal" id="lost"></div>
 </section>
 
 <section>
-  <div class="sh"><span class="sn">04</span><h2>The recordings behind it</h2></div>
-  <p class="lede">Every social post is cut from one of these. Nothing on Instagram or Facebook
-  needs Sean in front of a camera again.</p>
-  <div class="yt" id="yt"></div>
+  <div class="sh"><span class="sn">04</span><h2>What we tested, and what it taught us</h2></div>
+  <p class="lede">Every test has its success line written down <b>before</b> it runs, so nobody gets
+  to decide afterwards whether it worked. A test that fails and tells us why is worth more than one
+  that drifts.</p>
+  <div id="exps"></div>
 </section>
 
 <section>
-  <div class="sh"><span class="sn">05</span><h2>What the ads did</h2></div>
-  <p class="lede" id="paidl"></p>
-  <div class="figs" id="paid"></div>
+  <div class="sh"><span class="sn">05</span><h2>What we test next</h2></div>
+  <p class="lede">Scored out of ten on three axes, the way we scored them for Dr. Lucas: how cheap
+  it is to try, the odds it works, and what it is worth if it does. Highest average goes first.
+  <b>What is holding each one up is named</b>, because that is usually the real work.</p>
+  <div id="queue"></div>
 </section>
 
 <section>
-  <div class="sh"><span class="sn">06</span><h2 id="nexth">Next month, before it runs</h2></div>
-  <p class="lede">Planned posts by pillar, multiplied by what that pillar has historically reached
-  per post. Change the mix and this number changes, so a plan can be judged before anything is
-  published.</p>
+  <div class="sh"><span class="sn">06</span><h2 id="projh">What the plan projects to</h2></div>
+  <p class="lede">The planned content mix, multiplied by what each pillar has historically reached
+  per post. This is the forecast the plan produces as it stands, so a mix can be judged before
+  anybody records anything.</p>
   <div class="proj" id="proj"></div>
-  <div id="dirs" style="margin-top:22px"></div>
+  <div id="dirs" style="margin-top:24px"></div>
 </section>
 
 <section>
-  <div class="sh"><span class="sn">07</span><h2>What you think</h2></div>
-  <p class="lede">Where this is wrong, or where it is missing something only you can see. Saves on
-  its own a second after you stop typing, and everyone sees the same page.</p>
+  <div class="sh"><span class="sn">07</span><h2>Where this is wrong</h2></div>
+  <p class="lede">The decisions above are built from figures, which means they miss whatever the
+  figures cannot see. That is what this is for. Saves on its own a second after you stop typing,
+  and everyone sees the same page.</p>
   <div id="says"></div>
 </section>
 
+<section>
+  <div class="sh"><span class="sn">08</span><h2>If you want the numbers themselves</h2></div>
+  <p class="lede">Nothing above is the full picture, on purpose. Every figure behind it is live on
+  these, refreshed every three hours.</p>
+  <div class="out">
+    <a href="index.html"><b>Channel dashboard</b><span>Every channel, every figure, refreshed
+      every three hours</span></a>
+    <a href="monthly-review.html"><b>The working review</b><span>Each front in full, front by
+      front, with the read behind it</span></a>
+    <a href="ops-board.html"><b>Ops board</b><span>Every card, its owner, its status and its
+      72 hour reading</span></a>
+    <a href="growth-board.html"><b>Growth board</b><span>The funnel by layer, every hypothesis
+      and every test</span></a>
+    <a href="content-pipeline.html"><b>How content gets made</b><span>Who owns what, and the
+      monthly cycle</span></a>
+    <a href="numbers.html"><b>Hand uploads</b><span>LinkedIn and TikTok exports, which have no
+      API</span></a>
+  </div>
+</section>
+
 <footer>
-  How content gets made: <a href="content-pipeline.html">the pipeline</a> &middot;
-  this month's cards: <a href="ops-board.html">ops board</a> &middot;
-  the working review: <a href="monthly-review.html">monthly-review.html</a><br>
-  Thumbnails are held in this repository, so they do not disappear when Instagram's links expire.
+  Built on the 26th from Meta, Instagram, YouTube, GetResponse, HubSpot and Zoom. Nobody writes it
+  up by hand.<br>
+  Post thumbnails are held in this repository, so they stay put after Instagram's own links expire.
 </footer>
 
 </div>
+
+<script src="skles-growth-data.js"></script>
 <script>
 const FB='https://rifa-mae-default-rtdb.firebaseio.com/skles-ops/review';
 const MONTHS=['January','February','March','April','May','June','July','August',
   'September','October','November','December'];
+const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const CPLB=18.5;
 let ALL={},CUR=null;
+const G=(window.SKLES_GROWTH||{});
 
 const fail=()=>{const e=document.getElementById('err');if(e)e.style.display='block';};
 const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -263,8 +314,7 @@ const nice=m=>{const p=m.split('-');return MONTHS[+p[1]-1]+' '+p[0];};
 const shortm=m=>{const p=m.split('-');return MONTHS[+p[1]-1].slice(0,3)+' '+p[0].slice(2);};
 const num=v=>(v==null?'—':Number(v).toLocaleString('en-GB'));
 const money=v=>(v==null?'—':'$'+Number(v||0).toFixed(2));
-const DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-const CPLB=18.5;
+const wd=d=>{const n=new Date(d+'T12:00:00').getDay();return DAYS[n===0?6:n-1];};
 
 const SAYS=[['marissa','Marissa','YouTube, and what is already recorded',
    'What you would change, what is worth repeating, and what is recorded and waiting.'],
@@ -272,169 +322,244 @@ const SAYS=[['marissa','Marissa','YouTube, and what is already recorded',
    'Which posts worked, which did not, and anything the cards got wrong.'],
   ['marina','Marina','anything the rules missed','Notes that belong with this month’s record.']];
 
-function fig(v,label,note,tone){
-  return '<div class="fig"><b'+(tone?' class="'+tone+'"':'')+'>'+v+'</b><span>'+label+'</span>'
-    +(note?'<em>'+note+'</em>':'')+'</div>';
+/* A dimension becomes an instruction, not a row in a table. One template each, so the
+   decision reads as a decision and the figure sits underneath it as evidence. */
+const RULE={
+  'Format':      {t:p=>'Put more into '+p.b+' and less into '+p.w+'.',          who:'Valerie'},
+  'Day':         {t:p=>p.b+' is the slot. Stop spending '+p.w+' on it.',        who:'Valerie'},
+  'Caption length':{t:p=>'Keep captions '+p.b+'.',                             who:'Valerie'},
+  'Pillar':      {t:p=>'Lead with '+p.b+'. Rest '+p.w+' for a month.',         who:'Marissa'},
+  'Card format': {t:p=>'Cut more '+p.b+' and fewer '+p.w+'.',                   who:'Valerie'},
+  'Call to action':{t:p=>'Put the call to action '+p.b+'.',                     who:'Valerie'},
+  'Mix':         {t:p=>'Favour '+p.b+' over '+p.w+'.',                          who:'Marina'}
+};
+
+function model(d){
+  d=d||{};
+  const f=d.fronts||{},c=d.content||{};
+  const paid=(f.paid&&f.paid.data)||null;
+  const fn=(f.funnel&&f.funnel.data)||{};
+  const bd=(((f.social||{}).data)||{}).board||{};
+  const ms=c.months||[];
+  const me=ms.filter(x=>x.m===CUR)[0]||{posts:0,reach:0,avg:0,acts:0};
+  const prev=ms[ms.findIndex(x=>x.m===CUR)+1]||null;
+  const r=d.read||{},dz=r.directions||{};
+  return {built:d.built||'',c:c,paid:paid,fn:fn,bd:bd,ms:ms,me:me,prev:prev,
+    posts:(c.posts||[]),dims:((c.readout||{}).dims)||[],proj:c.projection||null,
+    dirs:[['Marissa','what to produce',dz.marissa],['Valerie','what changes',dz.valerie],
+          ['Marina','paid and the funnel',dz.marina]].filter(x=>x[2])};
 }
 
-function cover(d,c){
-  const ms=c.months||[],me=ms.filter(x=>x.m===CUR)[0]||{posts:0,reach:0,avg:0,acts:0};
-  const prev=ms[ms.findIndex(x=>x.m===CUR)+1];
-  document.getElementById('title').textContent=nice(CUR);
-  document.getElementById('built').textContent=c.built?'Pulled '+c.built:'';
+/* ------------------------------------------------------------------ cover */
+function cover(M){
+  document.getElementById('title').textContent=nice(CUR)+' in one page';
+  document.getElementById('built').textContent=M.built?'Numbers as at '+M.built:'';
 
-  let move='';
-  if(prev&&prev.avg&&me.avg){
-    const pc=Math.round((me.avg-prev.avg)/prev.avg*100);
-    move=' Reach per post is <span class="'+(pc>=0?'up':'dn')+'">'+(pc>=0?'up ':'down ')
-      +Math.abs(pc)+'%</span> on '+shortm(prev.m)+', at <b>'+me.avg+'</b> against '+prev.avg+'.';
+  const pc=(M.prev&&M.prev.avg&&M.me.avg)
+    ? Math.round((M.me.avg-M.prev.avg)/M.prev.avg*100) : null;
+  const dead=!M.fn.won_this_month;
+  let v='';
+  if(pc!=null) v+='Reach per post is <span class="'+(pc>=0?'up':'dn')+'">'
+    +(pc>=0?'up ':'down ')+Math.abs(pc)+'%</span> on '+shortm(M.prev.m)+'. ';
+  v+=M.paid&&M.paid.cpl&&M.paid.cpl<CPLB
+    ? 'Leads are still arriving at <b>'+money(M.paid.cpl)+'</b>, cheaper than any campaign we '
+      +'have run. '
+    : '';
+  v+=dead
+    ? 'Nothing was sold, and that has not changed since the funnel went live, so <b>everything '
+      +'worth doing next month sits after the form</b>, not before it.'
+    : '<b>'+money(M.fn.won_this_month)+' closed.</b>';
+  document.getElementById('verdict').innerHTML=v;
+
+  document.getElementById('lead').innerHTML=
+    '<span class="big'+(pc!=null?(pc>=0?' up':' dn'):'')+'">'+(M.me.avg||'—')+'</span>'
+    +'<span class="cap"><b>Reach per post</b>The one social figure posting more cannot flatter. '
+    +(M.prev&&M.prev.avg?'Was '+M.prev.avg+' in '+shortm(M.prev.m)+'.':'')+'</span>'
+    +'<span class="big">'+num(M.paid&&M.paid.leads)+'</span>'
+    +'<span class="cap"><b>Leads</b>At '+money(M.paid&&M.paid.cpl)+' each.</span>'
+    +'<span class="big'+(dead?' dn':' up')+'">'+money(M.fn.won_this_month)+'</span>'
+    +'<span class="cap"><b>Sold</b>'+(dead?'The number that decides the plan.':'Money through.')
+    +'</span>';
+}
+
+/* ------------------------------------------------------------------ 01 flow */
+function flow(M){
+  const fl=((G.snap||{}).flow)||[];
+  if(!fl.length){document.getElementById('flow').innerHTML='';return;}
+  const vals=fl.map(s=>s.unknown?null:parseInt(String(s.value).replace(/\D/g,''),10));
+  document.getElementById('flow').innerHTML=fl.map((s,i)=>{
+    const v=vals[i],p=vals[i-1];
+    const drop=(v!=null&&p!=null&&p>0&&v<p)?Math.round((p-v)/p*100)+'% lost':'';
+    return '<div class="fstep">'+(drop?'<span class="drop">'+drop+'</span>':'')
+      +'<b class="'+(s.unknown?'unk':(v===0?'dead':''))+'">'
+      +(s.unknown?'not measured':num(v))+'</b><span>'+esc(s.label)+'</span></div>';
+  }).join('');
+  const last=fl[fl.length-1];
+  document.getElementById('flowsay').innerHTML='Every step above the last one works. '
+    +'<b>'+esc(String(last.label))+'</b> is where it stops, which is why no amount of extra reach '
+    +'or cheaper leads changes the month. Figures from the growth board, '
+    +'as at '+esc(String((G.snap||{}).as_of||''))+'.';
+}
+
+/* ------------------------------------------------------------------ 02 decisions */
+function decisions(M){
+  const out=[];
+  const strong=M.dims.filter(x=>x['from']==='platform'&&x.spread>=1.25&&x.n>=6).slice(0,3);
+  strong.forEach(x=>{
+    const R=RULE[x.dim]||{t:p=>'Favour '+p.b+' over '+p.w+'.',who:'Valerie'};
+    out.push('<div class="dec"><span class="tag">'+R.who+'</span>'
+      +'<h3>'+esc(R.t({b:String(x.best.v).toLowerCase(),w:String(x.worst.v).toLowerCase()}))+'</h3>'
+      +'<div class="ev"><div>'+esc(x.best.v)+'<b>'+x.best.avg+'</b></div>'
+      +'<div>'+esc(x.worst.v)+'<b>'+x.worst.avg+'</b></div>'
+      +'<div>Gap<b>'+x.spread+'×</b></div>'
+      +'<div>Posts behind it<b>'+x.n+'</b></div></div>'
+      +'<p class="because">Average accounts reached per post, every post on record. '
+      +'<em>Not</em> a one-post result: '+x.best.n+' posts sit behind '+esc(x.best.v)+' and '
+      +x.worst.n+' behind '+esc(x.worst.v)+'.</p></div>');
+  });
+
+  const tagged=M.posts.filter(p=>p.card).length;
+  if(M.posts.length&&tagged<M.posts.length) out.push('<div class="dec">'
+    +'<span class="tag">Valerie</span><h3>Put the Instagram link on the card when you publish '
+    +'it.</h3><div class="ev"><div>Posts this month<b>'+M.posts.length+'</b></div>'
+    +'<div>Tagged to a card<b>'+tagged+'</b></div>'
+    +'<div>Dimensions we can score<b>'+M.dims.filter(x=>x['from']==='board').length+' of 4</b></div>'
+    +'</div><p class="because">Format, day and caption length come straight from Instagram, so '
+    +'those are solid. Pillar, hook and call to action only exist on the board, and they can only '
+    +'be scored on a post we can match to a card. <em>This is the single cheapest thing on this '
+    +'page</em>, and it decides whether next month can say why anything won.</p></div>');
+
+  if(!M.fn.won_this_month){
+    const top=(G.hyps||[]).slice().sort((a,b)=>b.avg-a.avg)[0];
+    out.push('<div class="dec"><span class="tag">Marina and Sean</span>'
+      +'<h3>Nothing upstream gets touched until the step after the form moves.</h3>'
+      +'<div class="ev"><div>Leads<b>'+num(M.paid&&M.paid.leads)+'</b></div>'
+      +'<div>Cost each<b>'+money(M.paid&&M.paid.cpl)+'</b></div>'
+      +'<div>Sold<b>$0.00</b></div></div>'
+      +'<p class="because">Cheaper leads and wider reach both make the same month. '
+      +(top?'The highest scored fix is “'+esc(top.title)+'”, and it is '
+        +'<em>'+esc(String(top.status))+'</em>.':'')+'</p></div>');
   }
-  const best=(c.posts||[])[0];
-  document.getElementById('stand').innerHTML='<b>'+me.posts+' posts</b> went out on Instagram and '
-    +'reached <b>'+num(me.reach)+' accounts</b>, with '+num(me.acts)+' interactions.'+move
-    +(best?' The month’s best was “'+esc(String(best.first).slice(0,60))
-      +'…” at '+num(best.reach)+'.':'');
-
-  const paid=(((d.fronts||{}).paid||{}).data)||{};
-  document.getElementById('figs').innerHTML=
-    fig(num(me.reach),'Accounts reached','organic, Instagram')
-    +fig(me.avg||'—','Per post','the number that matters')
-    +fig(me.posts,'Posts published','')
-    +fig(num(me.acts),'Interactions','likes, comments, saves, shares')
-    +fig(money(paid.cpl),'Cost per lead',paid.cpl?(paid.cpl<CPLB?'under the $18.50 benchmark'
-      :'over the $18.50 benchmark'):'', paid.cpl?(paid.cpl<CPLB?'good':'bad'):null);
+  document.getElementById('dec').innerHTML=out.join('')
+    ||'<div class="exp"><p class="hyp">Not enough scored posts yet to turn a figure into a '
+      +'decision.</p></div>';
+  document.getElementById('dech').textContent='What changes in '
+    +((M.proj&&M.proj.month)?nice(M.proj.month):'the month ahead');
 }
 
-function trend(c){
-  const ms=(c.months||[]).slice().reverse();
-  const top=Math.max.apply(null,ms.map(x=>x.avg).concat([1]));
-  document.getElementById('trend').innerHTML='<div class="bars">'+ms.map(x=>
-    '<div class="brow"><span class="bm">'+shortm(x.m)+'</span>'
-    +'<span class="bt"><i'+(x.m===CUR?' class="now"':'')+' style="width:'
-      +Math.max(2,x.avg/top*100)+'%"></i></span>'
-    +'<span class="bv">'+x.avg+'<small>'+x.posts+' posts · '+num(x.reach)
-      +' total</small></span></div>').join('')+'</div>'
-    +'<p class="axis">Average accounts reached per Instagram post. Bars share one scale, so the '
-    +'lengths are comparable month to month. The gold bar is the month on screen.</p>';
+/* ------------------------------------------------------------------ 03 what worked */
+function why(p,M){
+  const bits=[];
+  M.dims.filter(x=>x['from']==='platform').forEach(x=>{
+    let mine=null;
+    if(x.dim==='Format') mine=p.kind;
+    if(x.dim==='Day') mine=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+      [(new Date(p.when+'T12:00:00').getDay()+6)%7];
+    if(x.dim==='Caption length') mine=(p.words||0)<40?'short':((p.words||0)<90?'medium':'long');
+    if(mine&&mine===x.best.v) bits.push('<b>'+esc(String(x.best.v).toLowerCase())+'</b>, the best '
+      +esc(x.dim).toLowerCase()+' we have');
+  });
+  return bits.length?'Carries '+bits.join(' and ')+'.':esc(String(p.first).slice(0,74))+'…';
 }
 
-function gallery(c){
-  const ps=c.posts||[];
-  document.getElementById('galh').textContent='What ran in '+nice(CUR);
-  document.getElementById('gall').innerHTML=ps.length
-    ? 'Ranked by accounts reached, best first. Every thumbnail opens the real post. '
-      +'<b>'+ps.filter(p=>p.card).length+' of '+ps.length+'</b> are tagged to an ops-board card, '
-      +'which is what lets the next section say why one beat another.'
+function gallery(M){
+  const ps=M.posts;
+  document.getElementById('wh').textContent='What worked in '+nice(CUR);
+  document.getElementById('wl').innerHTML=ps.length
+    ? 'The best of the month, with what each one carries. Every thumbnail opens the real post, so '
+      +'you can see the thing itself rather than a figure standing in for it.'
     : 'Nothing published to Instagram in this month.';
-  document.getElementById('gal').innerHTML=ps.map((p,i)=>{
+  const top=ps.slice(0,6),bot=ps.length>7?ps.slice(-3):[];
+  const card=(p,i,cold)=>{
     const tags=[];
     if(p.kind) tags.push('<span class="tg f">'+esc(p.kind)+'</span>');
     if(p.pillar) tags.push('<span class="tg p">'+esc(p.pillar)+'</span>');
-    tags.push('<span class="tg">'+DAYS[new Date(p.when+'T12:00:00').getDay()===0?6
-      :new Date(p.when+'T12:00:00').getDay()-1].slice(0,3)+' '+p.when.slice(8)+'</span>');
-    if(!p.card) tags.push('<span class="tg u">untagged</span>');
+    tags.push('<span class="tg'+(cold?' w':'')+'">'+wd(p.when)+' '+p.when.slice(8)+'</span>');
     return '<a class="post" href="'+esc(p.url)+'" target="_blank" rel="noopener">'
-      +'<div class="shot">'+(p.img
-        ?'<img src="'+esc(p.img)+'" alt="" loading="lazy">'
-        :'<div class="none">No thumbnail held for this post</div>')
-      +'<span class="rk'+(i===0?' top':'')+'">'+(i===0?'Best of the month':'#'+(i+1))+'</span>'
+      +'<div class="shot">'+(p.img?'<img src="'+esc(p.img)+'" alt="" loading="lazy">'
+        :'<div class="none">No thumbnail held</div>')
+      +(i===0&&!cold?'<span class="rk">Best of the month</span>':'')
+      +(cold?'<span class="rk cold">Lowest reach</span>':'')
       +'<span class="re"><b>'+num(p.reach)+'</b><span>reached</span></span></div>'
-      +'<div class="meta"><p class="first">'+esc(p.first)+'</p>'
-      +'<div class="tags">'+tags.join('')+'</div>'
-      +'<div class="nums"><div>Views<b>'+num(p.views)+'</b></div>'
-      +'<div>Likes<b>'+num(p.likes)+'</b></div>'
-      +'<div>Saves<b>'+num(p.saved)+'</b></div>'
-      +'<div>Shares<b>'+num(p.shares)+'</b></div></div></div></a>';
-  }).join('');
+      +'<div class="meta"><p class="why">'+(cold?esc(String(p.first).slice(0,74))+'…'
+        :why(p,M))+'</p><div class="tags">'+tags.join('')+'</div></div></a>';
+  };
+  document.getElementById('won').innerHTML=top.map((p,i)=>card(p,i,false)).join('');
+  document.getElementById('lost').innerHTML=bot.length
+    ? bot.map(p=>card(p,0,true)).join('')
+    : '<p class="hint" style="margin:0">Too few posts this month to call a bottom three.</p>';
 }
 
-function says(d){
-  const r=(d.readout||{});
-  const ds=(r.dims||[]);
-  document.getElementById('dims').innerHTML=ds.length?ds.map(x=>{
-    const top=Math.max.apply(null,x.rows.map(y=>y.avg).concat([1]));
-    return '<div class="dim"><div class="dh"><h3>'+esc(x.dim)+'</h3>'
-      +'<span class="sp">'+x.spread+'× between best and worst</span>'
-      +'<span class="src'+(x['from']==='board'?' board':'')+'">'
-      +(x['from']==='board'?'from the board · n='+x.n:'from Instagram · n='+x.n)
-      +'</span></div>'
-      +x.rows.map((y,i)=>'<div class="drow'+(i===0?' best':i===x.rows.length-1?' worst':'')+'">'
-        +'<span class="dv">'+esc(y.v)+' <small>n='+y.n+'</small></span>'
-        +'<span class="dt"><i style="width:'+Math.max(2,y.avg/top*100)+'%"></i></span>'
-        +'<span class="da">'+y.avg+'</span></div>').join('')
+/* ------------------------------------------------------------------ 04 experiments */
+function exps(){
+  const es=G.exps||[];
+  document.getElementById('exps').innerHTML=es.length?es.map(e=>{
+    const read=(e.readings||[]).slice(-1)[0];
+    return '<div class="exp"><div class="eh"><h3>'+esc(e.title)+'</h3>'
+      +'<span class="pillx '+esc(e.state)+'">'+esc(e.state)+'</span></div>'
+      +'<p class="hyp">'+esc(e.hypothesis)+'</p>'
+      +'<div class="crit"><div>Metric<b style="font-size:13px">'+esc(e.metric)+'</b></div>'
+      +'<div>Baseline<b>'+esc(e.baseline)+'</b></div>'
+      +'<div>Success, set first<b>'+esc(e.success)+'</b></div>'
+      +(read?'<div>Last reading<b>'+esc(read.value)+'</b></div>':'')+'</div>'
+      +(e.learned?'<p class="learn"><b>What it taught us.</b> '+esc(e.learned)+'</p>'
+        :(e.verdict?'<p class="learn">'+esc(e.verdict)+'</p>':''))
       +'</div>';
-  }).join('')+verdict(ds,d)
-  :'<div class="dim"><p class="lede" style="margin:0">Not enough scored posts yet to rank any '
-    +'dimension.</p></div>';
+  }).join(''):'<div class="exp"><p class="hyp">No tests on record.</p></div>';
 }
 
-function verdict(ds,c){
-  if(!ds.length) return '';
-  const f=ds.filter(x=>x['from']==='platform')[0];
-  const board=ds.filter(x=>x['from']==='board');
-  const tagged=(c.posts||[]).filter(p=>p.card).length;
-  let t='';
-  if(f) t+='The widest gap is <b>'+esc(f.dim).toLowerCase()+'</b>: '+esc(f.best.v)+' reaches '
-    +f.best.avg+' per post against '+f.worst.avg+' for '+esc(f.worst.v)+'. ';
-  t+=board.length
-    ? 'The board dimensions sit on the posts that carry a card id, so treat them as a direction '
-      +'rather than a result.'
-    : 'No board dimension has two scored posts behind it yet, which is the one thing worth fixing: '
-      +'every published card needs its Instagram id on it, or the next month cannot say why '
-      +'anything won.';
-  return '<p class="verdict">'+t+'</p>';
+/* ------------------------------------------------------------------ 05 queue */
+function queue(){
+  const hs=(G.hyps||[]).slice().sort((a,b)=>b.avg-a.avg).slice(0,5);
+  document.getElementById('queue').innerHTML=hs.length?hs.map(h=>
+    '<div class="q"><div><h3>'+esc(h.title)+'</h3>'
+    +'<p class="st">'+esc(h.owner==='us'?'ours to ship':'needs someone else')+' &middot; '
+    +'<b>'+esc(h.status)+'</b></p></div>'
+    +'<div><div class="score">'
+    +[['cheap','Cheap',h.cheap],['odds','Odds',h.odds],['impact','Worth',h.impact]].map(s=>
+      '<div class="srow"><span>'+s[1]+'</span><span class="st2"><i style="width:'
+      +(s[2]*10)+'%"></i></span><span class="v">'+s[2]+'</span></div>').join('')
+    +'</div><div class="qavg">'+h.avg.toFixed(1)+'<small>average</small></div></div></div>'
+  ).join(''):'<div class="exp"><p class="hyp">No hypotheses on record.</p></div>';
 }
 
-function yt(c){
-  const vs=c.youtube||[];
-  document.getElementById('yt').innerHTML=vs.length?vs.map(v=>
-    '<a class="vid" href="'+esc(v.url)+'" target="_blank" rel="noopener">'
-    +'<div class="shot"><img src="'+esc(v.img)+'" alt="" loading="lazy">'
-    +'<span class="v">'+num(v.views)+' views</span></div>'
-    +'<p class="t">'+esc(v.title)+'</p></a>').join('')
-    :'<p class="lede" style="margin:0">No recordings read this month.</p>';
+/* ------------------------------------------------------------------ 06 projection */
+function proj(M){
+  const p=M.proj;
+  document.getElementById('projh').textContent=(p&&p.month)
+    ? 'What '+nice(p.month)+' projects to' : 'What the plan projects to';
+  if(!p||!p.rows||!p.rows.length){
+    document.getElementById('proj').innerHTML='<p class="axis" style="margin:0;padding:0;'
+      +'border:0">No cards dated in that month yet, so there is nothing to project from.</p>';
+  } else {
+    const hist=M.ms.slice(0,2).reverse();
+    const all=hist.map(x=>x.reach).concat([p.total]);
+    const top=Math.max.apply(null,all.concat([1]));
+    const lead=p.rows[0];
+    document.getElementById('proj').innerHTML='<div class="bars">'
+      +hist.map(x=>'<div class="brow"><span class="bm">'+shortm(x.m)
+        +'<small>'+x.posts+' posts, happened</small></span>'
+        +'<span class="bt"><i style="width:'+Math.max(2,x.reach/top*100)+'%"></i></span>'
+        +'<span class="bv">'+num(x.reach)+'</span></div>').join('')
+      +'<div class="brow"><span class="bm">'+shortm(p.month)
+      +'<small>'+p.posts+' posts, planned</small></span>'
+      +'<span class="bt"><i class="proj" style="width:'+Math.max(2,p.total/top*100)+'%"></i></span>'
+      +'<span class="bv">'+num(p.total)+'</span></div></div>'
+      +'<p class="axis">Total accounts reached. The striped bar is a forecast, not a result: '
+      +p.posts+' planned posts at each pillar’s own historical reach per post. '
+      +(lead?'The mix leans on <b>'+esc(lead.pillar)+'</b>, '+lead.planned+' of the '+p.posts
+        +'. ':'')
+      +'If that bar is not taller than the month before it, the plan is not a growth plan yet, '
+      +'and the mix is the thing to change.</p>';
+  }
+  document.getElementById('dirs').innerHTML=M.dirs.map(x=>
+    '<div class="dec" style="padding:19px 21px"><span class="tag">'+x[0]+'</span>'
+    +'<h3 style="font-size:17px;margin-top:11px">'+esc(x[2])+'</h3>'
+    +'<p class="because" style="margin-top:11px;padding-top:0;border:0">Derived from the figures '
+    +'above, on '+esc(x[1])+'.</p></div>').join('');
 }
 
-function paid(d){
-  const p=(((d.fronts||{}).paid||{}).data)||null;
-  document.getElementById('paidl').innerHTML=p
-    ? 'One campaign, running nationwide. '+(p.cpl&&p.cpl<CPLB
-      ? 'At '+money(p.cpl)+' a lead it is cheaper than every past SKLES campaign, so the money is '
-        +'not the problem this month.'
-      : 'At '+money(p.cpl)+' a lead it is above the $18.50 benchmark, and creative is the lever.')
-    : 'No figures came back from Meta. Check the token before concluding anything.';
-  document.getElementById('paid').innerHTML=p
-    ? fig(money(p.spend),'Spent','')
-      +fig(num(p.leads),'Leads','')
-      +fig(money(p.cpl),'Per lead','benchmark $18.50',p.cpl<CPLB?'good':'bad')
-      +fig(num(p.reach),'People reached','')
-      +fig((p.ctr||0)+'%','Click rate',num(p.clicks)+' clicks')
-    : '';
-}
-
-function next(c,d){
-  const pr=c.projection||{rows:[],total:0};
-  document.getElementById('nexth').textContent=pr.month
-    ? nice(pr.month)+', before it runs' : 'Next month, before it runs';
-  document.getElementById('proj').innerHTML=pr.rows&&pr.rows.length
-    ? '<table><thead><tr><th>Pillar</th><th class="r">Posts planned</th>'
-      +'<th class="r">Reach per post</th><th class="r">Projected reach</th></tr></thead><tbody>'
-      +pr.rows.map(r=>'<tr><td>'+esc(r.pillar)+'</td><td class="r">'+r.planned+'</td>'
-        +'<td class="r">'+r.per+(r.known?'':' <span class="est">est</span>')+'</td>'
-        +'<td class="r">'+num(r.reach)+'</td></tr>').join('')
-      +'</tbody><tfoot><tr><td>'+pr.posts+' posts</td><td class="r"></td><td class="r"></td>'
-      +'<td class="r">'+num(pr.total)+'</td></tr></tfoot></table>'
-      +'<p class="axis">Pillars with fewer than two scored posts behind them use the overall '
-      +'average of '+pr.base+', marked est.</p>'
-    : '<p class="lede" style="margin:0">No cards dated in that month yet, so there is nothing to '
-      +'project from.</p>';
-  const dz=((d.read||{}).directions)||{};
-  document.getElementById('dirs').innerHTML=[['Marissa','what to produce',dz.marissa],
-    ['Valerie','what changes',dz.valerie],['Marina','paid and the funnel',dz.marina]]
-    .filter(x=>x[2]).map(x=>'<div class="d"><h3>'+x[0]+' <em>&middot; '+x[1]+'</em></h3><p>'
-      +esc(x[2])+'</p></div>').join('');
-}
-
+/* ------------------------------------------------------------------ saving */
 const timers={};
 function mark(k,v){document.querySelectorAll('[data-s="'+k+'"]').forEach(s=>{
   s.textContent=v&&v.trim()?'in':'empty';s.classList.toggle('in',!!(v&&v.trim()));});}
@@ -461,8 +586,8 @@ function wire(){
 }
 
 function render(){
-  const d=ALL[CUR]||{},c=d.content||{};
-  cover(d,c);trend(c);gallery(c);says(c);yt(c);paid(d);next(c,d);
+  const M=model(ALL[CUR]||{});
+  cover(M);flow(M);decisions(M);gallery(M);exps();queue();proj(M);
   document.getElementById('says').innerHTML=SAYS.map(s=>
     '<div class="box"><div class="bh"><h3>'+s[1]+'</h3><span class="role">'+s[2]
     +'</span><span class="state" data-s="'+s[0]+'">empty</span></div><textarea data-k="'+s[0]
