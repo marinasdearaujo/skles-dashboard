@@ -74,9 +74,9 @@ footer a{color:var(--navy)}
 <header>
   <div class="eyebrow">Skills Up &middot; November 2026</div>
   <h1>What November needs, and when</h1>
-  <p class="lede">Twenty three pieces are booked and most of the material already exists. This
-  sheet lists only what does not, who it sits with, and the date each one starts holding work up.
-  Change a status and everyone sees it.</p>
+  <p class="lede">Twenty three pieces are booked and almost all of the material already exists, now that the
+  social cuts come out of Marissa’s long-form. This sheet lists only what is still outstanding,
+  who it sits with, and the date it starts holding work up. Change a status and everyone sees it.</p>
   <div class="tally" id="tally"></div>
   <div id="err">Could not reach the sheet just now. The rows below are still accurate, but status
   changes will not save until the connection is back.</div>
@@ -117,14 +117,6 @@ const DB = 'https://rifa-mae-default-rtdb.firebaseio.com/skles-ops/needs';
 const TODAY = new Date('2026-11-04T12:00:00');
 
 const ITEMS = [
-  { id:'walk', who:'Sean', by:'2026-11-07',
-    what:'Four short Reels, each well under a minute',
-    why:'The only format that cannot be made without him. All four lines are already his own words from September, so there is nothing to script or learn. About three minutes of usable footage in total. Walking, parked in the car between showings, at a property, whatever suits him, all four in one sitting or one a week.',
-    unlocks:'9, 16, 23 and 30 Nov' },
-  { id:'flip40', who:'Sean', by:'2026-11-09',
-    what:'The two properties behind the $40,000 figure',
-    why:'He gave us the number in September. Without the deals underneath it the carousel shows a round figure with nothing holding it up.',
-    unlocks:'11 Nov, and 18 Nov if the older figures are stale' },
   { id:'family', who:'Sean', by:'2026-11-17',
     what:'A family photo',
     why:'Live Well only works when the picture is personal. A studio portrait under a family caption reads as stock, which undoes the format. This is the only thing in November with nothing to fall back on.',
@@ -140,6 +132,8 @@ const ITEMS = [
 ];
 
 const HAVE = [
+  ['Marissa\u2019s long-form library','Five videos from October plus two already recorded and waiting. The Walk the Talk Reels and all three Blueprint carousels get cut from these, so nothing on the feed waits on Sean'],
+  ['The $40,000, on camera','\u201CMade $25K flipping this house, but one mistake cost me $5,000\u201D carries a real deal with the mistake left in, which covers the 11, 18 and 25 Nov carousels'],
   ['Eleven member testimonials','Nine on video, two written. In Sean’s testimonial folder since 2023 and never used. They cover all six Doing Good slots'],
   ['The Fast Track recording','All 36 minutes, plus the 5 Nov clip cut with handles, in SKLES Source Recordings'],
   ['Sean’s photo folder','29 studio shots from the September session with Marissa, plus personal photos from 2023 on'],
@@ -186,7 +180,7 @@ function render(){
     <div class="t"><div class="n">23</div><div class="l">Pieces booked for November</div></div>
     <div class="t"><div class="n">${ITEMS.length - done}</div><div class="l">Still outstanding</div></div>
     <div class="t"><div class="n">${late}</div><div class="l">Past the date needed</div></div>
-    <div class="t"><div class="n">15</div><div class="l">Cards already fully sourced</div></div>`;
+    <div class="t"><div class="n">20</div><div class="l">Cards already fully sourced</div></div>`;
 
   document.querySelectorAll('select.st').forEach(s => s.addEventListener('change', onSet));
 }
