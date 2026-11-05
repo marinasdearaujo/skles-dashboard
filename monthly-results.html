@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Monthly Results</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap">
+<style>
+:root{
+  --bg:#f4f6fb; --card:#fff; --line:#e6eaf3; --grid:#dfe4ef; --wash:#eef1f8;
+  --navy:#1b2b58; --gold:#c79a3f; --ink:#171b26; --muted:#6b7490;
+  --good:#17805a; --bad:#c13b52;
+  --lift:0 1px 2px rgba(23,35,70,.06),0 8px 22px rgba(23,35,70,.07);
+  --lift-sm:0 1px 2px rgba(23,35,70,.05),0 5px 14px rgba(23,35,70,.05);
+  --deep:linear-gradient(140deg,#24376d,#16224a);
+  --sans:'Poppins',system-ui,-apple-system,Segoe UI,sans-serif;
+  --serif:'Merriweather',Georgia,serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px 90px}
+h1,h2,h3,h4{text-wrap:balance;margin:0}
+p{margin:0}
+a{color:var(--navy)}
+img{max-width:100%;display:block}
+.eyebrow{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--gold)}
+select,input,textarea{font-family:inherit;font-size:14px;color:var(--ink);background:var(--card);
+  border:0;border-radius:11px;padding:9px 13px;box-shadow:var(--lift-sm)}
+textarea{width:100%;min-height:86px;resize:vertical;line-height:1.55}
+.num{font-variant-numeric:tabular-nums}
+#err{display:none;background:#fdeef1;color:var(--bad);border-radius:12px;padding:10px 13px;
+  font-size:12.5px;box-shadow:var(--lift-sm);margin-top:14px}
+
+/* cover */
+.cover{padding-block:40px 8px}
+.ctop{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.ctop h1{font-size:clamp(32px,6vw,54px);font-weight:700;letter-spacing:-.035em;color:var(--navy);
+  line-height:1;flex:1}
+.ctop .built{font-size:11.5px;color:var(--muted)}
+.stand{font-family:var(--serif);font-size:clamp(16px,2.3vw,20px);line-height:1.6;color:var(--ink);
+  max-width:60ch;margin-top:20px}
+.stand b{color:var(--navy)}
+.stand .up{color:var(--good);font-weight:700} .stand .dn{color:var(--bad);font-weight:700}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(134px,1fr));gap:11px;margin-top:26px}
+.fig{background:var(--card);border-radius:16px;box-shadow:var(--lift-sm);padding:15px 17px}
+.fig b{display:block;font-size:27px;font-weight:700;color:var(--navy);letter-spacing:-.03em;
+  font-variant-numeric:tabular-nums;line-height:1.05}
+.fig b.good{color:var(--good)} .fig b.bad{color:var(--bad)}
+.fig span{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  font-weight:700;display:block;margin-top:6px}
+.fig em{font-style:normal;display:block;font-size:11px;color:var(--muted);margin-top:4px}
+
+/* sections */
+section{padding-block:46px 0}
+.sh{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.sn{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--gold)}
+section h2{font-size:clamp(22px,3.6vw,30px);font-weight:700;letter-spacing:-.028em;color:var(--navy)}
+.lede{font-family:var(--serif);font-size:15px;line-height:1.65;color:var(--muted);max-width:66ch;
+  margin-top:9px;margin-bottom:22px}
+.lede b{color:var(--navy)}
+
+/* trend */
+.trend{background:var(--card);border-radius:18px;box-shadow:var(--lift);padding:24px 26px}
+.bars{display:grid;gap:15px;margin-top:4px}
+.brow{display:grid;grid-template-columns:96px minmax(0,1fr) auto;gap:14px;align-items:center}
+.brow .bm{font-size:13px;font-weight:600;color:var(--navy)}
+.brow .bt{height:26px;background:var(--wash);border-radius:7px;overflow:hidden;position:relative}
+.brow .bt i{display:block;height:100%;border-radius:7px;background:var(--deep)}
+.brow .bt i.now{background:linear-gradient(90deg,#c79a3f,#e0c58f)}
+.brow .bv{font-size:14.5px;font-weight:700;color:var(--navy);font-variant-numeric:tabular-nums;
+  white-space:nowrap}
+.brow .bv small{display:block;font-size:10.5px;font-weight:400;color:var(--muted)}
+.axis{font-size:11px;color:var(--muted);margin-top:16px;padding-top:13px;
+  border-top:1px solid var(--line)}
+
+/* gallery */
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(216px,1fr));gap:14px}
+.post{background:var(--card);border-radius:18px;box-shadow:var(--lift);overflow:hidden;
+  text-decoration:none;color:inherit;display:flex;flex-direction:column;transition:.16s}
+.post:hover{box-shadow:0 3px 6px rgba(23,35,70,.08),0 16px 34px rgba(23,35,70,.14);
+  transform:translateY(-2px)}
+.post .shot{position:relative;aspect-ratio:4/5;background:var(--wash);overflow:hidden}
+.post .shot img{width:100%;height:100%;object-fit:cover}
+.post .shot .none{display:flex;align-items:center;justify-content:center;height:100%;
+  font-size:11px;color:var(--muted);text-align:center;padding:14px}
+.post .rk{position:absolute;top:10px;left:10px;background:rgba(27,43,88,.9);color:#fff;
+  font-size:10.5px;font-weight:700;letter-spacing:.05em;padding:4px 9px;border-radius:30px;
+  backdrop-filter:blur(3px)}
+.post .rk.top{background:linear-gradient(135deg,#c79a3f,#e0c58f);color:#1b2b58}
+.post .re{position:absolute;bottom:10px;right:10px;background:rgba(255,255,255,.94);
+  border-radius:11px;padding:5px 10px;text-align:right;backdrop-filter:blur(3px)}
+.post .re b{display:block;font-size:17px;font-weight:700;color:var(--navy);line-height:1;
+  font-variant-numeric:tabular-nums}
+.post .re span{font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
+  font-weight:700}
+.post .meta{padding:13px 15px 15px;display:flex;flex-direction:column;gap:9px;flex:1}
+.post .first{font-size:12.5px;line-height:1.45;color:var(--ink);display:-webkit-box;
+  -webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tags{display:flex;gap:5px;flex-wrap:wrap}
+.tg{font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;font-weight:700;
+  background:var(--wash);color:var(--muted);border-radius:20px;padding:3px 8px;white-space:nowrap}
+.tg.p{background:#eef2fd;color:#2c4484}
+.tg.f{background:#eefaf4;color:#17805a}
+.tg.u{background:#fdf6e7;color:#8a6a1e}
+.post .nums{display:flex;gap:13px;margin-top:auto;padding-top:9px;
+  border-top:1px solid var(--line)}
+.post .nums div{font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);
+  font-weight:700}
+.post .nums b{display:block;font-size:13px;color:var(--ink);font-variant-numeric:tabular-nums;
+  letter-spacing:0;text-transform:none}
+
+/* readout */
+.dims{display:grid;gap:12px}
+.dim{background:var(--card);border-radius:18px;box-shadow:var(--lift-sm);padding:19px 21px}
+.dh{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.dh h3{font-size:16px;font-weight:700;color:var(--navy)}
+.dh .sp{font-size:12px;font-weight:700;color:var(--gold);font-variant-numeric:tabular-nums}
+.dh .src{font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;font-weight:700;
+  background:var(--wash);color:var(--muted);border-radius:20px;padding:3px 9px;margin-left:auto}
+.dh .src.board{background:#fdf6e7;color:#8a6a1e}
+.drow{display:grid;grid-template-columns:132px minmax(0,1fr) auto;gap:12px;align-items:center;
+  padding:5px 0}
+.drow .dv{font-size:12.5px;color:var(--ink);font-weight:500}
+.drow .dv small{color:var(--muted);font-weight:400}
+.drow .dt{height:17px;background:var(--wash);border-radius:6px;overflow:hidden}
+.drow .dt i{display:block;height:100%;border-radius:6px;background:#9fb0d8}
+.drow.best .dt i{background:var(--deep)}
+.drow.worst .dt i{background:#e4b9c2}
+.drow .da{font-size:13px;font-weight:700;color:var(--navy);font-variant-numeric:tabular-nums}
+.verdict{font-size:13px;line-height:1.6;background:var(--wash);border-radius:12px;
+  padding:12px 14px;margin-top:14px;color:var(--ink)}
+.verdict:before{content:'';display:block;width:26px;height:3px;border-radius:3px;
+  background:var(--gold);margin-bottom:9px}
+
+/* youtube */
+.yt{display:grid;grid-template-columns:repeat(auto-fill,minmax(246px,1fr));gap:13px}
+.vid{background:var(--card);border-radius:16px;box-shadow:var(--lift-sm);overflow:hidden;
+  text-decoration:none;color:inherit;transition:.16s}
+.vid:hover{box-shadow:var(--lift);transform:translateY(-2px)}
+.vid .shot{aspect-ratio:16/9;background:var(--wash);position:relative}
+.vid .shot img{width:100%;height:100%;object-fit:cover}
+.vid .v{position:absolute;bottom:8px;right:8px;background:rgba(27,43,88,.92);color:#fff;
+  font-size:11px;font-weight:700;padding:3px 8px;border-radius:7px}
+.vid .t{padding:12px 14px;font-size:12.5px;font-weight:500;line-height:1.4;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+/* next month */
+.proj{background:var(--card);border-radius:18px;box-shadow:var(--lift);padding:22px 24px}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th{text-align:left;font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
+  padding:0 12px 9px 0;border-bottom:1px solid var(--grid)}
+th.r,td.r{text-align:right}
+td{padding:10px 12px 10px 0;border-bottom:1px solid rgba(23,35,70,.06);
+  font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:0}
+tfoot td{font-weight:700;color:var(--navy);border-top:2px solid var(--navy);border-bottom:0}
+td .est{font-size:10.5px;color:var(--muted)}
+.d{background:var(--deep);color:#fff;border-radius:16px;padding:17px 19px;margin-top:10px;
+  box-shadow:var(--lift)}
+.d h3{font-size:14.5px;color:#fff}
+.d h3 em{font-style:normal;color:var(--gold);font-weight:400;font-size:11.5px}
+.d p{font-size:13.5px;color:#d6dcee;margin-top:5px;max-width:68ch}
+.box{background:var(--card);border-radius:16px;box-shadow:var(--lift-sm);padding:16px 18px;
+  margin-bottom:10px}
+.bh{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.bh h3{font-size:14.5px;color:var(--navy)}
+.bh .role{font-size:11.5px;color:var(--muted);flex:1}
+.state{font-size:10px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;
+  color:var(--muted);background:var(--wash);border-radius:20px;padding:2px 9px}
+.state.in{background:#e3f4ec;color:var(--good)}
+.hint{font-size:11.5px;color:var(--muted);margin-top:10px}
+footer{margin-top:50px;padding-top:22px;border-top:1px solid var(--line);font-size:12.5px;
+  color:var(--muted)}
+@media(max-width:560px){.gal{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+  .brow{grid-template-columns:72px minmax(0,1fr) auto;gap:9px}
+  .drow{grid-template-columns:96px minmax(0,1fr) auto;gap:9px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="cover">
+  <div class="eyebrow">Skills&nbsp;Up &middot; Sean K. Langston</div>
+  <div class="ctop">
+    <h1 id="title">Monthly results</h1>
+    <select id="pick" aria-label="Which month"></select>
+    <span class="built" id="built"></span>
+  </div>
+  <p class="stand" id="stand"></p>
+  <div class="figs" id="figs"></div>
+  <div id="err">Cannot reach the sheet just now. Nothing typed below will save until the
+    connection is back.</div>
+</div>
+
+<section>
+  <div class="sh"><span class="sn">01</span><h2>Reach per post, month by month</h2></div>
+  <p class="lede">The only social number that cannot be gamed by posting more. Total reach rises
+  with volume; <b>reach per post</b> tells you whether the content is getting better.</p>
+  <div class="trend" id="trend"></div>
+</section>
+
+<section>
+  <div class="sh"><span class="sn">02</span><h2 id="galh">What ran this month</h2></div>
+  <p class="lede" id="gall"></p>
+  <div class="gal" id="gal"></div>
+</section>
+
+<section>
+  <div class="sh"><span class="sn">03</span><h2>What the month says</h2></div>
+  <p class="lede">Every post on record, grouped by one dimension at a time, ranked on average
+  reach. A group needs <b>at least two posts</b> to appear at all, and the count sits next to
+  every figure, because one lucky post is not a finding.</p>
+  <div class="dims" id="dims"></div>
+</section>
+
+<section>
+  <div class="sh"><span class="sn">04</span><h2>The recordings behind it</h2></div>
+  <p class="lede">Every social post is cut from one of these. Nothing on Instagram or Facebook
+  needs Sean in front of a camera again.</p>
+  <div class="yt" id="yt"></div>
+</section>
+
+<section>
+  <div class="sh"><span class="sn">05</span><h2>What the ads did</h2></div>
+  <p class="lede" id="paidl"></p>
+  <div class="figs" id="paid"></div>
+</section>
+
+<section>
+  <div class="sh"><span class="sn">06</span><h2 id="nexth">Next month, before it runs</h2></div>
+  <p class="lede">Planned posts by pillar, multiplied by what that pillar has historically reached
+  per post. Change the mix and this number changes, so a plan can be judged before anything is
+  published.</p>
+  <div class="proj" id="proj"></div>
+  <div id="dirs" style="margin-top:22px"></div>
+</section>
+
+<section>
+  <div class="sh"><span class="sn">07</span><h2>What you think</h2></div>
+  <p class="lede">Where this is wrong, or where it is missing something only you can see. Saves on
+  its own a second after you stop typing, and everyone sees the same page.</p>
+  <div id="says"></div>
+</section>
+
+<footer>
+  How content gets made: <a href="content-pipeline.html">the pipeline</a> &middot;
+  this month's cards: <a href="ops-board.html">ops board</a> &middot;
+  the working review: <a href="monthly-review.html">monthly-review.html</a><br>
+  Thumbnails are held in this repository, so they do not disappear when Instagram's links expire.
+</footer>
+
+</div>
+<script>
+const FB='https://rifa-mae-default-rtdb.firebaseio.com/skles-ops/review';
+const MONTHS=['January','February','March','April','May','June','July','August',
+  'September','October','November','December'];
+let ALL={},CUR=null;
+
+const fail=()=>{const e=document.getElementById('err');if(e)e.style.display='block';};
+const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const nice=m=>{const p=m.split('-');return MONTHS[+p[1]-1]+' '+p[0];};
+const shortm=m=>{const p=m.split('-');return MONTHS[+p[1]-1].slice(0,3)+' '+p[0].slice(2);};
+const num=v=>(v==null?'—':Number(v).toLocaleString('en-GB'));
+const money=v=>(v==null?'—':'$'+Number(v||0).toFixed(2));
+const DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+const CPLB=18.5;
+
+const SAYS=[['marissa','Marissa','YouTube, and what is already recorded',
+   'What you would change, what is worth repeating, and what is recorded and waiting.'],
+  ['valerie','Valerie','social, and what travelled',
+   'Which posts worked, which did not, and anything the cards got wrong.'],
+  ['marina','Marina','anything the rules missed','Notes that belong with this month’s record.']];
+
+function fig(v,label,note,tone){
+  return '<div class="fig"><b'+(tone?' class="'+tone+'"':'')+'>'+v+'</b><span>'+label+'</span>'
+    +(note?'<em>'+note+'</em>':'')+'</div>';
+}
+
+function cover(d,c){
+  const ms=c.months||[],me=ms.filter(x=>x.m===CUR)[0]||{posts:0,reach:0,avg:0,acts:0};
+  const prev=ms[ms.findIndex(x=>x.m===CUR)+1];
+  document.getElementById('title').textContent=nice(CUR);
+  document.getElementById('built').textContent=c.built?'Pulled '+c.built:'';
+
+  let move='';
+  if(prev&&prev.avg&&me.avg){
+    const pc=Math.round((me.avg-prev.avg)/prev.avg*100);
+    move=' Reach per post is <span class="'+(pc>=0?'up':'dn')+'">'+(pc>=0?'up ':'down ')
+      +Math.abs(pc)+'%</span> on '+shortm(prev.m)+', at <b>'+me.avg+'</b> against '+prev.avg+'.';
+  }
+  const best=(c.posts||[])[0];
+  document.getElementById('stand').innerHTML='<b>'+me.posts+' posts</b> went out on Instagram and '
+    +'reached <b>'+num(me.reach)+' accounts</b>, with '+num(me.acts)+' interactions.'+move
+    +(best?' The month’s best was “'+esc(String(best.first).slice(0,60))
+      +'…” at '+num(best.reach)+'.':'');
+
+  const paid=(((d.fronts||{}).paid||{}).data)||{};
+  document.getElementById('figs').innerHTML=
+    fig(num(me.reach),'Accounts reached','organic, Instagram')
+    +fig(me.avg||'—','Per post','the number that matters')
+    +fig(me.posts,'Posts published','')
+    +fig(num(me.acts),'Interactions','likes, comments, saves, shares')
+    +fig(money(paid.cpl),'Cost per lead',paid.cpl?(paid.cpl<CPLB?'under the $18.50 benchmark'
+      :'over the $18.50 benchmark'):'', paid.cpl?(paid.cpl<CPLB?'good':'bad'):null);
+}
+
+function trend(c){
+  const ms=(c.months||[]).slice().reverse();
+  const top=Math.max.apply(null,ms.map(x=>x.avg).concat([1]));
+  document.getElementById('trend').innerHTML='<div class="bars">'+ms.map(x=>
+    '<div class="brow"><span class="bm">'+shortm(x.m)+'</span>'
+    +'<span class="bt"><i'+(x.m===CUR?' class="now"':'')+' style="width:'
+      +Math.max(2,x.avg/top*100)+'%"></i></span>'
+    +'<span class="bv">'+x.avg+'<small>'+x.posts+' posts · '+num(x.reach)
+      +' total</small></span></div>').join('')+'</div>'
+    +'<p class="axis">Average accounts reached per Instagram post. Bars share one scale, so the '
+    +'lengths are comparable month to month. The gold bar is the month on screen.</p>';
+}
+
+function gallery(c){
+  const ps=c.posts||[];
+  document.getElementById('galh').textContent='What ran in '+nice(CUR);
+  document.getElementById('gall').innerHTML=ps.length
+    ? 'Ranked by accounts reached, best first. Every thumbnail opens the real post. '
+      +'<b>'+ps.filter(p=>p.card).length+' of '+ps.length+'</b> are tagged to an ops-board card, '
+      +'which is what lets the next section say why one beat another.'
+    : 'Nothing published to Instagram in this month.';
+  document.getElementById('gal').innerHTML=ps.map((p,i)=>{
+    const tags=[];
+    if(p.kind) tags.push('<span class="tg f">'+esc(p.kind)+'</span>');
+    if(p.pillar) tags.push('<span class="tg p">'+esc(p.pillar)+'</span>');
+    tags.push('<span class="tg">'+DAYS[new Date(p.when+'T12:00:00').getDay()===0?6
+      :new Date(p.when+'T12:00:00').getDay()-1].slice(0,3)+' '+p.when.slice(8)+'</span>');
+    if(!p.card) tags.push('<span class="tg u">untagged</span>');
+    return '<a class="post" href="'+esc(p.url)+'" target="_blank" rel="noopener">'
+      +'<div class="shot">'+(p.img
+        ?'<img src="'+esc(p.img)+'" alt="" loading="lazy">'
+        :'<div class="none">No thumbnail held for this post</div>')
+      +'<span class="rk'+(i===0?' top':'')+'">'+(i===0?'Best of the month':'#'+(i+1))+'</span>'
+      +'<span class="re"><b>'+num(p.reach)+'</b><span>reached</span></span></div>'
+      +'<div class="meta"><p class="first">'+esc(p.first)+'</p>'
+      +'<div class="tags">'+tags.join('')+'</div>'
+      +'<div class="nums"><div>Views<b>'+num(p.views)+'</b></div>'
+      +'<div>Likes<b>'+num(p.likes)+'</b></div>'
+      +'<div>Saves<b>'+num(p.saved)+'</b></div>'
+      +'<div>Shares<b>'+num(p.shares)+'</b></div></div></div></a>';
+  }).join('');
+}
+
+function says(d){
+  const r=(d.readout||{});
+  const ds=(r.dims||[]);
+  document.getElementById('dims').innerHTML=ds.length?ds.map(x=>{
+    const top=Math.max.apply(null,x.rows.map(y=>y.avg).concat([1]));
+    return '<div class="dim"><div class="dh"><h3>'+esc(x.dim)+'</h3>'
+      +'<span class="sp">'+x.spread+'× between best and worst</span>'
+      +'<span class="src'+(x['from']==='board'?' board':'')+'">'
+      +(x['from']==='board'?'from the board · n='+x.n:'from Instagram · n='+x.n)
+      +'</span></div>'
+      +x.rows.map((y,i)=>'<div class="drow'+(i===0?' best':i===x.rows.length-1?' worst':'')+'">'
+        +'<span class="dv">'+esc(y.v)+' <small>n='+y.n+'</small></span>'
+        +'<span class="dt"><i style="width:'+Math.max(2,y.avg/top*100)+'%"></i></span>'
+        +'<span class="da">'+y.avg+'</span></div>').join('')
+      +'</div>';
+  }).join('')+verdict(ds,d)
+  :'<div class="dim"><p class="lede" style="margin:0">Not enough scored posts yet to rank any '
+    +'dimension.</p></div>';
+}
+
+function verdict(ds,c){
+  if(!ds.length) return '';
+  const f=ds.filter(x=>x['from']==='platform')[0];
+  const board=ds.filter(x=>x['from']==='board');
+  const tagged=(c.posts||[]).filter(p=>p.card).length;
+  let t='';
+  if(f) t+='The widest gap is <b>'+esc(f.dim).toLowerCase()+'</b>: '+esc(f.best.v)+' reaches '
+    +f.best.avg+' per post against '+f.worst.avg+' for '+esc(f.worst.v)+'. ';
+  t+=board.length
+    ? 'The board dimensions sit on the posts that carry a card id, so treat them as a direction '
+      +'rather than a result.'
+    : 'No board dimension has two scored posts behind it yet, which is the one thing worth fixing: '
+      +'every published card needs its Instagram id on it, or the next month cannot say why '
+      +'anything won.';
+  return '<p class="verdict">'+t+'</p>';
+}
+
+function yt(c){
+  const vs=c.youtube||[];
+  document.getElementById('yt').innerHTML=vs.length?vs.map(v=>
+    '<a class="vid" href="'+esc(v.url)+'" target="_blank" rel="noopener">'
+    +'<div class="shot"><img src="'+esc(v.img)+'" alt="" loading="lazy">'
+    +'<span class="v">'+num(v.views)+' views</span></div>'
+    +'<p class="t">'+esc(v.title)+'</p></a>').join('')
+    :'<p class="lede" style="margin:0">No recordings read this month.</p>';
+}
+
+function paid(d){
+  const p=(((d.fronts||{}).paid||{}).data)||null;
+  document.getElementById('paidl').innerHTML=p
+    ? 'One campaign, running nationwide. '+(p.cpl&&p.cpl<CPLB
+      ? 'At '+money(p.cpl)+' a lead it is cheaper than every past SKLES campaign, so the money is '
+        +'not the problem this month.'
+      : 'At '+money(p.cpl)+' a lead it is above the $18.50 benchmark, and creative is the lever.')
+    : 'No figures came back from Meta. Check the token before concluding anything.';
+  document.getElementById('paid').innerHTML=p
+    ? fig(money(p.spend),'Spent','')
+      +fig(num(p.leads),'Leads','')
+      +fig(money(p.cpl),'Per lead','benchmark $18.50',p.cpl<CPLB?'good':'bad')
+      +fig(num(p.reach),'People reached','')
+      +fig((p.ctr||0)+'%','Click rate',num(p.clicks)+' clicks')
+    : '';
+}
+
+function next(c,d){
+  const pr=c.projection||{rows:[],total:0};
+  document.getElementById('nexth').textContent=pr.month
+    ? nice(pr.month)+', before it runs' : 'Next month, before it runs';
+  document.getElementById('proj').innerHTML=pr.rows&&pr.rows.length
+    ? '<table><thead><tr><th>Pillar</th><th class="r">Posts planned</th>'
+      +'<th class="r">Reach per post</th><th class="r">Projected reach</th></tr></thead><tbody>'
+      +pr.rows.map(r=>'<tr><td>'+esc(r.pillar)+'</td><td class="r">'+r.planned+'</td>'
+        +'<td class="r">'+r.per+(r.known?'':' <span class="est">est</span>')+'</td>'
+        +'<td class="r">'+num(r.reach)+'</td></tr>').join('')
+      +'</tbody><tfoot><tr><td>'+pr.posts+' posts</td><td class="r"></td><td class="r"></td>'
+      +'<td class="r">'+num(pr.total)+'</td></tr></tfoot></table>'
+      +'<p class="axis">Pillars with fewer than two scored posts behind them use the overall '
+      +'average of '+pr.base+', marked est.</p>'
+    : '<p class="lede" style="margin:0">No cards dated in that month yet, so there is nothing to '
+      +'project from.</p>';
+  const dz=((d.read||{}).directions)||{};
+  document.getElementById('dirs').innerHTML=[['Marissa','what to produce',dz.marissa],
+    ['Valerie','what changes',dz.valerie],['Marina','paid and the funnel',dz.marina]]
+    .filter(x=>x[2]).map(x=>'<div class="d"><h3>'+x[0]+' <em>&middot; '+x[1]+'</em></h3><p>'
+      +esc(x[2])+'</p></div>').join('');
+}
+
+const timers={};
+function mark(k,v){document.querySelectorAll('[data-s="'+k+'"]').forEach(s=>{
+  s.textContent=v&&v.trim()?'in':'empty';s.classList.toggle('in',!!(v&&v.trim()));});}
+
+async function save(path,value){
+  try{
+    const r=await fetch(FB+'/'+CUR+'.json',{method:'PATCH',
+      headers:{'Content-Type':'application/json'},body:JSON.stringify({[path]:value})});
+    if(!r.ok) throw new Error('bad status');
+    ALL[CUR]=Object.assign({},ALL[CUR],{[path]:value});
+  }catch(e){fail();}
+}
+
+function wire(){
+  document.querySelectorAll('textarea[data-k]').forEach(el=>{
+    const k=el.dataset.k,cur=ALL[CUR]||{};
+    el.value=(cur[k]&&cur[k].text)||'';mark(k,el.value);
+    el.oninput=()=>{clearTimeout(timers[k]);
+      document.querySelectorAll('[data-s="'+k+'"]').forEach(s=>{
+        s.textContent='typing';s.classList.remove('in');});
+      timers[k]=setTimeout(async()=>{
+        await save(k,{text:el.value,saved:new Date().toISOString()});mark(k,el.value);},1000);};
+  });
+}
+
+function render(){
+  const d=ALL[CUR]||{},c=d.content||{};
+  cover(d,c);trend(c);gallery(c);says(c);yt(c);paid(d);next(c,d);
+  document.getElementById('says').innerHTML=SAYS.map(s=>
+    '<div class="box"><div class="bh"><h3>'+s[1]+'</h3><span class="role">'+s[2]
+    +'</span><span class="state" data-s="'+s[0]+'">empty</span></div><textarea data-k="'+s[0]
+    +'" placeholder="'+s[3]+'"></textarea></div>').join('');
+}
+
+function show(m){CUR=m;document.getElementById('pick').value=m;render();wire();}
+
+(async function init(){
+  try{const r=await fetch(FB+'.json');if(r.ok)ALL=(await r.json())||{};}catch(e){fail();}
+  const months=Object.keys(ALL).sort().reverse();
+  if(!months.length){fail();return;}
+  const p=document.getElementById('pick');
+  p.innerHTML=months.map(m=>'<option value="'+m+'">'+nice(m)+'</option>').join('');
+  p.onchange=e=>show(e.target.value);
+  show(months[0]);
+})();
+</script>
+</body>
+</html>
