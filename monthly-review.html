@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Monthly Review</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap">
+<style>
+:root{
+  --navy:#112250; --gold:#E0C58F; --ink:#16181d; --muted:#5d6472;
+  --bg:#faf9f7; --card:#ffffff; --line:#e4e2dd; --wash:#f2f0ec; --grid:#d9d6d0;
+  --good:#1d6b4f; --bad:#8c3a52;
+  --sans:'Poppins',system-ui,-apple-system,Segoe UI,sans-serif;
+  --serif:'Merriweather',Georgia,serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;
+  padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
+.wrap{max-width:900px;margin:0 auto}
+h1,h2,h3{text-wrap:balance;margin:0}
+p{margin:0}
+
+header{padding-block:38px 22px;border-bottom:3px solid var(--navy)}
+.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--gold)}
+h1{font-size:clamp(26px,4.6vw,36px);font-weight:700;letter-spacing:-.02em;color:var(--navy);margin-block:9px 11px}
+.lede{font-family:var(--serif);font-size:15.5px;line-height:1.65;color:var(--muted);max-width:60ch}
+
+section{padding-block:28px;border-bottom:1px solid var(--line)}
+h2{font-size:12px;letter-spacing:.11em;text-transform:uppercase;font-weight:700;color:var(--muted);
+  margin-bottom:13px}
+
+.nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(142px,1fr));gap:1px;
+  background:var(--grid);border:1px solid var(--grid);border-radius:6px;overflow:hidden}
+.t{background:var(--card);padding:13px 15px}
+.t .n{font-family:var(--serif);font-weight:700;font-size:21px;line-height:1.05;color:var(--navy);
+  font-variant-numeric:tabular-nums}
+.t .n.bad{color:var(--bad)} .t .n.good{color:var(--good)}
+.t .l{font-size:11.5px;color:var(--muted);margin-top:5px;line-height:1.4}
+
+.box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 17px;margin-bottom:11px}
+.box.lead{border-left:4px solid var(--gold)}
+.bh{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;margin-bottom:9px}
+.bh h3{font-size:15.5px;font-weight:600;color:var(--navy)}
+.bh .role{font-size:11px;color:var(--muted)}
+.bh .state{margin-left:auto;font-size:11px;font-weight:600;color:var(--muted)}
+.bh .state.in{color:var(--good)}
+textarea{width:100%;min-height:104px;font:inherit;font-size:14px;line-height:1.55;color:var(--ink);
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:11px 12px;resize:vertical}
+textarea:focus-visible{outline:2px solid var(--navy);outline-offset:1px}
+.hint{font-size:12px;color:var(--muted);margin-top:7px}
+
+.note{font-size:12.5px;color:var(--muted);max-width:70ch;line-height:1.55}
+.note a{color:var(--navy)}
+footer{padding-block:24px 56px;color:var(--muted);font-size:13px}
+footer a{color:var(--navy)}
+#err{display:none;background:#fdeef1;border:1px solid var(--bad);color:var(--bad);
+  border-radius:6px;padding:10px 13px;font-size:13px;margin-top:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Skills Up &middot; Sean K. Langston</div>
+  <h1 id="title">Monthly review</h1>
+  <p class="lede">The numbers, then three reads on them, then the plan. Whatever is written here on
+  the 26th is what next month gets built from.</p>
+  <div id="err">Cannot reach the sheet just now. Anything typed below will not save until the
+  connection is back.</div>
+</header>
+
+<section>
+  <h2>The month, as the systems have it</h2>
+  <div class="nums" id="nums"></div>
+  <p class="note" style="margin-top:12px">Pulled from Meta, GetResponse, YouTube, HubSpot and Zoom,
+  not typed up by anyone. Fuller detail on
+  <a href="https://skles.moovecreating.com/index.html">the channel dashboard</a> and per post on
+  <a href="https://skles.moovecreating.com/ops-board.html">the ops board</a>. If a figure looks
+  wrong, say so here rather than working around it.</p>
+</section>
+
+<section>
+  <h2>The reads</h2>
+
+  <div class="box lead">
+    <div class="bh"><h3>Marina</h3><span class="role">direction for next month</span>
+      <span class="state" id="s-marina">empty</span></div>
+    <textarea id="t-marina" data-k="marina"
+      placeholder="What the numbers say, and where next month should go."></textarea>
+  </div>
+
+  <div class="box">
+    <div class="bh"><h3>Marissa</h3><span class="role">YouTube, and what is recorded</span>
+      <span class="state" id="s-marissa">empty</span></div>
+    <textarea id="t-marissa" data-k="marissa"
+      placeholder="What you would change, what is worth repeating, and what is already recorded and waiting."></textarea>
+  </div>
+
+  <div class="box">
+    <div class="bh"><h3>Valerie</h3><span class="role">social, and what travelled</span>
+      <span class="state" id="s-valerie">empty</span></div>
+    <textarea id="t-valerie" data-k="valerie"
+      placeholder="Which posts worked, which did not, and anything the cards got wrong."></textarea>
+  </div>
+
+  <p class="hint">Saves on its own a second after you stop typing. Everyone sees the same page, so
+  there is nothing to send back.</p>
+</section>
+
+<footer>
+  The cycle: <a href="https://skles.moovecreating.com/content-pipeline.html">how content gets made</a>.
+  This month's cards: <a href="https://skles.moovecreating.com/ops-board.html">ops board</a>.<br>
+  Questions to Marina.
+</footer>
+
+</div>
+
+<script src="skles-monthly-data.js"></script>
+<script>
+const D  = window.SKLES_MONTHLY || {};
+const DB = 'https://rifa-mae-default-rtdb.firebaseio.com/skles-ops/review/' + (D.month || 'unknown');
+const MONTHS = ['January','February','March','April','May','June','July','August',
+                'September','October','November','December'];
+
+function fail(){ document.getElementById('err').style.display = 'block'; }
+
+function nums(){
+  const a = D.ads, ig = D.ig, fb = D.fb, b = D.board || {}, yt = D.youtube || {};
+  const t = [];
+  const add = (n, l, cls) => t.push(
+    `<div class="t"><div class="n${cls ? ' ' + cls : ''}">${n}</div><div class="l">${l}</div></div>`);
+
+  if (a) {
+    add('$' + a.spend.toFixed(2), 'Ad spend');
+    add(a.leads, 'Leads from the form');
+    add(a.cpl ? '$' + a.cpl.toFixed(2) : '—', 'Cost per lead', a.cpl && a.cpl < 10 ? 'good' : null);
+  } else {
+    add('—', 'Ad figures unavailable. Check the token before reading anything into this', 'bad');
+  }
+
+  if (ig) {
+    add(ig.reach, 'Instagram reach');
+    add(ig.new_followers === null ? '—' : ig.new_followers, 'New followers');
+    add(ig.engagement_rate + '%', 'Engagement rate');
+  } else if (D.organic_is_live === false) {
+    add('—', 'Organic figures are only held for the current month');
+  }
+  if (fb) add(fb.page_engagements, 'Facebook engagements');
+  if (yt.subs) add(yt.subs, 'YouTube subscribers');
+
+  add(b.cards || 0, 'Cards dated this month');
+  add(b.with_reading || 0, 'Carrying a 72-hour reach reading',
+      (b.cards && !b.with_reading) ? 'bad' : (b.with_reading ? 'good' : null));
+
+  document.getElementById('nums').innerHTML = t.join('');
+}
+
+function heading(){
+  if (!D.month) return;
+  const [y, m] = D.month.split('-');
+  document.getElementById('title').textContent = MONTHS[+m - 1] + ' ' + y + ' review';
+}
+
+const timers = {};
+function wire(state){
+  document.querySelectorAll('textarea').forEach(el => {
+    const k = el.dataset.k;
+    el.value = (state[k] && state[k].text) || '';
+    mark(k, el.value);
+    el.addEventListener('input', () => {
+      clearTimeout(timers[k]);
+      document.getElementById('s-' + k).textContent = 'typing';
+      document.getElementById('s-' + k).classList.remove('in');
+      timers[k] = setTimeout(() => save(k, el.value), 1000);
+    });
+  });
+}
+
+function mark(k, text){
+  const s = document.getElementById('s-' + k);
+  s.textContent = text.trim() ? 'in' : 'empty';
+  s.classList.toggle('in', !!text.trim());
+}
+
+async function save(k, text){
+  try {
+    const r = await fetch(DB + '.json', {
+      method: 'PATCH', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({[k]: {text: text, saved: new Date().toISOString()}})
+    });
+    if (!r.ok) throw new Error('bad status');
+    mark(k, text);
+  } catch (e) { fail(); }
+}
+
+(async function init(){
+  heading();
+  nums();
+  let state = {};
+  try {
+    const r = await fetch(DB + '.json');
+    if (r.ok) state = (await r.json()) || {};
+  } catch (e) { fail(); }
+  wire(state);
+})();
+</script>
+</body>
+</html>
