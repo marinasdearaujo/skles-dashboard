@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SKLES October 2026 review</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap">
+<style>
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:#0d1631;color:#F6F4EE;
+  font-family:'Poppins',system-ui,-apple-system,Segoe UI,sans-serif;overflow:hidden}
+#stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#fit{width:1920px;height:1080px;transform-origin:center center;position:relative;flex:none}
+#fit>section{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:hidden;
+  box-shadow:0 24px 80px rgba(0,0,0,.5)}
+#fit>section[hidden]{display:none!important}
+#bar{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:center;gap:14px;
+  padding:12px 20px;padding-bottom:calc(12px + env(safe-area-inset-bottom,0px));
+  background:linear-gradient(180deg,rgba(13,22,49,0),rgba(13,22,49,.92));
+  font-size:12.5px;color:#9fabca;z-index:20}
+#bar button{font-family:inherit;font-size:12.5px;font-weight:600;color:#F6F4EE;
+  background:rgba(255,255,255,.1);border:0;border-radius:30px;padding:8px 16px;cursor:pointer}
+#bar button:hover{background:rgba(255,255,255,.2)}
+#bar .sp{flex:1}
+#bar .ct{font-variant-numeric:tabular-nums;letter-spacing:.06em}
+#bar .nm{color:#E0C58F;font-weight:600}
+#toc{position:fixed;inset:0;background:rgba(9,16,37,.96);z-index:30;display:none;
+  overflow-y:auto;padding:48px 28px}
+#toc.on{display:block}
+#toc h2{font-family:'Merriweather',Georgia,serif;font-size:26px;margin:0 auto 22px;
+  max-width:780px;color:#F6F4EE}
+#toc ol{max-width:780px;margin:0 auto;padding:0;list-style:none}
+#toc li{border-top:1px solid rgba(255,255,255,.12)}
+#toc button{width:100%;text-align:left;font-family:inherit;background:none;border:0;
+  color:#C9D0E2;font-size:15px;padding:13px 4px;cursor:pointer;display:flex;gap:14px}
+#toc button:hover{color:#fff}
+#toc button b{color:#E0C58F;font-variant-numeric:tabular-nums;min-width:28px;font-weight:600}
+#toc .sec{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#E0C58F;
+  padding:22px 4px 6px;max-width:780px;margin:0 auto}
+@media print{
+  html,body{overflow:visible;background:#fff;height:auto}
+  #bar,#toc{display:none!important}
+  #stage{position:static;display:block}
+  #fit{width:auto;height:auto;transform:none!important}
+  #fit>section{position:relative!important;width:1920px;height:1080px;display:block!important;
+    page-break-after:always;box-shadow:none}
+}
+</style>
+</head>
+<body>
+<div id="stage"><div id="fit">
+<section id="cover" data-transition="fade" style="background:#112250;color:#F6F4EE;font-family:'Poppins', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:space-between">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#E0C58F">Skills Up · Sean K. Langston</p>
+<div style="display:flex;flex-direction:column;gap:40px">
+<div style="width:160px;height:6px;background:#E0C58F"></div>
+<h1 style="font-family:'Merriweather', Georgia, serif;font-size:120px;font-weight:700;line-height:1.1;color:#F6F4EE">October review</h1>
+<p style="font-size:40px;line-height:1.4;color:#C9D0E2;width:1300px">Three reports, three readers. The same October data, cut for the person who has to act on it.</p>
+</div>
+<p style="font-size:24px;color:#C9D0E2">Built on data held in the SKLES review console, 5 November 2026</p>
+
+</section>
+<section id="tiers" data-transition="fade" style="background:#F6F4EE;color:#3A4158;font-family:'Poppins', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:64px">
+<div style="display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#8C6D2E">How to read this deck</p>
+<h2 style="font-family:'Merriweather', Georgia, serif;font-size:56px;font-weight:700;line-height:1.2;color:#112250">Each report answers one question for one reader</h2>
+</div>
+<div style="display:flex;flex-direction:row;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:24px;background:#FFFDF8;border:1px solid #E2DED3;border-radius:16px;padding:44px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#8C6D2E">Monthly</p>
+<h3 style="font-family:'Merriweather', Georgia, serif;font-size:44px;font-weight:700;color:#112250">Strategic</h3>
+<p style="font-size:28px;line-height:1.4"><b>Sean</b><br>Is marketing making money?</p>
+<p style="font-size:24px;color:#6B7287">Decides budget and focus · 2 min</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:24px;background:#FFFDF8;border:1px solid #E2DED3;border-radius:16px;padding:44px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#8C6D2E">Every two weeks</p>
+<h3 style="font-family:'Merriweather', Georgia, serif;font-size:44px;font-weight:700;color:#112250">Tactical</h3>
+<p style="font-size:28px;line-height:1.4"><b>Marina, Valerie, Marissa</b><br>What works, and what changes?</p>
+<p style="font-size:24px;color:#6B7287">Decides creative, mix, tests · 10 min</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:24px;background:#FFFDF8;border:1px solid #E2DED3;border-radius:16px;padding:44px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#8C6D2E">Daily</p>
+<h3 style="font-family:'Merriweather', Georgia, serif;font-size:44px;font-weight:700;color:#112250">Operational</h3>
+<p style="font-size:28px;line-height:1.4"><b>Whoever runs today</b><br>Is everything running?</p>
+<p style="font-size:24px;color:#6B7287">Decides what to fix today · 30 sec</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7287">Anything that does not serve a report’s question moves to another report.</p>
+
+</section>
+<section id="s-div" data-transition="fade" style="background:#112250;color:#F6F4EE;font-family:'Poppins', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:space-between">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#E0C58F">Report 1 of 3 · Monthly</p>
+<div style="display:flex;flex-direction:column;gap:32px">
+<h1 style="font-family:'Merriweather', Georgia, serif;font-size:120px;font-weight:700;line-height:1.1;color:#F6F4EE">Strategic</h1>
+<p style="font-size:40px;line-height:1.4;color:#C9D0E2;width:1300px">For Sean. Is marketing making money, and where should the next dollar go?</p>
+</div>
+<div style="display:flex;flex-direction:row;gap:64px">
+<p style="font-size:28px;line-height:1.4;color:#C9D0E2"><span style="color:#E0C58F">Reader</span><br>Sean, the client</p>
+<p style="font-size:28px;line-height:1.4;color:#C9D0E2"><span style="color:#E0C58F">Decides</span><br>Budget and focus</p>
+<p style="font-size:28px;line-height:1.4;color:#C9D0E2"><span style="color:#E0C58F">Length</span><br>5 slides, 2 minutes</p>
+</div>
+</section>
+<section id="s-summary" data-transition="fade" style="background:#F6F4EE;color:#3A4158;font-family:'Poppins', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:56px">
+<div style="display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#8C6D2E">October 2026 · Summary</p>
+<h2 style="font-family:'Merriweather', Georgia, serif;font-size:56px;font-weight:700;line-height:1.2;color:#112250">Ads buy leads under the benchmark. The next dollar of revenue sits in the step after the form.</h2>
+</div>
+<div style="display:flex;flex-direction:column;gap:36px">
+<div style="display:flex;flex-direction:row;gap:48px;align-items:center;border-top:1px solid #E2DED3;padding:28px 0 0 0"><p style="width:300px;font-size:64px;font-weight:700;color:#1E7A55">$7.02</p><p style="flex:1;font-size:30px;line-height:1.4">per lead across 44 leads, against the $18.50 every past campaign averaged.</p></div>
+<div style="display:flex;flex-direction:row;gap:48px;align-items:center;border-top:1px solid #E2DED3;padding:28px 0 0 0"><p style="width:300px;font-size:64px;font-weight:700;color:#B23A4E">$0.00</p><p style="flex:1;font-size:30px;line-height:1.4">closed this month. Every lead was traced through HubSpot and none reached a sales conversation.</p></div>
+<div style="display:flex;flex-direction:row;gap:48px;align-items:center;border-top:1px solid #E2DED3;padding:28px 0 0 0"><p style="width:300px;font-size:64px;font-weight:700;color:#112250">108</p><p style="flex:1;font-size:30px;line-height:1.4">accounts reached per Instagram post, from 19 posts. Was 140 the month before.</p></div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7287">Strategic · October 2026</p>
+
+</section>
+<section id="s-score" data-transition="fade" style="background:#F6F4EE;color:#3A4158;font-family:'Poppins', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:64px">
+<div style="display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#8C6D2E">Scorecard</p>
+<h2 style="font-family:'Merriweather', Georgia, serif;font-size:56px;font-weight:700;line-height:1.2;color:#112250">Leads on track, revenue off track</h2>
+</div>
+<div style="display:flex;flex-direction:row;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FFFDF8;border:1px solid #E2DED3;border-radius:16px;padding:36px"><p style="align-self:start;font-size:24px;font-weight:600;padding:6px 18px;border-radius:999px;background:#DDEFE6;color:#1E7A55">On track</p><p style="font-size:28px;color:#6B7287">Cost per lead</p><p style="font-size:88px;font-weight:700;line-height:1.1;color:#112250">$7.02</p><p style="font-size:26px;line-height:1.4">62% under the $18.50 benchmark</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FFFDF8;border:1px solid #E2DED3;border-radius:16px;padding:36px"><p style="align-self:start;font-size:24px;font-weight:600;padding:6px 18px;border-radius:999px;background:#DDEFE6;color:#1E7A55">Steady</p><p style="font-size:28px;color:#6B7287">Leads</p><p style="font-size:88px;font-weight:700;line-height:1.1;color:#112250">44</p><p style="font-size:26px;line-height:1.4">47 the month before</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FFFDF8;border:2px solid #B23A4E;border-radius:16px;padding:36px"><p style="align-self:start;font-size:24px;font-weight:600;padding:6px 18px;border-radius:999px;background:#F7E1E5;color:#B23A4E">Off track</p><p style="font-size:28px;color:#6B7287">Revenue won</p><p style="font-size:88px;font-weight:700;line-height:1.1;color:#B23A4E">$0.00</p><p style="font-size:26px;line-height:1.4">$1,999.00 the month before</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FFFDF8;border:1px solid #E2DED3;border-radius:16px;padding:36px"><p style="align-self:start;font-size:24px;font-weight:600;padding:6px 18px;border-radius:999px;background:#F6E8CF;color:#8A5506">Watch</p><p style="font-size:28px;color:#6B7287">Organic reach per post</p><p style="font-size:88px;font-weight:700;line-height:1.1;color:#112250">108</p><p style="font-size:26px;line-height:1.4">Down 23% from 140</p></div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7287">Strategic · Benchmark is the average cost per lead across every past SKLES campaign</p>
+
+</section>
+<section id="s-funnel" data-transition="fade" style="background:#F6F4EE;color:#3A4158;font-family:'Poppins', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:56px">
+<div style="display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#8C6D2E">October 2026, from ad click to sale</p>
+<h2 style="font-family:'Merriweather', Georgia, serif;font-size:56px;font-weight:700;line-height:1.2;color:#112250">Ads deliver the leads. They stall before a sales conversation.</h2>
+</div>
+<div style="display:flex;flex-direction:column;gap:28px">
+<div style="display:flex;flex-direction:row;gap:32px;align-items:center"><p style="width:420px;font-size:30px;font-weight:500">Tapped the ad</p><div style="width:960px;height:60px;background:#E4E7EF;border-radius:8px;display:flex;flex-direction:row"><div style="width:960px;height:60px;background:#112250;border-radius:8px"></div></div><p style="width:220px;font-size:44px;font-weight:700;text-align:right;color:#112250">141</p></div>
+<div style="display:flex;flex-direction:row;gap:32px;align-items:center"><p style="width:420px;font-size:30px;font-weight:500">Finished the form</p><div style="width:960px;height:60px;background:#E4E7EF;border-radius:8px;display:flex;flex-direction:row"><div style="width:218px;height:60px;background:#112250;border-radius:8px"></div></div><p style="width:220px;font-size:44px;font-weight:700;text-align:right;color:#112250">32</p></div>
+<div style="display:flex;flex-direction:row;gap:32px;align-items:center"><p style="width:420px;font-size:30px;font-weight:500">Reached the list</p><div style="width:960px;height:60px;background:#E4E7EF;border-radius:8px;display:flex;flex-direction:row"><div style="width:204px;height:60px;background:#112250;border-radius:8px"></div></div><p style="width:220px;font-size:44px;font-weight:700;text-align:right;color:#112250">30</p></div>
+<div style="display:flex;flex-direction:row;gap:32px;align-items:center"><p style="width:420px;font-size:30px;font-weight:500">Reached the training page</p><div style="width:960px;height:60px;background:#E4E7EF;border-radius:8px;display:flex;flex-direction:row"><div style="width:8px;height:60px;background:#112250;border-radius:8px"></div></div><p style="width:220px;font-size:44px;font-weight:700;text-align:right;color:#112250">not measured</p></div>
+<div style="display:flex;flex-direction:row;gap:32px;align-items:center"><p style="width:420px;font-size:30px;font-weight:500">Paid</p><div style="width:960px;height:60px;background:#F7E1E5;border:2px dashed #B23A4E;border-radius:8px"></div><p style="width:220px;font-size:44px;font-weight:700;text-align:right;color:#B23A4E">0</p></div>
+</div>
+<p style="font-size:28px;line-height:1.45;border-left:6px solid #E0C58F;padding:4px 0 4px 28px">The loss happens at <b>Paid</b>, so more ad spend would only buy more leads that stall at the same step.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7287">Strategic · Meta Ads and HubSpot, October 2026</p>
+
+</section>
+<section id="s-proj" data-transition="fade" style="background:#F6F4EE;color:#3A4158;font-family:'Poppins', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:56px">
+<div style="display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#8C6D2E">November 2026, before it runs</p>
+<h2 style="font-family:'Merriweather', Georgia, serif;font-size:56px;font-weight:700;line-height:1.2;color:#112250">The planned mix projects above this month.</h2>
+</div>
+<div style="display:flex;flex-direction:column;gap:28px">
+<div style="display:flex;flex-direction:row;gap:32px;align-items:center"><p style="width:360px;font-size:30px;font-weight:500">October 2026<br><span style="font-size:24px;color:#6B7287">19 posts, happened</span></p><div style="width:900px;height:56px;background:#E4E7EF;border-radius:8px;display:flex;flex-direction:row"><div style="width:900px;height:56px;background:#112250;border-radius:8px"></div></div><p style="width:240px;font-size:40px;font-weight:700;text-align:right;color:#112250">2,046</p></div>
+<div style="display:flex;flex-direction:row;gap:32px;align-items:center"><p style="width:360px;font-size:30px;font-weight:500">November 2026<br><span style="font-size:24px;color:#6B7287">4 posts, happened</span></p><div style="width:900px;height:56px;background:#E4E7EF;border-radius:8px;display:flex;flex-direction:row"><div style="width:98px;height:56px;background:#112250;border-radius:8px"></div></div><p style="width:240px;font-size:40px;font-weight:700;text-align:right;color:#112250">223</p></div>
+<div style="display:flex;flex-direction:row;gap:32px;align-items:center"><p style="width:360px;font-size:30px;font-weight:500">November 2026<br><span style="font-size:24px;color:#6B7287">23 posts, planned</span></p><div style="width:900px;height:56px;background:#FFFDF8;border:2px dashed #E0C58F;border-radius:8px;display:flex;flex-direction:row"><div style="width:900px;height:52px;background:#E0C58F;border-radius:6px"></div></div><p style="width:240px;font-size:40px;font-weight:700;text-align:right;color:#8C6D2E">2,046</p></div>
+</div>
+<p style="font-size:28px;line-height:1.45;border-left:6px solid #E0C58F;padding:4px 0 4px 28px">23 planned posts at each pillar's own historical reach. The mix leans on <b>Founder Story</b>, 8 of the 23. The gain comes from volume, not from reach per post.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7287">Strategic · planned cards × historical reach per post, per pillar</p>
+
+</section>
+<section id="s-prio" data-transition="fade" style="background:#F6F4EE;color:#3A4158;font-family:'Poppins', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:56px">
+<div style="display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#8C6D2E">November plan</p>
+<h2 style="font-family:'Merriweather', Georgia, serif;font-size:56px;font-weight:700;line-height:1.2;color:#112250">Three priorities, with the bottleneck first</h2>
+</div>
+<div style="display:flex;flex-direction:column;gap:0">
+<div style="display:flex;flex-direction:row;gap:48px;align-items:center;border-top:1px solid #E2DED3;padding:32px 0">
+<p style="width:72px;font-size:56px;font-weight:700;color:#8C6D2E">1</p>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px">
+<p style="font-size:30px;font-weight:600;line-height:1.35;color:#112250">Follow up on the 44 October leads within 24 hours, then a three-email sequence that ends in a call booking</p>
+<p style="font-size:24px;color:#6B7287">Marina · live by Nov 12</p>
+</div>
+<p style="width:300px;font-size:32px;font-weight:700;text-align:right;color:#1E7A55">1 sale ≈ $1,999</p>
+</div>
+<div style="display:flex;flex-direction:row;gap:48px;align-items:center;border-top:1px solid #E2DED3;padding:32px 0">
+<p style="width:72px;font-size:56px;font-weight:700;color:#8C6D2E">2</p>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px">
+<p style="font-size:30px;font-weight:600;line-height:1.35;color:#112250">Hold ad spend near $300 a month and refresh two creatives before click rates fade</p>
+<p style="font-size:24px;color:#6B7287">Marina · by Nov 12</p>
+</div>
+<p style="width:300px;font-size:32px;font-weight:700;text-align:right;color:#1E7A55">CPL under $8</p>
+</div>
+<div style="display:flex;flex-direction:row;gap:48px;align-items:center;border-top:1px solid #E2DED3;border-bottom:1px solid #E2DED3;padding:32px 0">
+<p style="width:72px;font-size:56px;font-weight:700;color:#8C6D2E">3</p>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px">
+<p style="font-size:30px;font-weight:600;line-height:1.35;color:#112250">Rebuild the post mix around what reached furthest: student wins as feed posts, on Saturdays and Wednesdays</p>
+<p style="font-size:24px;color:#6B7287">Valerie · from Nov 9</p>
+</div>
+<p style="width:300px;font-size:32px;font-weight:700;text-align:right;color:#1E7A55">Reach back to 140</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7287">Strategic · Conservative: one sale assumed from 44 leads, at September’s $1,999 ticket</p>
+
+</section>
+<section id="s-ask" data-transition="fade" style="background:#E0C58F;color:#112250;font-family:'Poppins', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+<p style="font-size:28px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#112250">Decision needed from Sean</p>
+<h1 style="font-family:'Merriweather', Georgia, serif;font-size:88px;font-weight:700;line-height:1.2;color:#112250;width:1600px">Drop the intent question altogether</h1>
+<p style="font-size:36px;line-height:1.45;color:#22305E;width:1400px">Scored 8.0 out of 10 across cost, odds and impact, the highest of anything waiting on you. Status today: needs a decision from Sean.</p>
+
+</section>
+<section id="t-div" data-transition="fade" style="background:#112250;color:#F6F4EE;font-family:'Poppins', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:space-between">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#E0C58F">Report 2 of 3 · Every two weeks</p>
+<div style="display:flex;flex-direction:column;gap:32px">
+<h1 style="font-family:'Merriweather', Georgia, serif;font-size:120px;font-weight:700;line-height:1.1;color:#F6F4EE">Tactical</h1>
+<p style="font-size:40px;line-height:1.4;color:#C9D0E2;width:1300px">For the team. What worked, what did not, and what changes this cycle.</p>
+</div>
+<div style="display:flex;flex-direction:row;gap:64px">
+<p style="font-size:28px;line-height:1.4;color:#C9D0E2"><span style="color:#E0C58F">Reader</span><br>Marina, Valerie, Marissa</p>
+<p style="font-size:28px;line-height:1.4;color:#C9D0E2"><span style="color:#E0C58F">Decides</span><br>Creative, mix, tests</p>
+<p style="font-size:28px;line-height:1.4;color:#C9D0E2"><span style="color:#E0C58F">Length</span><br>5 slides, 10 minutes</p>
+</div>
+</section>
+<section id="t-paid" data-transition="fade" style="background:#F6F4EE;color:#3A4158;font-family:'Poppins', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:56px">
+<div style="display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#8C6D2E">Paid · October vs September</p>
+<h2 style="font-family:'Merriweather', Georgia, serif;font-size:56px;font-weight:700;line-height:1.2;color:#112250">Ad costs nearly doubled, and stronger clicks absorbed it</h2>
+</div>
+<div style="display:flex;flex-direction:row;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFDF8;border:1px solid #E2DED3;border-radius:16px;padding:40px">
+<p style="font-size:28px;color:#6B7287">Cost per 1,000 views</p>
+<p style="font-size:88px;font-weight:700;line-height:1.1;color:#112250">$67.19</p>
+<p style="font-size:28px;font-weight:600;color:#B23A4E">Up 85% from $36.31</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFDF8;border:1px solid #E2DED3;border-radius:16px;padding:40px">
+<p style="font-size:28px;color:#6B7287">Click rate</p>
+<p style="font-size:88px;font-weight:700;line-height:1.1;color:#112250">11.8%</p>
+<p style="font-size:28px;font-weight:600;color:#1E7A55">Up 4.1 pts from 7.7%</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFDF8;border:1px solid #E2DED3;border-radius:16px;padding:40px">
+<p style="font-size:28px;color:#6B7287">People reached</p>
+<p style="font-size:88px;font-weight:700;line-height:1.1;color:#112250">2,815</p>
+<p style="font-size:28px;font-weight:600;color:#B23A4E">Down 48% from 5,450</p>
+</div>
+</div>
+<p style="font-size:28px;line-height:1.45;border-left:6px solid #E0C58F;padding:4px 0 4px 28px">Cost per lead held at $7 only because the click rate climbed. Q4 auctions keep costs rising into December, so two fresh creatives go in before clicks fade. Seven people commented on ads for the first time; each gets a reply within a day.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7287">Tactical · Meta Ads</p>
+
+</section>
+<section id="t-worked" data-transition="fade" style="background:#F6F4EE;color:#3A4158;font-family:'Poppins', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:44px">
+<div style="display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#8C6D2E">The 4 that reached furthest</p>
+<h2 style="font-family:'Merriweather', Georgia, serif;font-size:56px;font-weight:700;line-height:1.2;color:#112250">What reached furthest, and what it was</h2>
+</div>
+<div style="display:flex;flex-direction:row;gap:28px">
+<div style="display:flex;flex-direction:column;gap:14px;background:#FFFDF8;border:2px solid #E0C58F;border-radius:16px;padding:28px"><img src="/_blob/b1648641affaedca2d733d6eb3a0af3c" alt="Instagram post" style="width:340px;height:425px;object-fit:cover;border-radius:12px"><p style="font-size:44px;font-weight:700;color:#112250">259</p><p style="font-size:24px;color:#6B7287">reached · REELS</p><p style="font-size:24px;line-height:1.35">2026-10-21 · no caption on the post</p></div>
+<div style="display:flex;flex-direction:column;gap:14px;background:#FFFDF8;border:1px solid #E2DED3;border-radius:16px;padding:28px"><img src="/_blob/a736ca8aaff5cee81666942314d59c0d" alt="Instagram post" style="width:340px;height:425px;object-fit:cover;border-radius:12px"><p style="font-size:44px;font-weight:700;color:#3A4158">213</p><p style="font-size:24px;color:#6B7287">reached · FEED</p><p style="font-size:24px;line-height:1.35">Shoutout to @eunicem_bent  for getting this property UNDER CONTRACT for he…</p></div>
+<div style="display:flex;flex-direction:column;gap:14px;background:#FFFDF8;border:1px solid #E2DED3;border-radius:16px;padding:28px"><img src="/_blob/ea217d87e26d9937c3e25c11ea70c8e1" alt="Instagram post" style="width:340px;height:425px;object-fit:cover;border-radius:12px"><p style="font-size:44px;font-weight:700;color:#3A4158">186</p><p style="font-size:24px;color:#6B7287">reached · FEED</p><p style="font-size:24px;line-height:1.35">🎉 Congratulations to @therealtoreric on getting this renovated home UNDER …</p></div>
+<div style="display:flex;flex-direction:column;gap:14px;background:#FFFDF8;border:1px solid #E2DED3;border-radius:16px;padding:28px"><img src="/_blob/633d32ef4ce41e3a2b8a49f15b558923" alt="Instagram post" style="width:340px;height:425px;object-fit:cover;border-radius:12px"><p style="font-size:44px;font-weight:700;color:#3A4158">160</p><p style="font-size:24px;color:#6B7287">reached · REELS</p><p style="font-size:24px;line-height:1.35">There's money to be made in ugly houses too. 🏚️💰</p></div>
+</div>
+<p style="font-size:28px;line-height:1.45;border-left:6px solid #E0C58F;padding:4px 0 4px 28px">Two of the four congratulate a named student on a property, and they cost Sean no camera time. That is the pillar to give more slots to.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7287">Tactical · October 2026 · ranked by accounts reached</p>
+
+</section>
+<section id="t-organic" data-transition="fade" style="background:#F6F4EE;color:#3A4158;font-family:'Poppins', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:56px">
+<div style="display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#8C6D2E">Organic · reach per post, 41 Instagram posts</p>
+<h2 style="font-family:'Merriweather', Georgia, serif;font-size:56px;font-weight:700;line-height:1.2;color:#112250">Saturday, feed, short reached furthest</h2>
+</div>
+<div style="display:flex;flex-direction:row;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FFFDF8;border:1px solid #E2DED3;border-radius:16px;padding:36px"><h3 style="font-size:32px;font-weight:600;color:#112250">Day</h3>
+<div style="display:flex;flex-direction:row;gap:16px;align-items:center"><p style="width:160px;font-size:26px;font-weight:600">Saturday</p><div style="width:190px;height:28px;background:#E4E7EF;border-radius:4px;display:flex;flex-direction:row"><div style="width:190px;height:28px;background:#112250;border-radius:4px"></div></div><p style="width:70px;font-size:26px;font-weight:700;text-align:right">150.6</p></div>
+<div style="display:flex;flex-direction:row;gap:16px;align-items:center"><p style="width:160px;font-size:26px;font-weight:600">Wednesday</p><div style="width:190px;height:28px;background:#E4E7EF;border-radius:4px;display:flex;flex-direction:row"><div style="width:179px;height:28px;background:#112250;border-radius:4px"></div></div><p style="width:70px;font-size:26px;font-weight:700;text-align:right">141.8</p></div>
+<div style="display:flex;flex-direction:row;gap:16px;align-items:center"><p style="width:160px;font-size:26px">Tuesday</p><div style="width:190px;height:28px;background:#E4E7EF;border-radius:4px;display:flex;flex-direction:row"><div style="width:156px;height:28px;background:#A9B0C2;border-radius:4px"></div></div><p style="width:70px;font-size:26px;text-align:right">124</p></div>
+<p style="font-size:24px;color:#6B7287">7 vs 9 vs 7 posts · solid</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FFFDF8;border:1px solid #E2DED3;border-radius:16px;padding:36px"><h3 style="font-size:32px;font-weight:600;color:#112250">Format</h3>
+<div style="display:flex;flex-direction:row;gap:16px;align-items:center"><p style="width:160px;font-size:26px;font-weight:600">Feed</p><div style="width:190px;height:28px;background:#E4E7EF;border-radius:4px;display:flex;flex-direction:row"><div style="width:190px;height:28px;background:#112250;border-radius:4px"></div></div><p style="width:70px;font-size:26px;font-weight:700;text-align:right">144.9</p></div>
+<div style="display:flex;flex-direction:row;gap:16px;align-items:center"><p style="width:160px;font-size:26px">Reels</p><div style="width:190px;height:28px;background:#E4E7EF;border-radius:4px;display:flex;flex-direction:row"><div style="width:135px;height:28px;background:#A9B0C2;border-radius:4px"></div></div><p style="width:70px;font-size:26px;text-align:right">102.6</p></div>
+<p style="font-size:24px;color:#6B7287">14 vs 27 posts · solid</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FFFDF8;border:1px solid #E2DED3;border-radius:16px;padding:36px"><h3 style="font-size:32px;font-weight:600;color:#112250">Caption length</h3>
+<div style="display:flex;flex-direction:row;gap:16px;align-items:center"><p style="width:160px;font-size:26px;font-weight:600">Short</p><div style="width:190px;height:28px;background:#E4E7EF;border-radius:4px;display:flex;flex-direction:row"><div style="width:190px;height:28px;background:#112250;border-radius:4px"></div></div><p style="width:70px;font-size:26px;font-weight:700;text-align:right">146</p></div>
+<div style="display:flex;flex-direction:row;gap:16px;align-items:center"><p style="width:160px;font-size:26px;font-weight:600">Medium</p><div style="width:190px;height:28px;background:#E4E7EF;border-radius:4px;display:flex;flex-direction:row"><div style="width:142px;height:28px;background:#112250;border-radius:4px"></div></div><p style="width:70px;font-size:26px;font-weight:700;text-align:right">109.3</p></div>
+<div style="display:flex;flex-direction:row;gap:16px;align-items:center"><p style="width:160px;font-size:26px">Long</p><div style="width:190px;height:28px;background:#E4E7EF;border-radius:4px;display:flex;flex-direction:row"><div style="width:133px;height:28px;background:#A9B0C2;border-radius:4px"></div></div><p style="width:70px;font-size:26px;text-align:right">102</p></div>
+<p style="font-size:24px;color:#6B7287">9 vs 30 vs 2 posts · direction</p></div>
+</div>
+<p style="font-size:28px;line-height:1.45;border-left:6px solid #E0C58F;padding:4px 0 4px 28px">Every comparison names how many posts sit behind it. A gap on two posts is a direction to try, not a finding to build on.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7287">Tactical · Instagram, September onward · navy marks the winners</p>
+
+</section>
+<section id="t-profile" data-transition="fade" style="background:#F6F4EE;color:#3A4158;font-family:'Poppins', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:64px">
+<div style="display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#8C6D2E">Where the audience is</p>
+<h2 style="font-family:'Merriweather', Georgia, serif;font-size:56px;font-weight:700;line-height:1.2;color:#112250">Sean’s own profile gets about six times the attention per post</h2>
+</div>
+<div style="display:flex;flex-direction:row;gap:96px;align-items:end">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:160px;font-weight:700;line-height:1;color:#112250">637</p>
+<p style="font-size:30px;line-height:1.4;width:640px">impressions per post on Sean’s Facebook profile<br><span style="color:#6B7287">21,036 over 33 posts</span></p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:160px;font-weight:700;line-height:1;color:#A9B0C2">108</p>
+<p style="font-size:30px;line-height:1.4;width:640px">reach per post on the Instagram page<br><span style="color:#6B7287">2,046 over 19 posts</span></p>
+</div>
+</div>
+<p style="font-size:28px;line-height:1.45;border-left:6px solid #E0C58F;padding:4px 0 4px 28px">Different metrics, so read it as a direction. Test: cross-post the top five October posts to Sean’s profile and compare in the same metric.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7287">Tactical · Facebook profile export (Oct 19) and Instagram</p>
+</section>
+<section id="t-tests" data-transition="fade" style="background:#F6F4EE;color:#3A4158;font-family:'Poppins', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:56px">
+<div style="display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#8C6D2E">Test log</p>
+<h2 style="font-family:'Merriweather', Georgia, serif;font-size:56px;font-weight:700;line-height:1.2;color:#112250">2 tests open, none settled</h2>
+</div>
+<table style="font-size:28px;color:#3A4158">
+<tr><th style="width:38%">Hypothesis</th><th style="width:20%">Measure</th><th style="width:16%">Status</th><th style="width:26%">Read</th></tr>
+<tr><td>Form v5: prefilled fields first</td><td>form opens that become leads</td><td style="color:#B23A4E">Ruled out</td><td>Field order inside a Meta instant form is not ours to set. Anything that…</td></tr>
+<tr><td>Tag the training page URL</td><td>leads arriving at the page with the tag</td><td style="color:#8A5506">Running</td><td>Starts counting the moment ad 04c goes live.</td></tr>
+<tr><td>Put the offer in front of the video</td><td>visits that click buy</td><td style="color:#6B7287">Queued</td><td>The baseline is dirty. A clean one needs a few days of real traffic once…</td></tr>
+</table>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7287">Tactical · every test names its measure before it starts</p>
+
+</section>
+<section id="t-changes" data-transition="fade" style="background:#F6F4EE;color:#3A4158;font-family:'Poppins', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:56px">
+<div style="display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#8C6D2E">This cycle</p>
+<h2 style="font-family:'Merriweather', Georgia, serif;font-size:56px;font-weight:700;line-height:1.2;color:#112250">Four changes, each with an owner and a date</h2>
+</div>
+<table style="font-size:30px;color:#3A4158">
+<tr><th style="width:68%">Change</th><th style="width:18%">Owner</th><th style="width:14%;text-align:right">By</th></tr>
+<tr><td>Two new ad creatives in rotation, same audience</td><td>Marina</td><td style="text-align:right">Nov 12</td></tr>
+<tr><td>Follow-up sequence and call booking live</td><td>Marina</td><td style="text-align:right">Nov 12</td></tr>
+<tr><td>Swap four planned Reels for student-win feed posts, Saturday and Wednesday</td><td>Valerie</td><td style="text-align:right">Nov 9</td></tr>
+<tr><td>Next long-form recordings built on objections raised in ad comments</td><td>Marissa</td><td style="text-align:right">Nov 20</td></tr>
+</table>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7287">Tactical · illustrative owners and dates</p>
+
+</section>
+<section id="o-div" data-transition="fade" style="background:#112250;color:#F6F4EE;font-family:'Poppins', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:space-between">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#E0C58F">Report 3 of 3 · Daily</p>
+<div style="display:flex;flex-direction:column;gap:32px">
+<h1 style="font-family:'Merriweather', Georgia, serif;font-size:120px;font-weight:700;line-height:1.1;color:#F6F4EE">Operational</h1>
+<p style="font-size:40px;line-height:1.4;color:#C9D0E2;width:1300px">For whoever runs today. Is everything running, and what breaks first?</p>
+</div>
+<div style="display:flex;flex-direction:row;gap:64px">
+<p style="font-size:28px;line-height:1.4;color:#C9D0E2"><span style="color:#E0C58F">Reader</span><br>Whoever runs today</p>
+<p style="font-size:28px;line-height:1.4;color:#C9D0E2"><span style="color:#E0C58F">Decides</span><br>What to fix today</p>
+<p style="font-size:28px;line-height:1.4;color:#C9D0E2"><span style="color:#E0C58F">Length</span><br>3 slides, 30 seconds</p>
+</div>
+</section>
+<section id="o-pace" data-transition="fade" style="background:#F6F4EE;color:#3A4158;font-family:'Poppins', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:64px">
+<div style="display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#8C6D2E">Thursday 5 November · day 5 of 30</p>
+<h2 style="font-family:'Merriweather', Georgia, serif;font-size:56px;font-weight:700;line-height:1.2;color:#112250">Pacing on plan. Three checks failing, all on data capture.</h2>
+</div>
+<div style="display:flex;flex-direction:column;gap:44px">
+<div style="display:flex;flex-direction:row;gap:32px;align-items:center">
+<p style="width:300px;font-size:30px;font-weight:500">Ad spend</p>
+<div style="position:relative;width:960px;height:32px;background:#E4E7EF;border-radius:6px"><div style="position:absolute;left:0px;top:0px;width:159px;height:32px;background:#112250;border-radius:6px"></div><div style="position:absolute;left:160px;top:-10px;width:5px;height:52px;background:#8C6D2E"></div></div>
+<p style="width:340px;font-size:30px;font-weight:600;text-align:right">$49.84 of $300</p>
+</div>
+<div style="display:flex;flex-direction:row;gap:32px;align-items:center">
+<p style="width:300px;font-size:30px;font-weight:500">Leads</p>
+<div style="position:relative;width:960px;height:32px;background:#E4E7EF;border-radius:6px"><div style="position:absolute;left:0px;top:0px;width:175px;height:32px;background:#112250;border-radius:6px"></div><div style="position:absolute;left:160px;top:-10px;width:5px;height:52px;background:#8C6D2E"></div></div>
+<p style="width:340px;font-size:30px;font-weight:600;text-align:right">8 of 44</p>
+</div>
+<div style="display:flex;flex-direction:row;gap:32px;align-items:center">
+<p style="width:300px;font-size:30px;font-weight:500">Posts out</p>
+<div style="position:relative;width:960px;height:32px;background:#E4E7EF;border-radius:6px"><div style="position:absolute;left:0px;top:0px;width:167px;height:32px;background:#112250;border-radius:6px"></div><div style="position:absolute;left:160px;top:-10px;width:5px;height:52px;background:#8C6D2E"></div></div>
+<p style="width:340px;font-size:30px;font-weight:600;text-align:right">4 of 23</p>
+</div>
+<div style="display:flex;flex-direction:row;gap:32px;align-items:center">
+<p style="width:300px;font-size:30px;font-weight:500">Cost per lead</p>
+<div style="position:relative;width:960px;height:32px;background:#E4E7EF;border-radius:6px"><div style="position:absolute;left:0px;top:0px;width:323px;height:32px;background:#1E7A55;border-radius:6px"></div></div>
+<p style="width:340px;font-size:30px;font-weight:600;text-align:right">$6.23, cap $18.50</p>
+</div>
+</div>
+<p style="font-size:28px;line-height:1.45;border-left:6px solid #E0C58F;padding:4px 0 4px 28px">Gold mark: where the month should be today (17%). Targets are October’s actuals until November’s are set.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7287">Operational · Meta Ads pull and Instagram</p>
+</section>
+<section id="o-checks" data-transition="fade" style="background:#F6F4EE;color:#3A4158;font-family:'Poppins', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:44px">
+<div style="display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#8C6D2E">Health checks</p>
+<h2 style="font-family:'Merriweather', Georgia, serif;font-size:56px;font-weight:700;line-height:1.2;color:#112250">3 fail, 3 need a look</h2>
+</div>
+<table style="font-size:24px;color:#3A4158">
+<tr><th style="width:11%">Status</th><th style="width:35%">Check</th><th style="width:41%">Fix</th><th style="width:13%">Owner</th></tr>
+<tr><td style="color:#B23A4E">Fail</td><td>0 of 66 cards carry a 72h reading</td><td>Write reach on each card 72h after posting</td><td>Valerie</td></tr>
+<tr><td style="color:#B23A4E">Fail</td><td>19 posts live, 17 cards marked Published</td><td>Move them to Published with their Instagram links</td><td>Valerie</td></tr>
+<tr><td style="color:#B23A4E">Fail</td><td>LinkedIn and TikTok sent the wrong sheets</td><td>Request the Content sheet and a per-video export</td><td>Sean's team</td></tr>
+<tr><td style="color:#8A5506">Check</td><td>Webinar: 4 sessions, 0 attendees</td><td>Confirm the Zoom to HubSpot sync before reading this</td><td>Marina</td></tr>
+<tr><td style="color:#8A5506">Check</td><td>5 of 19 posts tagged to a card</td><td>Paste the Instagram link on the card at publish</td><td>Valerie</td></tr>
+<tr><td style="color:#8A5506">Stale</td><td>Manual exports from Oct 23, 2026</td><td>Refresh so the gap stops being invisible</td><td>Valerie</td></tr>
+<tr><td style="color:#1E7A55">OK</td><td>Meta pull every 3 hours</td><td>Last pull returned spend, leads and comments</td><td>Auto</td></tr>
+</table>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7287">Operational · none of these belong in Sean's report</p>
+
+</section>
+<section id="o-queue" data-transition="fade" style="background:#F6F4EE;color:#3A4158;font-family:'Poppins', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:64px">
+<div style="display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#8C6D2E">October 2026 content queue</p>
+<h2 style="font-family:'Merriweather', Georgia, serif;font-size:56px;font-weight:700;line-height:1.2;color:#112250">35 scheduled against 8 still to produce</h2>
+</div>
+<div style="display:flex;flex-direction:row;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;align-items:center;background:#FFFDF8;border:1px solid #E2DED3;border-radius:16px;padding:40px 24px"><p style="font-size:96px;font-weight:700;line-height:1.1;color:#112250">6</p><p style="font-size:28px;color:#6B7287">Ideas</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;align-items:center;background:#FFFDF8;border:1px solid #E2DED3;border-radius:16px;padding:40px 24px"><p style="font-size:96px;font-weight:700;line-height:1.1;color:#112250">8</p><p style="font-size:28px;color:#6B7287">To Produce</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;align-items:center;background:#FFFDF8;border:1px solid #E2DED3;border-radius:16px;padding:40px 24px"><p style="font-size:96px;font-weight:700;line-height:1.1;color:#112250">35</p><p style="font-size:28px;color:#6B7287">Scheduled</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;align-items:center;background:#FFFDF8;border:1px solid #E2DED3;border-radius:16px;padding:40px 24px"><p style="font-size:96px;font-weight:700;line-height:1.1;color:#112250">17</p><p style="font-size:28px;color:#6B7287">Published</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;align-items:center;background:#FFFDF8;border:1px solid #E2DED3;border-radius:16px;padding:40px 24px"><p style="font-size:96px;font-weight:700;line-height:1.1;color:#112250">0</p><p style="font-size:28px;color:#6B7287">Archive</p></div>
+</div>
+<p style="font-size:28px;line-height:1.45;border-left:6px solid #E0C58F;padding:4px 0 4px 28px">At least four move from To produce to Scheduled each week to hold pace.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7287">Operational · ops board, 05 November</p>
+</section>
+</div></div>
+<div id="bar">
+  <button id="prev">&larr;</button>
+  <button id="next">&rarr;</button>
+  <span class="ct"><b id="at">1</b> / 20</span>
+  <span class="nm" id="where"></span>
+  <span class="sp"></span>
+  <span>Internal · October 2026 · three reports</span>
+  <button id="toctog">Contents</button>
+</div>
+<div id="toc">
+  <h2>SKLES October 2026 review</h2>
+  <ol>
+<li><button data-go="0"><b>1</b><span>October review</span></button></li>
+<li><button data-go="1"><b>2</b><span>Each report answers one question for one reader</span></button></li>
+<p class="sec">Strategic &middot; for Sean</p><ol>
+<li><button data-go="2"><b>3</b><span>Strategic</span></button></li>
+<li><button data-go="3"><b>4</b><span>Ads buy leads under the benchmark. The next dollar of revenue sits in the step after the f</span></button></li>
+<li><button data-go="4"><b>5</b><span>Leads on track, revenue off track</span></button></li>
+<li><button data-go="5"><b>6</b><span>Ads deliver the leads. They stall before a sales conversation.</span></button></li>
+<li><button data-go="6"><b>7</b><span>The planned mix projects above this month.</span></button></li>
+<li><button data-go="7"><b>8</b><span>Three priorities, with the bottleneck first</span></button></li>
+<li><button data-go="8"><b>9</b><span>Drop the intent question altogether</span></button></li>
+<p class="sec">Tactical &middot; for the team</p><ol>
+<li><button data-go="9"><b>10</b><span>Tactical</span></button></li>
+<li><button data-go="10"><b>11</b><span>Ad costs nearly doubled, and stronger clicks absorbed it</span></button></li>
+<li><button data-go="11"><b>12</b><span>What reached furthest, and what it was</span></button></li>
+<li><button data-go="12"><b>13</b><span>Saturday, feed, short reached furthest</span></button></li>
+<li><button data-go="13"><b>14</b><span>Sean’s own profile gets about six times the attention per post</span></button></li>
+<li><button data-go="14"><b>15</b><span>2 tests open, none settled</span></button></li>
+<li><button data-go="15"><b>16</b><span>Four changes, each with an owner and a date</span></button></li>
+<p class="sec">Operational &middot; for whoever runs today</p><ol>
+<li><button data-go="16"><b>17</b><span>Operational</span></button></li>
+<li><button data-go="17"><b>18</b><span>Pacing on plan. Three checks failing, all on data capture.</span></button></li>
+<li><button data-go="18"><b>19</b><span>3 fail, 3 need a look</span></button></li>
+<li><button data-go="19"><b>20</b><span>35 scheduled against 8 still to produce</span></button></li>
+</ol>
+</div>
+<script>
+var S=[].slice.call(document.querySelectorAll('#fit>section'));
+var SEC=["", "", "Strategic", "Strategic", "Strategic", "Strategic", "Strategic", "Strategic", "Strategic", "Tactical", "Tactical", "Tactical", "Tactical", "Tactical", "Tactical", "Tactical", "Operational", "Operational", "Operational", "Operational"];
+var i=0;
+
+function fit(){
+  var k=Math.min(window.innerWidth/1920,(window.innerHeight-56)/1080);
+  document.getElementById('fit').style.transform='scale('+k+')';
+}
+function go(n){
+  i=Math.max(0,Math.min(S.length-1,n));
+  S.forEach(function(s,j){s.hidden=j!==i;});
+  document.getElementById('at').textContent=i+1;
+  document.getElementById('where').textContent=SEC[i]||'';
+  if(history.replaceState) history.replaceState(null,'','#slide-'+(i+1));
+}
+document.getElementById('prev').onclick=function(){go(i-1);};
+document.getElementById('next').onclick=function(){go(i+1);};
+document.getElementById('toctog').onclick=function(){
+  document.getElementById('toc').classList.toggle('on');};
+document.querySelectorAll('[data-go]').forEach(function(b){
+  b.onclick=function(){go(+b.dataset.go);document.getElementById('toc').classList.remove('on');};});
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();go(i+1);}
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(i-1);}
+  if(e.key==='Home'){go(0);} if(e.key==='End'){go(S.length-1);}
+  if(e.key==='Escape'){document.getElementById('toc').classList.remove('on');}
+});
+document.getElementById('stage').onclick=function(e){
+  go(e.clientX < window.innerWidth*0.32 ? i-1 : i+1);};
+window.addEventListener('resize',fit);
+fit();
+var h=(location.hash||'').match(/slide-(\d+)/);
+go(h?(+h[1]-1):0);
+</script>
+</body>
+</html>
