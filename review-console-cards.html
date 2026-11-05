@@ -3,36 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Monthly review console</title>
+<title>Monthly Review Console</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap">
 <style>
-:root{
-  --navy:#112250; --gold:#E0C58F; --ink:#16181d; --muted:#5d6472;
-  --bg:#faf9f7; --card:#fff; --line:#e4e2dd; --wash:#f2f0ec; --grid:#d9d6d0; --head:#eceae5;
-  --good:#1f7a4d; --bad:#b4344a;
-  --sans:'Poppins',system-ui,-apple-system,Segoe UI,sans-serif;
-  --serif:'Merriweather',Georgia,serif;
-  color-scheme:light;
-}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5}
-h1,h2,h3,h4{text-wrap:balance;margin:0}
-p{margin:0}
-a{color:var(--navy)}
-.eyebrow{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--gold)}
-select,input,textarea{font-family:inherit;font-size:14px;color:var(--ink);background:var(--card);
-  border:1px solid var(--grid);border-radius:7px;padding:8px 11px}
-textarea{width:100%;min-height:86px;resize:vertical;line-height:1.55}
-.num{font-variant-numeric:tabular-nums}
-#err{display:none;background:#fdeef1;border:1px solid var(--bad);color:var(--bad);
-  border-radius:6px;padding:9px 12px;font-size:12.5px}
-.state{font-size:10px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;color:var(--muted);
-  background:var(--wash);border-radius:20px;padding:2px 8px}
-.state.in{background:#e7f2ec;color:var(--good)}
-.ux{position:fixed;right:12px;bottom:12px;z-index:90;background:var(--navy);color:#fff;
-  font-size:11.5px;font-weight:600;text-decoration:none;padding:9px 13px;border-radius:30px;
-  box-shadow:0 6px 18px rgba(17,34,80,.28)}
-
 :root{
   --bg:#f4f6fb; --card:#fff; --line:#e6eaf3; --grid:#dfe4ef; --wash:#eef1f8;
   --navy:#1b2b58; --gold:#c79a3f; --ink:#171b26; --muted:#6b7490;
@@ -40,173 +13,290 @@ textarea{width:100%;min-height:86px;resize:vertical;line-height:1.55}
   --lift:0 1px 2px rgba(23,35,70,.06),0 8px 22px rgba(23,35,70,.07);
   --lift-sm:0 1px 2px rgba(23,35,70,.05),0 5px 14px rgba(23,35,70,.05);
   --deep:linear-gradient(140deg,#24376d,#16224a);
+  --sans:'Poppins',system-ui,-apple-system,Segoe UI,sans-serif;
+  --serif:'Merriweather',Georgia,serif;
+  color-scheme:light;
 }
-.t-paid{background:linear-gradient(180deg,#eefaf4,#fff 42%)}
-.t-social{background:linear-gradient(180deg,#fdf6e7,#fff 42%)}
-.t-uploads{background:linear-gradient(180deg,#f1f3f8,#fff 42%)}
-.t-youtube{background:linear-gradient(180deg,#fdeef2,#fff 42%)}
-.t-funnel{background:linear-gradient(180deg,#eef2fd,#fff 42%)}
-select,input,textarea{border-radius:11px;border-color:var(--grid);box-shadow:var(--lift-sm);border:0}
-.pill{font-family:inherit;font-size:12.5px;font-weight:600;color:var(--navy);background:var(--card);
-  border:0;border-radius:999px;padding:9px 18px;cursor:pointer;box-shadow:var(--lift-sm);
-  transition:.14s}
-.pill:hover{box-shadow:var(--lift)}
-.pill[aria-current=true],.pill.on{background:var(--deep);color:#fff}
-.pill[disabled]{opacity:.4;cursor:default;box-shadow:none}
-.state{border-radius:999px;background:var(--wash)}
-.state.in{background:#e3f4ec;color:var(--good)}
-#err{border-radius:12px;border:0;box-shadow:var(--lift-sm);background:#fdeef1}
-.ux{background:var(--deep)}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;
+  overflow:hidden}
+h1,h2,h3,h4{text-wrap:balance;margin:0}
+p{margin:0}
+a{color:var(--navy)}
+img{display:block;max-width:100%}
+.eyebrow{font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--gold)}
+select,input,textarea{font-family:inherit;font-size:14px;color:var(--ink);background:var(--card);
+  border:0;border-radius:11px;padding:9px 13px;box-shadow:var(--lift-sm)}
+textarea{width:100%;min-height:90px;resize:vertical;line-height:1.55}
+#err{display:none;background:#fdeef1;color:var(--bad);border-radius:12px;padding:10px 13px;
+  font-size:12.5px;box-shadow:var(--lift-sm);margin-bottom:14px}
 
-.card{background:var(--card);border-radius:16px;box-shadow:var(--lift);padding:19px 21px}
-.card.sm{border-radius:14px;box-shadow:var(--lift-sm);padding:15px 17px}
-.hero{display:flex;align-items:flex-end;gap:13px;padding-bottom:15px;margin-bottom:15px;
+/* shell */
+.app{height:100%;max-width:1420px;margin:0 auto;padding:0 18px;
+  display:grid;grid-template-rows:auto minmax(0,1fr)}
+.bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-block:18px 14px}
+.bar h1{font-size:22px;font-weight:700;color:var(--navy);letter-spacing:-.03em;white-space:nowrap}
+.bar .sub{font-size:11.5px;color:var(--muted);flex:1}
+.panes{display:grid;grid-template-columns:304px minmax(0,1fr);gap:16px;min-height:0;
+  padding-bottom:18px}
+
+/* left list */
+.list{overflow-y:auto;min-height:0;display:grid;gap:7px;align-content:start;
+  padding:2px 5px 20px 2px}
+.lh{font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;font-weight:700;
+  color:var(--muted);padding:11px 4px 1px}
+.it{display:grid;grid-template-columns:auto 1fr auto;gap:3px 11px;align-items:center;
+  text-align:left;font-family:inherit;border:0;cursor:pointer;border-radius:14px;
+  box-shadow:var(--lift-sm);padding:12px 14px;transition:.14s;color:inherit;
+  background:var(--card)}
+.it:hover{box-shadow:var(--lift);transform:translateY(-1px)}
+.it .pic{width:36px;height:36px;border-radius:10px;object-fit:cover;grid-row:span 2;
+  background:var(--wash)}
+.it .dot{width:7px;height:7px;border-radius:50%;background:var(--grid);grid-row:span 2}
+.it .nm{font-size:13.5px;font-weight:600;color:var(--navy);min-width:0}
+.it .fig{font-size:14.5px;font-weight:700;color:var(--navy);font-variant-numeric:tabular-nums;
+  text-align:right;white-space:nowrap}
+.it .sb{font-size:10.5px;color:var(--muted);line-height:1.3;grid-column:2/-1}
+.it[aria-current=true]{background:var(--deep);box-shadow:0 8px 24px rgba(23,35,70,.22)}
+.it[aria-current=true] .nm{color:#fff}
+.it[aria-current=true] .fig{color:var(--gold)}
+.it[aria-current=true] .sb{color:#b6c0da}
+.it[aria-current=true] .dot.good{background:#6fe0ad}
+.it[aria-current=true] .dot.bad{background:#ff9fb0}
+.dot.good{background:var(--good)} .dot.bad{background:var(--bad)}
+.kbd{font-size:11px;color:var(--muted);padding:9px 6px 0}
+.kbd b{font-family:ui-monospace,monospace;background:var(--card);border-radius:5px;padding:1px 6px;
+  font-weight:400;box-shadow:var(--lift-sm)}
+
+/* right pane */
+.detail{overflow-y:auto;min-height:0;padding:2px 4px 30px 2px}
+.dwrap{max-width:1000px}
+.hd{margin-bottom:18px}
+.hd h2{font-size:clamp(22px,3vw,29px);font-weight:700;color:var(--navy);letter-spacing:-.03em}
+.hd p{font-family:var(--serif);font-size:14.5px;line-height:1.6;color:var(--muted);
+  margin-top:8px;max-width:68ch}
+.hd p b{color:var(--navy)}
+.card{border-radius:18px;box-shadow:var(--lift);padding:21px 23px;background:var(--card)}
+.card+.card{margin-top:13px}
+.fh{display:flex;align-items:center;gap:9px;margin-bottom:13px}
+.fh h3{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
+  font-weight:700;flex:1}
+.hero{display:flex;align-items:flex-end;gap:13px;padding-bottom:15px;margin-bottom:4px;
   border-bottom:1px solid rgba(23,35,70,.08)}
-.hero b{font-size:40px;font-weight:700;line-height:.95;color:var(--navy);
-  font-variant-numeric:tabular-nums;letter-spacing:-.03em}
+.hero b{font-size:42px;font-weight:700;line-height:.95;color:var(--navy);letter-spacing:-.035em;
+  font-variant-numeric:tabular-nums}
 .hero b.good{color:var(--good)} .hero b.bad{color:var(--bad)}
 .hero span{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;
   color:var(--muted);padding-bottom:6px}
+.mcols{display:grid;grid-template-columns:repeat(auto-fit,minmax(214px,1fr));gap:0 30px}
 .mrow{display:flex;justify-content:space-between;gap:12px;align-items:baseline;padding:8px 0;
   border-bottom:1px solid rgba(23,35,70,.06);font-size:13.5px}
-.mrow:last-child{border-bottom:0}
 .mrow span{color:var(--muted)}
 .mrow b{font-weight:600;font-variant-numeric:tabular-nums}
 .mrow b.good{color:var(--good)} .mrow b.bad{color:var(--bad)}
-.verdict{font-size:13.5px;line-height:1.6;margin-top:16px;background:var(--wash);
-  border-radius:12px;padding:13px 15px;color:var(--ink)}
+.verdict{font-size:13.5px;line-height:1.6;margin-top:17px;background:var(--wash);
+  border-radius:13px;padding:13px 15px;color:var(--ink)}
 .verdict:before{content:'';display:block;width:26px;height:3px;border-radius:3px;
   background:var(--gold);margin-bottom:9px}
-.rl{background:var(--card);border-radius:14px;box-shadow:var(--lift-sm);padding:13px 15px;
-  margin-bottom:8px}
-.rl .rule{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;
-  color:var(--gold)}
-.rl p{font-size:13.5px;margin-top:4px}
-.d{background:var(--deep);color:#fff;border-radius:16px;padding:16px 18px;margin-bottom:9px;
-  box-shadow:var(--lift)}
-.d h3{font-size:14px;color:#fff}
-.d h3 em{font-style:normal;color:var(--gold);font-weight:400;font-size:11.5px}
-.d p{font-size:13.5px;color:#d6dcee;margin-top:5px}
-.box{background:var(--card);border-radius:14px;box-shadow:var(--lift-sm);padding:15px 17px;
-  margin-bottom:10px}
-.bh{display:flex;align-items:center;gap:9px;margin-bottom:9px}
-.bh h3{font-size:14px;color:var(--navy)}
-.bh .role{font-size:11.5px;color:var(--muted);flex:1}
-.plan a{font-size:15.5px;font-weight:700}
-.url{width:100%;max-width:420px;margin-top:11px}
-.hint{font-size:11.5px;color:var(--muted);margin-top:9px}
-.sheet{background:var(--card);border-radius:14px;box-shadow:var(--lift-sm);overflow-x:auto;
-  padding:4px 16px 8px}
-table{border-collapse:collapse;width:100%;font-size:13px;min-width:480px}
+
+/* figures + trend */
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:11px}
+.fig{background:var(--card);border-radius:16px;box-shadow:var(--lift-sm);padding:14px 16px}
+.fig b{display:block;font-size:25px;font-weight:700;color:var(--navy);letter-spacing:-.03em;
+  font-variant-numeric:tabular-nums;line-height:1.05}
+.fig b.good{color:var(--good)} .fig b.bad{color:var(--bad)}
+.fig span{font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  font-weight:700;display:block;margin-top:6px}
+.fig em{font-style:normal;display:block;font-size:10.5px;color:var(--muted);margin-top:4px}
+.bars{display:grid;gap:14px}
+.brow{display:grid;grid-template-columns:86px minmax(0,1fr) auto;gap:14px;align-items:center}
+.brow .bm{font-size:13px;font-weight:600;color:var(--navy)}
+.brow .bt{height:24px;background:var(--wash);border-radius:7px;overflow:hidden}
+.brow .bt i{display:block;height:100%;border-radius:7px;background:var(--deep)}
+.brow .bt i.now{background:linear-gradient(90deg,#c79a3f,#e0c58f)}
+.brow .bv{font-size:14px;font-weight:700;color:var(--navy);font-variant-numeric:tabular-nums;
+  white-space:nowrap;text-align:right}
+.brow .bv small{display:block;font-size:10px;font-weight:400;color:var(--muted)}
+.axis{font-size:11px;color:var(--muted);margin-top:15px;padding-top:12px;
+  border-top:1px solid var(--line)}
+
+/* gallery */
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(192px,1fr));gap:13px}
+.post{background:var(--card);border-radius:17px;box-shadow:var(--lift);overflow:hidden;
+  text-decoration:none;color:inherit;display:flex;flex-direction:column;transition:.16s}
+.post:hover{box-shadow:0 3px 6px rgba(23,35,70,.08),0 16px 34px rgba(23,35,70,.14);
+  transform:translateY(-2px)}
+.post .shot{position:relative;aspect-ratio:4/5;background:var(--wash);overflow:hidden}
+.post .shot img{width:100%;height:100%;object-fit:cover}
+.post .shot .none{display:flex;align-items:center;justify-content:center;height:100%;
+  font-size:11px;color:var(--muted);text-align:center;padding:14px}
+.post .rk{position:absolute;top:9px;left:9px;background:rgba(27,43,88,.9);color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.05em;padding:4px 9px;border-radius:30px}
+.post .rk.top{background:linear-gradient(135deg,#c79a3f,#e0c58f);color:#1b2b58}
+.post .re{position:absolute;bottom:9px;right:9px;background:rgba(255,255,255,.94);
+  border-radius:11px;padding:5px 10px;text-align:right}
+.post .re b{display:block;font-size:16px;font-weight:700;color:var(--navy);line-height:1;
+  font-variant-numeric:tabular-nums}
+.post .re span{font-size:8px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
+  font-weight:700}
+.post .meta{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.post .first{font-size:12px;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;
+  -webkit-box-orient:vertical;overflow:hidden}
+.tags{display:flex;gap:5px;flex-wrap:wrap}
+.tg{font-size:9px;letter-spacing:.05em;text-transform:uppercase;font-weight:700;
+  background:var(--wash);color:var(--muted);border-radius:20px;padding:3px 8px;white-space:nowrap}
+.tg.p{background:#eef2fd;color:#2c4484}
+.tg.f{background:#eefaf4;color:#17805a}
+.tg.u{background:#fdf6e7;color:#8a6a1e}
+.post .nums{display:flex;gap:12px;margin-top:auto;padding-top:8px;border-top:1px solid var(--line)}
+.post .nums div{font-size:9px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);
+  font-weight:700}
+.post .nums b{display:block;font-size:12.5px;color:var(--ink);font-variant-numeric:tabular-nums;
+  letter-spacing:0;text-transform:none}
+
+/* youtube */
+.yt{display:grid;grid-template-columns:repeat(auto-fill,minmax(228px,1fr));gap:12px}
+.vid{background:var(--card);border-radius:16px;box-shadow:var(--lift-sm);overflow:hidden;
+  text-decoration:none;color:inherit;transition:.16s}
+.vid:hover{box-shadow:var(--lift);transform:translateY(-2px)}
+.vid .shot{aspect-ratio:16/9;background:var(--wash);position:relative}
+.vid .shot img{width:100%;height:100%;object-fit:cover}
+.vid .v{position:absolute;bottom:8px;right:8px;background:rgba(27,43,88,.92);color:#fff;
+  font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:7px}
+.vid .t{padding:11px 13px;font-size:12px;font-weight:500;line-height:1.4;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+/* readout */
+.dh{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.dh h3{font-size:16px;font-weight:700;color:var(--navy)}
+.dh .sp{font-size:11.5px;font-weight:700;color:var(--gold);font-variant-numeric:tabular-nums}
+.dh .src{font-size:9px;letter-spacing:.07em;text-transform:uppercase;font-weight:700;
+  background:var(--wash);color:var(--muted);border-radius:20px;padding:3px 9px;margin-left:auto}
+.dh .src.board{background:#fdf6e7;color:#8a6a1e}
+.drow{display:grid;grid-template-columns:138px minmax(0,1fr) auto;gap:12px;align-items:center;
+  padding:4px 0}
+.drow .dv{font-size:12.5px}
+.drow .dv small{color:var(--muted)}
+.drow .dt{height:16px;background:var(--wash);border-radius:6px;overflow:hidden}
+.drow .dt i{display:block;height:100%;border-radius:6px;background:#9fb0d8}
+.drow.best .dt i{background:var(--deep)}
+.drow.worst .dt i{background:#e4b9c2}
+.drow .da{font-size:13px;font-weight:700;color:var(--navy);font-variant-numeric:tabular-nums}
+
+/* projection + directions + boxes */
+table{border-collapse:collapse;width:100%;font-size:13.5px}
 th{text-align:left;font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
-  padding:12px 12px 8px 0;border-bottom:1px solid rgba(23,35,70,.1)}
+  padding:0 12px 9px 0;border-bottom:1px solid var(--grid)}
+th.r,td.r{text-align:right}
 td{padding:9px 12px 9px 0;border-bottom:1px solid rgba(23,35,70,.06);
   font-variant-numeric:tabular-nums}
 tr:last-child td{border-bottom:0}
+tfoot td{font-weight:700;color:var(--navy);border-top:2px solid var(--navy);border-bottom:0}
+td .est{font-size:10px;color:var(--muted)}
+.d{background:var(--deep);color:#fff;border-radius:17px;padding:17px 19px;box-shadow:var(--lift)}
+.d+.d{margin-top:10px}
+.d h3{font-size:14.5px;color:#fff}
+.d h3 em{font-style:normal;color:var(--gold);font-weight:400;font-size:11.5px}
+.d p{font-size:13.5px;color:#d6dcee;margin-top:5px;max-width:70ch}
+.rl{background:var(--card);border-radius:14px;box-shadow:var(--lift-sm);padding:13px 15px}
+.rl+.rl{margin-top:8px}
+.rl .rule{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;
+  color:var(--gold)}
+.rl p{font-size:13.5px;margin-top:4px}
+.box{background:var(--card);border-radius:16px;box-shadow:var(--lift-sm);padding:16px 18px}
+.box+.box{margin-top:10px}
+.bh{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.bh h3{font-size:14.5px;color:var(--navy)}
+.bh .role{font-size:11.5px;color:var(--muted);flex:1}
+.state{font-size:10px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;
+  color:var(--muted);background:var(--wash);border-radius:20px;padding:2px 9px}
+.state.in{background:#e3f4ec;color:var(--good)}
+.hint{font-size:11.5px;color:var(--muted);margin-top:10px}
+.plan a{font-size:16px;font-weight:700}
+.url{width:100%;max-width:430px;margin-top:11px}
 
-html,body{height:100%}
-body{overflow:hidden}
-.app{height:100%;max-width:1260px;margin:0 auto;padding:0 18px;
-  display:grid;grid-template-rows:auto auto minmax(0,1fr)}
-.bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-block:20px 6px}
-.bar h1{font-size:22px;font-weight:700;color:var(--navy);letter-spacing:-.025em;white-space:nowrap}
-.bar .sub{font-size:11.5px;color:var(--muted);flex:1}
-.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:9px;
-  padding-bottom:14px}
-.kp{background:var(--card);border-radius:14px;box-shadow:var(--lift-sm);padding:11px 14px}
-.kp b{display:block;font-size:19px;font-weight:700;color:var(--navy);
-  font-variant-numeric:tabular-nums;letter-spacing:-.02em}
-.kp b.good{color:var(--good)} .kp b.bad{color:var(--bad)}
-.kp span{font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
-  font-weight:700;display:block;margin-top:3px}
-.panes{display:grid;grid-template-columns:296px minmax(0,1fr);gap:16px;min-height:0;
-  padding-bottom:20px}
-.list{overflow-y:auto;min-height:0;display:grid;gap:8px;align-content:start;padding:2px 4px 2px 2px}
-.lh{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;
-  color:var(--muted);padding:9px 4px 1px}
-.it{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center;text-align:left;
-  font-family:inherit;border:0;cursor:pointer;background:var(--card);border-radius:14px;
-  box-shadow:var(--lift-sm);padding:13px 15px;transition:.14s;color:inherit}
-.it:hover{box-shadow:var(--lift);transform:translateY(-1px)}
-.it[aria-current=true]{background:var(--deep);box-shadow:0 8px 24px rgba(23,35,70,.22)}
-.it .nm{font-size:13.5px;font-weight:600;color:var(--navy);display:flex;align-items:center;gap:7px}
-.it[aria-current=true] .nm{color:#fff}
-.it .sb{font-size:11px;color:var(--muted);grid-column:1/-1;line-height:1.35}
-.it[aria-current=true] .sb{color:#b9c3dd}
-.it .fig{font-size:15px;font-weight:700;color:var(--navy);font-variant-numeric:tabular-nums;
-  text-align:right;white-space:nowrap}
-.it[aria-current=true] .fig{color:var(--gold)}
-.dot{width:7px;height:7px;border-radius:50%;background:var(--grid);flex:none}
-.dot.good{background:var(--good)} .dot.bad{background:var(--bad)}
-.it[aria-current=true] .dot.good{background:#6fe0ad} .it[aria-current=true] .dot.bad{background:#ff9fb0}
-.detail{overflow-y:auto;min-height:0;padding:2px 2px 20px}
-.dwrap{max-width:740px}
-.fh{display:flex;align-items:center;gap:8px;margin-bottom:11px}
-.fh h3{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
-  font-weight:700;flex:1}
-.hd{margin-bottom:14px}
-.hd h2{font-size:25px;font-weight:700;color:var(--navy);letter-spacing:-.025em}
-.hd p{font-size:12.5px;color:var(--muted);margin-top:4px;max-width:66ch}
-.kbd{font-size:11px;color:var(--muted);padding:8px 6px 0}
-.kbd b{font-family:ui-monospace,monospace;background:var(--card);border-radius:5px;padding:1px 6px;
-  font-weight:400;box-shadow:var(--lift-sm)}
-@media(max-width:780px){html,body{height:auto}body{overflow:auto}
-  .app{display:block}.panes{grid-template-columns:1fr}.list{overflow:visible}
-  .detail{overflow:visible}.kbd{display:none}}
+/* The per-channel tint. These sit LAST on purpose: .it and .card set their own background,
+   and at equal specificity the later rule is the one that paints. */
+.t-paid{background:linear-gradient(180deg,#eefaf4,#fff 46%)}
+.t-social{background:linear-gradient(180deg,#fdf6e7,#fff 46%)}
+.t-uploads{background:linear-gradient(180deg,#f1f3f8,#fff 46%)}
+.t-youtube{background:linear-gradient(180deg,#fdeef2,#fff 46%)}
+.t-funnel{background:linear-gradient(180deg,#eef2fd,#fff 46%)}
+.t-month{background:linear-gradient(180deg,#f3eefd,#fff 46%)}
+.t-ran{background:linear-gradient(180deg,#eefaf4,#fff 46%)}
+.t-why{background:linear-gradient(180deg,#fdf6e7,#fff 46%)}
+.t-next{background:linear-gradient(180deg,#eef2fd,#fff 46%)}
+.it[aria-current=true]{background:var(--deep)}
 
+@media(max-width:860px){
+  html,body{height:auto}body{overflow:auto}
+  .app{display:block}.panes{grid-template-columns:1fr}
+  .list,.detail{overflow:visible}.kbd{display:none}
+  .gal{grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:10px}
+  .brow{grid-template-columns:66px minmax(0,1fr) auto;gap:9px}
+  .drow{grid-template-columns:100px minmax(0,1fr) auto;gap:9px}
+}
 </style>
 </head>
 <body>
-
 <div class="app">
   <div class="bar">
     <div><div class="eyebrow">Skills&nbsp;Up &middot; Sean K. Langston</div>
       <h1 id="title">Monthly review</h1></div>
     <span class="sub" id="built"></span>
-    <select id="pick" class="pill" aria-label="Which month"></select>
+    <select id="pick" aria-label="Which month"></select>
   </div>
-  <div class="strip" id="strip"></div>
   <div class="panes">
     <nav class="list" id="list" aria-label="Sections"></nav>
     <div class="detail"><div class="dwrap">
-      <div id="err" style="margin-bottom:12px">Cannot reach the sheet just now. Nothing typed will
-        save until the connection is back.</div>
-      <div id="detail"></div></div></div>
+      <div id="err">Cannot reach the sheet just now. Nothing typed will save until the
+        connection is back.</div>
+      <div id="detail"></div>
+    </div></div>
   </div>
 </div>
 
-<a class="ux" href="review-pick.html">&larr; the other four</a>
 <script>
-
 const FB='https://rifa-mae-default-rtdb.firebaseio.com/skles-ops/review';
 const MONTHS=['January','February','March','April','May','June','July','August',
   'September','October','November','December'];
+const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 const CPLB=18.5;
-let ALL={},CUR=null;
+let ALL={},CUR=null,SEL=null;
 
 const fail=()=>{const e=document.getElementById('err');if(e)e.style.display='block';};
 const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const nice=m=>{const p=m.split('-');return MONTHS[+p[1]-1]+' '+p[0];};
+const shortm=m=>{const p=m.split('-');return MONTHS[+p[1]-1].slice(0,3)+' '+p[0].slice(2);};
 const num=v=>(v==null?'—':Number(v).toLocaleString('en-GB'));
 const money=v=>(v==null?'—':'$'+Number(v||0).toFixed(2));
+const wd=d=>{const n=new Date(d+'T12:00:00').getDay();return DAYS[n===0?6:n-1];};
 
-/* One normalised shape, five layouts. Nothing below here knows how it will be drawn. */
+const SAYS=[['marissa','Marissa','YouTube, and what is already recorded',
+   'What you would change, what is worth repeating, and what is recorded and waiting.'],
+  ['valerie','Valerie','social, and what travelled',
+   'Which posts worked, which did not, and anything the cards got wrong.'],
+  ['marina','Marina','anything the rules missed','Notes that belong with this month’s record.']];
+
+/* ---------------------------------------------------------------- the model */
 function model(d){
   d=d||{};
-  const f=d.fronts||{};
+  const f=d.fronts||{},c=d.content||{};
   const paid=(f.paid&&f.paid.data)||null;
   const soc=(f.social&&f.social.data)||{},ig=soc.ig,fb=soc.fb,bd=soc.board||{},st=bd.by_status||{};
   const up=(f.uploads&&f.uploads.data)||{},fbp=up['facebook-sean']||{},
         li=up.linkedin||{},tk=up.tiktok||{},tot=fbp.totals||{};
-  const yt=(f.youtube&&f.youtube.data)||{},rec=yt.recent||[];
+  const yt=(f.youtube&&f.youtube.data)||{};
   const fn=(f.funnel&&f.funnel.data)||{},lc=fn.lifecycle||{};
-  const top=rec.reduce((a,v)=>(v.views||0)>((a&&a.views)||0)?v:a,null);
+  const posts=c.posts||[],vids=c.youtube||[],ms=c.months||[];
+  const me=ms.filter(x=>x.m===CUR)[0]||{posts:0,reach:0,avg:0,acts:0};
+  const prev=ms[ms.findIndex(x=>x.m===CUR)+1]||null;
   const F=[];
 
   F.push({key:'paid',label:'Paid',note:'Meta ads, pulled every three hours',
     head:paid&&paid.cpl?money(paid.cpl):'—',headsub:'cost per lead',
     tone:paid&&paid.cpl&&paid.cpl<CPLB?'good':'bad',
-    quick:[['Spend',money(paid&&paid.spend)],['Leads',num(paid&&paid.leads)]],
     metrics:paid?[['Spend',money(paid.spend)],['Leads',num(paid.leads)],
       ['Per lead',money(paid.cpl),paid.cpl<CPLB?'good':'bad'],
       ['Impressions',num(paid.impressions)],['People reached',num(paid.reach)],
@@ -220,30 +310,34 @@ function model(d){
       +(paid.comments?' '+paid.comments+' people commented on an advert, which is a conversation nobody has had.':''))
       :'No figures came back. Check the Meta token before concluding anything.'});
 
-  F.push({key:'social',label:'Organic',note:'Instagram, the page, and the dated cards',
-    head:ig?num(ig.reach):num(bd.cards),headsub:ig?'Instagram reach':'cards dated',
-    tone:bd.cards&&!bd.with_reading?'bad':'good',
-    quick:[['Cards',num(bd.cards)],['Read at 72h',num(bd.with_reading)]],
-    metrics:(ig?[['Instagram reach',num(ig.reach)],['Profile views',num(ig.profile_views)],
+  F.push({key:'social',label:'Organic',note:'Instagram and the dated cards',
+    head:num(me.reach),headsub:'accounts reached',
+    tone:bd.cards&&!bd.with_reading?'bad':'good',pic:(posts[0]||{}).img,
+    metrics:(ig?[['Instagram reach, account',num(ig.reach)],['Profile views',num(ig.profile_views)],
       ['Followers',num(ig.followers)],
       ['New followers',ig.new_followers==null?'—':num(ig.new_followers)],
       ['Engagement rate',ig.engagement_rate+'%'],
       ['Website clicks',num(ig.website_clicks),ig.website_clicks<5?'bad':null],
       ['Facebook fans',num(fb&&fb.fans)],['Facebook engagements',num(fb&&fb.page_engagements)],
       ['Facebook page views',num(fb&&fb.page_views)]]
-      :[['Only held for the current month','—']])
-      .concat([['Cards dated',num(bd.cards)],['Published',num(bd.published)],
+      :[['Account figures held for the current month only','—']])
+      .concat([['Posts published',num(me.posts)],['Reach, summed over posts',num(me.reach)],
+      ['Reach per post',me.avg||'—'],['Interactions',num(me.acts)],
+      ['Cards dated',num(bd.cards)],['Published',num(bd.published)],
       ['With a 72h reading',num(bd.with_reading),bd.cards&&!bd.with_reading?'bad':'good']])
       .concat(Object.keys(st).length?[['Still scheduled',num(st['Scheduled']||0),
         (st['Scheduled']||0)>5?'bad':null]]:[]),
-    verdict:bd.cards&&!bd.with_reading
-      ?'Nothing was read at 72 hours, so no format can be scored this month.'
-      :'Formats can be ranked this month.'});
+    gallery:posts,
+    verdict:(prev&&prev.avg&&me.avg
+      ?'Reach per post is '+(me.avg>=prev.avg?'up':'down')+' on '+shortm(prev.m)+', '+me.avg
+        +' against '+prev.avg+'. '
+      :'')+(bd.cards&&!bd.with_reading
+      ?'Nothing was read at 72 hours, so the cards cannot score a format on their own.'
+      :'Formats can be ranked this month.')});
 
-  F.push({key:'uploads',label:'By hand',note:"Sean's profile, LinkedIn and TikTok, uploaded by Valerie",
+  F.push({key:'uploads',label:'By hand',note:"Sean's profile, LinkedIn and TikTok",
     head:num(tot.impressions),headsub:'profile impressions',
     tone:li.gap||tk.gap?'bad':'good',
-    quick:[['Profile posts',num(tot.posts)],['Rate',tot.rate!=null?tot.rate+'%':'—']],
     metrics:[["Sean’s profile posts",num(tot.posts)],
       ['Profile impressions',num(tot.impressions),tot.impressions>5000?'good':null],
       ['Profile interactions',num(tot.interactions)],
@@ -253,23 +347,23 @@ function model(d){
       ['Last refreshed',esc(up.last_updated?String(up.last_updated).split('·')[0].trim():'—')]],
     verdict:(fbp.best?'Best on the profile: “'+esc(String(fbp.best.title).slice(0,70))
       +'…”, '+num(fbp.best.impressions)+' impressions. ':'')
-      +(li.gap||tk.gap?'LinkedIn and TikTok are the wrong sheets, so neither can say which post worked.'
+      +(li.gap||tk.gap
+        ?'LinkedIn and TikTok came through as the wrong sheets, so neither can say which post worked, and neither has an API to show a thumbnail.'
         :'All three exports are usable.')});
 
   F.push({key:'youtube',label:'YouTube',note:"Marissa's long-form, the source for every cut",
-    head:num(rec.length),headsub:'recordings in hand',
-    tone:rec.length?'good':'bad',
-    quick:[['Subscribers',num(yt.subs)],['Videos',num(yt.videos_total)]],
+    head:num(vids.length||(yt.recent||[]).length),headsub:'recordings in hand',
+    tone:vids.length?'good':'bad',pic:(vids[0]||{}).img,
     metrics:[['Subscribers',num(yt.subs)],['Views, all time',num(yt.views_total)],
-      ['Videos on the channel',num(yt.videos_total)],['Recordings in hand',num(rec.length)]]
-      .concat(rec.slice(0,4).map(v=>['· '+esc(String(v.title).slice(0,34))+'…',num(v.views)+' views'])),
-    verdict:top?'Most watched: “'+esc(top.title)+'”. These are the source for every social cut.'
+      ['Videos on the channel',num(yt.videos_total)],['Recordings in hand',num(vids.length)]],
+    vids:vids,
+    verdict:vids.length
+      ?'Every social post is cut from one of these, so nothing on Instagram needs Sean in front of a camera again.'
       :'No recordings read this month.'});
 
   F.push({key:'funnel',label:'Funnel',note:'GetResponse, HubSpot and Zoom',
     head:money(fn.won_this_month),headsub:'won this month',
     tone:fn.won_this_month?'good':'bad',
-    quick:[['Leads',num(lc.lead)],['Customers',num(lc.customer)]],
     metrics:[['Subscribers',num(lc.subscriber)],['Leads',num(lc.lead)],
       ['Marketing qualified',num(lc.marketingqualifiedlead)],
       ['Sales qualified',num(lc.salesqualifiedlead)],['Customers',num(lc.customer)],
@@ -282,35 +376,259 @@ function model(d){
       :'Nothing closed. The gap is after the form, so nothing upstream is worth optimising.'});
 
   const r=d.read||{},dz=r.directions||{};
-  return {built:d.built||'',fronts:F,read:r.lines||[],
+  return {built:d.built||'',content:c,fronts:F,posts:posts,vids:vids,months:ms,me:me,prev:prev,
+    paid:paid,read:r.lines||[],
     dirs:[['Marissa','what to produce',dz.marissa],['Valerie','what changes',dz.valerie],
           ['Marina','paid and the funnel',dz.marina]].filter(x=>x[2]),
     plan:d.plan||null,
-    kpis:[['Spend',money(paid&&paid.spend),null],
-          ['Leads',num(paid&&paid.leads),null],
-          ['Per lead',paid&&paid.cpl?money(paid.cpl):'—',
-            paid&&paid.cpl&&paid.cpl<CPLB?'good':'bad'],
-          ['Cards read',num(bd.with_reading)+'/'+num(bd.cards),
-            bd.cards&&!bd.with_reading?'bad':'good'],
-          ['Won',money(fn.won_this_month),fn.won_this_month?'good':'bad']]};
+    kpis:[['Spend',money(paid&&paid.spend),null],['Leads',num(paid&&paid.leads),null],
+      ['Per lead',paid&&paid.cpl?money(paid.cpl):'—',
+        paid&&paid.cpl&&paid.cpl<CPLB?'good':'bad'],
+      ['Reach per post',me.avg||'—',null],
+      ['Won',money(fn.won_this_month),fn.won_this_month?'good':'bad']]};
 }
 
-const SAYS=[['marissa','Marissa','YouTube, and what is already recorded',
-   'What you would change, what is worth repeating, and what is recorded and waiting.'],
-  ['valerie','Valerie','social, and what travelled',
-   'Which posts worked, which did not, and anything the cards got wrong.'],
-  ['marina','Marina','anything the rules missed','Notes that belong with this month’s record.']];
+/* ---------------------------------------------------------------- pieces */
+function hd(h,p){return '<div class="hd"><h2>'+h+'</h2>'+(p?'<p>'+p+'</p>':'')+'</div>';}
+function fig(v,l,n,t){return '<div class="fig"><b'+(t?' class="'+t+'"':'')+'>'+v+'</b><span>'+l
+  +'</span>'+(n?'<em>'+n+'</em>':'')+'</div>';}
+function mrows(ms){return '<div class="mcols">'+ms.map(m=>'<div class="mrow"><span>'+m[0]
+  +'</span><b'+(m[2]?' class="'+m[2]+'"':'')+'>'+m[1]+'</b></div>').join('')+'</div>';}
 
-function rows(){
-  return Object.keys(ALL).sort().reverse().map(m=>{
-    const d=ALL[m]||{},paid=((d.fronts||{}).paid||{}).data||{},
-      bd=(((d.fronts||{}).social||{}).data||{}).board||{},p=d.plan||{};
-    return {m:m,label:nice(m),leads:num(paid.leads),
-      cpl:paid.cpl?money(paid.cpl):'—',
-      cards:num(bd.cards)+(bd.cards?' · '+num(bd.with_reading)+' read':''),
-      lines:((d.read||{}).lines||[]).length,plan:p.url?p:null};
-  });
+function postCard(p,i){
+  const tags=[];
+  if(p.kind) tags.push('<span class="tg f">'+esc(p.kind)+'</span>');
+  if(p.pillar) tags.push('<span class="tg p">'+esc(p.pillar)+'</span>');
+  tags.push('<span class="tg">'+wd(p.when)+' '+p.when.slice(8)+'</span>');
+  if(!p.card) tags.push('<span class="tg u">untagged</span>');
+  return '<a class="post" href="'+esc(p.url)+'" target="_blank" rel="noopener">'
+    +'<div class="shot">'+(p.img?'<img src="'+esc(p.img)+'" alt="" loading="lazy">'
+      :'<div class="none">No thumbnail held</div>')
+    +'<span class="rk'+(i===0?' top':'')+'">'+(i===0?'Best':'#'+(i+1))+'</span>'
+    +'<span class="re"><b>'+num(p.reach)+'</b><span>reached</span></span></div>'
+    +'<div class="meta"><p class="first">'+esc(p.first)+'</p>'
+    +'<div class="tags">'+tags.join('')+'</div>'
+    +'<div class="nums"><div>Views<b>'+num(p.views)+'</b></div>'
+    +'<div>Likes<b>'+num(p.likes)+'</b></div><div>Saves<b>'+num(p.saved)+'</b></div>'
+    +'<div>Shares<b>'+num(p.shares)+'</b></div></div></div></a>';
 }
+
+function vidCard(v){
+  return '<a class="vid" href="'+esc(v.url)+'" target="_blank" rel="noopener">'
+    +'<div class="shot"><img src="'+esc(v.img)+'" alt="" loading="lazy">'
+    +'<span class="v">'+num(v.views)+' views</span></div>'
+    +'<p class="t">'+esc(v.title)+'</p></a>';
+}
+
+/* ---------------------------------------------------------------- panes */
+function paneMonth(M){
+  const ms=M.months.slice().reverse();
+  const top=Math.max.apply(null,ms.map(x=>x.avg).concat([1]));
+  let move='';
+  if(M.prev&&M.prev.avg&&M.me.avg){
+    const pc=Math.round((M.me.avg-M.prev.avg)/M.prev.avg*100);
+    move=' Reach per post is <b>'+(pc>=0?'up ':'down ')+Math.abs(pc)+'%</b> on '
+      +shortm(M.prev.m)+', '+M.me.avg+' against '+M.prev.avg+'.';
+  }
+  const best=M.posts[0];
+  return hd(nice(CUR),'<b>'+M.me.posts+' posts</b> went out on Instagram and reached <b>'
+    +num(M.me.reach)+' accounts</b>, with '+num(M.me.acts)+' interactions.'+move
+    +(best?' The best was “'+esc(String(best.first).slice(0,58))+'…” at '
+      +num(best.reach)+'.':''))
+    +'<div class="figs">'+M.kpis.map(k=>fig(k[1],k[0],'',k[2])).join('')+'</div>'
+    +'<div class="card t-month" style="margin-top:13px"><div class="fh"><h3>Reach per post, '
+    +'month by month</h3></div><div class="bars">'+ms.map(x=>
+      '<div class="brow"><span class="bm">'+shortm(x.m)+'</span><span class="bt"><i'
+      +(x.m===CUR?' class="now"':'')+' style="width:'+Math.max(2,x.avg/top*100)+'%"></i></span>'
+      +'<span class="bv">'+x.avg+'<small>'+x.posts+' posts · '+num(x.reach)
+      +' total</small></span></div>').join('')
+    +'</div><p class="axis">The one social figure volume cannot flatter. Bars share a scale, so '
+    +'the lengths compare month to month. Gold is the month on screen.</p></div>';
+}
+
+function paneFront(f){
+  let s=hd(f.label,esc(f.note))
+    +'<div class="card t-'+f.key+'"><div class="hero"><b'+(f.tone?' class="'+f.tone+'"':'')+'>'
+    +f.head+'</b><span>'+esc(f.headsub)+'</span></div>'+mrows(f.metrics)
+    +'<p class="verdict">'+f.verdict+'</p></div>';
+  if(f.gallery&&f.gallery.length) s+='<div class="card"><div class="fh"><h3>The '
+    +f.gallery.length+' posts behind those figures</h3></div><div class="gal">'
+    +f.gallery.map(postCard).join('')+'</div></div>';
+  if(f.vids&&f.vids.length) s+='<div class="card"><div class="fh"><h3>The recordings</h3></div>'
+    +'<div class="yt">'+f.vids.map(vidCard).join('')+'</div></div>';
+  return s;
+}
+
+function paneRan(M){
+  const tagged=M.posts.filter(p=>p.card).length;
+  return hd('What ran in '+nice(CUR),M.posts.length
+    ? 'Ranked by accounts reached, best first. Every thumbnail opens the real post. <b>'+tagged
+      +' of '+M.posts.length+'</b> are tagged to an ops-board card, which is what lets the next '
+      +'section say why one beat another.'
+    : 'Nothing published to Instagram in this month.')
+    +(M.posts.length?'<div class="gal">'+M.posts.map(postCard).join('')+'</div>':'');
+}
+
+function paneWhy(M){
+  const r=M.content.readout||{},ds=r.dims||[];
+  if(!ds.length) return hd('What the month says','Not enough scored posts yet to rank any '
+    +'dimension.');
+  const f=ds.filter(x=>x['from']==='platform')[0],board=ds.filter(x=>x['from']==='board');
+  let v='';
+  if(f) v+='The widest gap is <b>'+esc(f.dim).toLowerCase()+'</b>: '+esc(f.best.v)+' reaches '
+    +f.best.avg+' per post against '+f.worst.avg+' for '+esc(f.worst.v)+'. ';
+  v+=board.length
+    ? 'The board dimensions rest on the posts carrying a card id, so treat them as a direction '
+      +'rather than a result.'
+    : 'No board dimension has two scored posts behind it, which is the one thing worth fixing: '
+      +'every published card needs its Instagram id, or next month still cannot say why '
+      +'anything won.';
+  return hd('What the month says','Every post on record, grouped one dimension at a time and '
+    +'ranked on average reach. A group needs <b>at least two posts</b> to appear, and the count '
+    +'sits beside every figure, because one lucky post is not a finding.')
+    +ds.map(x=>{
+      const top=Math.max.apply(null,x.rows.map(y=>y.avg).concat([1]));
+      return '<div class="card t-why"><div class="dh"><h3>'+esc(x.dim)+'</h3><span class="sp">'
+        +x.spread+'× best to worst</span><span class="src'
+        +(x['from']==='board'?' board':'')+'">'
+        +(x['from']==='board'?'from the board · n='+x.n:'from Instagram · n='+x.n)
+        +'</span></div>'
+        +x.rows.map((y,i)=>'<div class="drow'+(i===0?' best':i===x.rows.length-1?' worst':'')
+          +'"><span class="dv">'+esc(y.v)+' <small>n='+y.n+'</small></span><span class="dt"><i '
+          +'style="width:'+Math.max(2,y.avg/top*100)+'%"></i></span><span class="da">'+y.avg
+          +'</span></div>').join('')+'</div>';
+    }).join('')
+    +'<p class="verdict">'+v+'</p>';
+}
+
+function paneNext(M){
+  const pr=M.content.projection||{rows:[],total:0};
+  return hd(pr.month?nice(pr.month)+', before it runs':'Next month, before it runs',
+    'Planned posts by pillar, times what that pillar has historically reached per post. Change '
+    +'the mix and this changes, so a plan can be judged before anything is published.')
+    +'<div class="card t-next">'+(pr.rows&&pr.rows.length
+      ? '<table><thead><tr><th>Pillar</th><th class="r">Posts planned</th>'
+        +'<th class="r">Reach per post</th><th class="r">Projected reach</th></tr></thead><tbody>'
+        +pr.rows.map(r=>'<tr><td>'+esc(r.pillar)+'</td><td class="r">'+r.planned+'</td><td class="r">'
+          +r.per+(r.known?'':' <span class="est">est</span>')+'</td><td class="r">'+num(r.reach)
+          +'</td></tr>').join('')
+        +'</tbody><tfoot><tr><td>'+pr.posts+' posts</td><td class="r"></td><td class="r"></td>'
+        +'<td class="r">'+num(pr.total)+'</td></tr></tfoot></table>'
+        +'<p class="axis">Pillars with fewer than two scored posts behind them use the overall '
+        +'average of '+pr.base+', marked est.</p>'
+      : '<p style="font-size:13.5px;color:var(--muted)">No cards dated in that month yet, so '
+        +'there is nothing to project from.</p>')
+    +'</div>'
+    +(M.read.length?'<div style="margin-top:20px">'+M.read.map(l=>'<div class="rl">'
+      +'<div class="rule">'+esc(l.front)+' &middot; '+esc(l.rule)+'</div><p>'+esc(l.text)
+      +'</p></div>').join('')+'</div>':'')
+    +(M.dirs.length?'<div style="margin-top:13px">'+M.dirs.map(x=>'<div class="d"><h3>'+x[0]
+      +' <em>&middot; '+x[1]+'</em></h3><p>'+esc(x[2])+'</p></div>').join('')+'</div>':'');
+}
+
+function paneSays(){
+  return hd('What you think','Where the direction is wrong, or where it is missing something only '
+    +'you can see.')
+    +SAYS.map(s=>'<div class="box"><div class="bh"><h3>'+s[1]+'</h3><span class="role">'+s[2]
+      +'</span><span class="state" data-s="'+s[0]+'">empty</span></div><textarea data-k="'+s[0]
+      +'" placeholder="'+s[3]+'"></textarea></div>').join('')
+    +'<p class="hint">Saves on its own a second after you stop typing. Everyone sees the same page.</p>';
+}
+
+function panePlan(M){
+  return hd('The plan it produced','Built on the 29th to 30th from all three reads, then sent to '
+    +'Sean on the 1st as one email.')
+    +'<div class="box"><div class="plan">'+(M.plan&&M.plan.url
+      ?'<a href="'+esc(M.plan.url)+'">'+esc(M.plan.title||'The plan')+'</a>'
+      :'<span style="color:var(--muted);font-size:14px">Not built yet.</span>')
+    +'</div><input class="url" id="planurl" placeholder="https://..." aria-label="Plan link">'
+    +'<p class="hint">Paste the plan’s link here once it is built and it joins the record.</p>'
+    +'</div>';
+}
+
+function paneHist(){
+  return hd('Every month we have run','A direction that turned out wrong is only useful if it is '
+    +'still readable later.')
+    +'<div class="box"><table><thead><tr><th>Month</th><th class="r">Posts</th>'
+    +'<th class="r">Reach per post</th><th class="r">Leads</th><th class="r">Per lead</th>'
+    +'<th>Plan</th></tr></thead><tbody>'
+    +Object.keys(ALL).sort().reverse().map(m=>{
+      const d=ALL[m]||{},paid=((d.fronts||{}).paid||{}).data||{},p=d.plan||{};
+      const mm=((d.content||{}).months||[]).filter(x=>x.m===m)[0]||{};
+      return '<tr><td><a href="#" data-go="'+m+'">'+nice(m)+'</a></td><td class="r">'
+        +(mm.posts||'—')+'</td><td class="r">'+(mm.avg||'—')+'</td><td class="r">'
+        +num(paid.leads)+'</td><td class="r">'+(paid.cpl?money(paid.cpl):'—')+'</td><td>'
+        +(p.url?'<a href="'+esc(p.url)+'">'+esc(p.title||'Plan')+'</a>':'—')+'</td></tr>';
+    }).join('')+'</tbody></table></div>';
+}
+
+/* ---------------------------------------------------------------- list + render */
+function items(M){
+  const L=[{id:'month',name:'The month',sub:'the picture in five figures',
+    fig:M.me.avg||'—',tone:'',pic:null}];
+  M.fronts.forEach(f=>L.push({id:f.key,name:f.label,sub:f.note,fig:f.head,tone:f.tone,
+    pic:f.pic,front:f}));
+  L.push({id:'ran',name:'What ran',sub:'every post, ranked, with its thumbnail',
+    fig:M.posts.length,tone:M.posts.length?'good':'bad',pic:(M.posts[0]||{}).img});
+  const ds=((M.content.readout||{}).dims)||[];
+  L.push({id:'why',name:'What it says',sub:'best and worst per dimension',
+    fig:ds.length,tone:ds.length?'good':'bad',pic:null});
+  L.push({id:'next',name:'Next month',sub:'projected from the planned mix',
+    fig:num(((M.content.projection||{}).total)||0),tone:'',pic:null});
+  const filled=SAYS.filter(s=>((ALL[CUR]||{})[s[0]]||{}).text).length;
+  L.push({id:'says',name:'What you think',sub:'Marissa, Valerie, Marina',
+    fig:filled+'/3',tone:filled?'good':'',pic:null});
+  L.push({id:'plan',name:'The plan',sub:'what went to Sean on the 1st',
+    fig:M.plan&&M.plan.url?'linked':'—',tone:M.plan&&M.plan.url?'good':'bad',pic:null});
+  L.push({id:'hist',name:'Every month',sub:'the whole record',
+    fig:Object.keys(ALL).length,tone:'',pic:null});
+  return L;
+}
+
+function btn(x){
+  const on=x.id===SEL;
+  return '<button class="it'+(on?'':' t-'+x.id)+'" data-id="'+x.id+'" aria-current="'+on+'">'
+    +(x.pic?'<img class="pic" src="'+esc(x.pic)+'" alt="" loading="lazy">'
+      :'<span class="dot '+(x.tone||'')+'"></span>')
+    +'<span class="nm">'+esc(x.name)+'</span>'
+    +'<span class="fig">'+x.fig+'</span>'
+    +'<span class="sb">'+esc(x.sub)+'</span></button>';
+}
+
+function pane(M,L){
+  const it=L.filter(x=>x.id===SEL)[0]||L[0];
+  if(it.front) return paneFront(it.front);
+  if(SEL==='month') return paneMonth(M);
+  if(SEL==='ran') return paneRan(M);
+  if(SEL==='why') return paneWhy(M);
+  if(SEL==='next') return paneNext(M);
+  if(SEL==='says') return paneSays();
+  if(SEL==='plan') return panePlan(M);
+  return paneHist();
+}
+
+function render(){
+  const M=model(ALL[CUR]||{}),L=items(M);
+  if(!L.filter(x=>x.id===SEL).length) SEL=L[0].id;
+  document.getElementById('title').textContent=nice(CUR)+' review';
+  document.getElementById('built').textContent=M.built?'Numbers as at '+M.built:'';
+  document.getElementById('list').innerHTML='<div class="lh">The month</div>'+btn(L[0])
+    +'<div class="lh">Each front</div>'+L.slice(1,6).map(btn).join('')
+    +'<div class="lh">What it means</div>'+L.slice(6,9).map(btn).join('')
+    +'<div class="lh">The record</div>'+L.slice(9).map(btn).join('')
+    +'<p class="kbd"><b>&uarr;</b> <b>&darr;</b> walks the list.</p>';
+  document.getElementById('detail').innerHTML=pane(M,L);
+  document.querySelectorAll('.it').forEach(b=>b.onclick=()=>pick(b.dataset.id));
+  document.querySelectorAll('[data-go]').forEach(a=>a.onclick=e=>{
+    e.preventDefault();show(a.dataset.go);});
+}
+
+function pick(id){SEL=id;keep('sel',id);render();wire();
+  const d=document.querySelector('.detail');if(d)d.scrollTop=0;}
+
+/* localStorage is a per-viewer convenience: it can throw, and the page renders the same without it. */
+function keep(k,v){try{localStorage.setItem('skles-con-'+k,v);}catch(e){}}
+function kept(k){try{return localStorage.getItem('skles-con-'+k);}catch(e){return null;}}
 
 const timers={};
 function mark(k,v){document.querySelectorAll('[data-s="'+k+'"]').forEach(s=>{
@@ -346,139 +664,27 @@ function wire(){
   }
 }
 
-/* localStorage is a per-viewer convenience: it can throw, and the page renders the same without it. */
-function keep(k,v){try{localStorage.setItem('skles-ux-'+k,v);}catch(e){}}
-function kept(k){try{return localStorage.getItem('skles-ux-'+k);}catch(e){return null;}}
+document.addEventListener('keydown',e=>{
+  if(e.key!=='ArrowDown'&&e.key!=='ArrowUp') return;
+  if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName||'')) return;
+  const ids=[].slice.call(document.querySelectorAll('.it')).map(b=>b.dataset.id);
+  const i=ids.indexOf(SEL);if(i<0)return;
+  e.preventDefault();
+  pick(ids[(i+(e.key==='ArrowDown'?1:ids.length-1))%ids.length]);
+});
 
-function show(m){CUR=m;const p=document.getElementById('pick');if(p)p.value=m;render();wire();}
+function show(m){CUR=m;document.getElementById('pick').value=m;render();wire();}
 
 (async function init(){
   try{const r=await fetch(FB+'.json');if(r.ok)ALL=(await r.json())||{};}catch(e){fail();}
   const months=Object.keys(ALL).sort().reverse();
   if(!months.length){fail();return;}
+  SEL=kept('sel')||'month';
   const p=document.getElementById('pick');
-  if(p){p.innerHTML=months.map(m=>'<option value="'+m+'">'+nice(m)+'</option>').join('');
-    p.onchange=e=>show(e.target.value);}
-  start(months);
+  p.innerHTML=months.map(m=>'<option value="'+m+'">'+nice(m)+'</option>').join('');
+  p.onchange=e=>show(e.target.value);
+  show(months[0]);
 })();
-
-
-function frontCard(f,cls){
-  return '<div class="'+(cls||'card')+' t-'+f.key+'">'
-    +'<div class="fh"><h3>'+esc(f.label)+'</h3><span class="dot '+(f.tone||'')+'"></span></div>'
-    +'<div class="hero"><b'+(f.tone?' class="'+f.tone+'"':'')+'>'+f.head+'</b><span>'
-    +esc(f.headsub)+'</span></div>'
-    +f.metrics.map(m=>'<div class="mrow"><span>'+m[0]+'</span><b'+(m[2]?' class="'+m[2]+'"':'')
-      +'>'+m[1]+'</b></div>').join('')
-    +'<p class="verdict">'+f.verdict+'</p></div>';
-}
-function readHTML(M){
-  return (M.read.length?M.read:[{front:'—',rule:'none',
-    text:'No read was built for this month.'}]).map(l=>
-    '<div class="rl"><div class="rule">'+esc(l.front)+' &middot; '+esc(l.rule)+'</div><p>'
-    +esc(l.text)+'</p></div>').join('');
-}
-function dirsHTML(M){
-  return M.dirs.length?M.dirs.map(x=>'<div class="d"><h3>'+x[0]+' <em>&middot; '+x[1]
-    +'</em></h3><p>'+esc(x[2])+'</p></div>').join('')
-    :'<p class="hint">No direction was derived for this month.</p>';
-}
-function saysHTML(){
-  return SAYS.map(s=>'<div class="box"><div class="bh"><h3>'+s[1]+'</h3><span class="role">'+s[2]
-    +'</span><span class="state" data-s="'+s[0]+'">empty</span></div><textarea data-k="'+s[0]
-    +'" placeholder="'+s[3]+'"></textarea></div>').join('')
-    +'<p class="hint">Saves on its own a second after you stop typing. Everyone sees the same page.</p>';
-}
-function planHTML(M){
-  return '<div class="plan">'+(M.plan&&M.plan.url
-    ?'<a href="'+esc(M.plan.url)+'">'+esc(M.plan.title||'The plan')+'</a>'
-    :'<span style="color:var(--muted);font-size:14px">Not built yet.</span>')
-  +'</div><input class="url" id="planurl" placeholder="https://..." aria-label="Plan link">'
-  +'<p class="hint">Paste the plan’s link here once it is built and it joins the record.</p>';
-}
-function histHTML(){
-  return '<div class="sheet"><table><thead><tr><th>Month</th><th>Leads</th><th>Per lead</th>'
-    +'<th>Cards</th><th>Read</th><th>Plan</th></tr></thead><tbody>'
-    +rows().map(r=>'<tr><td><a href="#" data-go="'+r.m+'">'+r.label+'</a></td><td>'+r.leads
-      +'</td><td>'+r.cpl+'</td><td>'+r.cards+'</td><td>'+(r.lines?r.lines+' lines':'—')
-      +'</td><td>'+(r.plan?'<a href="'+esc(r.plan.url)+'">'+esc(r.plan.title||'Plan')+'</a>'
-        :'—')+'</td></tr>').join('')+'</tbody></table></div>';
-}
-function goWire(){document.querySelectorAll('[data-go]').forEach(a=>a.onclick=e=>{
-  e.preventDefault();show(a.dataset.go);});}
-
-let SEL=kept('k1')||'paid';
-function filled(){return SAYS.filter(s=>((ALL[CUR]||{})[s[0]]||{}).text).length;}
-
-function items(M){
-  const L=M.fronts.map(f=>({id:f.key,name:f.label,sub:f.note,fig:f.head,tone:f.tone,front:f}));
-  L.push({id:'read',name:'The read',sub:'what the figures say, rule by rule',
-    fig:M.read.length+' lines',tone:M.read.length?'good':'bad'});
-  L.push({id:'dirs',name:'The direction',sub:'one change each, derived from the read',
-    fig:M.dirs.length+' given',tone:M.dirs.length?'good':'bad'});
-  L.push({id:'says',name:'What you think',sub:'Marissa, Valerie, Marina',
-    fig:filled()+'/3 in',tone:filled()?'good':''});
-  L.push({id:'plan',name:'The plan',sub:'what went to Sean on the 1st',
-    fig:M.plan&&M.plan.url?'linked':'—',tone:M.plan&&M.plan.url?'good':'bad'});
-  L.push({id:'hist',name:'Every month',sub:'the whole record, back to September',
-    fig:rows().length+' months',tone:''});
-  return L;
-}
-
-function head(h,p){return '<div class="hd"><h2>'+h+'</h2><p>'+p+'</p></div>';}
-
-function detail(M){
-  const f=M.fronts.filter(x=>x.key===SEL)[0];
-  if(f) return frontCard(f,'card');
-  if(SEL==='read') return head('The read','Worked out from the figures, not from anyone’s '
-    +'impression of the month. Each line names the rule behind it, so a direction can be argued '
-    +'with on its merits.')+readHTML(M);
-  if(SEL==='dirs') return head('The direction','One change each, taken straight from the read.')
-    +dirsHTML(M);
-  if(SEL==='says') return head('What you think','Where the direction is wrong, or where it is '
-    +'missing something only you can see.')+saysHTML();
-  if(SEL==='plan') return head('The plan it produced','Built on the 29th to 30th from all three '
-    +'reads, then sent to Sean on the 1st as one email.')+planHTML(M);
-  return head('Every month we have run','A direction that turned out wrong is only useful if it '
-    +'is still readable later.')+histHTML();
-}
-
-function render(){
-  const M=model(ALL[CUR]||{}),L=items(M);
-  if(!L.filter(x=>x.id===SEL).length)SEL=L[0].id;
-  document.getElementById('title').textContent=nice(CUR)+' review';
-  document.getElementById('built').textContent=M.built?'Numbers as at '+M.built:'';
-  document.getElementById('strip').innerHTML=M.kpis.map(k=>'<div class="kp"><b'
-    +(k[2]?' class="'+k[2]+'"':'')+'>'+k[1]+'</b><span>'+k[0]+'</span></div>').join('');
-  document.getElementById('list').innerHTML='<div class="lh">Each front</div>'
-    +L.slice(0,5).map(it=>btn(it,true)).join('')
-    +'<div class="lh">What we do with it</div>'+L.slice(5).map(it=>btn(it,false)).join('')
-    +'<p class="kbd"><b>&uarr;</b> <b>&darr;</b> walks the list.</p>';
-  document.getElementById('detail').innerHTML=detail(M);
-  document.querySelectorAll('.it').forEach(b=>b.onclick=()=>{
-    SEL=b.dataset.id;keep('k1',SEL);render();wire();document.querySelector('.detail').scrollTop=0;});
-  goWire();
-}
-
-function btn(x,tint){
-  return '<button class="it'+(tint&&x.id!==SEL?' t-'+x.id:'')+'" data-id="'+x.id
-    +'" aria-current="'+(x.id===SEL)+'"><span class="nm"><span class="dot '+(x.tone||'')
-    +'"></span>'+esc(x.name)+'</span><span class="fig">'+x.fig+'</span>'
-    +'<span class="sb">'+esc(x.sub)+'</span></button>';
-}
-
-document.addEventListener('keydown',e=>{
-  if(e.key!=='ArrowDown'&&e.key!=='ArrowUp')return;
-  if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName||''))return;
-  const ids=[].slice.call(document.querySelectorAll('.it')).map(b=>b.dataset.id);
-  const i=ids.indexOf(SEL);if(i<0)return;
-  e.preventDefault();
-  SEL=ids[(i+(e.key==='ArrowDown'?1:ids.length-1))%ids.length];
-  keep('k1',SEL);render();wire();document.querySelector('.detail').scrollTop=0;
-});
-
-function start(months){show(months[0]);}
-
 </script>
 </body>
 </html>
