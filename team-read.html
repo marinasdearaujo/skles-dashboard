@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SKLES Team Read</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Merriweather:wght@700&display=swap">
+<style>
+/* One question at a time, phone first. Light only, like the growth board. */
+:root{
+  --bg:#F6F4EE; --surface:#FFFDF8; --line:#E2DED3; --wash:#ECEAE3;
+  --ink:#2B3247; --muted:#6B7287; --navy:#112250; --gold:#E0C58F; --gold-ink:#8C6D2E;
+  --good:#1E7A55; --good-bg:#DDEFE6; --bad:#B23A4E; --bad-bg:#F7E1E5; --warn:#8A5506; --warn-bg:#F6E8CF;
+  --sans:'Poppins',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --serif:'Merriweather',Georgia,serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55}
+h1,h2,h3{margin:0;text-wrap:balance;color:var(--navy)}
+p{margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+.wrap{max-width:640px;margin:0 auto;padding-block:20px 80px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--gold-ink)}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+
+header{display:grid;gap:10px;margin-bottom:18px}
+header h1{font-family:var(--serif);font-size:24px}
+.who{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-size:12px;padding:3px 10px;border-radius:99px;background:var(--wash);color:var(--muted);white-space:nowrap}
+.chip.done{background:var(--good-bg);color:var(--good)}
+.chip.me{outline:1.5px solid var(--navy)}
+.bar{height:6px;background:var(--wash);border-radius:6px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--navy);border-radius:6px;transition:width .3s}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:14px}
+.card h2{font-family:var(--serif);font-size:20px;line-height:1.35}
+.tag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  padding:2px 9px;border-radius:99px;background:var(--wash);color:var(--navy)}
+
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{display:grid;gap:8px;text-align:left;background:var(--surface);border:2px solid var(--line);
+  border-radius:14px;padding:8px;cursor:pointer;min-width:0}
+.tile:focus-visible,.btn:focus-visible,.pick:focus-visible{outline:2px solid var(--gold-ink);outline-offset:2px}
+.tile[aria-pressed="true"]{border-color:var(--navy);box-shadow:0 0 0 2px var(--navy) inset}
+.tile[disabled]{cursor:default}
+.shot{aspect-ratio:4/5;max-width:100%;border-radius:10px;overflow:hidden;background:var(--wash);position:relative}
+.shot img{width:100%;height:100%;object-fit:cover;display:block}
+.shot .none{display:grid;place-items:center;height:100%;font-size:12px;color:var(--muted);padding:8px;text-align:center}
+.cap{font-size:12.5px;line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;min-height:3.9em}
+.meta{font-size:11.5px;color:var(--muted)}
+.res{font-size:13px;font-weight:600;display:grid;gap:2px}
+.res b{font-size:20px;color:var(--navy)}
+.win{position:absolute;top:8px;left:8px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px;
+  background:var(--gold);color:var(--navy)}
+
+.big{display:grid;grid-template-columns:120px 1fr;gap:14px;align-items:start}
+.big .shot{width:120px}
+@media (max-width:380px){.big{grid-template-columns:96px 1fr}.big .shot{width:96px}}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.pick{border:1.5px solid var(--line);background:var(--surface);border-radius:99px;padding:7px 14px;
+  font-size:13.5px;cursor:pointer}
+.pick[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:var(--surface)}
+label{font-size:13px;font-weight:600;color:var(--navy);display:grid;gap:6px}
+input,select,textarea{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--surface)}
+textarea{min-height:72px;resize:vertical}
+.row{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.btn{border:0;border-radius:12px;padding:12px 18px;font-weight:600;cursor:pointer;background:var(--navy);color:var(--surface)}
+.btn.ghost{background:transparent;color:var(--navy);border:1.5px solid var(--line)}
+.btn[disabled]{opacity:.45;cursor:default}
+.verdict{border-radius:12px;padding:12px 14px;font-size:14px}
+.verdict.ok{background:var(--good-bg);color:var(--good)}
+.verdict.no{background:var(--bad-bg);color:var(--bad)}
+.verdict.note{background:var(--wash);color:var(--ink)}
+.others{display:grid;gap:8px;border-top:1px solid var(--line);padding-top:12px}
+.others p{font-size:13.5px}
+.others b{color:var(--navy)}
+.err{display:none;background:var(--bad-bg);color:var(--bad);border-radius:12px;padding:10px 14px;margin-bottom:14px;font-size:13.5px}
+.list{display:grid;gap:10px}
+.sum{display:grid;gap:4px;padding:12px 0;border-top:1px solid var(--line)}
+.sum:first-child{border-top:0;padding-top:0}
+.dots{display:flex;gap:5px;flex-wrap:wrap}
+.dots button{width:28px;height:28px;border-radius:8px;border:1.5px solid var(--line);background:var(--surface);
+  font-size:12px;cursor:pointer;color:var(--muted)}
+.dots button.ans{background:var(--good-bg);border-color:var(--good-bg);color:var(--good)}
+.dots button.cur{border-color:var(--navy);color:var(--navy);font-weight:700}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="err" id="err">The connection dropped, so your last answer may not have saved. Check your signal and press Save again.</div>
+  <div id="app"><p class="muted">Loading the team read…</p></div>
+</div>
+<script>
+const FB='https://rifa-mae-default-rtdb.firebaseio.com/skles-ops';
+const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const WHY=['The hook','The topic','The visual','Who is in it','The caption','Timing','Luck'];
+const METRICS=['Reach per post','Saves and shares per post','Hook rate','Cost per lead','Leads reaching a call','Other'];
+let S=null, U={}, ME=null, M=null, I=0, DRAFT={};
+
+const $=id=>document.getElementById(id);
+const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const nice=m=>MONTHS[+m.slice(5)-1]+' '+m.slice(0,4);
+const num=v=>v==null?'n/a':Number(v).toLocaleString('en-US');
+const nameOf=k=>(U[k]&&U[k].name)||k.charAt(0).toUpperCase()+k.slice(1);
+const slug=n=>String(n).toLowerCase().replace(/[^a-z0-9]+/g,'');
+function keep(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+function kept(k){try{return localStorage.getItem(k)}catch(e){return null}}
+
+async function get(p){const r=await fetch(FB+'/'+p+'.json');if(!r.ok)throw 0;return r.json();}
+async function put(p,v,method){
+  try{const r=await fetch(FB+'/'+p+'.json',{method:method||'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(v)});
+    if(!r.ok)throw 0;$('err').style.display='none';return true;}
+  catch(e){$('err').style.display='block';return false;}
+}
+
+/* ------------------------------------------------------------ data */
+function mine(){
+  if(!S||!ME||(S.team||[]).indexOf(ME)<0) return [];
+  return (S.items||[]).filter(it=>!it.only||it.only.indexOf(ME)>=0);
+}
+const R=(id,who)=>(((S.responses||{})[id])||{})[who||ME];
+function done(who){
+  return (S.items||[]).filter(it=>(!it.only||it.only.indexOf(who)>=0)&&R(it.id,who)).length;
+}
+function total(who){return (S.items||[]).filter(it=>!it.only||it.only.indexOf(who)>=0).length;}
+const open=()=>S.state==='open'&&new Date(S.closes)>new Date();
+
+/* ------------------------------------------------------------ pieces */
+function shot(p,winner){
+  return '<div class="shot">'+(p.img?'<img src="'+esc(p.img)+'" alt="" loading="lazy">'
+    :'<div class="none">No thumbnail</div>')+(winner?'<span class="win">Won</span>':'')+'</div>';
+}
+function tile(it,side,picked,reveal){
+  const p=it[side],ad=it.variable==='ad';
+  const meta=ad?esc(p.hook||'Ad'):esc([p.format&&p.format.toLowerCase(),p.pillar,p.day].filter(Boolean).join(' · '));
+  const res=!reveal?'':ad
+    ?'<div class="res"><b>$'+p.cpl.toFixed(2)+'</b><span>per lead · '+num(p.leads)+' leads</span><span class="meta">'
+      +Math.round(p.hook_rate*100)+'% watched past 3 seconds</span></div>'
+    :'<div class="res"><b>'+num(p.reach)+'</b><span>reached · '+num(p.saved)+' saves, '+num(p.shares)+' shares</span></div>';
+  return '<button class="tile" data-side="'+side.slice(-1)+'" aria-pressed="'+(picked===side.slice(-1))+'"'
+    +(reveal?' disabled':'')+'>'+shot(p,reveal&&it.winner===side.slice(-1))
+    +'<p class="cap">'+esc(ad?p.concept:(p.caption||'No caption'))+'</p><p class="meta">'+meta+'</p>'+res+'</button>';
+}
+function chips(sel){
+  return '<div class="chips" id="chips">'+WHY.map(w=>'<button class="pick" data-chip="'+esc(w)+'" aria-pressed="'
+    +((sel||[]).indexOf(w)>=0)+'">'+esc(w)+'</button>').join('')+'</div>';
+}
+function others(it,fmt){
+  const by=(S.responses||{})[it.id]||{},rows=Object.keys(by).filter(k=>k!==ME).map(k=>fmt(k,by[k])).filter(Boolean);
+  return rows.length?'<div class="others"><p class="eyebrow">What the others said</p>'+rows.join('')+'</div>'
+    :'<div class="others"><p class="small muted">Nobody else has answered this one yet.</p></div>';
+}
+
+/* ------------------------------------------------------------ items */
+function vPair(it){
+  const r=R(it.id),d=DRAFT[it.id]||{},pick=r?r.pick:d.pick,rev=!!r;
+  let h='<span class="tag">'+(it.variable==='ad'?'Paid':'Organic')+'</span><h2>'+esc(it.q)+'</h2>'
+    +'<p class="small muted">'+esc(it.differ)+(rev?'':' Numbers stay hidden until you answer.')+'</p>'
+    +'<div class="duo" id="duo">'+tile(it,'a',pick,rev)+tile(it,'b',pick,rev)+'</div>';
+  if(!rev){
+    h+='<label>Why do you think so?</label>'+chips(d.chips)
+      +'<label>Anything else (optional)<textarea id="text" placeholder="One line is plenty.">'+esc(d.text||'')+'</textarea></label>'
+      +'<div class="row"><span class="small muted">'+(pick?'':'Tap the one you think won.')+'</span>'
+      +'<button class="btn" id="save"'+(pick?'':' disabled')+'>Lock it in</button></div>';
+  }else{
+    const right=r.pick===it.winner;
+    h+='<div class="verdict '+(right?'ok':'no')+'">'+(right?'You called it.':'Not this time.')
+      +(r.chips&&r.chips.length?' You put it down to '+esc(r.chips.join(', ').toLowerCase())+'.':'')+'</div>'
+      +others(it,(k,x)=>x&&x.pick?'<p><b>'+esc(nameOf(k))+'</b> '+(x.pick===it.winner?'called it':'picked the other')
+        +(x.chips&&x.chips.length?', put it down to '+esc(x.chips.join(', ').toLowerCase()):'')
+        +(x.text?': “'+esc(x.text)+'”':'')+'</p>':'');
+  }
+  return h;
+}
+function vOutlier(it){
+  const r=R(it.id),d=DRAFT[it.id]||{},p=it.post,top=it.side==='top';
+  let h='<span class="tag">'+(top?'Reached furthest':'Reached least')+'</span>'
+    +'<h2>'+(top?'Why did this one work?':'Why did this one fall short?')+'</h2>'
+    +'<div class="big">'+shot(p)+'<div style="display:grid;gap:6px;min-width:0"><p class="small">'+esc(p.caption||'No caption')+'</p>'
+    +'<p class="meta">'+esc([p.format&&p.format.toLowerCase(),p.pillar,p.day+' '+p.when.slice(8)].filter(Boolean).join(' · '))+'</p>'
+    +'<p class="res"><b>'+num(p.reach)+'</b><span>reached, #'+it.rank+' of '+it.of+' this month</span></p>'
+    +(p.url?'<a class="small" href="'+esc(p.url)+'" target="_blank" rel="noopener">Open the post</a>':'')+'</div></div>';
+  if(!r){
+    h+='<label>What made the difference?</label>'+chips(d.chips)
+      +'<label>In one line, what should we '+(top?'repeat':'avoid')+'?<textarea id="text" placeholder="'
+      +(top?'For example: the member’s face in the first frame':'For example: the first line gave the ending away')+'">'
+      +esc(d.text||'')+'</textarea></label><div class="row"><span></span><button class="btn" id="save">Save</button></div>';
+  }else{
+    h+='<div class="verdict note">You said: '+esc([(r.chips||[]).join(', '),r.text].filter(Boolean).join('. ')||'nothing added')+'</div>'
+      +others(it,(k,x)=>x&&(x.text||(x.chips||[]).length)?'<p><b>'+esc(nameOf(k))+'</b> '
+        +esc([(x.chips||[]).join(', ').toLowerCase(),x.text].filter(Boolean).join('. '))+'</p>':'');
+  }
+  return h;
+}
+function vRule(it){
+  const r=R(it.id),d=DRAFT[it.id]||{};
+  let h='<span class="tag">'+esc(it.front)+'</span><h2>'+esc(it.action)+'</h2><p>'+esc(it.text)+'</p>'
+    +'<p class="small muted">This is what the agreed rules propose. You know things the numbers do not.</p>';
+  if(!r){
+    h+='<div class="chips" id="votes">'+[['agree','Agree'],['disagree','Disagree'],['unsure','Not sure']]
+      .map(v=>'<button class="pick" data-vote="'+v[0]+'" aria-pressed="'+(d.vote===v[0])+'">'+v[1]+'</button>').join('')+'</div>'
+      +'<label>'+(d.vote==='disagree'?'What would you do instead?':'Why (optional)')
+      +'<textarea id="text">'+esc(d.text||'')+'</textarea></label>'
+      +'<div class="row"><span class="small muted" id="hint"></span><button class="btn" id="save"'+(d.vote?'':' disabled')+'>Save</button></div>';
+  }else{
+    h+='<div class="verdict note">You '+({agree:'agreed',disagree:'disagreed',unsure:'were not sure'}[r.vote])
+      +(r.text?': “'+esc(r.text)+'”':'.')+'</div>'
+      +others(it,(k,x)=>x&&x.vote?'<p><b>'+esc(nameOf(k))+'</b> '+({agree:'agreed',disagree:'disagreed',unsure:'not sure'}[x.vote])
+        +(x.text?': “'+esc(x.text)+'”':'')+'</p>':'');
+  }
+  return h;
+}
+function vGrade(it){
+  const r=R(it.id),d=DRAFT[it.id]||{};
+  let h='<span class="tag">Last month’s test</span><h2>'+esc(it.change)+'</h2>'
+    +'<p class="small">It counted as working if: <b>'+esc(it.criterion)+'</b></p><p class="small muted">Measured on '+esc(it.metric)+'.</p>';
+  if(!r){
+    h+='<div class="chips" id="votes">'+[['hit','It hit'],['missed','It missed'],['notrun','It never ran']]
+      .map(v=>'<button class="pick" data-vote="'+v[0]+'" aria-pressed="'+(d.vote===v[0])+'">'+v[1]+'</button>').join('')+'</div>'
+      +'<label>What we learned (optional)<textarea id="text">'+esc(d.text||'')+'</textarea></label>'
+      +'<div class="row"><span></span><button class="btn" id="save"'+(d.vote?'':' disabled')+'>Save</button></div>';
+  }else{
+    h+='<div class="verdict note">'+esc({hit:'It hit',missed:'It missed',notrun:'It never ran'}[r.vote])+(r.text?': '+esc(r.text):'.')+'</div>'
+      +others(it,(k,x)=>x&&x.vote?'<p><b>'+esc(nameOf(k))+'</b> '+esc({hit:'hit',missed:'missed',notrun:'never ran'}[x.vote])
+        +(x.text?': “'+esc(x.text)+'”':'')+'</p>':'');
+  }
+  return h;
+}
+function vObj(it){
+  const r=R(it.id)||{},d=Object.assign({},r,DRAFT[it.id]||{}),saved=!!R(it.id);
+  return '<span class="tag">Call queue</span><h2>What stopped people this month?</h2>'
+    +'<p class="small muted">The three objections you heard most, in the lead’s own words if you can. These become next month’s hooks.</p>'
+    +[1,2,3].map(n=>'<label>Objection '+n+'<input id="o'+n+'" value="'+esc(d['o'+n]||'')+'"></label>').join('')
+    +'<label>How many leads did you speak to this month?<input id="talked" inputmode="numeric" value="'+esc(d.talked||'')+'"></label>'
+    +'<div class="row"><span class="small muted">'+(saved?'Saved. You can still change it.':'')+'</span><button class="btn" id="save">Save</button></div>';
+}
+function vPropose(it){
+  const r=R(it.id)||{},d=Object.assign({},r,DRAFT[it.id]||{}),saved=!!R(it.id),lead=ME===S.lead;
+  let h='<span class="tag">Your proposal</span><h2>One thing to try next month</h2>'
+    +'<p class="small muted">Write down what counts as working before it runs, so nobody argues about it afterwards.</p>'
+    +'<label>Where<select id="front">'+['Paid','Organic','Funnel'].map(f=>'<option'+(d.front===f?' selected':'')+'>'+f+'</option>').join('')+'</select></label>'
+    +'<label>What we change<input id="change" value="'+esc(d.change||'')+'" placeholder="Student wins as feed posts on Saturdays"></label>'
+    +'<label>How we measure it<select id="metric">'+METRICS.map(m=>'<option'+(d.metric===m?' selected':'')+'>'+m+'</option>').join('')+'</select></label>'
+    +'<label>It counts as working if<input id="criterion" value="'+esc(d.criterion||'')+'" placeholder="Reach per post above 140 across 4 posts"></label>'
+    +'<label>Who runs it<select id="owner">'+(S.team||[]).map(k=>'<option value="'+k+'"'+((d.owner||ME)===k?' selected':'')+'>'+esc(nameOf(k))+'</option>').join('')+'</select></label>'
+    +'<div class="row"><span class="small muted">'+(saved?'Saved. You can still change it.':'Optional, but this is how the team steers next month.')+'</span><button class="btn" id="save">Save</button></div>';
+  const all=(S.responses||{}).propose||{};
+  const keys=Object.keys(all).filter(k=>all[k]&&all[k].change);
+  if(keys.length) h+='<div class="others"><p class="eyebrow">Proposals so far'+(lead?' · accept the ones that go in the plan':'')+'</p>'
+    +keys.map(k=>{const x=all[k];return '<div class="sum"><p><b>'+esc(nameOf(k))+'</b> · '+esc(x.front)+': '+esc(x.change)+'</p>'
+      +'<p class="small muted">'+esc(x.metric)+'. Works if '+esc(x.criterion||'not written yet')+'. Run by '+esc(nameOf(x.owner||k))+'.</p>'
+      +(lead?'<button class="pick" data-accept="'+k+'" aria-pressed="'+!!x.accepted+'">'+(x.accepted?'In the plan':'Accept')+'</button>'
+        :(x.accepted?'<p class="small" style="color:var(--good)">In the plan</p>':''))+'</div>';}).join('')+'</div>';
+  return h;
+}
+const VIEW={pair:vPair,outlier:vOutlier,rule:vRule,grade:vGrade,objections:vObj,propose:vPropose};
+
+/* ------------------------------------------------------------ screens */
+function head(){
+  const team=S.team||[],closes=new Date(S.closes);
+  const when=open()?'Open until '+closes.toLocaleString('en-US',{weekday:'long',day:'numeric',month:'short',hour:'numeric',minute:'2-digit'})
+    :'Closed. This is the record.';
+  const items=mine(),n=items.filter(it=>R(it.id)).length;
+  return '<header><div class="row"><span class="eyebrow">SKLES team read · '+esc(nice(M))+'</span>'
+    +(ME?'<button class="btn ghost small" id="out" style="padding:4px 10px">'+esc(nameOf(ME))+' · sign out</button>':'')+'</div>'
+    +'<h1>'+(open()?'About ten minutes, whenever suits you':'What the team said')+'</h1><p class="small muted">'+esc(when)+'</p>'
+    +(items.length&&open()?'<div class="bar" aria-label="'+n+' of '+items.length+' answered"><i style="width:'+(n/items.length*100)+'%"></i></div>':'')
+    +'<div class="who">'+team.map(k=>{const d=done(k),t=total(k);return '<span class="chip'+(d>=t?' done':'')+(k===ME?' me':'')+'">'
+      +esc(nameOf(k))+' '+(d>=t?'done':d+'/'+t)+'</span>';}).join('')+'</div></header>';
+}
+function render(){
+  if(!S){ $('app').innerHTML='<div class="card"><h2>No team read is open</h2><p class="muted">The next one opens on the 26th, once the month’s numbers are in.</p></div>'; return; }
+  if(!ME){ return login(); }
+  const items=mine();
+  if(!open()||!items.length) return results();
+  if(I>=items.length) return finished();
+  const it=items[I];
+  $('app').innerHTML=head()
+    +'<div class="dots" style="margin-bottom:12px">'+items.map((x,i)=>'<button data-go="'+i+'" class="'+(R(x.id)?'ans ':'')+(i===I?'cur':'')
+      +'" aria-label="Question '+(i+1)+'">'+(i+1)+'</button>').join('')+'</div>'
+    +'<div class="card">'+VIEW[it.kind](it)+'</div>'
+    +'<div class="row" style="margin-top:14px"><button class="btn ghost" id="back"'+(I?'':' disabled')+'>Back</button>'
+    +'<button class="btn ghost" id="next">'+(I===items.length-1?'Finish':'Next')+'</button></div>';
+  wire(it);
+}
+function finished(){
+  const items=mine(),left=items.filter(it=>!R(it.id)).length;
+  const pairs=items.filter(it=>it.kind==='pair'&&R(it.id)),right=pairs.filter(it=>R(it.id).pick===it.winner).length;
+  $('app').innerHTML=head()+'<div class="card"><h2>'+(left?left+' left unanswered':'That’s everything, thank you')+'</h2>'
+    +(pairs.length?'<p>You called '+right+' of '+pairs.length+' match-ups.</p>':'')
+    +'<p class="muted small">Your answers go into the plan Marina writes on the 29th, and your notes appear in the review next to the post they are about. '
+    +'You can come back and see what the others said until the read closes.</p>'
+    +'<div class="row"><button class="btn ghost" id="again">Look through it again</button><button class="btn" id="seeall">See what everyone said</button></div></div>';
+  $('again').onclick=()=>{I=0;render();};
+  $('seeall').onclick=results;
+  wireHead();
+}
+function results(){
+  const items=S.items||[],resp=S.responses||{};
+  const block=it=>{
+    const by=resp[it.id]||{},keys=Object.keys(by);
+    if(it.kind==='pair'){const w=it[it.winner];return '<div class="sum"><p class="eyebrow">'+esc(it.q)+'</p><p><b>'
+      +esc(it.variable==='ad'?w.concept:(w.caption||'').slice(0,70))+'</b> won.</p><p class="small muted">'
+      +(keys.length?keys.map(k=>esc(nameOf(k))+(by[k].pick===it.winner?' called it':' missed')).join(' · '):'No picks.')+'</p></div>';}
+    if(it.kind==='outlier'){const t=keys.map(k=>[(by[k].chips||[]).join(', ').toLowerCase(),by[k].text].filter(Boolean).join('. ')?'<p class="small"><b>'
+      +esc(nameOf(k))+'</b> '+esc([(by[k].chips||[]).join(', ').toLowerCase(),by[k].text].filter(Boolean).join('. '))+'</p>':'').join('');
+      return '<div class="sum"><p class="eyebrow">'+(it.side==='top'?'Reached furthest':'Reached least')+' · '+num(it.post.reach)+'</p><p>'
+        +esc((it.post.caption||'').slice(0,80))+'</p>'+(t||'<p class="small muted">No notes.</p>')+'</div>';}
+    if(it.kind==='rule'){const c={agree:0,disagree:0,unsure:0};keys.forEach(k=>c[by[k].vote]=(c[by[k].vote]||0)+1);
+      return '<div class="sum"><p class="eyebrow">'+esc(it.front)+' rule</p><p><b>'+esc(it.action)+'</b></p><p class="small muted">'
+        +c.agree+' agree · '+c.disagree+' disagree · '+c.unsure+' not sure</p>'
+        +keys.filter(k=>by[k].text).map(k=>'<p class="small"><b>'+esc(nameOf(k))+'</b> '+esc(by[k].text)+'</p>').join('')+'</div>';}
+    if(it.kind==='objections'){const o=by.rodney||{};const l=['o1','o2','o3'].map(k=>o[k]).filter(Boolean);
+      return '<div class="sum"><p class="eyebrow">Call queue objections</p>'+(l.length?l.map(x=>'<p>“'+esc(x)+'”</p>').join(''):'<p class="small muted">Not filled in.</p>')
+        +(o.talked?'<p class="small muted">Spoke to '+esc(o.talked)+' leads.</p>':'')+'</div>';}
+    if(it.kind==='propose'){const l=keys.filter(k=>by[k].change);return '<div class="sum"><p class="eyebrow">Proposals</p>'
+      +(l.length?l.map(k=>'<p><b>'+esc(nameOf(k))+'</b> '+esc(by[k].change)+(by[k].accepted?' <span class="tag" style="background:var(--good-bg);color:var(--good)">In the plan</span>':'')
+        +'<br><span class="small muted">Works if '+esc(by[k].criterion||'not written')+'</span></p>').join(''):'<p class="small muted">None yet.</p>')+'</div>';}
+    if(it.kind==='grade'){const v=keys.map(k=>esc(nameOf(k))+': '+({hit:'hit',missed:'missed',notrun:'never ran'}[by[k].vote])).join(' · ');
+      return '<div class="sum"><p class="eyebrow">Last month’s test</p><p>'+esc(it.change)+'</p><p class="small muted">'+(v||'Not graded.')+'</p></div>';}
+    return '';
+  };
+  $('app').innerHTML=head()+'<div class="card list">'+items.map(block).join('')+'</div>'
+    +(open()&&mine().length?'<div class="row" style="margin-top:14px"><button class="btn ghost" id="backq">Back to my questions</button></div>':'');
+  if($('backq')) $('backq').onclick=()=>{I=0;render();};
+  wireHead();
+}
+function login(){
+  const names=(S.team||[]).concat(S.viewers||[]);
+  $('app').innerHTML='<header><span class="eyebrow">SKLES team read · '+esc(nice(M))+'</span><h1>Sign in</h1>'
+    +'<p class="small muted">Same name and PIN as the ops board.</p></header><div class="card">'
+    +'<label>Your name<select id="lname">'+names.map(k=>'<option value="'+k+'">'+esc(nameOf(k))+'</option>').join('')+'</select></label>'
+    +'<label id="lpinl">PIN<input id="lpin" type="password" inputmode="numeric" autocomplete="current-password"></label>'
+    +'<div class="row"><span class="small" id="lmsg" style="color:var(--bad)"></span><button class="btn" id="lgo">Sign in</button></div></div>';
+  const lab=()=>{const u=U[$('lname').value];$('lpinl').firstChild.textContent=u&&u.pin?'PIN':'Create a PIN (4 to 6 digits)';};
+  $('lname').onchange=lab;lab();
+  const go=async()=>{
+    const k=$('lname').value,pin=$('lpin').value.trim(),u=U[k]||{};
+    if(!/^\d{4,6}$/.test(pin)){$('lmsg').textContent='The PIN is 4 to 6 digits.';return;}
+    if(!u.pin){await put('users/'+k,{pin:pin,name:u.name||nameOf(k)},'PATCH');U[k]=Object.assign({},u,{pin:pin});}
+    else if(u.pin!==pin){$('lmsg').textContent='That PIN does not match. Try again.';return;}
+    ME=k;keep('skles_ops_sess',nameOf(k));I=firstOpen();render();
+  };
+  $('lgo').onclick=go;$('lpin').onkeydown=e=>{if(e.key==='Enter')go();};
+}
+function firstOpen(){const items=mine(),i=items.findIndex(it=>!R(it.id));return i<0?items.length:i;}
+
+/* ------------------------------------------------------------ wiring */
+function wireHead(){if($('out'))$('out').onclick=()=>{try{localStorage.removeItem('skles_ops_sess')}catch(e){}ME=null;render();};}
+function draft(it,patch){DRAFT[it.id]=Object.assign({},DRAFT[it.id]||{},patch);}
+function wire(it){
+  wireHead();
+  document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{I=+b.dataset.go;render();});
+  $('back').onclick=()=>{I=Math.max(0,I-1);render();};
+  $('next').onclick=()=>{I++;render();scrollTo(0,0);};
+  const text=$('text');if(text)text.oninput=()=>draft(it,{text:text.value});
+  document.querySelectorAll('#duo .tile:not([disabled])').forEach(b=>b.onclick=()=>{draft(it,{pick:b.dataset.side});render();});
+  document.querySelectorAll('#chips .pick').forEach(b=>b.onclick=()=>{
+    const cur=(DRAFT[it.id]||{}).chips||[],c=b.dataset.chip;
+    draft(it,{chips:cur.indexOf(c)>=0?cur.filter(x=>x!==c):cur.concat([c])});
+    b.setAttribute('aria-pressed',b.getAttribute('aria-pressed')!=='true');});
+  document.querySelectorAll('#votes .pick').forEach(b=>b.onclick=()=>{draft(it,{vote:b.dataset.vote});render();});
+  document.querySelectorAll('[data-accept]').forEach(b=>b.onclick=async()=>{
+    const k=b.dataset.accept,x=((S.responses||{}).propose||{})[k];
+    if(await put('session/'+M+'/responses/propose/'+k,{accepted:!x.accepted},'PATCH')){x.accepted=!x.accepted;render();}});
+  const save=$('save');if(!save)return;
+  save.onclick=async()=>{
+    const d=DRAFT[it.id]||{};let v;
+    if(it.kind==='pair') v={pick:d.pick,chips:d.chips||[],text:(d.text||'').trim()};
+    else if(it.kind==='outlier') v={chips:d.chips||[],text:(d.text||'').trim()};
+    else if(it.kind==='rule'||it.kind==='grade'){
+      if(it.kind==='rule'&&d.vote==='disagree'&&!(d.text||'').trim()){$('hint').textContent='Say what you would do instead.';return;}
+      v={vote:d.vote,text:(d.text||'').trim()};}
+    else if(it.kind==='objections') v={o1:$('o1').value.trim(),o2:$('o2').value.trim(),o3:$('o3').value.trim(),talked:$('talked').value.trim()};
+    else if(it.kind==='propose'){const old=R(it.id)||{};v={front:$('front').value,change:$('change').value.trim(),metric:$('metric').value,
+      criterion:$('criterion').value.trim(),owner:$('owner').value,accepted:!!old.accepted};
+      if(!v.change){$('change').focus();return;}}
+    v.at=new Date().toISOString();
+    save.disabled=true;
+    if(await put('session/'+M+'/responses/'+it.id+'/'+ME,v)){
+      S.responses=S.responses||{};S.responses[it.id]=S.responses[it.id]||{};S.responses[it.id][ME]=v;delete DRAFT[it.id];
+      try{S=await get('session/'+M)||S;}catch(e){}
+      render();
+    }else save.disabled=false;
+  };
+}
+
+/* ------------------------------------------------------------ start */
+(async function(){
+  try{
+    const q=new URLSearchParams(location.search).get('m');
+    const all=await get('session')||{};U=await get('users')||{};
+    const months=Object.keys(all).sort().reverse();
+    M=q&&all[q]?q:(months.find(m=>all[m].state==='open')||months[0]);
+    S=M?all[M]:null;
+    const sess=kept('skles_ops_sess');
+    if(S&&sess){const k=slug(sess);if(U[k]&&(S.team||[]).concat(S.viewers||[]).indexOf(k)>=0)ME=k;}
+    if(S&&ME)I=firstOpen();
+  }catch(e){$('err').style.display='block';}
+  render();
+})();
+</script>
+</body>
+</html>
