@@ -52,7 +52,7 @@ h2{font-size:12px;letter-spacing:.11em;text-transform:uppercase;font-weight:700;
 .fronts{display:grid;grid-template-columns:repeat(auto-fit,minmax(224px,1fr));gap:11px}
 .fr{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:16px 17px;
   border-top:4px solid var(--c);min-width:0}
-.fr.paid{--c:#1d6b4f} .fr.social{--c:#8a6a1f} .fr.youtube{--c:#8c3a52} .fr.funnel{--c:#112250}
+.fr.paid{--c:#1d6b4f} .fr.social{--c:#8a6a1f} .fr.youtube{--c:#8c3a52} .fr.funnel{--c:#112250} .fr.uploads{--c:#5d6472}
 .fr h3{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--muted);
   margin-bottom:11px}
 .kv{display:flex;justify-content:space-between;gap:10px;font-size:13.5px;padding-block:4px;
@@ -239,52 +239,106 @@ function fronts(d){
   const ig = soc.ig || null, fb = soc.fb || null, bd = soc.board || {};
   const yt = (f.youtube && f.youtube.data) || {};
   const fn = (f.funnel && f.funnel.data) || {};
+  const up = (f.uploads && f.uploads.data) || {};
   const out = [];
+  const money = v => '$' + Number(v || 0).toFixed(2);
 
+  /* Paid */
   out.push(`<div class="fr paid"><h3>Paid</h3>` + (paid
-    ? kv('Spend', '$' + Number(paid.spend).toFixed(2))
+    ? kv('Spend', money(paid.spend))
       + kv('Leads', num(paid.leads))
-      + kv('Per lead', paid.cpl ? '$' + Number(paid.cpl).toFixed(2) : '—',
+      + kv('Per lead', paid.cpl ? money(paid.cpl) : '\u2014',
            paid.cpl && paid.cpl < 18.5 ? 'good' : 'bad')
-      + kv('Reach', num(paid.reach))
+      + kv('Impressions', num(paid.impressions))
+      + kv('People reached', num(paid.reach))
+      + kv('Frequency', paid.frequency ? paid.frequency + '\u00d7' : '\u2014')
+      + kv('Clicks', num(paid.clicks) + (paid.ctr ? ' \u00b7 ' + paid.ctr + '%' : ''))
+      + kv('Link clicks', num(paid.link_clicks))
+      + kv('Video views', num(paid.video_views))
+      + kv('CPM', paid.cpm ? money(paid.cpm) : '\u2014')
+      + kv('Comments on ads', num(paid.comments), paid.comments ? 'bad' : null)
       + `<p class="verdict">${paid.cpl && paid.cpl < 18.5
-          ? 'Cheaper than every past campaign. This front is working.'
-          : 'Above the benchmark. Creative is the lever.'}</p>`
+          ? 'Cheaper than every past campaign, so this front is working.'
+          : 'Above the benchmark. Creative is the lever, not budget.'}` +
+        (paid.comments ? ' ' + paid.comments + ' people commented on an advert, which is a conversation nobody has had.' : '') +
+        `</p>`
     : `<p class="verdict">No figures came back. Check the Meta token before concluding anything.</p>`)
     + `</div>`);
 
-  out.push(`<div class="fr social"><h3>Organic social</h3>`
+  /* Organic, from the APIs */
+  const st = bd.by_status || {};
+  out.push(`<div class="fr social"><h3>Organic &middot; Instagram and the page</h3>`
     + (ig ? kv('Instagram reach', num(ig.reach))
-          + kv('New followers', ig.new_followers == null ? '—' : num(ig.new_followers))
-          + kv('Engagement', ig.engagement_rate + '%')
+          + kv('Profile views', num(ig.profile_views))
+          + kv('Followers', num(ig.followers))
+          + kv('New followers', ig.new_followers == null ? '\u2014' : num(ig.new_followers))
+          + kv('Engagement rate', ig.engagement_rate + '%')
+          + kv('Website clicks', num(ig.website_clicks), ig.website_clicks < 5 ? 'bad' : null)
+          + kv('Facebook fans', num(fb && fb.fans))
           + kv('Facebook engagements', num(fb && fb.page_engagements))
-        : kv('Only held for the current month', '—'))
+          + kv('Facebook page views', num(fb && fb.page_views))
+        : kv('Only held for the current month', '\u2014'))
     + kv('Cards dated', num(bd.cards))
-    + kv('With a reading', num(bd.with_reading), bd.cards && !bd.with_reading ? 'bad' : 'good')
+    + kv('Published', num(bd.published))
+    + kv('With a 72h reading', num(bd.with_reading), bd.cards && !bd.with_reading ? 'bad' : 'good')
+    + (Object.keys(st).length ? kv('Still scheduled', num(st['Scheduled'] || 0),
+         (st['Scheduled'] || 0) > 5 ? 'bad' : null) : '')
     + `<p class="verdict">${bd.cards && !bd.with_reading
-        ? 'Nothing was read at 72 hours, so no format can be scored.'
+        ? 'Nothing was read at 72 hours, so no format can be scored this month.'
         : 'Formats can be ranked this month.'}</p></div>`);
 
+  /* Valerie's hand uploads */
+  const fbp = up['facebook-sean'] || {}, li = up.linkedin || {}, tk = up.tiktok || {};
+  const tot = fbp.totals || {};
+  out.push(`<div class="fr uploads"><h3>Uploaded by hand &middot; profile, LinkedIn, TikTok</h3>`
+    + kv('Sean\u2019s profile posts', num(tot.posts))
+    + kv('Profile impressions', num(tot.impressions), tot.impressions > 5000 ? 'good' : null)
+    + kv('Profile interactions', num(tot.interactions))
+    + kv('Profile rate', tot.rate != null ? tot.rate + '%' : '\u2014',
+         tot.rate >= 5 ? 'good' : null)
+    + kv('LinkedIn posts', li.gap ? 'not in the file' : num(li.rows), li.gap ? 'bad' : null)
+    + kv('TikTok videos', tk.gap ? 'not in the file' : num(tk.rows), tk.gap ? 'bad' : null)
+    + kv('Last refreshed', esc(up.last_updated ? String(up.last_updated).split('\u00b7')[0].trim() : '\u2014'))
+    + `<p class="verdict">` + (fbp.best
+        ? 'Best on the profile: \u201c' + esc(String(fbp.best.title).slice(0, 70)) + '\u2026\u201d, '
+          + num(fbp.best.impressions) + ' impressions. '
+        : '')
+      + (li.gap || tk.gap
+        ? 'LinkedIn and TikTok are the wrong sheets, so neither can say which post worked.'
+        : 'All three exports are usable.')
+      + `</p></div>`);
+
+  /* YouTube */
   const rec = yt.recent || [];
   const top = rec.reduce((a, v) => (v.views || 0) > ((a && a.views) || 0) ? v : a, null);
   out.push(`<div class="fr youtube"><h3>YouTube</h3>`
     + kv('Subscribers', num(yt.subs))
+    + kv('Views, all time', num(yt.views_total))
+    + kv('Videos on the channel', num(yt.videos_total))
     + kv('Recordings in hand', num(rec.length))
-    + kv('Best watched', top ? num(top.views) + ' views' : '—')
+    + rec.slice(0, 4).map(v =>
+        kv('&middot; ' + esc(String(v.title).slice(0, 34)) + '\u2026', num(v.views) + ' views')).join('')
     + `<p class="verdict">${top
-        ? 'Most watched: “' + esc(top.title) + '”. The source for every social cut.'
+        ? 'Most watched: \u201c' + esc(top.title) + '\u201d. These are the source for every social cut.'
         : 'No recordings read this month.'}</p></div>`);
 
+  /* Funnel */
   const lc = fn.lifecycle || {};
   out.push(`<div class="fr funnel"><h3>Funnel and sales</h3>`
-    + kv('Leads on the list', num(lc.lead))
+    + kv('Subscribers', num(lc.subscriber))
+    + kv('Leads', num(lc.lead))
+    + kv('Marketing qualified', num(lc.marketingqualifiedlead))
+    + kv('Sales qualified', num(lc.salesqualifiedlead))
     + kv('Customers', num(lc.customer))
-    + kv('Won this month', '$' + Number(fn.won_this_month || 0).toFixed(2),
-         fn.won_this_month ? 'good' : 'bad')
-    + kv('Webinar attendees', num(fn.webinar_attendees))
+    + kv('From this campaign', num(fn.from_campaign))
+    + kv('Won this month', money(fn.won_this_month), fn.won_this_month ? 'good' : 'bad')
+    + kv('Won, all time', money(fn.won_total))
+    + kv('Open pipeline', money(fn.open_total))
+    + kv('Webinar attendees', num(fn.webinar_attendees),
+         !fn.webinar_attendees && fn.webinar_sessions ? 'bad' : null)
     + `<p class="verdict">${fn.won_this_month
         ? 'Money came through this month.'
-        : 'Nothing closed. The gap is after the form.'}</p></div>`);
+        : 'Nothing closed. The gap is after the form, so nothing upstream is worth optimising.'}</p></div>`);
 
   document.getElementById('fronts').innerHTML = out.join('');
 }
