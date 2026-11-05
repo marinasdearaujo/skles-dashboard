@@ -100,6 +100,26 @@ textarea{width:100%;min-height:90px;resize:vertical;line-height:1.55}
 .verdict:before{content:'';display:block;width:26px;height:3px;border-radius:3px;
   background:var(--gold);margin-bottom:9px}
 
+/* direction */
+.more{margin-top:14px}
+.more summary{cursor:pointer;font-size:12px;font-weight:600;color:var(--muted);list-style:none;padding:6px 0}
+.more summary::-webkit-details-marker{display:none}
+.more summary:before{content:'+ '}
+.more[open] summary:before{content:'− '}
+.dp{display:grid;grid-template-columns:34px minmax(0,1fr);gap:14px;align-items:start}
+.dpn{width:30px;height:30px;border-radius:50%;background:var(--deep);color:#fff;font-weight:700;
+  font-size:13px;display:grid;place-items:center}
+.own{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--gold)}
+.dp h3,.ask h3{font-size:16.5px;font-weight:600;color:var(--navy);line-height:1.4;margin-top:4px}
+.dp .ev{font-size:13px;color:var(--muted);margin-top:6px}
+.dp .imp{font-size:12.5px;font-weight:600;color:var(--good);margin-top:6px}
+.ask{background:linear-gradient(140deg,#e9d3a1,#e0c58f)}
+.ask .own{color:var(--navy)}
+.said{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.said p{font-size:13px;color:var(--muted)} .said b{color:var(--navy)}
+.go{font-family:inherit;border:0;border-radius:11px;padding:9px 14px;font-weight:600;font-size:13px;
+  background:var(--deep);color:#fff;cursor:pointer}
+
 /* figures + trend */
 .figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:11px}
 .fig{background:var(--card);border-radius:16px;box-shadow:var(--lift-sm);padding:14px 16px}
@@ -321,7 +341,7 @@ const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;',
 const nice=m=>{const p=m.split('-');return MONTHS[+p[1]-1]+' '+p[0];};
 const shortm=m=>{const p=m.split('-');return MONTHS[+p[1]-1].slice(0,3)+' '+p[0].slice(2);};
 const num=v=>(v==null?'—':Number(v).toLocaleString('en-GB'));
-const money=v=>(v==null?'—':'$'+Number(v||0).toFixed(2));
+const money=v=>(v==null?'—':'$'+Number(v||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}));
 const wd=d=>{const n=new Date(d+'T12:00:00').getDay();return DAYS[n===0?6:n-1];};
 
 const SAYS=[['marissa','Marissa','YouTube, and what is already recorded',
@@ -331,9 +351,20 @@ const SAYS=[['marissa','Marissa','YouTube, and what is already recorded',
   ['marina','Marina','anything the rules missed','Notes that belong with this month’s record.']];
 
 /* ---------------------------------------------------------------- the model */
+/* Each verdict compares: this month against last month and the benchmark, so the sentence
+   changes when the numbers do. A sentence that reads the same every month gets skipped. */
+const mon=m=>MONTHS[+m.slice(5)-1];
+const pmKey=m=>{let y=+m.slice(0,4),n=+m.slice(5)-1;if(n<1){n=12;y--;}return y+'-'+String(n).padStart(2,'0');};
+const pct=(a,b)=>(a==null||!b)?null:Math.round((a-b)/b*100);
+const way=(a,b)=>{const p=pct(a,b);return p==null?'':p>0?'up '+p+'%':p<0?'down '+(-p)+'%':'flat';};
+const running=m=>m===new Date().toISOString().slice(0,7);
+const OWNER={rodney:'Rodney',marina:'Marina',valerie:'Valerie',marissa:'Marissa'};
+
 function model(d){
   d=d||{};
   const f=d.fronts||{},c=d.content||{};
+  const pm=pmKey(CUR),pd=ALL[pm]||{},pf=pd.fronts||{};
+  const pp=(pf.paid&&pf.paid.data)||null,pfn=(pf.funnel&&pf.funnel.data)||{};
   const paid=(f.paid&&f.paid.data)||null;
   const soc=(f.social&&f.social.data)||{},ig=soc.ig,fb=soc.fb,bd=soc.board||{},st=bd.by_status||{};
   const up=(f.uploads&&f.uploads.data)||{},fbp=up['facebook-sean']||{},
@@ -355,10 +386,14 @@ function model(d){
       ['Clicks',num(paid.clicks)+(paid.ctr?' · '+paid.ctr+'%':'')],
       ['Link clicks',num(paid.link_clicks)],['Video views',num(paid.video_views)],
       ['CPM',money(paid.cpm)],['Comments on ads',num(paid.comments),paid.comments?'bad':null]]:[],
-    verdict:paid?((paid.cpl&&paid.cpl<CPLB
-      ?'Cheaper than every past campaign, so this front is working.'
-      :'Above the benchmark. Creative is the lever, not budget.')
-      +(paid.comments?' '+paid.comments+' people commented on an advert, which is a conversation nobody has had.':''))
+    verdict:paid&&paid.cpl?('Leads cost <b>'+money(paid.cpl)+'</b>'
+      +(pp&&pp.cpl?', '+(paid.cpl>pp.cpl?'up':'down')+' from '+money(pp.cpl)+' in '+mon(pm):'')
+      +(paid.cpl<CPLB?', '+Math.round((1-paid.cpl/CPLB)*100)+'% under the '+money(CPLB)+' benchmark'
+        :', above the '+money(CPLB)+' benchmark')+'. '+num(paid.leads)+' leads'
+      +(pp&&pp.leads!=null?' against '+num(pp.leads):'')+'.'
+      +(pp&&pp.cpm&&Math.abs(pct(paid.cpm,pp.cpm))>=20?' Cost per 1,000 views went '+way(paid.cpm,pp.cpm)
+        +' to '+money(paid.cpm)+(pp.ctr&&paid.ctr?', and the click rate moved from '+pp.ctr+'% to '+paid.ctr+'%':'')+'.':'')
+      +(paid.comments?' '+paid.comments+' people commented on an ad.':''))
       :'No figures came back. Check the Meta token before concluding anything.'});
 
   F.push({key:'social',label:'Organic',note:'Instagram and the dated cards',
@@ -380,11 +415,12 @@ function model(d){
         (st['Scheduled']||0)>5?'bad':null]]:[]),
     gallery:posts,
     verdict:(prev&&prev.avg&&me.avg
-      ?'Reach per post is '+(me.avg>=prev.avg?'up':'down')+' on '+shortm(prev.m)+', '+me.avg
-        +' against '+prev.avg+'. '
-      :'')+(bd.cards&&!bd.with_reading
-      ?'Nothing was read at 72 hours, so the cards cannot score a format on their own.'
-      :'Formats can be ranked this month.')});
+      ?'Reach per post went <b>'+way(me.avg,prev.avg)+'</b> to '+Math.round(me.avg)+', from '+Math.round(prev.avg)+' in '
+        +mon(prev.m)+', on '+me.posts+' posts against '+prev.posts+'.'
+        +(me.posts>=prev.posts&&me.avg<prev.avg?' Volume held, so posting more will not fix it.':'')
+      :me.avg?'Each post reached '+Math.round(me.avg)+' people on average, across '+me.posts+' posts.':'No posts read this month.')
+      +(posts[0]?' Best: '+(posts[0].first?'“'+esc(String(posts[0].first).slice(0,54))+'”':'an uncaptioned '+(posts[0].kind==='REELS'?'Reel':'post')+' from '+wd(posts[0].when)+' '+posts[0].when.slice(8))+', at '+num(posts[0].reach)+'.':'')
+      +(running(CUR)?' The month is still running.':'')});
 
   F.push({key:'uploads',label:'By hand',note:"Sean's profile, LinkedIn and TikTok",
     head:num(tot.impressions),headsub:'profile impressions',
@@ -396,11 +432,9 @@ function model(d){
       ['LinkedIn posts',li.gap?'not in the file':num(li.rows),li.gap?'bad':null],
       ['TikTok videos',tk.gap?'not in the file':num(tk.rows),tk.gap?'bad':null],
       ['Last refreshed',esc(up.last_updated?String(up.last_updated).split('·')[0].trim():'—')]],
-    verdict:(fbp.best?'Best on the profile: “'+esc(String(fbp.best.title).slice(0,70))
-      +'…”, '+num(fbp.best.impressions)+' impressions. ':'')
-      +(li.gap||tk.gap
-        ?'LinkedIn and TikTok came through as the wrong sheets, so neither can say which post worked, and neither has an API to show a thumbnail.'
-        :'All three exports are usable.')});
+    verdict:(tot.posts&&me.avg?'Sean’s own profile averages <b>'+num(Math.round(tot.impressions/tot.posts))
+      +' impressions per post</b>, against '+Math.round(me.avg)+' reached per post on the Instagram page. ':'')
+      +(li.gap||tk.gap?'LinkedIn and TikTok sent the wrong export, so neither can be read yet.':'')});
 
   F.push({key:'youtube',label:'YouTube',note:"Marissa's long-form, the source for every cut",
     head:num(vids.length||(yt.recent||[]).length),headsub:'recordings in hand',
@@ -408,9 +442,9 @@ function model(d){
     metrics:[['Subscribers',num(yt.subs)],['Views, all time',num(yt.views_total)],
       ['Videos on the channel',num(yt.videos_total)],['Recordings in hand',num(vids.length)]],
     vids:vids,
-    verdict:vids.length
-      ?'Every social post is cut from one of these, so nothing on Instagram needs Sean in front of a camera again.'
-      :'No recordings read this month.'});
+    verdict:vids.length?(()=>{const t=vids.slice().sort((a,b)=>(b.views||0)-(a.views||0))[0];
+      return 'Most watched: <b>“'+esc(String(t.title).slice(0,96))+'”</b> at '+num(t.views)+' views, of '
+        +vids.length+' recordings in hand.';})():'No recordings read this month.'});
 
   F.push({key:'funnel',label:'Funnel',note:'GetResponse, HubSpot and Zoom',
     head:money(fn.won_this_month),headsub:'won this month',
@@ -423,11 +457,15 @@ function model(d){
       ['Won, all time',money(fn.won_total)],['Open pipeline',money(fn.open_total)],
       ['Webinar attendees',num(fn.webinar_attendees),
         !fn.webinar_attendees&&fn.webinar_sessions?'bad':null]],
-    verdict:fn.won_this_month?'Money came through this month.'
-      :'Nothing closed. The gap is after the form, so nothing upstream is worth optimising.'});
+    verdict:fn.won_this_month?'<b>'+money(fn.won_this_month)+' closed</b>'
+        +(pfn.won_this_month!=null?', against '+money(pfn.won_this_month)+' in '+mon(pm):'')+'.'
+      :'<b>Nothing closed</b>'+(pfn.won_this_month?', after '+money(pfn.won_this_month)+' in '+mon(pm):'')+'. '
+        +(paid&&paid.leads?num(paid.leads)+' leads came in and '+num(lc.salesqualifiedlead||0)+' reached a sales conversation':'')
+        +(fn.webinar_sessions?'; '+fn.webinar_sessions+' webinar sessions recorded '+num(fn.webinar_attendees||0)+' attendees':'')+'.'});
 
   const r=d.read||{},dz=r.directions||{};
   return {built:d.built||'',content:c,fronts:F,posts:posts,vids:vids,months:ms,me:me,prev:prev,
+    direction:d.direction||null,
     paid:paid,read:r.lines||[],
     dirs:[['Marissa','what to produce',dz.marissa],['Valerie','what changes',dz.valerie],
           ['Marina','paid and the funnel',dz.marina]].filter(x=>x[2]),
@@ -612,18 +650,38 @@ function paneMonth(M){
     +'the lengths compare month to month. Gold is the month on screen.</p></div>';
 }
 
+/* One number and one sentence. The rest of the figures are there, folded away, for whoever
+   wants to check the sentence. The posts themselves live in What ran. */
 function paneFront(f){
   let s=hd(f.label,esc(f.note))
     +'<div class="card t-'+f.key+'"><div class="hero"><b'+(f.tone?' class="'+f.tone+'"':'')+'>'
-    +f.head+'</b><span>'+esc(f.headsub)+'</span></div>'+mrows(f.metrics)
-    +'<p class="verdict">'+f.verdict+'</p></div>';
-  if(f.gallery&&f.gallery.length) s+='<div class="card"><div class="fh"><h3>The '
-    +f.gallery.length+' posts behind those figures</h3></div><div class="gal">'
-    +f.gallery.map(postCard).join('')+'</div></div>';
+    +f.head+'</b><span>'+esc(f.headsub)+'</span></div>'
+    +'<p class="verdict">'+f.verdict+'</p>'
+    +(f.metrics.length?'<details class="more"><summary>All '+f.metrics.length+' figures</summary>'
+      +mrows(f.metrics)+'</details>':'')+'</div>';
   if(f.vids&&f.vids.length) s+='<div class="card"><div class="fh"><h3>The recordings</h3></div>'
     +'<div class="yt">'+f.vids.map(vidCard).join('')+'</div></div>';
   return s;
 }
+
+/* Next month, proposed from this month's numbers by the rules in skles_session_build.py.
+   The team argues with it in What you think; the deck and the email are built from it. */
+function paneDirection(M){
+  const dr=M.direction,pts=(dr&&dr.points)||[];
+  if(!pts.length) return hd('Next month','The direction is written on the 26th, once the month’s '
+    +'numbers are in.');
+  const said=SAYS.filter(s=>s[0]!=='marina').map(s=>[s[1],!!(((ALL[CUR]||{})[s[0]]||{}).text)]);
+  return hd('What we do in '+mon(nextKey(CUR)),'Proposed from '+nice(CUR)
+    +'’s numbers. Each point names its owner and the evidence behind it. If one is wrong, say so in '
+    +'<b>What you think</b> and it goes into the plan.')
+    +pts.map((p,i)=>'<div class="card dp"><div class="dpn">'+(i+1)+'</div><div><span class="own">'
+      +esc(OWNER[p.owner]||p.owner)+'</span><h3>'+esc(p.text)+'</h3><p class="ev">'+esc(p.why)+'</p>'
+      +(p.impact?'<p class="imp">'+esc(p.impact)+'</p>':'')+'</div></div>').join('')
+    +(dr.ask?'<div class="card ask"><span class="own">The one decision for Sean</span><h3>'+esc(dr.ask)+'</h3></div>':'')
+    +'<div class="card said"><p>'+said.map(x=>'<b>'+x[0]+'</b> '+(x[1]?'has added a view':'has not added a view yet')).join(' · ')
+    +'</p><button class="go" data-pick="says">Open What you think</button></div>';
+}
+const nextKey=m=>{let y=+m.slice(0,4),n=+m.slice(5)+1;if(n>12){n=1;y++;}return y+'-'+String(n).padStart(2,'0');};
 
 function paneRan(M){
   const tagged=M.posts.filter(p=>p.card).length;
@@ -635,63 +693,6 @@ function paneRan(M){
     +(M.posts.length?'<div class="gal">'+M.posts.map(postCard).join('')+'</div>':'');
 }
 
-function paneWhy(M){
-  const r=M.content.readout||{},ds=r.dims||[];
-  if(!ds.length) return hd('What the month says','Not enough scored posts yet to rank any '
-    +'dimension.');
-  const f=ds.filter(x=>x['from']==='platform')[0],board=ds.filter(x=>x['from']==='board');
-  let v='';
-  if(f) v+='The widest gap is <b>'+esc(f.dim).toLowerCase()+'</b>: '+esc(f.best.v)+' reaches '
-    +f.best.avg+' per post against '+f.worst.avg+' for '+esc(f.worst.v)+'. ';
-  v+=board.length
-    ? 'The board dimensions rest on the posts carrying a card id, so treat them as a direction '
-      +'rather than a result.'
-    : 'No board dimension has two scored posts behind it, which is the one thing worth fixing: '
-      +'every published card needs its Instagram id, or next month still cannot say why '
-      +'anything won.';
-  return hd('What the month says','Every post on record, grouped one dimension at a time and '
-    +'ranked on average reach. A group needs <b>at least two posts</b> to appear, and the count '
-    +'sits beside every figure, because one lucky post is not a finding.')
-    +ds.map(x=>{
-      const top=Math.max.apply(null,x.rows.map(y=>y.avg).concat([1]));
-      return '<div class="card t-why"><div class="dh"><h3>'+esc(x.dim)+'</h3><span class="sp">'
-        +x.spread+'× best to worst</span><span class="src'
-        +(x['from']==='board'?' board':'')+'">'
-        +(x['from']==='board'?'from the board · n='+x.n:'from Instagram · n='+x.n)
-        +'</span></div>'
-        +x.rows.map((y,i)=>'<div class="drow'+(i===0?' best':i===x.rows.length-1?' worst':'')
-          +'"><span class="dv">'+esc(y.v)+' <small>n='+y.n+'</small></span><span class="dt"><i '
-          +'style="width:'+Math.max(2,y.avg/top*100)+'%"></i></span><span class="da">'+y.avg
-          +'</span></div>').join('')+'</div>';
-    }).join('')
-    +'<p class="verdict">'+v+'</p>';
-}
-
-function paneNext(M){
-  const pr=M.content.projection||{rows:[],total:0};
-  return hd(pr.month?nice(pr.month)+', before it runs':'Next month, before it runs',
-    'Planned posts by pillar, times what that pillar has historically reached per post. Change '
-    +'the mix and this changes, so a plan can be judged before anything is published.')
-    +'<div class="card t-next">'+(pr.rows&&pr.rows.length
-      ? '<table><thead><tr><th>Pillar</th><th class="r">Posts planned</th>'
-        +'<th class="r">Reach per post</th><th class="r">Projected reach</th></tr></thead><tbody>'
-        +pr.rows.map(r=>'<tr><td>'+esc(r.pillar)+'</td><td class="r">'+r.planned+'</td><td class="r">'
-          +r.per+(r.known?'':' <span class="est">est</span>')+'</td><td class="r">'+num(r.reach)
-          +'</td></tr>').join('')
-        +'</tbody><tfoot><tr><td>'+pr.posts+' posts</td><td class="r"></td><td class="r"></td>'
-        +'<td class="r">'+num(pr.total)+'</td></tr></tfoot></table>'
-        +'<p class="axis">Pillars with fewer than two scored posts behind them use the overall '
-        +'average of '+pr.base+', marked est.</p>'
-      : '<p style="font-size:13.5px;color:var(--muted)">No cards dated in that month yet, so '
-        +'there is nothing to project from.</p>')
-    +'</div>'
-    +(M.read.length?'<div style="margin-top:20px">'+M.read.map(l=>'<div class="rl">'
-      +'<div class="rule">'+esc(l.front)+' &middot; '+esc(l.rule)+'</div><p>'+esc(l.text)
-      +'</p></div>').join('')+'</div>':'')
-    +(M.dirs.length?'<div style="margin-top:13px">'+M.dirs.map(x=>'<div class="d"><h3>'+x[0]
-      +' <em>&middot; '+x[1]+'</em></h3><p>'+esc(x[2])+'</p></div>').join('')+'</div>':'');
-}
-
 function paneSays(){
   return hd('What you think','Where the direction is wrong, or where it is missing something only '
     +'you can see.')
@@ -699,17 +700,6 @@ function paneSays(){
       +'</span><span class="state" data-s="'+s[0]+'">empty</span></div><textarea data-k="'+s[0]
       +'" placeholder="'+s[3]+'"></textarea></div>').join('')
     +'<p class="hint">Saves on its own a second after you stop typing. Everyone sees the same page.</p>';
-}
-
-function panePlan(M){
-  return hd('The plan it produced','Built on the 29th to 30th from all three reads, then sent to '
-    +'Sean on the 1st as one email.')
-    +'<div class="box"><div class="plan">'+(M.plan&&M.plan.url
-      ?'<a href="'+esc(M.plan.url)+'">'+esc(M.plan.title||'The plan')+'</a>'
-      :'<span style="color:var(--muted);font-size:14px">Not built yet.</span>')
-    +'</div><input class="url" id="planurl" placeholder="https://..." aria-label="Plan link">'
-    +'<p class="hint">Paste the plan’s link here once it is built and it joins the record.</p>'
-    +'</div>';
 }
 
 function paneHist(){
@@ -729,23 +719,20 @@ function paneHist(){
 }
 
 /* ---------------------------------------------------------------- list + render */
+const GROUPS=[['Next month',['direction']],['The month',['month','ran']],
+  ['Each front',['paid','social','uploads','youtube','funnel']],['Your view',['says']],['The record',['hist']]];
 function items(M){
-  const L=[{id:'month',name:'The month',sub:'the picture in five figures',
-    fig:M.me.avg||'—',tone:'',pic:null}];
+  const pts=((M.direction||{}).points)||[];
+  const L=[{id:'direction',name:'Direction',sub:'what we do next, and who owns it',
+    fig:pts.length||'—',tone:pts.length?'good':'',pic:null},
+    {id:'month',name:'The month',sub:'the picture in five figures',fig:M.me.avg||'—',tone:'',pic:null}];
   M.fronts.forEach(f=>L.push({id:f.key,name:f.label,sub:f.note,fig:f.head,tone:f.tone,
     pic:f.pic,front:f}));
-  L.push({id:'ran',name:'What ran',sub:'ranked contact sheet, notes per post',
+  L.push({id:'ran',name:'What ran',sub:'every post, ranked, notes per post',
     fig:M.posts.length,tone:M.posts.length?'good':'bad',pic:(M.posts[0]||{}).img});
-  const ds=((M.content.readout||{}).dims)||[];
-  L.push({id:'why',name:'What it says',sub:'best and worst per dimension',
-    fig:ds.length,tone:ds.length?'good':'bad',pic:null});
-  L.push({id:'next',name:'Next month',sub:'projected from the planned mix',
-    fig:num(((M.content.projection||{}).total)||0),tone:'',pic:null});
   const filled=SAYS.filter(s=>((ALL[CUR]||{})[s[0]]||{}).text).length;
   L.push({id:'says',name:'What you think',sub:'Marissa, Valerie, Marina',
     fig:filled+'/3',tone:filled?'good':'',pic:null});
-  L.push({id:'plan',name:'The plan',sub:'what went to Sean on the 1st',
-    fig:M.plan&&M.plan.url?'linked':'—',tone:M.plan&&M.plan.url?'good':'bad',pic:null});
   L.push({id:'hist',name:'Every month',sub:'the whole record',
     fig:Object.keys(ALL).length,tone:'',pic:null});
   return L;
@@ -764,12 +751,10 @@ function btn(x){
 function pane(M,L){
   const it=L.filter(x=>x.id===SEL)[0]||L[0];
   if(it.front) return paneFront(it.front);
+  if(SEL==='direction') return paneDirection(M);
   if(SEL==='month') return paneMonth(M);
   if(SEL==='ran') return paneSheet(M);
-  if(SEL==='why') return paneWhy(M);
-  if(SEL==='next') return paneNext(M);
   if(SEL==='says') return paneSays();
-  if(SEL==='plan') return panePlan(M);
   return paneHist();
 }
 
@@ -778,13 +763,13 @@ function render(){
   if(!L.filter(x=>x.id===SEL).length) SEL=L[0].id;
   document.getElementById('title').textContent=nice(CUR)+' review';
   document.getElementById('built').textContent=M.built?'Numbers as at '+M.built:'';
-  document.getElementById('list').innerHTML='<div class="lh">The month</div>'+btn(L[0])
-    +'<div class="lh">Each front</div>'+L.slice(1,6).map(btn).join('')
-    +'<div class="lh">What it means</div>'+L.slice(6,9).map(btn).join('')
-    +'<div class="lh">The record</div>'+L.slice(9).map(btn).join('')
+  const by={};L.forEach(x=>by[x.id]=x);
+  document.getElementById('list').innerHTML=GROUPS.map(g=>'<div class="lh">'+g[0]+'</div>'
+      +g[1].filter(id=>by[id]).map(id=>btn(by[id])).join('')).join('')
     +'<p class="kbd"><b>&uarr;</b> <b>&darr;</b> walks the list.</p>';
   document.getElementById('detail').innerHTML=pane(M,L);
   document.querySelectorAll('.it').forEach(b=>b.onclick=()=>pick(b.dataset.id));
+  document.querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>pick(b.dataset.pick));
   document.querySelectorAll('[data-go]').forEach(a=>a.onclick=e=>{
     e.preventDefault();show(a.dataset.go);});
   wireSheet();
@@ -846,7 +831,7 @@ function show(m){CUR=m;document.getElementById('pick').value=m;render();wire();}
   try{const r=await fetch(FB+'.json');if(r.ok)ALL=(await r.json())||{};}catch(e){fail();}
   const months=Object.keys(ALL).sort().reverse();
   if(!months.length){fail();return;}
-  SEL=kept('sel')||'month';
+  SEL=kept('sel')||'direction';
   const p=document.getElementById('pick');
   p.innerHTML=months.map(m=>'<option value="'+m+'">'+nice(m)+'</option>').join('');
   p.onchange=e=>show(e.target.value);
