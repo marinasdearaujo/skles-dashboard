@@ -268,7 +268,8 @@ function head(){
   const items=mine(),n=items.filter(it=>R(it.id)).length;
   return '<header><div class="row"><span class="eyebrow">SKLES team read · '+esc(nice(M))+'</span>'
     +(ME?'<button class="btn ghost small" id="out" style="padding:4px 10px">'+esc(nameOf(ME))+' · sign out</button>':'')+'</div>'
-    +'<h1>'+(open()?'About ten minutes, whenever suits you':'What the team said')+'</h1><p class="small muted">'+esc(when)+'</p>'
+    +'<h1>'+(open()?'About ten minutes, whenever suits you':'What the team said')+'</h1><p class="small muted">'+esc(when)
+    +(ME&&ME===S.lead?' · <a href="plan.html?m='+M+'">Write the plan</a>':'')+'</p>'
     +(items.length&&open()?'<div class="bar" aria-label="'+n+' of '+items.length+' answered"><i style="width:'+(n/items.length*100)+'%"></i></div>':'')
     +'<div class="who">'+team.map(k=>{const d=done(k),t=total(k);return '<span class="chip'+(d>=t?' done':'')+(k===ME?' me':'')+'">'
       +esc(nameOf(k))+' '+(d>=t?'done':d+'/'+t)+'</span>';}).join('')+'</div></header>';
