@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Review Treatments</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap">
+<style>
+:root{
+  --navy:#112250; --gold:#E0C58F; --ink:#16181d; --muted:#5d6472;
+  --bg:#faf9f7; --card:#ffffff; --line:#e4e2dd; --wash:#f2f0ec; --grid:#d9d6d0;
+  --good:#1d6b4f; --bad:#8c3a52;
+  --sans:'Poppins',system-ui,-apple-system,Segoe UI,sans-serif;
+  --serif:'Merriweather',Georgia,serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;
+  padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
+.wrap{max-width:940px;margin:0 auto}
+h1,h2,h3{text-wrap:balance;margin:0}
+p{margin:0}
+
+header{padding-block:34px 0}
+.top{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.tl{flex:1;min-width:0}
+.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--gold)}
+h1{font-size:clamp(24px,4.2vw,33px);font-weight:700;letter-spacing:-.02em;color:var(--navy);margin-block:8px 7px}
+.sub{font-size:12.5px;color:var(--muted)}
+select{font:inherit;font-size:13.5px;font-weight:600;color:var(--navy);background:#fff;
+  border:1px solid var(--grid);border-radius:6px;padding:7px 11px;cursor:pointer}
+select:focus-visible{outline:2px solid var(--navy);outline-offset:1px}
+
+/* tabs */
+.tabs{display:flex;gap:2px;margin-top:20px;overflow-x:auto;border-bottom:2px solid var(--navy);
+  scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;font:inherit;font-size:13px;font-weight:600;color:var(--muted);background:transparent;
+  border:0;border-radius:7px 7px 0 0;padding:10px 15px;cursor:pointer;white-space:nowrap;
+  border-bottom:3px solid transparent;margin-bottom:-2px}
+.tab:hover{color:var(--navy);background:var(--wash)}
+.tab[aria-selected="true"]{color:#fff;background:var(--navy);border-bottom-color:var(--gold)}
+.tab:focus-visible{outline:2px solid var(--navy);outline-offset:-2px}
+
+.panel{padding-block:26px}
+.panel + .panel{border-top:1px solid var(--line)}
+h2{font-size:12px;letter-spacing:.11em;text-transform:uppercase;font-weight:700;color:var(--muted);
+  margin-bottom:6px}
+.h2sub{font-size:13px;color:var(--muted);margin-bottom:15px;max-width:68ch}
+
+.fronts{display:grid;grid-template-columns:repeat(auto-fit,minmax(224px,1fr));gap:11px}
+.fr{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:16px 17px;
+  border-top:4px solid var(--c);min-width:0}
+.fr.paid{--c:#1d6b4f} .fr.social{--c:#8a6a1f} .fr.youtube{--c:#8c3a52} .fr.funnel{--c:#112250} .fr.uploads{--c:#5d6472}
+.fr h3{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--muted);
+  margin-bottom:11px}
+.kv{display:flex;justify-content:space-between;gap:10px;font-size:13.5px;padding-block:4px;
+  border-bottom:1px dashed var(--line)}
+.kv:last-of-type{border-bottom:0}
+.kv span{color:var(--muted);min-width:0}
+.kv b{font-variant-numeric:tabular-nums;color:var(--navy);white-space:nowrap}
+.kv b.bad{color:var(--bad)} .kv b.good{color:var(--good)}
+.fr .verdict{font-family:var(--serif);font-size:13px;line-height:1.55;color:var(--ink);
+  margin-top:11px;padding-top:11px;border-top:1px solid var(--line)}
+
+.read{display:grid;gap:8px}
+.rl{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:12px 14px}
+.rl .rule{font-size:10px;letter-spacing:.07em;text-transform:uppercase;font-weight:700;
+  color:var(--gold);margin-bottom:4px}
+.rl p{font-size:14px;color:var(--ink);max-width:76ch}
+.dirs{display:grid;grid-template-columns:repeat(auto-fit,minmax(246px,1fr));gap:11px;margin-top:18px}
+.d{background:var(--navy);color:#fff;border-radius:11px;padding:16px 17px}
+.d h3{font-size:14px;font-weight:600;color:var(--gold);margin-bottom:7px}
+.d p{font-size:13.5px;color:#dde2ef;line-height:1.55}
+
+.box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:15px 16px;margin-bottom:10px}
+.bh{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;margin-bottom:8px}
+.bh h3{font-size:15px;font-weight:600;color:var(--navy)}
+.bh .role{font-size:11.5px;color:var(--muted)}
+.bh .state{margin-left:auto;font-size:11px;font-weight:600;color:var(--muted)}
+.bh .state.in{color:var(--good)}
+textarea{width:100%;min-height:92px;font:inherit;font-size:14px;line-height:1.55;color:var(--ink);
+  background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:11px 12px;resize:vertical}
+textarea:focus-visible,input.url:focus-visible{outline:2px solid var(--navy);outline-offset:1px}
+input.url{width:100%;font:inherit;font-size:14px;color:var(--ink);background:var(--bg);
+  border:1px solid var(--line);border-radius:7px;padding:10px 12px;margin-top:9px}
+.hint{font-size:12px;color:var(--muted);margin-top:7px}
+
+.plan{background:var(--wash);border:1px solid var(--line);border-left:4px solid var(--gold);
+  border-radius:10px;padding:16px 18px}
+.plan a{font-family:var(--serif);font-size:16px;font-weight:700;color:var(--navy)}
+.sheet{overflow-x:auto;border:1px solid var(--grid);border-radius:4px;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:600px;font-size:13.5px}
+thead th{background:var(--wash);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+  font-weight:700;color:var(--muted);text-align:left;padding:9px 12px;
+  border-right:1px solid var(--grid);border-bottom:1px solid var(--grid);white-space:nowrap}
+thead th:last-child{border-right:0}
+tbody td{padding:10px 12px;border-right:1px solid var(--grid);border-bottom:1px solid var(--grid);
+  vertical-align:top}
+tbody td:last-child{border-right:0}
+tbody tr:last-child td{border-bottom:0}
+td.m{white-space:nowrap;font-weight:600;color:var(--navy)}
+td.n{font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--muted)}
+td a{color:var(--navy)}
+
+footer{padding-block:24px 56px;color:var(--muted);font-size:13px;border-top:1px solid var(--line)}
+footer a{color:var(--navy)}
+#err{display:none;background:#fdeef1;border:1px solid var(--bad);color:var(--bad);
+  border-radius:6px;padding:10px 13px;font-size:13px;margin-top:13px}
+
+.styler{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:6px;align-items:center;
+  background:#15171c;color:#fff;margin-inline:-18px;padding:9px 18px;
+  box-shadow:0 2px 10px rgba(0,0,0,.18)}
+.styler .sl{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;
+  color:#9aa3b8;margin-right:4px}
+.sb{font:inherit;font-size:12.5px;font-weight:600;color:#cfd6e6;background:#242833;border:0;
+  border-radius:999px;padding:6px 13px;cursor:pointer}
+.sb:hover{background:#333846;color:#fff}
+.sb[aria-pressed="true"]{background:#E0C58F;color:#15171c}
+.sb:focus-visible{outline:2px solid #E0C58F;outline-offset:2px}
+
+/* ============================================================
+   FIVE TREATMENTS. Same markup, same data. Pick one.
+   Each overrides tokens first and structure only where needed.
+   ============================================================ */
+
+/* 1 · LEDGER — print, cream paper, rules instead of boxes */
+:root[data-style="ledger"]{
+  --bg:#f6f3ec; --card:#fffdf8; --line:#ddd6c6; --grid:#cfc7b4; --wash:#efe9dc;
+  --navy:#1c2a3a; --gold:#9a7636; --ink:#1a1a18; --muted:#6b6459;
+}
+[data-style="ledger"] h1{font-family:var(--serif);font-weight:700;letter-spacing:-.015em}
+[data-style="ledger"] .fr{border:0;border-top:1px solid var(--navy);border-radius:0;
+  background:transparent;padding:14px 0 4px}
+[data-style="ledger"] .fr h3{color:var(--navy);letter-spacing:.16em}
+[data-style="ledger"] .kv{border-bottom:1px dotted var(--grid);font-size:14px}
+[data-style="ledger"] .kv b{font-family:var(--serif)}
+[data-style="ledger"] .rl{border:0;border-left:2px solid var(--gold);border-radius:0;
+  background:transparent;padding:4px 0 4px 15px}
+[data-style="ledger"] .d{background:transparent;color:var(--ink);border:1px solid var(--navy);
+  border-radius:0}
+[data-style="ledger"] .d h3{color:var(--gold)} [data-style="ledger"] .d p{color:var(--ink)}
+[data-style="ledger"] .tab[aria-selected="true"]{background:transparent;color:var(--navy);
+  border-bottom-color:var(--navy)}
+[data-style="ledger"] .fronts{grid-template-columns:repeat(auto-fit,minmax(272px,1fr))}
+
+/* 2 · CONSOLE — dark, dense, gold on navy, numerals forward */
+:root[data-style="console"]{
+  --bg:#0c1220; --card:#141d31; --line:#223css; --line:#22304d; --grid:#2b3a5c; --wash:#18223a;
+  --navy:#e8edf8; --gold:#E0C58F; --ink:#eef1f7; --muted:#8c9ab5;
+  --good:#5fd3a1; --bad:#ff8099;
+  color-scheme:dark;
+}
+[data-style="console"] body{background:
+  radial-gradient(1100px 500px at 15% -10%, #16233d 0%, transparent 60%), var(--bg)}
+[data-style="console"] h1{color:#fff;letter-spacing:-.025em}
+[data-style="console"] .fr{background:var(--card);border-color:var(--line);border-radius:6px}
+[data-style="console"] .kv{font-size:13px;padding-block:5px;border-bottom-color:#1d2840}
+[data-style="console"] .kv b{font-variant-numeric:tabular-nums;font-weight:700;color:#fff;
+  font-size:14.5px}
+[data-style="console"] .fr .verdict{color:var(--muted);border-top-color:#1d2840}
+[data-style="console"] .rl{background:var(--card);border-color:var(--line);border-radius:6px}
+[data-style="console"] .rl p{color:#dfe5f1}
+[data-style="console"] .d{background:linear-gradient(140deg,#1b2742,#121a2c);
+  border:1px solid var(--gold)}
+[data-style="console"] .tabs{border-bottom-color:var(--gold)}
+[data-style="console"] .tab[aria-selected="true"]{background:var(--gold);color:#0c1220}
+[data-style="console"] .tab:hover{background:#1a2440;color:#fff}
+[data-style="console"] select,[data-style="console"] textarea,[data-style="console"] input.url{
+  background:var(--card);color:var(--ink);border-color:var(--grid)}
+[data-style="console"] thead th{background:var(--wash);color:var(--muted)}
+[data-style="console"] .box,[data-style="console"] .plan{background:var(--card);border-color:var(--line)}
+[data-style="console"] .sheet{background:var(--card)}
+
+/* 3 · BRIEF — airy, white, big serif figures, hairlines only */
+:root[data-style="brief"]{
+  --bg:#ffffff; --card:#ffffff; --line:#eceae6; --grid:#e4e1dc; --wash:#f7f6f4;
+  --navy:#101418; --gold:#b08a3e; --ink:#101418; --muted:#8a8780;
+}
+[data-style="brief"] .wrap{max-width:820px}
+[data-style="brief"] h1{font-size:clamp(28px,5vw,42px);font-weight:700}
+[data-style="brief"] .panel{padding-block:40px}
+[data-style="brief"] .fronts{grid-template-columns:1fr;gap:0}
+[data-style="brief"] .fr{border:0;border-top:1px solid var(--line);border-radius:0;
+  padding:22px 0 8px;display:grid;grid-template-columns:168px 1fr;gap:26px}
+[data-style="brief"] .fr h3{margin:0;font-size:12px;letter-spacing:.12em;color:var(--gold)}
+[data-style="brief"] .fr .kv{grid-column:2;font-size:15px;padding-block:6px;border-bottom:0}
+[data-style="brief"] .fr .kv b{font-family:var(--serif);font-size:17px}
+[data-style="brief"] .fr .verdict{grid-column:2;border-top:1px solid var(--line);
+  font-size:14px;margin-top:14px;padding-top:14px}
+[data-style="brief"] .rl{border:0;border-radius:0;padding:14px 0;
+  border-bottom:1px solid var(--line);background:transparent}
+[data-style="brief"] .rl p{font-size:16px;line-height:1.6}
+[data-style="brief"] .d{background:var(--wash);color:var(--ink);border-radius:0;
+  border-left:3px solid var(--gold)}
+[data-style="brief"] .d h3{color:var(--gold)} [data-style="brief"] .d p{color:var(--ink)}
+[data-style="brief"] .tab[aria-selected="true"]{background:var(--ink)}
+@media (max-width:620px){ [data-style="brief"] .fr{grid-template-columns:1fr;gap:8px}
+  [data-style="brief"] .fr .kv,[data-style="brief"] .fr .verdict{grid-column:1} }
+
+/* 4 · CARDS — soft, tinted per channel, friendly SaaS */
+:root[data-style="cards"]{
+  --bg:#f4f6fb; --card:#ffffff; --line:#e6eaf3; --grid:#dfe4ef; --wash:#eef1f8;
+  --navy:#1b2b58; --gold:#c79a3f; --ink:#171b26; --muted:#6b7490;
+}
+[data-style="cards"] .fr{border:0;border-radius:16px;padding:19px 20px;
+  box-shadow:0 1px 2px rgba(23,35,70,.06), 0 8px 22px rgba(23,35,70,.07)}
+[data-style="cards"] .fr.paid{background:linear-gradient(180deg,#eefaf4,#fff 42%)}
+[data-style="cards"] .fr.social{background:linear-gradient(180deg,#fdf6e7,#fff 42%)}
+[data-style="cards"] .fr.uploads{background:linear-gradient(180deg,#f1f3f8,#fff 42%)}
+[data-style="cards"] .fr.youtube{background:linear-gradient(180deg,#fdeef2,#fff 42%)}
+[data-style="cards"] .fr.funnel{background:linear-gradient(180deg,#eef2fd,#fff 42%)}
+[data-style="cards"] .fr h3{color:var(--navy);font-size:12px}
+[data-style="cards"] .kv{border-bottom:1px solid rgba(23,35,70,.06)}
+[data-style="cards"] .rl{border:0;border-radius:14px;
+  box-shadow:0 1px 2px rgba(23,35,70,.05), 0 6px 16px rgba(23,35,70,.05)}
+[data-style="cards"] .d{border-radius:16px;background:linear-gradient(140deg,#24376d,#16224a)}
+[data-style="cards"] .box,[data-style="cards"] .plan{border:0;border-radius:14px;
+  box-shadow:0 1px 2px rgba(23,35,70,.05), 0 6px 16px rgba(23,35,70,.05)}
+[data-style="cards"] .tabs{border-bottom:0;gap:7px}
+[data-style="cards"] .tab{border-radius:999px;border-bottom:0;margin-bottom:0;
+  background:#fff;box-shadow:0 1px 2px rgba(23,35,70,.06)}
+[data-style="cards"] .tab[aria-selected="true"]{background:var(--navy);color:#fff}
+[data-style="cards"] .sheet{border:0;border-radius:14px;
+  box-shadow:0 1px 2px rgba(23,35,70,.05), 0 6px 16px rgba(23,35,70,.05)}
+
+/* 5 · BROADSHEET — masthead, condensed labels, gold rules */
+:root[data-style="broadsheet"]{
+  --bg:#fbfaf7; --card:#ffffff; --line:#e0dcd2; --grid:#d3cec2; --wash:#f3f0e9;
+  --navy:#112250; --gold:#9c7a2e; --ink:#15171c; --muted:#60636d;
+}
+[data-style="broadsheet"] header{background:var(--navy);margin-inline:-18px;
+  padding:26px 18px 0;border-bottom:4px double var(--gold)}
+[data-style="broadsheet"] header .eyebrow{color:var(--gold)}
+[data-style="broadsheet"] header h1{color:#fff;font-family:var(--serif);font-size:clamp(26px,4.6vw,38px)}
+[data-style="broadsheet"] header .sub{color:#c3cbe0}
+[data-style="broadsheet"] .tabs{border-bottom:0;margin-top:18px}
+[data-style="broadsheet"] .tab{color:#aeb9d4;border-radius:0;border-bottom:3px solid transparent}
+[data-style="broadsheet"] .tab:hover{background:rgba(255,255,255,.08);color:#fff}
+[data-style="broadsheet"] .tab[aria-selected="true"]{background:transparent;color:#fff;
+  border-bottom-color:var(--gold)}
+[data-style="broadsheet"] h2{color:var(--navy);font-family:var(--serif);font-size:19px;
+  text-transform:none;letter-spacing:0;border-bottom:2px solid var(--navy);padding-bottom:6px}
+[data-style="broadsheet"] .fronts{grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:0 24px}
+[data-style="broadsheet"] .fr{border:0;border-radius:0;background:transparent;padding:16px 0;
+  border-top:1px solid var(--grid)}
+[data-style="broadsheet"] .fr h3{color:var(--gold);letter-spacing:.14em}
+[data-style="broadsheet"] .fr .verdict{font-size:13.5px;font-style:italic}
+[data-style="broadsheet"] .read{columns:2;column-gap:24px}
+[data-style="broadsheet"] .rl{break-inside:avoid;border:0;border-left:3px solid var(--gold);
+  border-radius:0;background:transparent;margin-bottom:12px}
+[data-style="broadsheet"] .d{border-radius:0;border-top:4px solid var(--gold)}
+@media (max-width:700px){ [data-style="broadsheet"] .read{columns:1} }
+
+</style>
+</head>
+<body>
+
+<div class="styler" id="styler">
+  <span class="sl">Treatment</span>
+  <button class="sb" data-s="ledger">1 Ledger</button>
+  <button class="sb" data-s="console">2 Console</button>
+  <button class="sb" data-s="brief">3 Brief</button>
+  <button class="sb" data-s="cards">4 Cards</button>
+  <button class="sb" data-s="broadsheet">5 Broadsheet</button>
+</div>
+
+<div class="wrap">
+
+<header>
+  <div class="top">
+    <div class="tl">
+      <div class="eyebrow">Skills Up &middot; Sean K. Langston</div>
+      <h1 id="title">Monthly review</h1>
+      <p class="sub" id="built"></p>
+    </div>
+    <select id="pick" aria-label="Which month"></select>
+  </div>
+
+  <div class="tabs" role="tablist" id="tabs">
+    <button class="tab" role="tab" data-t="fronts">Each front</button>
+    <button class="tab" role="tab" data-t="read">The read</button>
+    <button class="tab" role="tab" data-t="says">What you think</button>
+    <button class="tab" role="tab" data-t="plan">The plan</button>
+    <button class="tab" role="tab" data-t="hist">Every month</button>
+    <button class="tab" role="tab" data-t="all">Everything</button>
+  </div>
+  <div id="err">Cannot reach the sheet just now. Nothing typed below will save until the
+  connection is back.</div>
+</header>
+
+<div class="panel" data-p="fronts">
+  <h2>Each front</h2>
+  <p class="h2sub">Pulled from Meta, GetResponse, YouTube, HubSpot and Zoom. Nobody writes these
+  up. If a figure looks wrong, say so under What you think, because then it is wrong for all of us.</p>
+  <div class="fronts" id="fronts"></div>
+</div>
+
+<div class="panel" data-p="read">
+  <h2>The read, and the direction</h2>
+  <p class="h2sub">Worked out from the numbers, not from anyone's impression of the month. Each
+  line names the rule behind it, so a direction can be argued with on its merits.</p>
+  <div class="read" id="read"></div>
+  <div class="dirs" id="dirs"></div>
+</div>
+
+<div class="panel" data-p="says">
+  <h2>What you think</h2>
+  <p class="h2sub">Where the direction is wrong, or where it is missing something only you can see.</p>
+  <div class="box">
+    <div class="bh"><h3>Marissa</h3><span class="role">YouTube, and what is already recorded</span>
+      <span class="state" id="s-marissa">empty</span></div>
+    <textarea data-k="marissa"
+      placeholder="What you would change, what is worth repeating, and what is recorded and waiting."></textarea>
+  </div>
+  <div class="box">
+    <div class="bh"><h3>Valerie</h3><span class="role">social, and what travelled</span>
+      <span class="state" id="s-valerie">empty</span></div>
+    <textarea data-k="valerie"
+      placeholder="Which posts worked, which did not, and anything the cards got wrong."></textarea>
+  </div>
+  <div class="box">
+    <div class="bh"><h3>Marina</h3><span class="role">anything the rules missed</span>
+      <span class="state" id="s-marina">empty</span></div>
+    <textarea data-k="marina" placeholder="Notes that belong with this month's record."></textarea>
+  </div>
+  <p class="hint">Saves on its own a second after you stop typing. Everyone sees the same page.</p>
+</div>
+
+<div class="panel" data-p="plan">
+  <h2>The plan it produced</h2>
+  <p class="h2sub">Built on the 29th to 30th from all three reads, then sent to Sean on the 1st as
+  one email.</p>
+  <div class="plan" id="plan"></div>
+  <input class="url" id="planurl" placeholder="https://..." aria-label="Plan link">
+  <p class="hint">Paste the plan's link here once it is built and it joins the record.</p>
+</div>
+
+<div class="panel" data-p="hist">
+  <h2>Every month we have run</h2>
+  <p class="h2sub">What we concluded, and what we then planned. A direction that turned out wrong
+  is only useful if it is still readable later.</p>
+  <div class="sheet">
+    <table>
+      <thead><tr><th>Month</th><th>Leads</th><th>Per lead</th><th>Cards</th><th>Read</th><th>Plan</th></tr></thead>
+      <tbody id="hist"></tbody>
+    </table>
+  </div>
+</div>
+
+<footer>
+  How content gets made: <a href="https://skles.moovecreating.com/content-pipeline.html">the pipeline</a>.
+  This month's cards: <a href="https://skles.moovecreating.com/ops-board.html">ops board</a>.<br>
+  Questions to Marina.
+</footer>
+
+</div>
+
+<script>
+/* Treatment picker. Only for choosing: the chosen one gets applied to the real page. */
+(function styler(){
+  const bar = document.getElementById('styler');
+  const set = s => {
+    document.documentElement.setAttribute('data-style', s);
+    bar.querySelectorAll('.sb').forEach(b =>
+      b.setAttribute('aria-pressed', b.dataset.s === s ? 'true' : 'false'));
+    try { localStorage.setItem('skles-review-style', s); } catch (e) {}
+  };
+  bar.querySelectorAll('.sb').forEach(b => b.onclick = () => set(b.dataset.s));
+  let start = 'ledger';
+  try { start = localStorage.getItem('skles-review-style') || 'ledger'; } catch (e) {}
+  set(start);
+})();
+
+const FB = 'https://rifa-mae-default-rtdb.firebaseio.com/skles-ops/review';
+const MONTHS = ['January','February','March','April','May','June','July','August',
+                'September','October','November','December'];
+let ALL = {}, CUR = null, TAB = 'fronts';
+
+const fail = () => document.getElementById('err').style.display = 'block';
+const esc = t => String(t == null ? '' : t)
+  .replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const nice = m => { const [y, n] = m.split('-'); return MONTHS[+n - 1] + ' ' + y; };
+const num = v => (v == null ? '—' : Number(v).toLocaleString('en-GB'));
+const kv = (l, v, c) =>
+  `<div class="kv"><span>${l}</span><b${c ? ' class="' + c + '"' : ''}>${v}</b></div>`;
+
+/* localStorage is a per-viewer convenience only: it can throw in a private window or
+   with site data blocked, and the page has to render the same either way. */
+function remember(t){ try { localStorage.setItem('skles-review-tab', t); } catch (e) {} }
+function recall(){ try { return localStorage.getItem('skles-review-tab'); } catch (e) { return null; } }
+
+function tabs(){
+  document.querySelectorAll('.tab').forEach(b => {
+    const on = b.dataset.t === TAB;
+    b.setAttribute('aria-selected', on ? 'true' : 'false');
+    b.onclick = () => { TAB = b.dataset.t; remember(TAB); tabs(); };
+  });
+  document.querySelectorAll('.panel').forEach(p => {
+    p.hidden = !(TAB === 'all' || p.dataset.p === TAB);
+  });
+}
+
+function fronts(d){
+  const f = (d && d.fronts) || {};
+  const paid = (f.paid && f.paid.data) || null;
+  const soc = (f.social && f.social.data) || {};
+  const ig = soc.ig || null, fb = soc.fb || null, bd = soc.board || {};
+  const yt = (f.youtube && f.youtube.data) || {};
+  const fn = (f.funnel && f.funnel.data) || {};
+  const up = (f.uploads && f.uploads.data) || {};
+  const out = [];
+  const money = v => '$' + Number(v || 0).toFixed(2);
+
+  /* Paid */
+  out.push(`<div class="fr paid"><h3>Paid</h3>` + (paid
+    ? kv('Spend', money(paid.spend))
+      + kv('Leads', num(paid.leads))
+      + kv('Per lead', paid.cpl ? money(paid.cpl) : '\u2014',
+           paid.cpl && paid.cpl < 18.5 ? 'good' : 'bad')
+      + kv('Impressions', num(paid.impressions))
+      + kv('People reached', num(paid.reach))
+      + kv('Frequency', paid.frequency ? paid.frequency + '\u00d7' : '\u2014')
+      + kv('Clicks', num(paid.clicks) + (paid.ctr ? ' \u00b7 ' + paid.ctr + '%' : ''))
+      + kv('Link clicks', num(paid.link_clicks))
+      + kv('Video views', num(paid.video_views))
+      + kv('CPM', paid.cpm ? money(paid.cpm) : '\u2014')
+      + kv('Comments on ads', num(paid.comments), paid.comments ? 'bad' : null)
+      + `<p class="verdict">${paid.cpl && paid.cpl < 18.5
+          ? 'Cheaper than every past campaign, so this front is working.'
+          : 'Above the benchmark. Creative is the lever, not budget.'}` +
+        (paid.comments ? ' ' + paid.comments + ' people commented on an advert, which is a conversation nobody has had.' : '') +
+        `</p>`
+    : `<p class="verdict">No figures came back. Check the Meta token before concluding anything.</p>`)
+    + `</div>`);
+
+  /* Organic, from the APIs */
+  const st = bd.by_status || {};
+  out.push(`<div class="fr social"><h3>Organic &middot; Instagram and the page</h3>`
+    + (ig ? kv('Instagram reach', num(ig.reach))
+          + kv('Profile views', num(ig.profile_views))
+          + kv('Followers', num(ig.followers))
+          + kv('New followers', ig.new_followers == null ? '\u2014' : num(ig.new_followers))
+          + kv('Engagement rate', ig.engagement_rate + '%')
+          + kv('Website clicks', num(ig.website_clicks), ig.website_clicks < 5 ? 'bad' : null)
+          + kv('Facebook fans', num(fb && fb.fans))
+          + kv('Facebook engagements', num(fb && fb.page_engagements))
+          + kv('Facebook page views', num(fb && fb.page_views))
+        : kv('Only held for the current month', '\u2014'))
+    + kv('Cards dated', num(bd.cards))
+    + kv('Published', num(bd.published))
+    + kv('With a 72h reading', num(bd.with_reading), bd.cards && !bd.with_reading ? 'bad' : 'good')
+    + (Object.keys(st).length ? kv('Still scheduled', num(st['Scheduled'] || 0),
+         (st['Scheduled'] || 0) > 5 ? 'bad' : null) : '')
+    + `<p class="verdict">${bd.cards && !bd.with_reading
+        ? 'Nothing was read at 72 hours, so no format can be scored this month.'
+        : 'Formats can be ranked this month.'}</p></div>`);
+
+  /* Valerie's hand uploads */
+  const fbp = up['facebook-sean'] || {}, li = up.linkedin || {}, tk = up.tiktok || {};
+  const tot = fbp.totals || {};
+  out.push(`<div class="fr uploads"><h3>Uploaded by hand &middot; profile, LinkedIn, TikTok</h3>`
+    + kv('Sean\u2019s profile posts', num(tot.posts))
+    + kv('Profile impressions', num(tot.impressions), tot.impressions > 5000 ? 'good' : null)
+    + kv('Profile interactions', num(tot.interactions))
+    + kv('Profile rate', tot.rate != null ? tot.rate + '%' : '\u2014',
+         tot.rate >= 5 ? 'good' : null)
+    + kv('LinkedIn posts', li.gap ? 'not in the file' : num(li.rows), li.gap ? 'bad' : null)
+    + kv('TikTok videos', tk.gap ? 'not in the file' : num(tk.rows), tk.gap ? 'bad' : null)
+    + kv('Last refreshed', esc(up.last_updated ? String(up.last_updated).split('\u00b7')[0].trim() : '\u2014'))
+    + `<p class="verdict">` + (fbp.best
+        ? 'Best on the profile: \u201c' + esc(String(fbp.best.title).slice(0, 70)) + '\u2026\u201d, '
+          + num(fbp.best.impressions) + ' impressions. '
+        : '')
+      + (li.gap || tk.gap
+        ? 'LinkedIn and TikTok are the wrong sheets, so neither can say which post worked.'
+        : 'All three exports are usable.')
+      + `</p></div>`);
+
+  /* YouTube */
+  const rec = yt.recent || [];
+  const top = rec.reduce((a, v) => (v.views || 0) > ((a && a.views) || 0) ? v : a, null);
+  out.push(`<div class="fr youtube"><h3>YouTube</h3>`
+    + kv('Subscribers', num(yt.subs))
+    + kv('Views, all time', num(yt.views_total))
+    + kv('Videos on the channel', num(yt.videos_total))
+    + kv('Recordings in hand', num(rec.length))
+    + rec.slice(0, 4).map(v =>
+        kv('&middot; ' + esc(String(v.title).slice(0, 34)) + '\u2026', num(v.views) + ' views')).join('')
+    + `<p class="verdict">${top
+        ? 'Most watched: \u201c' + esc(top.title) + '\u201d. These are the source for every social cut.'
+        : 'No recordings read this month.'}</p></div>`);
+
+  /* Funnel */
+  const lc = fn.lifecycle || {};
+  out.push(`<div class="fr funnel"><h3>Funnel and sales</h3>`
+    + kv('Subscribers', num(lc.subscriber))
+    + kv('Leads', num(lc.lead))
+    + kv('Marketing qualified', num(lc.marketingqualifiedlead))
+    + kv('Sales qualified', num(lc.salesqualifiedlead))
+    + kv('Customers', num(lc.customer))
+    + kv('From this campaign', num(fn.from_campaign))
+    + kv('Won this month', money(fn.won_this_month), fn.won_this_month ? 'good' : 'bad')
+    + kv('Won, all time', money(fn.won_total))
+    + kv('Open pipeline', money(fn.open_total))
+    + kv('Webinar attendees', num(fn.webinar_attendees),
+         !fn.webinar_attendees && fn.webinar_sessions ? 'bad' : null)
+    + `<p class="verdict">${fn.won_this_month
+        ? 'Money came through this month.'
+        : 'Nothing closed. The gap is after the form, so nothing upstream is worth optimising.'}</p></div>`);
+
+  document.getElementById('fronts').innerHTML = out.join('');
+}
+
+function read(d){
+  const r = (d && d.read) || {};
+  document.getElementById('read').innerHTML = (r.lines || []).map(l =>
+    `<div class="rl"><div class="rule">${esc(l.front)} &middot; ${esc(l.rule)}</div>
+     <p>${esc(l.text)}</p></div>`).join('')
+    || '<div class="rl"><p>No read was built for this month.</p></div>';
+
+  const dz = r.directions || {};
+  document.getElementById('dirs').innerHTML = [
+    ['Marissa', 'what to produce', dz.marissa],
+    ['Valerie', 'what changes', dz.valerie],
+    ['Marina', 'paid and the funnel', dz.marina],
+  ].filter(x => x[2]).map(([who, what, text]) =>
+    `<div class="d"><h3>${who} &middot; ${what}</h3><p>${esc(text)}</p></div>`).join('');
+}
+
+function plan(d){
+  const p = (d && d.plan) || null;
+  document.getElementById('plan').innerHTML = p && p.url
+    ? `<a href="${esc(p.url)}">${esc(p.title || 'The plan')}</a>`
+    : '<span style="color:var(--muted);font-size:14px">Not built yet.</span>';
+  document.getElementById('planurl').value = (p && p.url) || '';
+}
+
+function hist(){
+  document.getElementById('hist').innerHTML = Object.keys(ALL).sort().reverse().map(m => {
+    const d = ALL[m] || {};
+    const paid = ((d.fronts || {}).paid || {}).data || {};
+    const bd = (((d.fronts || {}).social || {}).data || {}).board || {};
+    const lines = ((d.read || {}).lines || []).length;
+    const p = d.plan || {};
+    return `<tr>
+      <td class="m"><a href="#" data-go="${m}">${nice(m)}</a></td>
+      <td class="n">${num(paid.leads)}</td>
+      <td class="n">${paid.cpl ? '$' + Number(paid.cpl).toFixed(2) : '—'}</td>
+      <td class="n">${num(bd.cards)}${bd.cards ? ' &middot; ' + num(bd.with_reading) + ' read' : ''}</td>
+      <td class="n">${lines ? lines + ' lines' : '—'}</td>
+      <td>${p.url ? `<a href="${esc(p.url)}">${esc(p.title || 'Plan')}</a>` : '—'}</td>
+    </tr>`;
+  }).join('');
+  document.querySelectorAll('[data-go]').forEach(a => a.addEventListener('click', e => {
+    e.preventDefault(); show(a.dataset.go);
+  }));
+}
+
+const timers = {};
+function mark(k, text){
+  const s = document.getElementById('s-' + k);
+  if (!s) return;
+  s.textContent = text && text.trim() ? 'in' : 'empty';
+  s.classList.toggle('in', !!(text && text.trim()));
+}
+
+async function save(path, value){
+  try {
+    const r = await fetch(FB + '/' + CUR + '.json', {
+      method: 'PATCH', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({[path]: value})
+    });
+    if (!r.ok) throw new Error('bad status');
+    ALL[CUR] = Object.assign({}, ALL[CUR], {[path]: value});
+  } catch (e) { fail(); }
+}
+
+function wire(){
+  document.querySelectorAll('textarea').forEach(el => {
+    const k = el.dataset.k, cur = ALL[CUR] || {};
+    el.value = (cur[k] && cur[k].text) || '';
+    mark(k, el.value);
+    el.oninput = () => {
+      clearTimeout(timers[k]);
+      const s = document.getElementById('s-' + k);
+      if (s) { s.textContent = 'typing'; s.classList.remove('in'); }
+      timers[k] = setTimeout(async () => {
+        await save(k, {text: el.value, saved: new Date().toISOString()});
+        mark(k, el.value);
+      }, 1000);
+    };
+  });
+  const pu = document.getElementById('planurl');
+  pu.oninput = () => {
+    clearTimeout(timers.plan);
+    timers.plan = setTimeout(async () => {
+      const v = pu.value.trim();
+      if (!v) return;
+      await save('plan', {url: v, title: ((ALL[CUR] || {}).plan || {}).title || nice(CUR) + ' plan'});
+      plan(ALL[CUR]); hist();
+    }, 1200);
+  };
+}
+
+function show(m){
+  CUR = m;
+  const d = ALL[m] || {};
+  document.getElementById('title').textContent = nice(m) + ' review';
+  document.getElementById('built').textContent = d.built ? 'Numbers as at ' + d.built : '';
+  document.getElementById('pick').value = m;
+  fronts(d); read(d); plan(d); wire(); hist(); tabs();
+}
+
+(async function init(){
+  try {
+    const r = await fetch(FB + '.json');
+    if (r.ok) ALL = (await r.json()) || {};
+  } catch (e) { fail(); }
+  const months = Object.keys(ALL).sort().reverse();
+  if (!months.length) { fail(); tabs(); return; }
+  const saved = recall();
+  if (saved && document.querySelector(`.tab[data-t="${saved}"]`)) TAB = saved;
+  document.getElementById('pick').innerHTML =
+    months.map(m => `<option value="${m}">${nice(m)}</option>`).join('');
+  document.getElementById('pick').onchange = e => show(e.target.value);
+  show(months[0]);
+})();
+</script>
+</body>
+</html>
