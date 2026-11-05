@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Monthly review console</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap">
+<style>
+:root{
+  --navy:#112250; --gold:#E0C58F; --ink:#16181d; --muted:#5d6472;
+  --bg:#faf9f7; --card:#fff; --line:#e4e2dd; --wash:#f2f0ec; --grid:#d9d6d0; --head:#eceae5;
+  --good:#1f7a4d; --bad:#b4344a;
+  --sans:'Poppins',system-ui,-apple-system,Segoe UI,sans-serif;
+  --serif:'Merriweather',Georgia,serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5}
+h1,h2,h3,h4{text-wrap:balance;margin:0}
+p{margin:0}
+a{color:var(--navy)}
+.eyebrow{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--gold)}
+select,input,textarea{font-family:inherit;font-size:14px;color:var(--ink);background:var(--card);
+  border:1px solid var(--grid);border-radius:7px;padding:8px 11px}
+textarea{width:100%;min-height:86px;resize:vertical;line-height:1.55}
+.num{font-variant-numeric:tabular-nums}
+#err{display:none;background:#fdeef1;border:1px solid var(--bad);color:var(--bad);
+  border-radius:6px;padding:9px 12px;font-size:12.5px}
+.state{font-size:10px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;color:var(--muted);
+  background:var(--wash);border-radius:20px;padding:2px 8px}
+.state.in{background:#e7f2ec;color:var(--good)}
+.ux{position:fixed;right:12px;bottom:12px;z-index:90;background:var(--navy);color:#fff;
+  font-size:11.5px;font-weight:600;text-decoration:none;padding:9px 13px;border-radius:30px;
+  box-shadow:0 6px 18px rgba(17,34,80,.28)}
+
+html,body{height:100%}
+body{overflow:hidden}
+.app{height:100%;display:grid;grid-template-rows:auto minmax(0,1fr)}
+.bar{display:flex;align-items:center;gap:16px;padding:12px 18px;background:var(--navy);color:#fff}
+.bar h1{font-size:15px;font-weight:600;color:#fff;white-space:nowrap}
+.bar .eyebrow{color:var(--gold)}
+.bar .sub{font-size:11.5px;color:#aab4cd;flex:1;white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis}
+.bar select{background:#1b3068;color:#fff;border-color:#2b4284;font-size:13px;padding:6px 9px}
+.panes{display:grid;grid-template-columns:272px minmax(0,1fr);min-height:0}
+.list{border-right:1px solid var(--grid);background:var(--card);overflow-y:auto;min-height:0}
+.lh{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--muted);
+  padding:15px 16px 6px;background:var(--card);position:sticky;top:0}
+.it{display:grid;grid-template-columns:7px 1fr auto;gap:10px;align-items:center;width:100%;
+  text-align:left;background:none;border:0;border-bottom:1px solid var(--line);
+  padding:11px 16px;cursor:pointer;font-family:inherit}
+.it:hover{background:var(--wash)}
+.it[aria-current=true]{background:var(--wash);box-shadow:inset 3px 0 0 var(--navy)}
+.it .dot{width:7px;height:7px;border-radius:50%;background:var(--grid)}
+.it .dot.good{background:var(--good)} .it .dot.bad{background:var(--bad)}
+.it .nm{font-size:13.5px;font-weight:600;color:var(--ink)}
+.it .nm small{display:block;font-weight:400;font-size:11px;color:var(--muted);margin-top:1px}
+.it .fig{font-size:14px;font-weight:700;color:var(--navy);font-variant-numeric:tabular-nums;
+  text-align:right}
+.it .fig small{display:block;font-size:9.5px;font-weight:600;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--muted)}
+.detail{overflow-y:auto;min-height:0;padding:26px 30px 70px}
+.dwrap{max-width:720px}
+.dwrap h2{font-size:clamp(21px,3vw,27px);font-weight:700;color:var(--navy);letter-spacing:-.02em}
+.dwrap .note{font-size:12.5px;color:var(--muted);margin-top:5px;margin-bottom:22px}
+.hero{display:flex;align-items:flex-end;gap:14px;padding-bottom:18px;margin-bottom:18px;
+  border-bottom:2px solid var(--navy)}
+.hero b{font-family:var(--serif);font-size:44px;line-height:.95;color:var(--navy);
+  font-variant-numeric:tabular-nums}
+.hero b.good{color:var(--good)} .hero b.bad{color:var(--bad)}
+.hero span{font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;font-weight:600;
+  color:var(--muted);padding-bottom:5px}
+table.m{border-collapse:collapse;width:100%;font-size:13.5px}
+table.m td{padding:8px 0;border-bottom:1px solid var(--line)}
+table.m td:first-child{color:var(--muted)}
+table.m td:last-child{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+table.m td.good{color:var(--good)} table.m td.bad{color:var(--bad)}
+.verdict{font-family:var(--serif);font-size:14.5px;line-height:1.65;margin-top:20px;
+  padding:14px 16px;background:var(--wash);border-left:3px solid var(--gold);border-radius:0 7px 7px 0}
+.rl{padding:12px 0;border-bottom:1px solid var(--line)}
+.rl .rule{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;
+  color:var(--muted);background:var(--wash);padding:2px 7px;border-radius:20px;display:inline-block}
+.rl p{font-size:14px;margin-top:7px}
+.d{background:var(--navy);color:#fff;border-radius:9px;padding:15px 17px;margin-top:9px}
+.d h3{font-size:14px;color:#fff} .d h3 em{font-style:normal;color:var(--gold);font-weight:400;font-size:11.5px}
+.d p{font-size:13px;color:#dde2ef;margin-top:4px}
+.box{border:1px solid var(--line);border-radius:9px;padding:13px 15px;margin-bottom:10px;background:var(--card)}
+.bh{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.bh h3{font-size:14px;color:var(--navy)} .bh .role{font-size:11px;color:var(--muted);flex:1}
+.url{width:100%;max-width:420px;margin-top:12px}
+.hint{font-size:11.5px;color:var(--muted);margin-top:9px}
+.plan a{font-family:var(--serif);font-size:16px;font-weight:700}
+table.h{border-collapse:collapse;width:100%;font-size:13px;min-width:500px}
+table.h th{text-align:left;font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--muted);padding:7px 10px 7px 0;border-bottom:2px solid var(--navy)}
+table.h td{padding:9px 10px 9px 0;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+.sheet{overflow-x:auto}
+.kbd{font-size:11px;color:var(--muted);padding:10px 16px}
+.kbd b{font-family:ui-monospace,monospace;background:var(--wash);border:1px solid var(--grid);
+  border-radius:4px;padding:1px 5px;font-weight:400}
+@media(max-width:720px){body{overflow:auto}html,body{height:auto}
+  .panes{grid-template-columns:1fr}.list{border-right:0;border-bottom:1px solid var(--grid)}
+  .detail{padding:20px 18px 60px}.kbd{display:none}}
+
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="bar">
+    <div class="eyebrow">Skills&nbsp;Up</div>
+    <h1 id="title">Monthly review</h1>
+    <span class="sub" id="built"></span>
+    <select id="pick" aria-label="Which month"></select>
+  </div>
+  <div class="panes">
+    <nav class="list" id="list" aria-label="Sections"></nav>
+    <div class="detail"><div class="dwrap"><div id="err">Cannot reach the sheet just now.
+      Nothing typed will save until the connection is back.</div><div id="detail"></div></div></div>
+  </div>
+</div>
+
+<a class="ux" href="review-pick.html">&larr; the other four</a>
+<script>
+
+const FB='https://rifa-mae-default-rtdb.firebaseio.com/skles-ops/review';
+const MONTHS=['January','February','March','April','May','June','July','August',
+  'September','October','November','December'];
+const CPLB=18.5;
+let ALL={},CUR=null;
+
+const fail=()=>{const e=document.getElementById('err');if(e)e.style.display='block';};
+const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const nice=m=>{const p=m.split('-');return MONTHS[+p[1]-1]+' '+p[0];};
+const num=v=>(v==null?'—':Number(v).toLocaleString('en-GB'));
+const money=v=>(v==null?'—':'$'+Number(v||0).toFixed(2));
+
+/* One normalised shape, five layouts. Nothing below here knows how it will be drawn. */
+function model(d){
+  d=d||{};
+  const f=d.fronts||{};
+  const paid=(f.paid&&f.paid.data)||null;
+  const soc=(f.social&&f.social.data)||{},ig=soc.ig,fb=soc.fb,bd=soc.board||{},st=bd.by_status||{};
+  const up=(f.uploads&&f.uploads.data)||{},fbp=up['facebook-sean']||{},
+        li=up.linkedin||{},tk=up.tiktok||{},tot=fbp.totals||{};
+  const yt=(f.youtube&&f.youtube.data)||{},rec=yt.recent||[];
+  const fn=(f.funnel&&f.funnel.data)||{},lc=fn.lifecycle||{};
+  const top=rec.reduce((a,v)=>(v.views||0)>((a&&a.views)||0)?v:a,null);
+  const F=[];
+
+  F.push({key:'paid',label:'Paid',note:'Meta ads, pulled every three hours',
+    head:paid&&paid.cpl?money(paid.cpl):'—',headsub:'cost per lead',
+    tone:paid&&paid.cpl&&paid.cpl<CPLB?'good':'bad',
+    quick:[['Spend',money(paid&&paid.spend)],['Leads',num(paid&&paid.leads)]],
+    metrics:paid?[['Spend',money(paid.spend)],['Leads',num(paid.leads)],
+      ['Per lead',money(paid.cpl),paid.cpl<CPLB?'good':'bad'],
+      ['Impressions',num(paid.impressions)],['People reached',num(paid.reach)],
+      ['Frequency',paid.frequency?paid.frequency+'×':'—'],
+      ['Clicks',num(paid.clicks)+(paid.ctr?' · '+paid.ctr+'%':'')],
+      ['Link clicks',num(paid.link_clicks)],['Video views',num(paid.video_views)],
+      ['CPM',money(paid.cpm)],['Comments on ads',num(paid.comments),paid.comments?'bad':null]]:[],
+    verdict:paid?((paid.cpl&&paid.cpl<CPLB
+      ?'Cheaper than every past campaign, so this front is working.'
+      :'Above the benchmark. Creative is the lever, not budget.')
+      +(paid.comments?' '+paid.comments+' people commented on an advert, which is a conversation nobody has had.':''))
+      :'No figures came back. Check the Meta token before concluding anything.'});
+
+  F.push({key:'social',label:'Organic',note:'Instagram, the page, and the dated cards',
+    head:ig?num(ig.reach):num(bd.cards),headsub:ig?'Instagram reach':'cards dated',
+    tone:bd.cards&&!bd.with_reading?'bad':'good',
+    quick:[['Cards',num(bd.cards)],['Read at 72h',num(bd.with_reading)]],
+    metrics:(ig?[['Instagram reach',num(ig.reach)],['Profile views',num(ig.profile_views)],
+      ['Followers',num(ig.followers)],
+      ['New followers',ig.new_followers==null?'—':num(ig.new_followers)],
+      ['Engagement rate',ig.engagement_rate+'%'],
+      ['Website clicks',num(ig.website_clicks),ig.website_clicks<5?'bad':null],
+      ['Facebook fans',num(fb&&fb.fans)],['Facebook engagements',num(fb&&fb.page_engagements)],
+      ['Facebook page views',num(fb&&fb.page_views)]]
+      :[['Only held for the current month','—']])
+      .concat([['Cards dated',num(bd.cards)],['Published',num(bd.published)],
+      ['With a 72h reading',num(bd.with_reading),bd.cards&&!bd.with_reading?'bad':'good']])
+      .concat(Object.keys(st).length?[['Still scheduled',num(st['Scheduled']||0),
+        (st['Scheduled']||0)>5?'bad':null]]:[]),
+    verdict:bd.cards&&!bd.with_reading
+      ?'Nothing was read at 72 hours, so no format can be scored this month.'
+      :'Formats can be ranked this month.'});
+
+  F.push({key:'uploads',label:'By hand',note:"Sean's profile, LinkedIn and TikTok, uploaded by Valerie",
+    head:num(tot.impressions),headsub:'profile impressions',
+    tone:li.gap||tk.gap?'bad':'good',
+    quick:[['Profile posts',num(tot.posts)],['Rate',tot.rate!=null?tot.rate+'%':'—']],
+    metrics:[["Sean’s profile posts",num(tot.posts)],
+      ['Profile impressions',num(tot.impressions),tot.impressions>5000?'good':null],
+      ['Profile interactions',num(tot.interactions)],
+      ['Profile rate',tot.rate!=null?tot.rate+'%':'—',tot.rate>=5?'good':null],
+      ['LinkedIn posts',li.gap?'not in the file':num(li.rows),li.gap?'bad':null],
+      ['TikTok videos',tk.gap?'not in the file':num(tk.rows),tk.gap?'bad':null],
+      ['Last refreshed',esc(up.last_updated?String(up.last_updated).split('·')[0].trim():'—')]],
+    verdict:(fbp.best?'Best on the profile: “'+esc(String(fbp.best.title).slice(0,70))
+      +'…”, '+num(fbp.best.impressions)+' impressions. ':'')
+      +(li.gap||tk.gap?'LinkedIn and TikTok are the wrong sheets, so neither can say which post worked.'
+        :'All three exports are usable.')});
+
+  F.push({key:'youtube',label:'YouTube',note:"Marissa's long-form, the source for every cut",
+    head:num(rec.length),headsub:'recordings in hand',
+    tone:rec.length?'good':'bad',
+    quick:[['Subscribers',num(yt.subs)],['Videos',num(yt.videos_total)]],
+    metrics:[['Subscribers',num(yt.subs)],['Views, all time',num(yt.views_total)],
+      ['Videos on the channel',num(yt.videos_total)],['Recordings in hand',num(rec.length)]]
+      .concat(rec.slice(0,4).map(v=>['· '+esc(String(v.title).slice(0,34))+'…',num(v.views)+' views'])),
+    verdict:top?'Most watched: “'+esc(top.title)+'”. These are the source for every social cut.'
+      :'No recordings read this month.'});
+
+  F.push({key:'funnel',label:'Funnel',note:'GetResponse, HubSpot and Zoom',
+    head:money(fn.won_this_month),headsub:'won this month',
+    tone:fn.won_this_month?'good':'bad',
+    quick:[['Leads',num(lc.lead)],['Customers',num(lc.customer)]],
+    metrics:[['Subscribers',num(lc.subscriber)],['Leads',num(lc.lead)],
+      ['Marketing qualified',num(lc.marketingqualifiedlead)],
+      ['Sales qualified',num(lc.salesqualifiedlead)],['Customers',num(lc.customer)],
+      ['From this campaign',num(fn.from_campaign)],
+      ['Won this month',money(fn.won_this_month),fn.won_this_month?'good':'bad'],
+      ['Won, all time',money(fn.won_total)],['Open pipeline',money(fn.open_total)],
+      ['Webinar attendees',num(fn.webinar_attendees),
+        !fn.webinar_attendees&&fn.webinar_sessions?'bad':null]],
+    verdict:fn.won_this_month?'Money came through this month.'
+      :'Nothing closed. The gap is after the form, so nothing upstream is worth optimising.'});
+
+  const r=d.read||{},dz=r.directions||{};
+  return {built:d.built||'',fronts:F,read:r.lines||[],
+    dirs:[['Marissa','what to produce',dz.marissa],['Valerie','what changes',dz.valerie],
+          ['Marina','paid and the funnel',dz.marina]].filter(x=>x[2]),
+    plan:d.plan||null,
+    kpis:[['Spend',money(paid&&paid.spend),null],
+          ['Leads',num(paid&&paid.leads),null],
+          ['Per lead',paid&&paid.cpl?money(paid.cpl):'—',
+            paid&&paid.cpl&&paid.cpl<CPLB?'good':'bad'],
+          ['Cards read',num(bd.with_reading)+'/'+num(bd.cards),
+            bd.cards&&!bd.with_reading?'bad':'good'],
+          ['Won',money(fn.won_this_month),fn.won_this_month?'good':'bad']]};
+}
+
+const SAYS=[['marissa','Marissa','YouTube, and what is already recorded',
+   'What you would change, what is worth repeating, and what is recorded and waiting.'],
+  ['valerie','Valerie','social, and what travelled',
+   'Which posts worked, which did not, and anything the cards got wrong.'],
+  ['marina','Marina','anything the rules missed','Notes that belong with this month’s record.']];
+
+function rows(){
+  return Object.keys(ALL).sort().reverse().map(m=>{
+    const d=ALL[m]||{},paid=((d.fronts||{}).paid||{}).data||{},
+      bd=(((d.fronts||{}).social||{}).data||{}).board||{},p=d.plan||{};
+    return {m:m,label:nice(m),leads:num(paid.leads),
+      cpl:paid.cpl?money(paid.cpl):'—',
+      cards:num(bd.cards)+(bd.cards?' · '+num(bd.with_reading)+' read':''),
+      lines:((d.read||{}).lines||[]).length,plan:p.url?p:null};
+  });
+}
+
+const timers={};
+function mark(k,v){document.querySelectorAll('[data-s="'+k+'"]').forEach(s=>{
+  s.textContent=v&&v.trim()?'in':'empty';s.classList.toggle('in',!!(v&&v.trim()));});}
+
+async function save(path,value){
+  try{
+    const r=await fetch(FB+'/'+CUR+'.json',{method:'PATCH',
+      headers:{'Content-Type':'application/json'},body:JSON.stringify({[path]:value})});
+    if(!r.ok) throw new Error('bad status');
+    ALL[CUR]=Object.assign({},ALL[CUR],{[path]:value});
+  }catch(e){fail();}
+}
+
+function wire(){
+  document.querySelectorAll('textarea[data-k]').forEach(el=>{
+    const k=el.dataset.k,cur=ALL[CUR]||{};
+    el.value=(cur[k]&&cur[k].text)||'';mark(k,el.value);
+    el.oninput=()=>{clearTimeout(timers[k]);
+      document.querySelectorAll('[data-s="'+k+'"]').forEach(s=>{
+        s.textContent='typing';s.classList.remove('in');});
+      timers[k]=setTimeout(async()=>{
+        await save(k,{text:el.value,saved:new Date().toISOString()});mark(k,el.value);},1000);};
+  });
+  const pu=document.getElementById('planurl');
+  if(pu){
+    pu.value=((ALL[CUR]||{}).plan||{}).url||'';
+    pu.oninput=()=>{clearTimeout(timers.plan);
+      timers.plan=setTimeout(async()=>{
+        const v=pu.value.trim();if(!v)return;
+        await save('plan',{url:v,title:(((ALL[CUR]||{}).plan)||{}).title||nice(CUR)+' plan'});
+        render();wire();},1200);};
+  }
+}
+
+/* localStorage is a per-viewer convenience: it can throw, and the page renders the same without it. */
+function keep(k,v){try{localStorage.setItem('skles-ux-'+k,v);}catch(e){}}
+function kept(k){try{return localStorage.getItem('skles-ux-'+k);}catch(e){return null;}}
+
+function show(m){CUR=m;const p=document.getElementById('pick');if(p)p.value=m;render();wire();}
+
+(async function init(){
+  try{const r=await fetch(FB+'.json');if(r.ok)ALL=(await r.json())||{};}catch(e){fail();}
+  const months=Object.keys(ALL).sort().reverse();
+  if(!months.length){fail();return;}
+  const p=document.getElementById('pick');
+  if(p){p.innerHTML=months.map(m=>'<option value="'+m+'">'+nice(m)+'</option>').join('');
+    p.onchange=e=>show(e.target.value);}
+  start(months);
+})();
+
+
+let SEL=kept('sel')||'paid';
+
+function items(M){
+  const L=M.fronts.map(f=>({id:f.key,name:f.label,sub:f.note,fig:f.head,figsub:f.headsub,
+    tone:f.tone,front:f}));
+  L.push({id:'read',name:'The read',sub:'what the numbers say, rule by rule',
+    fig:M.read.length,figsub:'lines',tone:M.read.length?'good':'bad'});
+  L.push({id:'dirs',name:'The direction',sub:'one change each',
+    fig:M.dirs.length,figsub:'given',tone:M.dirs.length?'good':'bad'});
+  L.push({id:'says',name:'What you think',sub:'Marissa, Valerie, Marina',
+    fig:SAYS.filter(s=>((ALL[CUR]||{})[s[0]]||{}).text).length+'/3',figsub:'in',
+    tone:SAYS.filter(s=>((ALL[CUR]||{})[s[0]]||{}).text).length?'good':''});
+  L.push({id:'plan',name:'The plan',sub:'what went to Sean on the 1st',
+    fig:M.plan&&M.plan.url?'✓':'—',figsub:'',tone:M.plan&&M.plan.url?'good':'bad'});
+  L.push({id:'hist',name:'Every month',sub:'the whole record',fig:rows().length,figsub:'months',tone:''});
+  return L;
+}
+
+function detail(M,L){
+  const it=L.filter(x=>x.id===SEL)[0]||L[0];
+  if(it.front){
+    const f=it.front;
+    return '<h2>'+esc(f.label)+'</h2><p class="note">'+esc(f.note)+'</p>'
+      +'<div class="hero"><b'+(f.tone?' class="'+f.tone+'"':'')+'>'+f.head+'</b><span>'
+      +esc(f.headsub)+'</span></div>'
+      +'<table class="m">'+f.metrics.map(m=>'<tr><td>'+m[0]+'</td><td'
+        +(m[2]?' class="'+m[2]+'"':'')+'>'+m[1]+'</td></tr>').join('')+'</table>'
+      +'<p class="verdict">'+f.verdict+'</p>';
+  }
+  if(SEL==='read') return '<h2>The read</h2><p class="note">Worked out from the numbers, not from '
+    +'anyone’s impression of the month. Each line names the rule behind it.</p>'
+    +((M.read.length?M.read:[{front:'—',rule:'none',text:'No read was built for this month.'}])
+      .map(l=>'<div class="rl"><span class="rule">'+esc(l.front)+' &middot; '+esc(l.rule)
+        +'</span><p>'+esc(l.text)+'</p></div>').join(''));
+  if(SEL==='dirs') return '<h2>The direction</h2><p class="note">One change each, derived from the '
+    +'read above.</p>'+(M.dirs.length
+      ?M.dirs.map(x=>'<div class="d"><h3>'+x[0]+' <em>&middot; '+x[1]+'</em></h3><p>'+esc(x[2])
+        +'</p></div>').join('')
+      :'<p class="note">No direction was derived for this month.</p>');
+  if(SEL==='says') return '<h2>What you think</h2><p class="note">Where the direction is wrong, or '
+    +'where it is missing something only you can see. Saves a second after you stop typing, and '
+    +'everyone sees the same page.</p>'
+    +SAYS.map(s=>'<div class="box"><div class="bh"><h3>'+s[1]+'</h3><span class="role">'+s[2]
+      +'</span><span class="state" data-s="'+s[0]+'">empty</span></div><textarea data-k="'+s[0]
+      +'" placeholder="'+s[3]+'"></textarea></div>').join('');
+  if(SEL==='plan') return '<h2>The plan it produced</h2><p class="note">Built on the 29th to 30th '
+    +'from all three reads, then sent to Sean on the 1st as one email.</p>'
+    +'<div class="plan">'+(M.plan&&M.plan.url
+      ?'<a href="'+esc(M.plan.url)+'">'+esc(M.plan.title||'The plan')+'</a>'
+      :'<span style="color:var(--muted);font-size:14px">Not built yet.</span>')
+    +'</div><input class="url" id="planurl" placeholder="https://..." aria-label="Plan link">'
+    +'<p class="hint">Paste the plan’s link here once it is built and it joins the record.</p>';
+  return '<h2>Every month we have run</h2><p class="note">A direction that turned out wrong is only '
+    +'useful if it is still readable later.</p><div class="sheet"><table class="h"><thead><tr>'
+    +'<th>Month</th><th>Leads</th><th>Per lead</th><th>Cards</th><th>Read</th><th>Plan</th></tr>'
+    +'</thead><tbody>'+rows().map(r=>'<tr><td><a href="#" data-go="'+r.m+'">'+r.label
+      +'</a></td><td>'+r.leads+'</td><td>'+r.cpl+'</td><td>'+r.cards+'</td><td>'
+      +(r.lines?r.lines+' lines':'—')+'</td><td>'
+      +(r.plan?'<a href="'+esc(r.plan.url)+'">'+esc(r.plan.title||'Plan')+'</a>':'—')
+      +'</td></tr>').join('')+'</tbody></table></div>';
+}
+
+function render(){
+  const M=model(ALL[CUR]||{}),L=items(M);
+  if(!L.filter(x=>x.id===SEL).length) SEL=L[0].id;
+  document.getElementById('title').textContent=nice(CUR)+' review';
+  document.getElementById('built').textContent=M.built?'Numbers as at '+M.built:'';
+  document.getElementById('list').innerHTML='<div class="lh">Each front</div>'
+    +L.slice(0,5).map(btn).join('')+'<div class="lh">What we do with it</div>'
+    +L.slice(5).map(btn).join('')
+    +'<p class="kbd"><b>&uarr;</b> <b>&darr;</b> moves down the list.</p>';
+  document.getElementById('detail').innerHTML=detail(M,L);
+  document.querySelectorAll('.it').forEach(b=>b.onclick=()=>{
+    SEL=b.dataset.id;keep('sel',SEL);render();wire();
+    document.querySelector('.detail').scrollTop=0;});
+  document.querySelectorAll('[data-go]').forEach(a=>a.onclick=e=>{e.preventDefault();show(a.dataset.go);});
+}
+
+function btn(x){
+  return '<button class="it" data-id="'+x.id+'" aria-current="'+(x.id===SEL)+'">'
+    +'<span class="dot '+(x.tone||'')+'"></span>'
+    +'<span class="nm">'+esc(x.name)+'<small>'+esc(x.sub)+'</small></span>'
+    +'<span class="fig">'+x.fig+(x.figsub?'<small>'+esc(x.figsub)+'</small>':'')+'</span></button>';
+}
+
+document.addEventListener('keydown',e=>{
+  if(e.key!=='ArrowDown'&&e.key!=='ArrowUp') return;
+  if(/INPUT|TEXTAREA|SELECT/.test((e.target.tagName||''))) return;
+  const ids=[].slice.call(document.querySelectorAll('.it')).map(b=>b.dataset.id);
+  const i=ids.indexOf(SEL);if(i<0)return;
+  e.preventDefault();
+  SEL=ids[(i+(e.key==='ArrowDown'?1:ids.length-1))%ids.length];
+  keep('sel',SEL);render();wire();document.querySelector('.detail').scrollTop=0;
+});
+
+function start(months){show(months[0]);}
+
+</script>
+</body>
+</html>
