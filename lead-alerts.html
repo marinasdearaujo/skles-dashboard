@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Skills Up &middot; Your leads and how they reach you</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Poppins:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#FFFFFF; --sunk:#F0EEE9;
+  --ink:#15192A; --ink-2:#565B6E; --ink-3:#8C8F9D;
+  --navy:#112250; --tan:#E0C58F; --tan-deep:#8A672C;
+  --line:#E6E3DC; --live:#1C7A58; --live-bg:#E6F3EE;
+  --warm:#8A5506; --warm-bg:#FBF2E4;
+  --f-display:'Merriweather',Georgia,serif;
+  --f-body:'Poppins',system-ui,-apple-system,'Segoe UI',sans-serif;
+  color-scheme:light;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f-body);
+  font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:820px;margin:0 auto;padding-block:40px 72px;padding-left:18px;padding-right:18px}
+h1,h2,h3{font-family:var(--f-display);margin:0;letter-spacing:-.012em;text-wrap:balance}
+h1{font-size:clamp(27px,4.6vw,37px);font-weight:900;line-height:1.13}
+h2{font-size:14px;font-weight:700}
+h3{font-size:17px;font-weight:700;line-height:1.3}
+p{margin:0}
+.eyebrow{font-size:10px;font-weight:600;letter-spacing:.19em;text-transform:uppercase;color:var(--tan-deep)}
+header{border-bottom:2px solid var(--navy);padding-bottom:22px}
+.lede{margin-top:13px;font-size:16px;color:var(--ink-2);max-width:58ch}
+
+section{margin-top:38px}
+.shead{display:flex;align-items:baseline;gap:11px;padding-bottom:9px;border-bottom:1px solid var(--line);margin-bottom:16px}
+.shead h2{flex:none}
+.shead p{font-size:12px;color:var(--ink-3)}
+.body p + p{margin-top:12px}
+.body{color:var(--ink-2);max-width:66ch}
+.body strong{color:var(--ink);font-weight:600}
+
+/* the two calls */
+.calls{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.call{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--tan-deep);
+  border-radius:12px;padding:17px 18px}
+.call .nm{font-family:var(--f-display);font-weight:900;font-size:18px;line-height:1.2}
+.call .tel{display:block;margin-top:9px;font-size:21px;font-weight:600;color:var(--navy);
+  letter-spacing:-.01em;text-decoration:none}
+.call .meta{margin-top:10px;font-size:12.5px;color:var(--ink-2);line-height:1.5}
+.call .flag{display:inline-block;margin-top:11px;font-size:9.5px;font-weight:700;letter-spacing:.07em;
+  text-transform:uppercase;padding:3px 9px;border-radius:20px;background:var(--warm-bg);color:var(--warm)}
+
+/* numbered steps */
+ol.steps{list-style:none;margin:0;padding:0;counter-reset:s}
+ol.steps li{counter-increment:s;position:relative;padding:0 0 18px 46px;margin:0}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:-1px;width:30px;height:30px;
+  border-radius:9px;background:var(--navy);color:var(--tan);display:grid;place-items:center;
+  font-family:var(--f-display);font-weight:900;font-size:13px}
+ol.steps li:last-child{padding-bottom:0}
+ol.steps .st{font-weight:600;font-size:15px;line-height:1.35}
+ol.steps .sd{font-size:13.5px;color:var(--ink-2);margin-top:4px;line-height:1.5}
+
+/* the sample alert */
+.sample{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:6px}
+.sample .sbar{background:var(--sunk);padding:10px 16px;font-size:12px;color:var(--ink-3);
+  border-bottom:1px solid var(--line)}
+.sample .sbar b{color:var(--ink-2);font-weight:600}
+.sample .sbody{padding:16px;font-size:13.5px;line-height:1.6;color:var(--ink-2)}
+.sample .sbody .k{color:var(--ink-3)}
+.sample .sbody .v{color:var(--ink);font-weight:600}
+
+.note{background:var(--sunk);border-radius:10px;padding:14px 16px;font-size:13.5px;
+  color:var(--ink-2);line-height:1.55;margin-top:14px}
+.note b{color:var(--ink);font-weight:600}
+
+a.inline{color:var(--navy);font-weight:500}
+footer{margin-top:46px;padding-top:17px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-3);line-height:1.55}
+@media (max-width:620px){ .calls{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Skills Up With Sean K. Langston</div>
+  <h1>Your leads, and how they reach you</h1>
+  <p class="lede">Why the email alerts never arrived, what replaces them, two people worth
+    calling today, and how to get into the page inbox. Written out in full so nothing here
+    needs a call.</p>
+</header>
+
+<section>
+  <div class="shead"><h2>Call these two today</h2><p>they are not in the CRM</p></div>
+  <div class="body">
+    <p>We checked every form submission since the start of October against the CRM, one by one.
+      Forty nine people have filled the form in. Forty seven are in the CRM. These two are not,
+      because the email platform refuses their addresses, so they never appeared in your queue
+      and nobody has called them.</p>
+  </div>
+  <div class="calls" style="margin-top:16px">
+    <div class="call">
+      <div class="nm">Quinton Robinson</div>
+      <a class="tel" href="tel:+16784802065">678-480-2065</a>
+      <div class="meta">Signed up 7 October.<br>Said he is just learning for now.<br>
+        QuintonRobinson82@gmail.com</div>
+    </div>
+    <div class="call">
+      <div class="nm">Radford Fulton</div>
+      <a class="tel" href="tel:+13479427283">347-942-7283</a>
+      <div class="meta">Signed up 26 October, then filled the form in a second time on 3 November.<br>
+        4nooppression64@gmail.com</div>
+      <span class="flag">Came back twice</span>
+    </div>
+  </div>
+  <div class="note"><b>Why they are not in the CRM.</b> GetResponse will not accept those two
+    addresses onto the list. We tried adding them by hand and it refused both, silently, with no
+    error anywhere. That is a limit on their side and there is no setting that changes it. The
+    phone numbers are good, which is what matters for you.</div>
+</section>
+
+<section>
+  <div class="shead"><h2>Why the email alerts never arrived</h2><p>and why there was nothing to click</p></div>
+  <div class="body">
+    <p>Both addresses on the notification list, <strong>info@langstonrealtygroup.com</strong> and
+      <strong>info@seanklangstonenterprises.com</strong>, are confirmed. They always were. So the
+      address was never the problem and there was never a confirmation link waiting to be clicked.</p>
+    <p>The real reason sits in how GetResponse is built. It sends those lead alerts only for people
+      who sign up through a form that GetResponse itself hosts. Our leads come from the Meta form
+      and travel in through Zapier, which GetResponse files as an <strong>API contact</strong>.
+      It does not send alerts for those, by design. Their own documentation says so.</p>
+    <p>That means no address on that list was ever going to receive them, and no amount of
+      confirming, re-confirming or swapping the address would have changed it.</p>
+  </div>
+  <div class="note"><b>The screen with the GoDaddy button.</b> That one is DKIM authentication for
+    langstonrealtygroup.com. It is a sending setting, used when a domain sends marketing email.
+    The funnel does not send from that domain, so it has no effect on your leads. Nothing to do there.</div>
+</section>
+
+<section>
+  <div class="shead"><h2>What replaces it</h2><p>one email per lead, straight off the form</p></div>
+  <div class="body">
+    <p>The alert now reads the Meta form directly instead of waiting on the CRM. Every time
+      somebody fills it in, you get one email with everything you need to make the call, so you
+      never have to open the CRM to look up a number.</p>
+    <p>Reading it off the form rather than off the CRM is deliberate. It is what makes sure
+      somebody like Quinton or Radford still reaches you even when the email platform refuses them.</p>
+  </div>
+  <div class="sample">
+    <div class="sbar"><b>To</b> info@langstonrealtygroup.com &nbsp;&middot;&nbsp;
+      <b>Cc</b> theaccgrp@gmail.com &nbsp;&middot;&nbsp; <b>Subject</b> New lead: Mary Carson</div>
+    <div class="sbody">
+      <span class="k">Name</span> &nbsp;<span class="v">Mary Carson</span><br>
+      <span class="k">Phone</span> &nbsp;<span class="v">601-337-5431</span><br>
+      <span class="k">Email</span> &nbsp;<span class="v">maryncarson63@gmail.com</span><br>
+      <span class="k">Signed up</span> &nbsp;<span class="v">5 November, 3:34am ET</span><br>
+      <span class="k">Getting started</span> &nbsp;<span class="v">Just learning for now</span>
+    </div>
+  </div>
+  <div class="note">It goes to <b>info@langstonrealtygroup.com</b> and copies your gmail, so it
+    reaches you wherever you are reading. It will not send twice for the same person.</div>
+</section>
+
+<section>
+  <div class="shead"><h2>Getting into the Skills Up inbox</h2><p>three steps</p></div>
+  <div class="body">
+    <p>The page you reached was <strong>Dominion Partners</strong>, your own old page. Skills Up
+      lives in a separate Business portfolio, and your account had never been added to it, so there
+      was nothing in the account switcher to change to. That is now being fixed.</p>
+  </div>
+  <ol class="steps" style="margin-top:18px">
+    <li>
+      <div class="st">Accept the invite</div>
+      <div class="sd">It is already sent, to theaccgrp@gmail.com, from Meta. It invites you into the
+        Skills Up Business portfolio. If it is not in your inbox, check the spam folder, it often
+        lands there.</div>
+    </li>
+    <li>
+      <div class="st">Sean adds you to the page</div>
+      <div class="sd">One click on his side once you have accepted. It gives you messages and
+        comments on the Skills Up page and nothing else, so there is no risk of touching the ads
+        or the billing.</div>
+    </li>
+    <li>
+      <div class="st">Open the inbox</div>
+      <div class="sd">Use this link and it lands you on the right page with no switching:<br>
+        <a class="inline" href="https://business.facebook.com/latest/inbox/all?asset_id=906745769194260">business.facebook.com/latest/inbox/all?asset_id=906745769194260</a></div>
+    </li>
+  </ol>
+</section>
+
+<section>
+  <div class="shead"><h2>What is waiting in there</h2><p>already paid for</p></div>
+  <div class="body">
+    <p>Alongside the people who filled the form in, October's ads pulled
+      <strong>seven people into direct messages and six into the comments</strong>. They raised
+      their hand and then asked their question in the inbox instead of on the form, so they appear
+      in neither the report nor your call queue. We have already paid for every one of them.</p>
+    <p>Inside the inbox there are separate tabs for <strong>Messenger</strong>,
+      <strong>Instagram</strong> and <strong>Comments</strong>, and the conversations are split
+      across all three, so it is worth looking at each. Everything from October is still unread.
+      They can be pointed at exactly the same link you have been sending.</p>
+  </div>
+</section>
+
+<footer>
+  Skills Up With Sean K. Langston. Kept current by Marina. Nothing on this page needs a sign in.
+</footer>
+
+</div>
+</body>
+</html>
