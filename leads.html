@@ -112,8 +112,8 @@ footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--line);
   <p class="eyebrow">SKLES · Fast Track</p>
   <h1>The Lead List</h1>
   <p class="lede">Every lead the adverts have brought in, newest first, with what happened to each one.
-  Set the status and leave a line about the call. Everyone on the team sees the same list, so nobody
-  calls the same person twice.</p>
+  The outcomes come straight from the calls Rodney logs in the CRM, so this is the same record seen
+  on one screen. Anyone can correct a row here and the whole team sees it.</p>
   <div class="who-bar">
     <label for="who">Who is updating this?</label>
     <select id="who">
@@ -150,18 +150,18 @@ footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--line);
 </div>
 
 <div class="note">
-  <h2>How the statuses work</h2>
-  <p><b>Not called yet</b> is where every lead starts. <b>Left a message</b> and <b>Texted</b> mean you
-  tried and did not reach them, so they stay in the queue. <b>Talked</b> means you spoke to them.
+  <h2>How to read it</h2>
+  <p><b>Tried, no voicemail</b>, <b>Left a message</b> and <b>Texted</b> all mean the call was made and
+  nobody picked up, so they stay in the queue. <b>Talked</b> means a real conversation happened.
   <b>Sent the link</b> means they have the Apprentice link. <b>Wants in</b> is the one that matters:
-  it tells Sean who to expect. <b>Not a fit</b> and <b>No answer, done trying</b> take them out of the count.</p>
-  <p>The people who answered <b>In the next 3 months</b> are the ones to call first. They are marked in
+  it tells Sean who to expect. <b>Bad number</b> and <b>Not a fit</b> take them out of the count for good.</p>
+  <p>The people who answered <b>In the next 3 months</b> are worth the next call. They are marked in
   amber and the filter at the top pulls just them.</p>
 </div>
 
 <footer>
-  Leads pulled from the Meta lead forms. Statuses and notes are saved for the whole team the moment
-  you set them.<br>
+  Leads pulled from the Meta lead forms, outcomes from the calls logged in the CRM. A change made
+  here is saved for the whole team the moment you set it.<br>
   Questions to Marina.
 </footer>
 </div>
@@ -171,16 +171,17 @@ footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--line);
 const DB = 'https://rifa-mae-default-rtdb.firebaseio.com/skles-ops/leads';
 
 const STATUS = {
-  new:      'Not called yet',
-  message:  'Left a message',
-  texted:   'Texted',
-  talked:   'Talked',
-  link:     'Sent the link',
-  wantsin:  'Wants in',
-  nofit:    'Not a fit',
-  noanswer: 'No answer, done trying'
+  new:     'Not called yet',
+  tried:   'Tried, no voicemail',
+  message: 'Left a message',
+  texted:  'Texted',
+  talked:  'Talked',
+  link:    'Sent the link',
+  wantsin: 'Wants in',
+  nofit:   'Not a fit',
+  bad:     'Bad number'
 };
-const OPEN = ['new', 'message', 'texted'];          // still owed a call
+const OPEN = ['new', 'tried', 'message', 'texted'];   // reached nobody yet
 const TIMING = {
   next_3_months: ['In the next 3 months', 't3'],
   this_year:     ['Sometime this year', 'ty'],
@@ -248,14 +249,14 @@ function renderTally(){
   const hot  = LEADS.filter(l => l.timing === 'next_3_months' && OPEN.indexOf(st(l.id)) > -1).length;
   const talked = LEADS.filter(l => ['talked','link','wantsin'].indexOf(st(l.id)) > -1).length;
   const wants = LEADS.filter(l => st(l.id) === 'wantsin').length;
-  const out = LEADS.filter(l => ['nofit','noanswer'].indexOf(st(l.id)) > -1).length;
+  const out = LEADS.filter(l => ['nofit','bad'].indexOf(st(l.id)) > -1).length;
   document.getElementById('tally').innerHTML =
     '<div class="t"><div class="n">' + LEADS.length + '</div><div class="l">Leads in total</div></div>' +
     '<div class="t hot"><div class="n">' + hot + '</div><div class="l">Ready to start in 3 months and still owed a call</div></div>' +
     '<div class="t"><div class="n">' + open + '</div><div class="l">Still to reach</div></div>' +
     '<div class="t"><div class="n">' + talked + '</div><div class="l">Spoken to</div></div>' +
     '<div class="t won"><div class="n">' + wants + '</div><div class="l">Said they want in</div></div>' +
-    '<div class="t"><div class="n">' + out + '</div><div class="l">Closed out</div></div>';
+    '<div class="t"><div class="n">' + out + '</div><div class="l">Bad number or not a fit</div></div>';
 }
 
 function renderBar(){
