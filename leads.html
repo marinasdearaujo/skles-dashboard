@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Lead List</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Poppins:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --paper:#F7F6F3; --card:#FFFFFF; --ink:#141829; --ink-2:#55596E; --ink-3:#8A8EA0;
+  --navy:#112250; --tan:#E0C58F; --tan-deep:#9A7638; --tan-soft:#F5EAD3;
+  --line:rgba(17,34,80,.13); --rail:#E2DED6;
+  --warm:#B4763A; --good:#2F7D5B; --cold:#8A8EA0;
+  --f-display:'Merriweather',Georgia,serif; --f-body:'Poppins',system-ui,-apple-system,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0C1326; --card:#141E38; --ink:#EDEFF5; --ink-2:#AFB6CC; --ink-3:#7B84A0;
+  --navy:#08112A; --tan:#E0C58F; --tan-deep:#E0C58F; --tan-soft:#1B2949;
+  --line:rgba(224,197,143,.18); --rail:#24304F;
+  --warm:#E0A567; --good:#6FC79C; --cold:#7B84A0; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --paper:#0C1326; --card:#141E38; --ink:#EDEFF5; --ink-2:#AFB6CC; --ink-3:#7B84A0;
+  --navy:#08112A; --tan:#E0C58F; --tan-deep:#E0C58F; --tan-soft:#1B2949;
+  --line:rgba(224,197,143,.18); --rail:#24304F;
+  --warm:#E0A567; --good:#6FC79C; --cold:#7B84A0; color-scheme:dark;}
+
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);
+  font-size:15.5px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding-block:38px 70px;padding-left:16px;padding-right:16px}
+h1,h2{font-family:var(--f-display);margin:0;letter-spacing:-.01em;text-wrap:balance}
+h1{font-size:clamp(27px,4.4vw,38px);font-weight:900;line-height:1.14}
+h2{font-size:17px;font-weight:700}
+p{margin:0}
+.eyebrow{font-size:10.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--tan-deep)}
+header{border-bottom:2px solid var(--navy);padding-bottom:24px}
+.lede{margin-top:12px;font-size:16.5px;color:var(--ink-2);max-width:62ch}
+
+/* who you are */
+.who-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:18px;
+  font-size:13.5px;color:var(--ink-2)}
+.who-bar select{font-family:inherit;font-size:13.5px;padding:7px 11px;border-radius:9px;
+  border:1px solid var(--line);background:var(--card);color:var(--ink)}
+
+/* tally */
+.tally{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:11px;margin-top:26px}
+.t{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:15px 17px}
+.t .n{font-family:var(--f-display);font-weight:900;font-size:30px;line-height:1;
+  color:var(--navy);font-variant-numeric:tabular-nums}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .t .n{color:var(--tan)}}
+:root[data-theme="dark"] .t .n{color:var(--tan)}
+.t .l{font-size:11.5px;color:var(--ink-2);margin-top:6px;line-height:1.35}
+.t.hot{border-color:var(--warm)}
+.t.won{border-color:var(--good)}
+
+/* filters */
+.bar{display:flex;flex-wrap:wrap;gap:7px;margin-top:26px;align-items:center}
+.bar .sep{width:1px;height:22px;background:var(--line);margin:0 4px}
+.chip{font-family:inherit;font-size:12.5px;padding:7px 13px;border-radius:999px;cursor:pointer;
+  border:1px solid var(--line);background:var(--card);color:var(--ink-2);line-height:1.2}
+.chip:hover{border-color:var(--tan-deep)}
+.chip[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:var(--tan);font-weight:600}
+
+/* table */
+.scroller{overflow-x:auto;margin-top:16px;border:1px solid var(--line);border-radius:13px;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:860px}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:10.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-3);white-space:nowrap;cursor:pointer;user-select:none;
+  position:sticky;top:0;background:var(--card);z-index:1}
+th:hover{color:var(--tan-deep)}
+th .ar{opacity:.45;font-size:9px}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:var(--tan-soft)}
+.rn{color:var(--ink-3);font-size:12.5px;width:34px;font-variant-numeric:tabular-nums}
+.ct b{display:block;font-size:14.5px;font-weight:600;color:var(--ink)}
+.ct a{display:block;font-size:12.5px;color:var(--ink-2);text-decoration:none;word-break:break-all}
+.ct a:hover{color:var(--tan-deep);text-decoration:underline}
+.when{font-size:12.5px;color:var(--ink-2);white-space:nowrap;font-variant-numeric:tabular-nums}
+.when span{display:block;color:var(--ink-3);font-size:11px}
+.tm{font-size:12.5px;white-space:nowrap}
+.tm.t3{color:var(--warm);font-weight:600}
+.tm.ty{color:var(--ink-2)}
+.tm.tl{color:var(--cold)}
+select.st{font-family:inherit;font-size:13px;padding:6px 9px;border-radius:8px;
+  border:1px solid var(--line);background:var(--paper);color:var(--ink);min-width:140px}
+input.ob{font-family:inherit;font-size:13px;padding:6px 9px;border-radius:8px;width:100%;min-width:180px;
+  border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+input.ob:focus,select.st:focus{outline:2px solid var(--tan);outline-offset:1px}
+.by{font-size:10.5px;color:var(--ink-3);margin-top:4px}
+.saved{font-size:10.5px;color:var(--good);opacity:0;transition:opacity .25s;margin-top:4px;display:block}
+.saved.on{opacity:1}
+.empty{padding:34px 18px;text-align:center;color:var(--ink-3);font-size:14px}
+
+.note{margin-top:30px;background:var(--tan-soft);border-left:4px solid var(--tan);
+  border-radius:0 11px 11px 0;padding:18px 21px}
+.note h2{font-size:15px;margin-bottom:7px}
+.note p{font-size:14px;color:var(--ink-2)}
+.note p+p{margin-top:9px}
+#err{display:none;margin-top:16px;background:#FDECEC;border-left:4px solid #C0392B;
+  border-radius:0 11px 11px 0;padding:14px 18px;font-size:13.5px;color:#7B241C}
+footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--line);
+  font-size:12px;color:var(--ink-3);line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">SKLES · Fast Track</p>
+  <h1>The Lead List</h1>
+  <p class="lede">Every lead the adverts have brought in, newest first, with what happened to each one.
+  Set the status and leave a line about the call. Everyone on the team sees the same list, so nobody
+  calls the same person twice.</p>
+  <div class="who-bar">
+    <label for="who">Who is updating this?</label>
+    <select id="who">
+      <option value="">Pick your name</option>
+      <option>Rodney</option>
+      <option>Sean</option>
+      <option>Marina</option>
+      <option>Demond</option>
+      <option>Valerie</option>
+      <option>Marissa</option>
+    </select>
+  </div>
+</header>
+
+<div class="tally" id="tally"></div>
+
+<div class="bar" id="bar"></div>
+
+<div id="err">That change did not save. Check the connection and set it again, otherwise the rest of the team will not see it.</div>
+
+<div class="scroller">
+  <table>
+    <thead><tr>
+      <th data-s="n">#</th>
+      <th data-s="name">Contact <span class="ar">▲▼</span></th>
+      <th data-s="at">Came in <span class="ar">▲▼</span></th>
+      <th data-s="timing">Wants to start <span class="ar">▲▼</span></th>
+      <th data-s="status">Status <span class="ar">▲▼</span></th>
+      <th>What happened</th>
+    </tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <div class="empty" id="empty" hidden>Nothing matches that filter.</div>
+</div>
+
+<div class="note">
+  <h2>How the statuses work</h2>
+  <p><b>Not called yet</b> is where every lead starts. <b>Left a message</b> and <b>Texted</b> mean you
+  tried and did not reach them, so they stay in the queue. <b>Talked</b> means you spoke to them.
+  <b>Sent the link</b> means they have the Apprentice link. <b>Wants in</b> is the one that matters:
+  it tells Sean who to expect. <b>Not a fit</b> and <b>No answer, done trying</b> take them out of the count.</p>
+  <p>The people who answered <b>In the next 3 months</b> are the ones to call first. They are marked in
+  amber and the filter at the top pulls just them.</p>
+</div>
+
+<footer>
+  Leads pulled from the Meta lead forms. Statuses and notes are saved for the whole team the moment
+  you set them.<br>
+  Questions to Marina.
+</footer>
+</div>
+
+<script src="skles-leads-data.js"></script>
+<script>
+const DB = 'https://rifa-mae-default-rtdb.firebaseio.com/skles-ops/leads';
+
+const STATUS = {
+  new:      'Not called yet',
+  message:  'Left a message',
+  texted:   'Texted',
+  talked:   'Talked',
+  link:     'Sent the link',
+  wantsin:  'Wants in',
+  nofit:    'Not a fit',
+  noanswer: 'No answer, done trying'
+};
+const OPEN = ['new', 'message', 'texted'];          // still owed a call
+const TIMING = {
+  next_3_months: ['In the next 3 months', 't3'],
+  this_year:     ['Sometime this year', 'ty'],
+  learning:      ['Just learning for now', 'tl']
+};
+
+let state = {};                 // { leadId: {status, note, who, at} }
+let fStatus = 'all', fTiming = 'all';
+let sortKey = 'at', sortDir = -1;
+
+function esc(t){ return String(t == null ? '' : t)
+  .replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+function who(){
+  try { return localStorage.getItem('skles-who') || ''; } catch (e) { return ''; }
+}
+function setWho(v){
+  try { localStorage.setItem('skles-who', v); } catch (e) {}
+}
+
+function st(id){ return (state[id] && state[id].status) || 'new'; }
+function nt(id){ return (state[id] && state[id].note) || ''; }
+
+function phoneFmt(p){
+  const d = String(p).replace(/[^0-9]/g, '').replace(/^1/, '');
+  return d.length === 10 ? '(' + d.slice(0,3) + ') ' + d.slice(3,6) + '-' + d.slice(6) : p;
+}
+function dayFmt(s){
+  const d = new Date(s.replace(' ', 'T') + ':00');
+  if (isNaN(d)) return s;
+  return d.toLocaleDateString('en-US', { month:'short', day:'numeric' });
+}
+function timeFmt(s){
+  const d = new Date(s.replace(' ', 'T') + ':00');
+  if (isNaN(d)) return '';
+  return d.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit' }) + ' ET';
+}
+
+function shown(){
+  return LEADS.filter(l => {
+    if (fTiming !== 'all' && l.timing !== fTiming) return false;
+    if (fStatus === 'all') return true;
+    if (fStatus === 'open') return OPEN.indexOf(st(l.id)) > -1;
+    return st(l.id) === fStatus;
+  });
+}
+
+function sorted(list){
+  const c = list.slice();
+  c.sort((a, b) => {
+    let x, y;
+    if (sortKey === 'status') { x = STATUS[st(a.id)]; y = STATUS[st(b.id)]; }
+    else if (sortKey === 'timing') {
+      const o = { next_3_months:0, this_year:1, learning:2 };
+      x = o[a.timing]; y = o[b.timing];
+    } else { x = a[sortKey]; y = b[sortKey]; }
+    if (x === y) return 0;
+    return (x > y ? 1 : -1) * sortDir;
+  });
+  return c;
+}
+
+function renderTally(){
+  const open = LEADS.filter(l => OPEN.indexOf(st(l.id)) > -1).length;
+  const hot  = LEADS.filter(l => l.timing === 'next_3_months' && OPEN.indexOf(st(l.id)) > -1).length;
+  const talked = LEADS.filter(l => ['talked','link','wantsin'].indexOf(st(l.id)) > -1).length;
+  const wants = LEADS.filter(l => st(l.id) === 'wantsin').length;
+  const out = LEADS.filter(l => ['nofit','noanswer'].indexOf(st(l.id)) > -1).length;
+  document.getElementById('tally').innerHTML =
+    '<div class="t"><div class="n">' + LEADS.length + '</div><div class="l">Leads in total</div></div>' +
+    '<div class="t hot"><div class="n">' + hot + '</div><div class="l">Ready to start in 3 months and still owed a call</div></div>' +
+    '<div class="t"><div class="n">' + open + '</div><div class="l">Still to reach</div></div>' +
+    '<div class="t"><div class="n">' + talked + '</div><div class="l">Spoken to</div></div>' +
+    '<div class="t won"><div class="n">' + wants + '</div><div class="l">Said they want in</div></div>' +
+    '<div class="t"><div class="n">' + out + '</div><div class="l">Closed out</div></div>';
+}
+
+function renderBar(){
+  const counts = {};
+  Object.keys(STATUS).forEach(k => { counts[k] = LEADS.filter(l => st(l.id) === k).length; });
+  let h = '<button class="chip" data-f="status" data-v="all" aria-pressed="' + (fStatus === 'all') + '">Everyone</button>';
+  h += '<button class="chip" data-f="status" data-v="open" aria-pressed="' + (fStatus === 'open') + '">Still to reach</button>';
+  Object.keys(STATUS).forEach(k => {
+    if (!counts[k] && k !== 'new') return;
+    h += '<button class="chip" data-f="status" data-v="' + k + '" aria-pressed="' + (fStatus === k) + '">' +
+         STATUS[k] + ' ' + counts[k] + '</button>';
+  });
+  h += '<span class="sep"></span>';
+  h += '<button class="chip" data-f="timing" data-v="all" aria-pressed="' + (fTiming === 'all') + '">Any timing</button>';
+  Object.keys(TIMING).forEach(k => {
+    const n = LEADS.filter(l => l.timing === k).length;
+    h += '<button class="chip" data-f="timing" data-v="' + k + '" aria-pressed="' + (fTiming === k) + '">' +
+         TIMING[k][0] + ' ' + n + '</button>';
+  });
+  document.getElementById('bar').innerHTML = h;
+  document.querySelectorAll('#bar .chip').forEach(b => b.addEventListener('click', () => {
+    if (b.dataset.f === 'status') fStatus = b.dataset.v; else fTiming = b.dataset.v;
+    render();
+  }));
+}
+
+function renderRows(){
+  const list = sorted(shown());
+  document.getElementById('empty').hidden = list.length > 0;
+  document.getElementById('rows').innerHTML = list.map((l, i) => {
+    const s = st(l.id);
+    const tm = TIMING[l.timing] || [l.timing || 'Not asked', 'tl'];
+    const opts = Object.keys(STATUS).map(k =>
+      '<option value="' + k + '"' + (k === s ? ' selected' : '') + '>' + STATUS[k] + '</option>').join('');
+    const mark = state[l.id] && state[l.id].who
+      ? '<div class="by">' + esc(state[l.id].who) + ', ' + esc(state[l.id].at || '') + '</div>' : '';
+    return '<tr>' +
+      '<td class="rn">' + (i + 1) + '</td>' +
+      '<td class="ct"><b>' + esc(l.name) + '</b>' +
+        '<a href="tel:+' + esc(String(l.phone).replace(/[^0-9]/g, '')) + '">' + esc(phoneFmt(l.phone)) + '</a>' +
+        '<a href="mailto:' + esc(l.email) + '">' + esc(l.email) + '</a></td>' +
+      '<td class="when">' + dayFmt(l.at) + '<span>' + timeFmt(l.at) + '</span></td>' +
+      '<td class="tm ' + tm[1] + '">' + tm[0] + '</td>' +
+      '<td><select class="st" data-i="' + l.id + '" aria-label="Status for ' + esc(l.name) + '">' +
+        opts + '</select><span class="saved" id="sv-' + l.id + '">saved</span></td>' +
+      '<td><input class="ob" data-i="' + l.id + '" value="' + esc(nt(l.id)) +
+        '" placeholder="What they said" aria-label="Note for ' + esc(l.name) + '">' + mark + '</td>' +
+    '</tr>';
+  }).join('');
+
+  document.querySelectorAll('select.st').forEach(s => s.addEventListener('change', onStatus));
+  document.querySelectorAll('input.ob').forEach(i => i.addEventListener('change', onNote));
+}
+
+function render(){ renderTally(); renderBar(); renderRows(); }
+
+function stamp(){
+  const d = new Date();
+  return d.toLocaleDateString('en-US', { month:'short', day:'numeric' });
+}
+
+async function save(id, patch){
+  const cur = state[id] || {};
+  state[id] = Object.assign({}, cur, patch, { who: who() || 'someone', at: stamp() });
+  try {
+    const r = await fetch(DB + '/' + id + '.json', {
+      method:'PATCH', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(state[id])
+    });
+    if (!r.ok) throw new Error('bad status');
+    const sv = document.getElementById('sv-' + id);
+    if (sv) { sv.classList.add('on'); setTimeout(() => sv.classList.remove('on'), 1400); }
+  } catch (err) {
+    document.getElementById('err').style.display = 'block';
+  }
+}
+
+async function onStatus(e){
+  const id = e.currentTarget.dataset.i;
+  await save(id, { status: e.currentTarget.value });
+  render();
+}
+
+async function onNote(e){
+  const id = e.currentTarget.dataset.i;
+  await save(id, { note: e.currentTarget.value });
+  renderRows();
+}
+
+document.querySelectorAll('th[data-s]').forEach(h => h.addEventListener('click', () => {
+  const k = h.dataset.s;
+  if (k === 'n') return;
+  if (sortKey === k) sortDir = -sortDir; else { sortKey = k; sortDir = k === 'at' ? -1 : 1; }
+  renderRows();
+}));
+
+const sel = document.getElementById('who');
+sel.value = who();
+sel.addEventListener('change', () => setWho(sel.value));
+
+(async function init(){
+  try {
+    const r = await fetch(DB + '.json');
+    if (r.ok) state = (await r.json()) || {};
+  } catch (err) {
+    document.getElementById('err').style.display = 'block';
+  }
+  render();
+})();
+</script>
+</body>
+</html>
