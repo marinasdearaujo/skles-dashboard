@@ -1,6 +1,6 @@
 // SKLES Fast Track leads, pulled from the Meta lead forms (v2 to v5).
-// Generated 10 Nov 2026 08:29 ET. Statuses and notes are NOT here: they live in Firebase
-// under skles-ops/leads so the whole team sees the same thing.
+// Generated 10 Nov 2026 08:48 ET by skles_leads_pull.py. Statuses and notes are NOT
+// here: they live in Firebase under skles-ops/leads so the team all sees the same thing.
 const LEADS = [
  {
   "id": "1658903305634927",
@@ -154,7 +154,8 @@ const LEADS = [
   "at": "2026-11-03 16:41",
   "src": "ig",
   "ad": "02",
-  "form": "v3"
+  "form": "v3",
+  "again": 2
  },
  {
   "id": "1897366834947942",
@@ -220,7 +221,8 @@ const LEADS = [
   "at": "2026-10-31 12:25",
   "src": "fb",
   "ad": "04c",
-  "form": "v5"
+  "form": "v5",
+  "again": 2
  },
  {
   "id": "987949540380833",
@@ -231,7 +233,8 @@ const LEADS = [
   "at": "2026-10-29 06:56",
   "src": "fb",
   "ad": "04c",
-  "form": "v5"
+  "form": "v5",
+  "again": 2
  },
  {
   "id": "4211172079180886",
@@ -264,7 +267,8 @@ const LEADS = [
   "at": "2026-10-28 08:10",
   "src": "fb",
   "ad": "04c",
-  "form": "v5"
+  "form": "v5",
+  "again": 2
  },
  {
   "id": "1747668819643771",
@@ -306,17 +310,6 @@ const LEADS = [
   "phone": "+15109268073",
   "timing": "next_3_months",
   "at": "2026-10-26 02:33",
-  "src": "ig",
-  "ad": "04c",
-  "form": "v5"
- },
- {
-  "id": "4111025509203632",
-  "name": "Radford Fulton",
-  "email": "4nooppression64@gmail.com",
-  "phone": "+13479427283",
-  "timing": "this_year",
-  "at": "2026-10-25 21:48",
   "src": "ig",
   "ad": "04c",
   "form": "v5"
@@ -399,17 +392,6 @@ const LEADS = [
   "form": "v2"
  },
  {
-  "id": "1422355596093270",
-  "name": "Raquel Graham",
-  "email": "grahamraquel29@gmail.com",
-  "phone": "+12035075763",
-  "timing": "learning",
-  "at": "2026-10-19 20:25",
-  "src": "fb",
-  "ad": "02",
-  "form": "v3"
- },
- {
   "id": "1620033526487842",
   "name": "Tony Davis",
   "email": "Ynotd6807@gmail.com",
@@ -443,17 +425,6 @@ const LEADS = [
   "form": "v2"
  },
  {
-  "id": "1772976334031800",
-  "name": "Kamal Mourad",
-  "email": "Kamour@gmail.com",
-  "phone": "+17705980267",
-  "timing": "next_3_months",
-  "at": "2026-10-18 08:42",
-  "src": "fb",
-  "ad": "04",
-  "form": "v2"
- },
- {
   "id": "2248463379060481",
   "name": "Keith D Sanders",
   "email": "mycalltoislam@gmail.com",
@@ -482,17 +453,6 @@ const LEADS = [
   "phone": "+12145979163",
   "timing": "learning",
   "at": "2026-10-17 10:41",
-  "src": "fb",
-  "ad": "04",
-  "form": "v2"
- },
- {
-  "id": "1644869830354510",
-  "name": "May May",
-  "email": "Greamaymay@gmail.com",
-  "phone": "+14129021925",
-  "timing": "next_3_months",
-  "at": "2026-10-14 18:54",
   "src": "fb",
   "ad": "04",
   "form": "v2"
