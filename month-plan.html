@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SKLES December 2026 Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700;900&family=Poppins:wght@400;500;600&display=swap">
+<style>
+/* Light only, by choice, like the rest of the board: this gets opened on a phone. */
+:root{--paper:#F6F4EE;--card:#FFFDF8;--ink:#15192A;--ink2:#565B6E;--ink3:#8C8F9D;
+--navy:#112250;--tan:#E0C58F;--tan2:#8A672C;--line:#E6E3DC;--good:#1C7A58;--good-bg:#E6F3EE}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 15px/1.55 Poppins,system-ui,sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding-block:28px 72px;padding-left:18px;padding-right:18px}
+.eyebrow{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--tan2);font-weight:600}
+h1{font:900 34px/1.15 Merriweather,Georgia,serif;margin:.2em 0 .1em;text-wrap:balance}
+.sub{color:var(--ink2);margin:0 0 6px}
+.flag{background:#FBF1DA;border:1px solid var(--tan);border-radius:10px;padding:12px 14px;margin:18px 0 26px;font-size:14px}
+h2{font:900 21px/1.25 Merriweather,Georgia,serif;margin:34px 0 4px}
+.hint{color:var(--ink3);font-size:13px;margin:0 0 14px}
+.read p,.read li{margin:0 0 8px;max-width:66ch}
+.read h3{font:900 16px/1.3 Merriweather,Georgia,serif;margin:18px 0 8px;color:var(--navy)}
+.read ul{margin:0 0 10px;padding-left:18px}
+.read strong{color:var(--navy)}
+ol.acts{list-style:none;counter-reset:a;padding:0;margin:0;display:grid;gap:10px}
+ol.acts li{counter-increment:a;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px 12px 46px;position:relative}
+ol.acts li::before{content:counter(a);position:absolute;left:14px;top:13px;width:22px;height:22px;border-radius:50%;background:var(--navy);color:#fff;font-size:12px;font-weight:600;display:grid;place-items:center}
+.a{margin:0 0 4px;font-weight:600}
+.w{margin:0 0 8px;color:var(--ink2);font-size:14px}
+.m{margin:0;display:flex;flex-wrap:wrap;gap:6px}
+.m span{font-size:11.5px;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:2px 9px;color:var(--ink2)}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;min-width:0;display:flex;flex-direction:column}
+.card header{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
+.d{font-weight:600;font-variant-numeric:tabular-nums}
+.pill{font-size:11px;border:1px solid var(--line);border-radius:999px;padding:1px 8px;color:var(--ink2);text-transform:capitalize}
+.pill.social{background:#EEF2FB;border-color:#CBD8F0;color:var(--navy)}
+.pill.youtube{background:#FDEDEA;border-color:#F3CBC2;color:#A4311A}
+.pill.funnel{background:#FBF1DA;border-color:var(--tan);color:var(--tan2)}
+.pill.mix-experiment{background:#F1EAF8;border-color:#DCCBEC;color:#5B3A86}
+.who{margin-left:auto;font-size:12px;color:var(--ink3)}
+.card h3{font:900 17px/1.3 Merriweather,Georgia,serif;margin:0 0 6px;text-wrap:balance}
+.copy{margin:0 0 10px;font-size:14px;color:var(--ink2)}
+dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:12.5px}
+dt{color:var(--ink3)}
+dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.lk{color:var(--navy)}
+.card footer{margin-top:auto;padding-top:12px;display:flex;align-items:center;gap:10px}
+button.ok{font:600 13px Poppins,sans-serif;background:var(--navy);color:#fff;border:0;border-radius:8px;padding:7px 12px;cursor:pointer}
+button.ok:disabled{background:var(--good-bg);color:var(--good);cursor:default}
+.state{font-size:12px;color:var(--good)}
+.bar{position:sticky;bottom:0;background:var(--paper);border-top:1px solid var(--line);padding:12px 0;margin-top:22px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.bar button{font:600 14px Poppins,sans-serif;background:var(--navy);color:#fff;border:0;border-radius:9px;padding:10px 16px;cursor:pointer}
+.bar .n{color:var(--ink2);font-size:13px}
+footer.foot{margin-top:30px;color:var(--ink3);font-size:12.5px}
+</style></head><body><div class="wrap">
+<p class="eyebrow">Skills Up · proposed plan</p>
+<h1>December 2026</h1>
+<p class="sub">12 cards, built from 2026-11 and the team's read. Holding 12 social and 0 YouTube, which is what went out last month.</p>
+<div class="flag"><strong>Nothing here is on the board yet.</strong> Every card is a proposal.
+Approve the ones you want and they are written to the ops board as To Produce, owned by the
+person named on them. The rest stay here and expire with the month.</div>
+
+<h2>The read</h2>
+<p class="hint">Written from the numbers the 26th pulled. Nothing in it was typed by hand.</p>
+<div class="read"><p>Reach per post fell to 67 in November, from 111 in October and 141 in September. Posts dropped to 12 from 19, and total reach to 805 from 1,996. Solid, n=12.</p><p><strong>By dimension</strong></p><ul><li>Day: Wednesday 132 per post (n=11) and Saturday 129 (n=9), against Monday 76 (n=11). Solid.</li><li>Caption length: short 148 (n=9), medium 108 (n=33), long 71 (n=6). Solid.</li><li>Format: feed 126 (n=18) against reels 102 (n=30). Solid.</li><li>Mix: repurpose 113 (n=14) and proven 109 (n=22) are level. Solid. Experiment's 63 rests on 2 posts. Direction.</li><li>Pillar: Recognition 127 (n=15) against Founder Story 82 (n=9). Funnel Push tops it at 146 on 4 posts. Direction.</li><li>Webinar CTA, Funnel Push and Story each show 146 on 4 posts, likely the same 4. Direction.</li><li>&quot;Start the training&quot; is the weakest CTA at 62 (n=8). Direction.</li></ul><p><strong>Elsewhere</strong></p><ul><li>0 of 27 board cards carry a 72-hour reading. Solid.</li><li>37 paid leads at $6 each. 4 webinar sessions had 0 attendees. $0 won. Solid, n=37.</li><li>The attorney video drew 324 views. The next best drew 71. Direction, n=6.</li><li>Exports date from Oct 23. LinkedIn and TikTok came as the wrong sheets. Solid, n=2.</li></ul><p><strong>The team</strong></p><p>Nothing came back on the 5 Nov direction. Silence counts as agreement, so the feed shift, held volume, long-form cadence and dropping the intent question all stand. Volume did not hold: 12 posts against 19.</p></div>
+
+<h2>What to do about it</h2>
+<p class="hint">Strongest first. Each one carries the rule that produced it, so the argument is about the rule.</p>
+<ol class="acts">
+<li><p class="a">Run one test registration through the ad form this week and follow it to the webinar link. Fix the first step where it stops.</p><p class="w">37 paid leads came in at $6.17 each, and the 4 webinar sessions had 0 attendees. $0 was won this month (n=37 leads, 4 sessions).</p>
+<p class="m"><span>Leads without sales: leads above 0 with webinar attendees and won this month both at 0.</span><span>Marina</span><span>Webinar attendees above 0 per session, and won this month up from $0.</span></p></li>
+<li><p class="a">Write the 72-hour reach onto each card three days after it posts, starting with the 6 November cards already in Published.</p><p class="w">0 of 27 board cards carry a 72-hour reading, so the board cannot score any pillar or card format (n=27).</p>
+<p class="m"><span>No readings: cards with a reading at 0.</span><span>Valerie</span><span>Cards with a reading up from 0 to every published card, so the pillar and card format rows get scored from the board.</span></p></li>
+<li><p class="a">Write every December caption short, the length that led November.</p><p class="w">Short captions averaged 148 reach per post (n=9), against 108 for medium (n=33) and 71 for long (n=6).</p>
+<p class="m"><span>Caption length dimension, spread 2.1 over 48 posts, best side 9. Solid.</span><span>Valerie</span><span>Reach per post back above 108, up from 67 in November.</span></p></li>
+<li><p class="a">Call the 12 contacts sitting at Lead stage this week and book each one into the next webinar session.</p><p class="w">12 deals sit at Lead and 3 at Apprentice, with $5,997 open and $0 won this month (n=15).</p>
+<p class="m"><span>Leads without sales: open pipeline above 0 with won this month at 0.</span><span>Rodney</span><span>Won this month up from $0, against $5,997 open.</span></p></li>
+<li><p class="a">Put the masters of the 6 vault long-forms in the shared folder this week, the attorney video first.</p><p class="w">The attorney video drew 324 views, against 71 for the next best of the 6. None of the 6 has been cut yet, and 7 December cards come from them (n=6).</p>
+<p class="m"><span>Long-form is the source, and best watched sets the shape.</span><span>Marissa</span><span>All 7 cut cards go out on their dates, with reach per post above the 67 November average.</span></p></li></ol>
+
+<h2>December 2026's cards</h2>
+<p class="hint">Mix: 8 proven, 3 repurpose, 1 experiment. Cadence held from Instagram posts measured in the month.</p>
+<div class="grid">
+<article class="card" id="c203" data-id="203">
+  <header><span class="d">2026-12-01</span><span class="pill social">social</span>
+    <span class="pill mix-repurpose">repurpose</span><span class="pill">Carousel</span>
+    <span class="who">Valerie</span></header>
+  <h3>The $5,000 mistake that showed up after closing</h3>
+  <p class="copy">Sean walks through the mistake that cost him $5,000 after closing. Each slide takes one step from the video, in his words. Short caption.</p>
+  <dl>
+    <dt>Pillar</dt><dd>Proof / Math</dd>
+    <dt>On screen</dt><dd>Slide one is a still of Sean from the video with $5,000 in large type</dd>
+    <dt>Asks for</dt><dd>Full video on YouTube, link in bio</dd>
+    <dt>Material</dt><dd>HAVE vault long-form HkQZGzx12OE, &quot;This $5,000 Mistake Happened AFTER Closing&quot;, master with Marissa <a class="lk" href="https://www.youtube.com/watch?v=HkQZGzx12OE" target="_blank" rel="noopener">material</a></dd>
+  </dl>
+  <footer><button class="ok" onclick="approve(203)">Approve onto the board</button>
+    <span class="state"></span></footer>
+</article>
+<article class="card" id="c204" data-id="204">
+  <header><span class="d">2026-12-02</span><span class="pill social">social</span>
+    <span class="pill mix-proven">proven</span><span class="pill">Reel</span>
+    <span class="who">Valerie</span></header>
+  <h3>My attorney took my mortgage money</h3>
+  <p class="copy">Cut the moment Sean tells how his attorney took the mortgage money. The caption gives the lesson he states in the video. Short caption.</p>
+  <dl>
+    <dt>Pillar</dt><dd>Founder Story</dd>
+    <dt>On screen</dt><dd>Sean talking to camera, cut from the long-form, with burned-in captions</dd>
+    <dt>Asks for</dt><dd>Full story on YouTube, link in bio</dd>
+    <dt>Material</dt><dd>HAVE vault long-form btKxFp6sTp0, &quot;MY ATTORNEY STOLE MY MORTGAGE MONEY&quot;, master with Marissa <a class="lk" href="https://www.youtube.com/watch?v=btKxFp6sTp0" target="_blank" rel="noopener">material</a></dd>
+  </dl>
+  <footer><button class="ok" onclick="approve(204)">Approve onto the board</button>
+    <span class="state"></span></footer>
+</article>
+<article class="card" id="c205" data-id="205">
+  <header><span class="d">2026-12-05</span><span class="pill social">social</span>
+    <span class="pill mix-proven">proven</span><span class="pill">Carousel</span>
+    <span class="who">Valerie</span></header>
+  <h3>One member's win, told in their own words</h3>
+  <p class="copy">One member's result from the testimonial folder, with their quote as the center of the post. Short caption that congratulates them by name.</p>
+  <dl>
+    <dt>Pillar</dt><dd>Recognition</dd>
+    <dt>On screen</dt><dd>Member photo on slide one, their quote in large type on slide two</dd>
+    <dt>Asks for</dt><dd>nothing</dd>
+    <dt>Material</dt><dd>HAVE testimonial folder </dd>
+  </dl>
+  <footer><button class="ok" onclick="approve(205)">Approve onto the board</button>
+    <span class="state"></span></footer>
+</article>
+<article class="card" id="c206" data-id="206">
+  <header><span class="d">2026-12-08</span><span class="pill social">social</span>
+    <span class="pill mix-proven">proven</span><span class="pill">Reel</span>
+    <span class="who">Valerie</span></header>
+  <h3>Do this before you close on any house</h3>
+  <p class="copy">Cut the part where Sean names the step to take before closing. The caption repeats that step in one line. Short caption.</p>
+  <dl>
+    <dt>Pillar</dt><dd>Proof / Math</dd>
+    <dt>On screen</dt><dd>Sean talking to camera, cut from the long-form, with the step as on-screen text</dd>
+    <dt>Asks for</dt><dd>Full video on YouTube, link in bio</dd>
+    <dt>Material</dt><dd>HAVE vault long-form ScgQOh12fVI, &quot;NEVER Close on a House Without Doing this FIRST&quot;, master with Marissa <a class="lk" href="https://www.youtube.com/watch?v=ScgQOh12fVI" target="_blank" rel="noopener">material</a></dd>
+  </dl>
+  <footer><button class="ok" onclick="approve(206)">Approve onto the board</button>
+    <span class="state"></span></footer>
+</article>
+<article class="card" id="c207" data-id="207">
+  <header><span class="d">2026-12-09</span><span class="pill social">social</span>
+    <span class="pill mix-proven">proven</span><span class="pill">Repost</span>
+    <span class="who">Valerie</span></header>
+  <h3>There's nothing wrong with having a job</h3>
+  <p class="copy">Repost the published reel on having a job and planning what comes next. Rewrite the caption for the end of the year. Short caption.</p>
+  <dl>
+    <dt>Pillar</dt><dd>Founder Story</dd>
+    <dt>On screen</dt><dd>The original published reel, unchanged</dd>
+    <dt>Asks for</dt><dd>nothing</dd>
+    <dt>Material</dt><dd>HAVE published Instagram reel opening &quot;There's nothing wrong with having a job&quot; </dd>
+  </dl>
+  <footer><button class="ok" onclick="approve(207)">Approve onto the board</button>
+    <span class="state"></span></footer>
+</article>
+<article class="card" id="c208" data-id="208">
+  <header><span class="d">2026-12-12</span><span class="pill social">social</span>
+    <span class="pill mix-proven">proven</span><span class="pill">Reel</span>
+    <span class="who">Valerie</span></header>
+  <h3>Three years without paying rent, then I bought the block</h3>
+  <p class="copy">Cut the part where Sean explains how he went three years without rent and ended up buying the block. Short caption.</p>
+  <dl>
+    <dt>Pillar</dt><dd>Founder Story</dd>
+    <dt>On screen</dt><dd>Sean talking to camera, cut from the long-form, with burned-in captions</dd>
+    <dt>Asks for</dt><dd>Full story on YouTube, link in bio</dd>
+    <dt>Material</dt><dd>HAVE vault long-form ReqnVHtORXA, &quot;3 YEARS Without Paying Rent&quot;, master with Marissa <a class="lk" href="https://www.youtube.com/watch?v=ReqnVHtORXA" target="_blank" rel="noopener">material</a></dd>
+  </dl>
+  <footer><button class="ok" onclick="approve(208)">Approve onto the board</button>
+    <span class="state"></span></footer>
+</article>
+<article class="card" id="c209" data-id="209">
+  <header><span class="d">2026-12-15</span><span class="pill social">social</span>
+    <span class="pill mix-proven">proven</span><span class="pill">Repost</span>
+    <span class="who">Valerie</span></header>
+  <h3>You make your money on the day you buy</h3>
+  <p class="copy">Repost the published reel on buying right. The caption keeps his line about paying retail. Short caption.</p>
+  <dl>
+    <dt>Pillar</dt><dd>Proof / Math</dd>
+    <dt>On screen</dt><dd>The original published reel, unchanged</dd>
+    <dt>Asks for</dt><dd>nothing</dd>
+    <dt>Material</dt><dd>HAVE published Instagram reel opening &quot;You don't make money in Real Estate by paying retail&quot; </dd>
+  </dl>
+  <footer><button class="ok" onclick="approve(209)">Approve onto the board</button>
+    <span class="state"></span></footer>
+</article>
+<article class="card" id="c210" data-id="210">
+  <header><span class="d">2026-12-16</span><span class="pill social">social</span>
+    <span class="pill mix-proven">proven</span><span class="pill">Carousel</span>
+    <span class="who">Valerie</span></header>
+  <h3>What changed for one member this year</h3>
+  <p class="copy">A second member's result from the testimonial folder, told as where they started and where they are now, in their words. Short caption.</p>
+  <dl>
+    <dt>Pillar</dt><dd>Recognition</dd>
+    <dt>On screen</dt><dd>Member photo on slide one, their before and after in two lines on slide two</dd>
+    <dt>Asks for</dt><dd>nothing</dd>
+    <dt>Material</dt><dd>HAVE testimonial folder </dd>
+  </dl>
+  <footer><button class="ok" onclick="approve(210)">Approve onto the board</button>
+    <span class="state"></span></footer>
+</article>
+<article class="card" id="c211" data-id="211">
+  <header><span class="d">2026-12-19</span><span class="pill social">social</span>
+    <span class="pill mix-repurpose">repurpose</span><span class="pill">Carousel</span>
+    <span class="who">Valerie</span></header>
+  <h3>My first real estate deal almost ruined me</h3>
+  <p class="copy">Sean's first deal and what went wrong, one point per slide, taken from the video. The last slide gives the lesson he states. Short caption.</p>
+  <dl>
+    <dt>Pillar</dt><dd>Founder Story</dd>
+    <dt>On screen</dt><dd>Slide one is a still of Sean from the video with the hook in large type</dd>
+    <dt>Asks for</dt><dd>Full video on YouTube, link in bio</dd>
+    <dt>Material</dt><dd>HAVE vault long-form FSXmEB2AJ2k, &quot;MY FIRST REAL ESTATE DEAL ALMOST RUINED ME&quot;, master with Marissa <a class="lk" href="https://www.youtube.com/watch?v=FSXmEB2AJ2k" target="_blank" rel="noopener">material</a></dd>
+  </dl>
+  <footer><button class="ok" onclick="approve(211)">Approve onto the board</button>
+    <span class="state"></span></footer>
+</article>
+<article class="card" id="c212" data-id="212">
+  <header><span class="d">2026-12-23</span><span class="pill social">social</span>
+    <span class="pill mix-experiment">experiment</span><span class="pill">Story</span>
+    <span class="who">Valerie</span></header>
+  <h3>Want the full plan? Join the next webinar</h3>
+  <p class="copy">Three Story frames that invite viewers to the next webinar session. One line on what the session covers, with the date from the registration page.</p>
+  <dl>
+    <dt>Pillar</dt><dd>Funnel Push</dd>
+    <dt>On screen</dt><dd>A still of Sean from the attorney video, then the session date, then a link sticker</dd>
+    <dt>Asks for</dt><dd>Save your seat at the webinar</dd>
+    <dt>Material</dt><dd>HAVE still from vault long-form btKxFp6sTp0 and the webinar registration page <a class="lk" href="https://www.youtube.com/watch?v=btKxFp6sTp0" target="_blank" rel="noopener">material</a></dd>
+  </dl>
+  <footer><button class="ok" onclick="approve(212)">Approve onto the board</button>
+    <span class="state"></span></footer>
+</article>
+<article class="card" id="c213" data-id="213">
+  <header><span class="d">2026-12-26</span><span class="pill social">social</span>
+    <span class="pill mix-repurpose">repurpose</span><span class="pill">Carousel</span>
+    <span class="who">Valerie</span></header>
+  <h3>The step I skipped before closing, and what it cost me</h3>
+  <p class="copy">The step Sean skipped before closing and what it cost him, one point per slide, from the video. Short caption.</p>
+  <dl>
+    <dt>Pillar</dt><dd>Proof / Math</dd>
+    <dt>On screen</dt><dd>Slide one is a still of Sean from the video with the step named in large type</dd>
+    <dt>Asks for</dt><dd>Full video on YouTube, link in bio</dd>
+    <dt>Material</dt><dd>HAVE vault long-form 5A_rQnGzqqQ, &quot;Lesson Every Homebuyer Needs! I Skipped THIS Before Closing&quot;, master with Marissa <a class="lk" href="https://www.youtube.com/watch?v=5A_rQnGzqqQ" target="_blank" rel="noopener">material</a></dd>
+  </dl>
+  <footer><button class="ok" onclick="approve(213)">Approve onto the board</button>
+    <span class="state"></span></footer>
+</article>
+<article class="card" id="c214" data-id="214">
+  <header><span class="d">2026-12-30</span><span class="pill social">social</span>
+    <span class="pill mix-proven">proven</span><span class="pill">Carousel</span>
+    <span class="who">Valerie</span></header>
+  <h3>This year's member wins, one slide each</h3>
+  <p class="copy">The member wins from the testimonial folder, one per slide, each with a name and one line on the result. Short caption that thanks them.</p>
+  <dl>
+    <dt>Pillar</dt><dd>Recognition</dd>
+    <dt>On screen</dt><dd>One member photo per slide with their result in one line</dd>
+    <dt>Asks for</dt><dd>nothing</dd>
+    <dt>Material</dt><dd>HAVE testimonial folder </dd>
+  </dl>
+  <footer><button class="ok" onclick="approve(214)">Approve onto the board</button>
+    <span class="state"></span></footer>
+</article></div>
+
+<div class="bar"><button onclick="approveAll()">Approve all 12</button>
+<span class="n" id="count">none approved yet</span></div>
+<footer class="foot">Built Nov 25, 2026 · 07:30 AM by the plan agent on the 30th.
+The cycle: <a class="lk" href="content-pipeline.html">content-pipeline.html</a> ·
+the month's review: <a class="lk" href="review-console-cards.html">review console</a></footer>
+</div>
+<script>
+const FB = "https://rifa-mae-default-rtdb.firebaseio.com/skles-ops";
+const MONTH = "2026-12";
+const CARDS = [{"id": 203, "date": "2026-12-01", "board": "social", "pillar": "Proof / Math", "fmt": "Carousel", "mix": "repurpose", "owner": "Valerie", "status": "To Produce", "hook": "The $5,000 mistake that showed up after closing", "copy": "Sean walks through the mistake that cost him $5,000 after closing. Each slide takes one step from the video, in his words. Short caption.", "cta": "Full video on YouTube, link in bio", "visual": "Slide one is a still of Sean from the video with $5,000 in large type", "chans": ["Instagram", "Facebook"], "source": "HAVE vault long-form HkQZGzx12OE, \"This $5,000 Mistake Happened AFTER Closing\", master with Marissa", "attachments": [{"kind": "link", "label": "", "url": "https://www.youtube.com/watch?v=HkQZGzx12OE"}], "updatedBy": "Plan agent"}, {"id": 204, "date": "2026-12-02", "board": "social", "pillar": "Founder Story", "fmt": "Reel", "mix": "proven", "owner": "Valerie", "status": "To Produce", "hook": "My attorney took my mortgage money", "copy": "Cut the moment Sean tells how his attorney took the mortgage money. The caption gives the lesson he states in the video. Short caption.", "cta": "Full story on YouTube, link in bio", "visual": "Sean talking to camera, cut from the long-form, with burned-in captions", "chans": ["Instagram", "Facebook"], "source": "HAVE vault long-form btKxFp6sTp0, \"MY ATTORNEY STOLE MY MORTGAGE MONEY\", master with Marissa", "attachments": [{"kind": "link", "label": "", "url": "https://www.youtube.com/watch?v=btKxFp6sTp0"}], "updatedBy": "Plan agent"}, {"id": 205, "date": "2026-12-05", "board": "social", "pillar": "Recognition", "fmt": "Carousel", "mix": "proven", "owner": "Valerie", "status": "To Produce", "hook": "One member's win, told in their own words", "copy": "One member's result from the testimonial folder, with their quote as the center of the post. Short caption that congratulates them by name.", "cta": "", "visual": "Member photo on slide one, their quote in large type on slide two", "chans": ["Instagram", "Facebook"], "source": "HAVE testimonial folder", "attachments": [], "updatedBy": "Plan agent"}, {"id": 206, "date": "2026-12-08", "board": "social", "pillar": "Proof / Math", "fmt": "Reel", "mix": "proven", "owner": "Valerie", "status": "To Produce", "hook": "Do this before you close on any house", "copy": "Cut the part where Sean names the step to take before closing. The caption repeats that step in one line. Short caption.", "cta": "Full video on YouTube, link in bio", "visual": "Sean talking to camera, cut from the long-form, with the step as on-screen text", "chans": ["Instagram", "Facebook"], "source": "HAVE vault long-form ScgQOh12fVI, \"NEVER Close on a House Without Doing this FIRST\", master with Marissa", "attachments": [{"kind": "link", "label": "", "url": "https://www.youtube.com/watch?v=ScgQOh12fVI"}], "updatedBy": "Plan agent"}, {"id": 207, "date": "2026-12-09", "board": "social", "pillar": "Founder Story", "fmt": "Repost", "mix": "proven", "owner": "Valerie", "status": "To Produce", "hook": "There's nothing wrong with having a job", "copy": "Repost the published reel on having a job and planning what comes next. Rewrite the caption for the end of the year. Short caption.", "cta": "", "visual": "The original published reel, unchanged", "chans": ["Instagram", "Facebook"], "source": "HAVE published Instagram reel opening \"There's nothing wrong with having a job\"", "attachments": [], "updatedBy": "Plan agent"}, {"id": 208, "date": "2026-12-12", "board": "social", "pillar": "Founder Story", "fmt": "Reel", "mix": "proven", "owner": "Valerie", "status": "To Produce", "hook": "Three years without paying rent, then I bought the block", "copy": "Cut the part where Sean explains how he went three years without rent and ended up buying the block. Short caption.", "cta": "Full story on YouTube, link in bio", "visual": "Sean talking to camera, cut from the long-form, with burned-in captions", "chans": ["Instagram", "Facebook"], "source": "HAVE vault long-form ReqnVHtORXA, \"3 YEARS Without Paying Rent\", master with Marissa", "attachments": [{"kind": "link", "label": "", "url": "https://www.youtube.com/watch?v=ReqnVHtORXA"}], "updatedBy": "Plan agent"}, {"id": 209, "date": "2026-12-15", "board": "social", "pillar": "Proof / Math", "fmt": "Repost", "mix": "proven", "owner": "Valerie", "status": "To Produce", "hook": "You make your money on the day you buy", "copy": "Repost the published reel on buying right. The caption keeps his line about paying retail. Short caption.", "cta": "", "visual": "The original published reel, unchanged", "chans": ["Instagram", "Facebook"], "source": "HAVE published Instagram reel opening \"You don't make money in Real Estate by paying retail\"", "attachments": [], "updatedBy": "Plan agent"}, {"id": 210, "date": "2026-12-16", "board": "social", "pillar": "Recognition", "fmt": "Carousel", "mix": "proven", "owner": "Valerie", "status": "To Produce", "hook": "What changed for one member this year", "copy": "A second member's result from the testimonial folder, told as where they started and where they are now, in their words. Short caption.", "cta": "", "visual": "Member photo on slide one, their before and after in two lines on slide two", "chans": ["Instagram", "Facebook"], "source": "HAVE testimonial folder", "attachments": [], "updatedBy": "Plan agent"}, {"id": 211, "date": "2026-12-19", "board": "social", "pillar": "Founder Story", "fmt": "Carousel", "mix": "repurpose", "owner": "Valerie", "status": "To Produce", "hook": "My first real estate deal almost ruined me", "copy": "Sean's first deal and what went wrong, one point per slide, taken from the video. The last slide gives the lesson he states. Short caption.", "cta": "Full video on YouTube, link in bio", "visual": "Slide one is a still of Sean from the video with the hook in large type", "chans": ["Instagram", "Facebook"], "source": "HAVE vault long-form FSXmEB2AJ2k, \"MY FIRST REAL ESTATE DEAL ALMOST RUINED ME\", master with Marissa", "attachments": [{"kind": "link", "label": "", "url": "https://www.youtube.com/watch?v=FSXmEB2AJ2k"}], "updatedBy": "Plan agent"}, {"id": 212, "date": "2026-12-23", "board": "social", "pillar": "Funnel Push", "fmt": "Story", "mix": "experiment", "owner": "Valerie", "status": "To Produce", "hook": "Want the full plan? Join the next webinar", "copy": "Three Story frames that invite viewers to the next webinar session. One line on what the session covers, with the date from the registration page.", "cta": "Save your seat at the webinar", "visual": "A still of Sean from the attorney video, then the session date, then a link sticker", "chans": ["Instagram", "Facebook"], "source": "HAVE still from vault long-form btKxFp6sTp0 and the webinar registration page", "attachments": [{"kind": "link", "label": "", "url": "https://www.youtube.com/watch?v=btKxFp6sTp0"}], "updatedBy": "Plan agent"}, {"id": 213, "date": "2026-12-26", "board": "social", "pillar": "Proof / Math", "fmt": "Carousel", "mix": "repurpose", "owner": "Valerie", "status": "To Produce", "hook": "The step I skipped before closing, and what it cost me", "copy": "The step Sean skipped before closing and what it cost him, one point per slide, from the video. Short caption.", "cta": "Full video on YouTube, link in bio", "visual": "Slide one is a still of Sean from the video with the step named in large type", "chans": ["Instagram", "Facebook"], "source": "HAVE vault long-form 5A_rQnGzqqQ, \"Lesson Every Homebuyer Needs! I Skipped THIS Before Closing\", master with Marissa", "attachments": [{"kind": "link", "label": "", "url": "https://www.youtube.com/watch?v=5A_rQnGzqqQ"}], "updatedBy": "Plan agent"}, {"id": 214, "date": "2026-12-30", "board": "social", "pillar": "Recognition", "fmt": "Carousel", "mix": "proven", "owner": "Valerie", "status": "To Produce", "hook": "This year's member wins, one slide each", "copy": "The member wins from the testimonial folder, one per slide, each with a name and one line on the result. Short caption that thanks them.", "cta": "", "visual": "One member photo per slide with their result in one line", "chans": ["Instagram", "Facebook"], "source": "HAVE testimonial folder", "attachments": [], "updatedBy": "Plan agent"}];
+let done = {};
+
+function paint() {
+  const n = Object.keys(done).length;
+  document.getElementById("count").textContent =
+    n ? n + " of " + CARDS.length + " approved" : "none approved yet";
+  CARDS.forEach(c => {
+    const el = document.getElementById("c" + c.id);
+    if (!el) return;
+    const b = el.querySelector("button.ok"), s = el.querySelector(".state");
+    if (done[c.id]) { b.disabled = true; b.textContent = "On the board"; s.textContent = "approved"; }
+  });
+}
+
+async function load() {
+  try {
+    const r = await fetch(FB + "/review/" + MONTH + "/calendar/approved.json");
+    done = (await r.json()) || {};
+  } catch (e) { done = {}; }
+  paint();
+}
+
+async function approve(id) {
+  const c = CARDS.find(x => x.id === id);
+  if (!c || done[id]) return;
+  const el = document.getElementById("c" + id);
+  const b = el.querySelector("button.ok"), s = el.querySelector(".state");
+  b.disabled = true; s.textContent = "writing...";
+  const card = Object.assign({}, c, {updatedAt: new Date().toISOString()});
+  try {
+    const w = await fetch(FB + "/cards/c" + id + ".json",
+      {method: "PUT", headers: {"Content-Type": "application/json"}, body: JSON.stringify(card)});
+    if (!w.ok) throw new Error(w.status);
+    await fetch(FB + "/review/" + MONTH + "/calendar/approved/" + id + ".json",
+      {method: "PUT", headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({at: new Date().toISOString()})});
+    done[id] = true; paint();
+  } catch (e) {
+    b.disabled = false; s.textContent = "did not write, try again";
+  }
+}
+
+async function approveAll() {
+  for (const c of CARDS) { if (!done[c.id]) await approve(c.id); }
+}
+load();
+</script></body></html>
